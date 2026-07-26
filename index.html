@@ -1,127 +1,219 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ta">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>THAMIZHAN ENERGY SYSTEMS</title>
-
-<link rel="stylesheet" href="style.css">
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>தமிழன் எனர்ஜி சிஸ்டம் | Thamizhan Energy System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+        }
+        header {
+            background: #0f2027;
+            background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
+            color: white;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .logo h1 {
+            font-size: 24px;
+            color: #00ff88;
+        }
+        .logo p {
+            font-size: 12px;
+            color: #ccc;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        nav ul li a:hover {
+            color: #00ff88;
+        }
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+        }
+        .hero h2 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+        .hero p {
+            font-size: 18px;
+            max-width: 700px;
+            margin-bottom: 30px;
+            color: #e0e0e0;
+        }
+        .btn {
+            background: #00ff88;
+            color: #0f2027;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #00cc6a;
+            box-shadow: 0 0 15px #00ff88;
+        }
+        .products {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .products h2 {
+            font-size: 32px;
+            margin-bottom: 40px;
+            color: #203a43;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .product-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            text-align: left;
+            border-top: 4px solid #00ff88;
+        }
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .product-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #0f2027;
+        }
+        .product-card p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .badge {
+            display: inline-block;
+            background: #e1f5fe;
+            color: #0288d1;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        footer {
+            background: #0f2027;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 14px;
+        }
+        @media(max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .hero h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
 </head>
-
 <body>
 
-<header>
+    <header>
+        <div class="logo">
+            <h1>தமிழன் எனர்ஜி சிஸ்டம்</h1>
+            <p>Automation & IoT Solutions</p>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">முகப்பு (Home)</a></li>
+                <li><a href="#products">தயாரிப்புகள் (Products)</a></li>
+                <li><a href="#">IoT டேஷ்போர்டு (IoT)</a></li>
+                <li><a href="#">வாடிக்கையாளர் மையம் (Portal)</a></li>
+                <li><a href="#">தொடர்புக்கு (Contact)</a></li>
+            </ul>
+        </nav>
+    </header>
 
-<nav>
+    <section class="hero">
+        <h2>நவீன ஆட்டோமேஷன் & ஐஓடி தீர்வுகள்</h2>
+        <p>உங்கள் நீர் மேலாண்மையை மிகவும் எளிமையாகவும், பாதுகாப்பாகவும் மாற்ற எங்களது அதிநவீன வாட்டர் லெவல் கண்ட்ரோலர்களைப் பயன்படுத்துங்கள்.</p>
+        <a href="#products" class="btn">ப்ராடக்ட்ஸைக் காண்க</a>
+    </section>
 
-<div class="logo">
+    <section class="products" id="products">
+        <h2>எங்கள் வாட்டர் லெவல் கண்ட்ரோலர் மாடல்கள்</h2>
+        <div class="product-grid">
+            
+            <div class="product-card">
+                <span class="badge">Basic Version</span>
+                <h3>AWLCP 1.0</h3>
+                <p>நம்பகமான பேசிக் வெர்ஷன் வாட்டர் லெவல் கண்ட்ரோலர். இதில் பிரதானமாக மோட்டார் பாதுகாப்பிற்கான <strong>ட்ரைடன் கண்ட்ரோல் (Dry Run Protection)</strong> சிறப்பம்சமாக உள்ளது.</p>
+                <a href="#" class="btn" style="padding: 8px 20px; font-size: 14px;">விவரங்கள்</a>
+            </div>
 
-THAMIZHAN <span>ENERGY SYSTEMS</span>
+            <div class="product-card">
+                <span class="badge" style="background: #e8f5e9; color: #388e3c;">WiFi Model</span>
+                <h3>AWLCW 1.0</h3>
+                <p>மொபைல் செயலி (Mobile App) மூலம் எங்குிருந்தும் கட்டுப்படுத்தும் வசதி. ஒயர்டு சென்சார்கள் மற்றும் பாதுகாப்பான <strong>ட்ரைடன் டிடெக்ஷன்</strong> தொழில்நுட்பம் கொண்டது.</p>
+                <a href="#" class="btn" style="padding: 8px 20px; font-size: 14px;">விவரங்கள்</a>
+            </div>
 
-</div>
+            <div class="product-card">
+                <span class="badge" style="background: #fff3e0; color: #f57c00;">WiFi + Solar / Wireless</span>
+                <h3>AWLCWS 1.0</h3>
+                <p>மேல் மற்றும் கீழ் தொட்டிகளுக்கு இடையே ஒயரிங் தேவையில்லை! வயர்லெஸ் டிரான்ஸ்மிஷன், சோலார் சப்போர்ட் மற்றும் <strong>ட்ரைடன் டிடெக்ஷன்</strong> கொண்ட அதிநவீன ஐஓடி மாடல்.</p>
+                <a href="#" class="btn" style="padding: 8px 20px; font-size: 14px;">விவரங்கள்</a>
+            </div>
 
-<ul>
+        </div>
+    </section>
 
-<li><a href="#">Home</a></li>
-<li><a href="#">Products</a></li>
-<li><a href="#">Services</a></li>
-<li><a href="#">Downloads</a></li>
-<li><a href="#">About</a></li>
-<li><a href="#">Contact</a></li>
-
-</ul>
-
-</nav>
-
-<div class="hero">
-
-<h1>Powering the Future</h1>
-
-<p>
-
-Smart Energy • Smart IoT • Smart Automation
-
-</p>
-
-<a href="#" class="btn">Explore Products</a>
-
-</div>
-
-</header>
-
-<section class="products">
-
-<h2>Our Products</h2>
-
-<div class="cards">
-
-<div class="card">
-
-<h3>Thamizhi Water Level Controller</h3>
-
-<p>
-
-Automatic Water Tank Controller
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>UPS Systems</h3>
-
-<p>
-
-Reliable Backup Solutions
-
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>Battery Solutions</h3>
-
-<p>
-
-Lithium & Lead Acid Batteries
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-
-<section class="about">
-
-<h2>Why Choose Us?</h2>
-
-<p>
-
-Thamizhan Energy Systems provides innovative IoT products,
-smart automation and energy solutions designed for homes,
-industries and commercial applications.
-
-</p>
-
-</section>
-
-<footer>
-
-<p>
-
-©2026 THAMIZHAN ENERGY SYSTEMS
-
-</p>
-
-</footer>
+    <footer>
+        <p>&copy; 2026 Thamizhan Energy System. All Rights Reserved. | Powered by Automation & IoT.</p>
+    </footer>
 
 </body>
-
 </html>
