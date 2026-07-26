@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ஆன்லைன் ஸ்டோர் | தமிழன் எனர்ஜி சிஸ்டம்</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+        }
+        header {
+            background: #0f2027;
+            background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
+            color: white;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo h1 {
+            font-size: 22px;
+            color: #00ff88;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        nav ul li a:hover {
+            color: #00ff88;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .shop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .shop-header h2 {
+            color: #203a43;
+        }
+        .cart-info {
+            background: #203a43;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+        .product-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-top: 4px solid #00ff88;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .product-card h3 {
+            font-size: 20px;
+            color: #0f2027;
+            margin-bottom: 10px;
+        }
+        .price {
+            font-size: 22px;
+            color: #2c5364;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        .features {
+            list-style: none;
+            margin: 15px 0;
+            font-size: 13px;
+            color: #666;
+        }
+        .features li {
+            margin-bottom: 6px;
+        }
+        .btn {
+            background: #00ff88;
+            color: #0f2027;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #00cc6a;
+        }
+        .coupon-section {
+            margin-top: 40px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .coupon-section input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            flex: 1;
+        }
+        footer {
+            background: #0f2027;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <h1>தமிழன் எனர்ஜி சிஸ்டம்</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">முகப்பு (Home)</a></li>
+                <li><a href="shop.html">ஸ்டோர் (Store)</a></li>
+                <li><a href="#">கார்ட் (Cart)</a></li>
+                <li><a href="#">தொடர்புக்கு</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="shop-header">
+            <h2>எங்களது தயாரிப்புகள் (Water Level Controllers)</h2>
+            <div class="cart-info">🛒 கார்ட் பொருட்கள்: <span id="cart-count">0</span></div>
+        </div>
+
+        <div class="product-grid">
+            
+            <div class="product-card">
+                <div>
+                    <h3>AWLCP 1.0 (Basic Version)</h3>
+                    <div class="price">₹3,499</div>
+                    <ul class="features">
+                        <li>✔️ ட்ரைடன் கண்ட்ரோல் (Dry Run Protection)</li>
+                        <li>✔️ ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்</li>
+                        <li>✔️ உறுதியான எலக்ட்ரானிக்ஸ் அமைப்பு</li>
+                        <li>✔️ 1 வருடம் உத்தரவாதம் (Warranty)</li>
+                    </ul>
+                </div>
+                <button class="btn" onclick="addToCart()">கார்ட்டில் சேர்க்கவும்</button>
+            </div>
+
+            <div class="product-card">
+                <div>
+                    <h3>AWLCW 1.0 (WiFi Model)</h3>
+                    <div class="price">₹4,999</div>
+                    <ul class="features">
+                        <li>✔️ மொபைல் செயலி மூலம் ரிமோட் கண்ட்ரோல்</li>
+                        <li>✔️ ஒயர்டு சென்சார்ஸ் (Wired Sensors)</li>
+                        <li>✔️ ட்ரைடன் டிடெக்ஷன் & அலார்ட்</li>
+                        <li>✔️ 1 வருடம் உத்தரவாதம் (Warranty)</li>
+                    </ul>
+                </div>
+                <button class="btn" onclick="addToCart()">கார்ட்டில் சேர்க்கவும்</button>
+            </div>
+
+            <div class="product-card">
+                <div>
+                    <h3>AWLCWS 1.0 (WiFi + Solar / Wireless)</h3>
+                    <div class="price">₹6,999</div>
+                    <ul class="features">
+                        <li>✔️ வயர்லெஸ் சென்சார் (மேலே & கீழே டிவைஸ்)</li>
+                        <li>✔️ சோலார் பவர் சப்போர்ட்</li>
+                        <li>✔️ வைஃபை & ட்ரைடன் பாதுகாப்பு</li>
+                        <li>✔️ 1 வருடம் உத்தரவாதம் (Warranty)</li>
+                    </ul>
+                </div>
+                <button class="btn" onclick="addToCart()">கார்ட்டில் சேர்க்கவும்</button>
+            </div>
+
+        </div>
+
+        <div class="coupon-section">
+            <input type="text" id="coupon-code" placeholder="கூப்பன் குறியீட்டை உள்ளிடவும் (உதாரணமாக: THAMIZHAN10)">
+            <button class="btn" style="width: 200px;" onclick="applyCoupon()">கூப்பன் 적용 / Apply</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Thamizhan Energy System. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        let cartCount = 0;
+        function addToCart() {
+            cartCount++;
+            document.getElementById('cart-count').innerText = cartCount;
+            alert('பொருள் உங்கள் கார்ட்டில் வெற்றிகரமாக சேர்க்கப்பட்டது!');
+        }
+
+        function applyCoupon() {
+            let code = document.getElementById('coupon-code').value;
+            if(code.trim() !== '') {
+                alert('கூப்பன் வெற்றிகரமாக ஏற்கப்பட்டது! தள்ளுபடிப் பலன் பெறப்பட்டுள்ளது.');
+            } else {
+                alert('தயவுசெய்து சரியான கூப்பன் குறியீட்டை உள்ளிடவும்.');
+            }
+        }
+    </script>
+
+</body>
+</html>
