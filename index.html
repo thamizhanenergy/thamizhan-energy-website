@@ -1,59 +1,41 @@
-
 <!DOCTYPE html>
 <html lang="ta">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>தமிழன் எனர்ஜி சிஸ்டம் | Thamizhan Energy System</title>
+    <title>தமிழன் எனர்ஜி சிஸ்டம்ஸ் | Thamizhan Energy Systems (TES)</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-        body {
-            background-color: #f4f7f6;
-            color: #333;
-        }
+        /* Basic Reset & Layout */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f4f7f6; color: #333; line-height: 1.6; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        
+        /* Header & Logo Section */
         header {
-            background: #0f2027;
-            background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
-            color: white;
-            padding: 20px 50px;
+            background: #fff;
+            padding: 15px 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        .logo h1 {
-            font-size: 24px;
-            color: #00ff88;
-        }
-        .logo p {
-            font-size: 12px;
-            color: #ccc;
-        }
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 20px;
-        }
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-        nav ul li a:hover {
-            color: #00ff88;
-        }
+        .brand-section { display: flex; align-items: center; gap: 15px; }
+        .logo-img { height: 60px; width: auto; } /* Based on image 1.png */
+        .company-title h1 { font-size: 24px; color: #0f2027; font-weight: 700; }
+        .company-title p { font-size: 12px; color: #555; letter-spacing: 1px; }
+        nav ul { list-style: none; display: flex; gap: 25px; }
+        nav ul li a { font-weight: 600; font-size: 14px; }
+        nav ul li a:hover { color: #00b359; }
+
+        /* Hero Section - The Banner */
         .hero {
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            height: 80vh;
+            /* Based on Image 3.png (Hero Banner Image) */
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://raw.githubusercontent.com/YourUsername/YourRepo/main/4.png') no-repeat center center/cover;
+            height: 70vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -62,157 +44,154 @@
             color: white;
             padding: 0 20px;
         }
-        .hero h2 {
-            font-size: 42px;
-            margin-bottom: 20px;
-            color: #ffffff;
-        }
-        .hero p {
-            font-size: 18px;
-            max-width: 700px;
-            margin-bottom: 30px;
-            color: #e0e0e0;
-        }
-        .btn {
-            background: #00ff88;
-            color: #0f2027;
-            padding: 12px 30px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 700;
-            transition: 0.3s;
-        }
-        .btn:hover {
-            background: #00cc6a;
-            box-shadow: 0 0 15px #00ff88;
-        }
-        .products {
-            padding: 60px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        .products h2 {
-            font-size: 32px;
-            margin-bottom: 40px;
-            color: #203a43;
-        }
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
+        .hero h2 { font-size: 48px; margin-bottom: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .hero p { font-size: 18px; max-width: 700px; margin-bottom: 30px; }
+        .btn { background: #00ff88; color: #0f2027; padding: 12px 35px; border-radius: 30px; font-weight: 700; font-size: 16px; text-transform: uppercase; }
+        .btn:hover { background: #00cc6a; box-shadow: 0 4px 15px rgba(0,255,136,0.4); }
+
+        /* Products Section - Key Specs */
+        .products-section { padding: 60px 20px; max-width: 1200px; margin: 0 auto; }
+        .section-title { text-align: center; font-size: 36px; color: #0f2027; margin-bottom: 50px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
         .product-card {
-            background: white;
+            background: #fff;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: 0.3s;
-            text-align: left;
-            border-top: 4px solid #00ff88;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border-top: 5px solid #00ff88; /* Accent Color */
+            transition: transform 0.3s;
         }
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        .product-card h3 {
-            font-size: 20px;
-            margin-bottom: 15px;
-            color: #0f2027;
-        }
-        .product-card p {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-        .badge {
-            display: inline-block;
-            background: #e1f5fe;
-            color: #0288d1;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-        footer {
-            background: #0f2027;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-            font-size: 14px;
-        }
-        @media(max-width: 768px) {
-            header {
-                flex-direction: column;
-                gap: 15px;
-            }
-            nav ul {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .hero h2 {
-                font-size: 28px;
-            }
+        .product-card:hover { transform: translateY(-10px); }
+        .product-card h3 { font-size: 22px; color: #0f2027; margin-bottom: 10px; }
+        .model-badge { display: inline-block; background: #e0f7fa; color: #006064; padding: 5px 10px; border-radius: 5px; font-size: 11px; font-weight: 600; margin-bottom: 15px; }
+        .spec-list { list-style: none; font-size: 14px; color: #555; margin-top: 15px; }
+        .spec-list li { margin-bottom: 8px; display: flex; align-items: flex-start; }
+        .spec-list li::before { content: '✔️'; color: #00b359; margin-right: 10px; font-size: 12px; }
+        .price-tag { font-size: 24px; font-weight: 700; color: #2c3e50; margin-top: 20px; }
+
+        /* Future Devices Section - Teaser */
+        .future-section { background: #0f2027; color: #fff; padding: 60px 20px; text-align: center; margin-top: 60px; }
+        .future-grid { display: flex; justify-content: center; gap: 40px; margin-top: 40px; flex-wrap: wrap; }
+        .future-item { width: 200px; text-align: center; }
+        .future-img { width: 100px; height: 100px; object-fit: contain; margin-bottom: 15px; filter: brightness(0) invert(1); } /* Based on image 293558.png */
+
+        /* Footer */
+        footer { background: #0c1a1f; color: #aaa; padding: 30px 50px; text-align: center; font-size: 13px; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header { padding: 15px 20px; flex-direction: column; gap: 15px; }
+            nav ul { flex-wrap: wrap; justify-content: center; gap: 15px; }
+            .hero h2 { font-size: 32px; }
+            .hero p { font-size: 16px; }
+            .future-grid { gap: 20px; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">
-            <h1>தமிழன் எனர்ஜி சிஸ்டம்</h1>
-            <p>Automation & IoT Solutions</p>
+        <div class="brand-section">
+            <img src="https://raw.githubusercontent.com/YourUsername/YourRepo/main/2.png" alt="Thamizhan Energy Systems Logo" class="logo-img">
+            <div class="company-title">
+                <h1>தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1>
+                <p>POWERED BY TAMIZHI</p>
+            </div>
         </div>
         <nav>
             <ul>
-                <li><a href="#">முகப்பு (Home)</a></li>
-                <li><a href="#products">தயாரிப்புகள் (Products)</a></li>
-                <li><a href="#">IoT டேஷ்போர்டு (IoT)</a></li>
-                <li><a href="#">வாடிக்கையாளர் மையம் (Portal)</a></li>
-                <li><a href="#">தொடர்புக்கு (Contact)</a></li>
+                <li><a href="#home">முகப்பு</a></li>
+                <li><a href="#products">தயாரிப்புகள்</a></li>
+                <li><a href="#features">சிறப்பம்சங்கள்</a></li>
+                <li><a href="#future">எதிர்காலத் திட்டங்கள்</a></li>
+                <li><a href="#contact">தொடர்புக்கு</a></li>
             </ul>
         </nav>
     </header>
 
-    <section class="hero">
-        <h2>நவீன ஆட்டோமேஷன் & ஐஓடி தீர்வுகள்</h2>
-        <p>உங்கள் நீர் மேலாண்மையை மிகவும் எளிமையாகவும், பாதுகாப்பாகவும் மாற்ற எங்களது அதிநவீன வாட்டர் லெவல் கண்ட்ரோலர்களைப் பயன்படுத்துங்கள்.</p>
-        <a href="#products" class="btn">ப்ராடக்ட்ஸைக் காண்க</a>
+    <section class="hero" id="home">
+        <h2>புரட்சிகரமான நீர் மேலாண்மை</h2>
+        <p>இந்தியாவின் நம்பகமான ஆட்டோமேஷன் மற்றும் ஐஓடி தீர்வுகள். உங்கள் நீரை எளிதாகக் கண்காணிக்கவும் கட்டுப்படுத்தவும்.</p>
+        <a href="#products" class="btn">எங்கள் தயாரிப்புகள்</a>
     </section>
 
-    <section class="products" id="products">
-        <h2>எங்கள் வாட்டர் லெவல் கண்ட்ரோலர் மாடல்கள்</h2>
+    <section class="products-section" id="products">
+        <h2 class="section-title">எங்கள் மாடல்கள்</h2>
         <div class="product-grid">
             
             <div class="product-card">
-                <span class="badge">Basic Version</span>
-                <h3>AWLCP 1.0</h3>
-                <p>நம்பகமான பேசிக் வெர்ஷன் வாட்டர் லெவல் கண்ட்ரோலர். இதில் பிரதானமாக மோட்டார் பாதுகாப்பிற்கான <strong>ட்ரைடன் கண்ட்ரோல் (Dry Run Protection)</strong> சிறப்பம்சமாக உள்ளது.</p>
-                <a href="#" class="btn" style="padding: 8px 20px; font-size: 14px;">விவரங்கள்</a>
+                <span class="model-badge">Basic Version</span>
+                <h3>AWLCP 1.0 (Basic)</h3>
+                <p>நம்பகமான மற்றும் எளிமையான ஆட்டோமேஷன்.</p>
+                <ul class="spec-list">
+                    <li>ஆட்டோ மோட்டார் ஆன்/ஆஃப் (மேல் & கீழ் டேங்க்)</li>
+                    <li><strong>டிரைடன் பாதுகாப்பு (Dry Run Control)</strong></li>
+                    <li>உயர் மின்னழுத்த பாதுகாப்பு</li>
+                    <li>LED நிலை காட்டி</li>
+                    <li>எளிதான நிறுவல்</li>
+                </ul>
+                <div class="price-tag">₹3,499/-</div>
             </div>
 
             <div class="product-card">
-                <span class="badge" style="background: #e8f5e9; color: #388e3c;">WiFi Model</span>
-                <h3>AWLCW 1.0</h3>
-                <p>மொபைல் செயலி (Mobile App) மூலம் எங்குிருந்தும் கட்டுப்படுத்தும் வசதி. ஒயர்டு சென்சார்கள் மற்றும் பாதுகாப்பான <strong>ட்ரைடன் டிடெக்ஷன்</strong> தொழில்நுட்பம் கொண்டது.</p>
-                <a href="#" class="btn" style="padding: 8px 20px; font-size: 14px;">விவரங்கள்</a>
+                <span class="model-badge">WiFi Enabled</span>
+                <h3>AWLCW 1.0 (WiFi)</h3>
+                <p>மொபைல் செயலி மூலம் முழுமையான கட்டுப்பாடு.</p>
+                <ul class="spec-list">
+                    <li><strong>WiFi இணைப்பு</strong> (Android / iOS App)</li>
+                    <li>எங்கிருந்தும் மோட்டாரை இயக்கலாம்/நிறுத்தலாம்</li>
+                    <li>நேரடி நீர் மட்ட நிலை அறிக்கை</li>
+                    <li>அனைத்து அடிப்படை பாதுகாப்பு அம்சங்களும்</li>
+                    <li>தவறான அறிவிப்புகள் (Alerts)</li>
+                </ul>
+                <div class="price-tag">₹4,999/-</div>
             </div>
 
             <div class="product-card">
-                <span class="badge" style="background: #fff3e0; color: #f57c00;">WiFi + Solar / Wireless</span>
-                <h3>AWLCWS 1.0</h3>
-                <p>மேல் மற்றும் கீழ் தொட்டிகளுக்கு இடையே ஒயரிங் தேவையில்லை! வயர்லெஸ் டிரான்ஸ்மிஷன், சோலார் சப்போர்ட் மற்றும் <strong>ட்ரைடன் டிடெக்ஷன்</strong> கொண்ட அதிநவீன ஐஓடி மாடல்.</p>
-                <a href="#" class="btn" style="padding: 8px 20px; font-size: 14px;">விவரங்கள்</a>
+                <span class="model-badge">Wireless + Solar</span>
+                <h3>AWLCWS 1.0 (Pro)</h3>
+                <p>வயர்லெஸ் மற்றும் சூரிய ஆற்றல் கொண்ட அதிநவீன மாடல்.</p>
+                <ul class="spec-list">
+                    <li><strong>மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு</strong></li>
+                    <li><strong>சோலார் பேனல் சப்போர்ட்</strong> (Off-grid capability)</li>
+                    <li>Wi-Fi மற்றும் மொபைல் கண்ட்ரோல்</li>
+                    <li>மேம்பட்ட ட்ரைடன் கண்ட்ரோல்</li>
+                    <li>தொழில்துறை தர சென்சார்கள்</li>
+                </ul>
+                <div class="price-tag">₹6,999/-</div>
             </div>
 
         </div>
     </section>
 
+    <section class="future-section" id="future">
+        <h2 class="section-title" style="color: #fff;">எதிர்கால கண்டுபிடிப்புகள்</h2>
+        <p>நாங்கள் உருவாக்கத் திட்டமிட்டுள்ள பிற எலக்ட்ரானிக் சாதனங்கள்.</p>
+        <div class="future-grid">
+            <div class="future-item">
+                <img src="https://raw.githubusercontent.com/YourUsername/YourRepo/main/293558.png" alt="Smart Home Devices" class="future-img">
+                <h4>ஸ்மார்ட் ஹோம் சாதனங்கள்</h4>
+                <p>IoT அடிப்படையிலான மின்சாதனக் கட்டுப்பாடுகள்.</p>
+            </div>
+            <div class="future-item">
+                <img src="https://raw.githubusercontent.com/YourUsername/YourRepo/main/293558.png" alt="Industrial Automation" class="future-img">
+                <h4>தொழில்துறை ஆட்டோமேஷன்</h4>
+                <p>ஃபேக்டரி கன்ட்ரோலர்ஸ் மற்றும் சென்சார்கள்.</p>
+            </div>
+            <div class="future-item">
+                <img src="https://raw.githubusercontent.com/YourUsername/YourRepo/main/293558.png" alt="Energy Management" class="future-img">
+                <h4>எனர்ஜி மேனேஜ்மென்ட் சிஸ்டம்</h4>
+                <p>மின்சார பயன்பாட்டைக் கண்காணிக்கும் கருவிகள்.</p>
+            </div>
+        </div>
+    </section>
+
     <footer>
-        <p>&copy; 2026 Thamizhan Energy System. All Rights Reserved. | Powered by Automation & IoT.</p>
+        <p>&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ் (ஒரு தமிழி பிராண்ட்). அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
+    </footer>
+
+</body>
+</html>
     </footer>
 
 </body>
