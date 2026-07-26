@@ -32,7 +32,7 @@
 
         /* Hero Section using Image 4.png */
         .hero {
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('3.png') no-repeat center center/cover;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('1.png') no-repeat center center/cover;
             height: 70vh;
             display: flex;
             flex-direction: column;
@@ -47,10 +47,30 @@
         .btn { background: #00ff88; color: #0f2027; padding: 12px 35px; border-radius: 30px; font-weight: 700; font-size: 16px; text-transform: uppercase; }
         .btn:hover { background: #00cc6a; box-shadow: 0 4px 15px rgba(0,255,136,0.4); }
 
-        /* Products & Specs Section using Image 3.png */
+        /* Products Section - 3 Models Grid */
         .products-section { padding: 60px 20px; max-width: 1200px; margin: 0 auto; text-align: center; }
-        .section-title { font-size: 34px; color: #0f2027; margin-bottom: 20px; }
-        .specs-image-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-top: 30px; }
+        .section-title { font-size: 34px; color: #0f2027; margin-bottom: 15px; }
+        .section-desc { color: #666; margin-bottom: 40px; font-size: 15px; }
+        
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; text-align: left; margin-bottom: 50px; }
+        .product-card {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border-top: 5px solid #00ff88;
+            transition: transform 0.3s;
+        }
+        .product-card:hover { transform: translateY(-10px); }
+        .product-card h3 { font-size: 22px; color: #0f2027; margin-bottom: 10px; }
+        .model-badge { display: inline-block; background: #e0f7fa; color: #006064; padding: 5px 12px; border-radius: 5px; font-size: 11px; font-weight: 600; margin-bottom: 15px; }
+        .spec-list { list-style: none; font-size: 14px; color: #555; margin-top: 15px; }
+        .spec-list li { margin-bottom: 8px; display: flex; align-items: flex-start; }
+        .spec-list li::before { content: '✔️'; color: #00b359; margin-right: 10px; font-size: 12px; }
+        .price-tag { font-size: 24px; font-weight: 700; color: #2c3e50; margin-top: 20px; }
+
+        /* Full Spec Image Container (Image 3.png) */
+        .specs-image-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-top: 20px; }
         .specs-img { width: 100%; height: auto; border-radius: 8px; display: block; }
 
         /* Future Devices Section using Image 2.png */
@@ -75,8 +95,8 @@
         <div class="brand-section">
             <img src="2.png" alt="Thamizhi Logo" class="logo-img">
             <div class="company-title">
-                <h1>TAMIZHI</h1>
-                <p>POWERED BY Thamizhan Energy Systems</p>
+                <h1>தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1>
+                <p>POWERED BY TAMIZHI</p>
             </div>
         </div>
         <nav>
@@ -96,9 +116,53 @@
     </section>
 
     <section class="products-section" id="products">
-        <h2 class="section-title">வாட்டர் லெவல் கண்ட்ரோலர் மாடல்கள் & விவரங்கள்</h2>
-        <p style="color: #666;">AWLCP 1.0 (Basic), AWLCW 1.0 (WiFi), மற்றும் AWLCWS 1.0 (WiFi + Solar / Wireless) ஆகிய மூன்று மாடல்களின் முழுமையான ஸ்பெசிபிகேஷன்.</p>
+        <h2 class="section-title">எங்களது மூன்று ஸ்மார்ட் மாடல்கள்</h2>
+        <p class="section-desc">உங்கள் தேவைகளுக்குப் பொருத்தமான வாட்டர் லெவல் கண்ட்ரோலர் மாடலைத் தேர்ந்தெடுக்கவும்.</p>
         
+        <div class="product-grid">
+            
+            <div class="product-card">
+                <span class="model-badge">Basic Version</span>
+                <h3>AWLCP 1.0 (Basic)</h3>
+                <p>நம்பகமான மற்றும் எளிமையான ஆட்டோமேஷன்.</p>
+                <ul class="spec-list">
+                    <li>ஆட்டோ மோட்டார் ஆன்/ஆஃப் (மேல் & கீழ் டேங்க்)</li>
+                    <li><strong>ட்ரைடன் பாதுகாப்பு (Dry Run Control)</strong></li>
+                    <li>உயர் மின்னழுத்த பாதுகாப்பு</li>
+                    <li>LED நிலை காட்டி & எளிய நிறுவல்</li>
+                </ul>
+                <div class="price-tag">₹3,499/-</div>
+            </div>
+
+            <div class="product-card">
+                <span class="model-badge" style="background: #e8f5e9; color: #2e7d32;">WiFi Model</span>
+                <h3>AWLCW 1.0 (WiFi)</h3>
+                <p>மொபைல் செயலி மூலம் முழுமையான கட்டுப்பாடு.</p>
+                <ul class="spec-list">
+                    <li><strong>WiFi இணைப்பு</strong> (Android / iOS App)</li>
+                    <li>எங்கிருந்தும் மோட்டாரை இயக்கலாம்/நிறுத்தலாம்</li>
+                    <li>நேரடி நீர் மட்ட நிலை அறிக்கை</li>
+                    <li>ட்ரைடன் டிடெக்ஷன் & அலார்ட்</li>
+                </ul>
+                <div class="price-tag">₹4,999/-</div>
+            </div>
+
+            <div class="product-card">
+                <span class="model-badge" style="background: #fff3e0; color: #ef6c00;">Wireless + Solar</span>
+                ### AWLCWS 1.0 (Pro)
+                <p>வயர்லெஸ் மற்றும் சூரிய ஆற்றல் கொண்ட அதிநவீன மாடல்.</p>
+                <ul class="spec-list">
+                    <li><strong>மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு</strong></li>
+                    <li><strong>சோலார் பேனல் சப்போர்ட்</strong></li>
+                    <li>Wi-Fi மற்றும் மொபைல் கண்ட்ரோல்</li>
+                    <li>மேம்பட்ட ட்ரைடன் கண்ட்ரோல்</li>
+                </ul>
+                <div class="price-tag">₹6,999/-</div>
+            </div>
+
+        </div>
+
+        <h3 style="margin-top: 40px; margin-bottom: 15px; color: #0f2027;">தொழில்நுட்ப விவரங்கள் (Specifications Overview)</h3>
         <div class="specs-image-box">
             <img src="3.png" alt="Water Level Controller Specifications" class="specs-img">
         </div>
