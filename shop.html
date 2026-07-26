@@ -3,146 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ஆன்லைன் ஸ்டோர் | தமிழன் எனர்ஜி சிஸ்டம்</title>
+    <title>ஆன்லைன் ஸ்டோர் | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-        body {
-            background-color: #f4f7f6;
-            color: #333;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f4f7f6; color: #333; line-height: 1.6; }
+        a { text-decoration: none; color: inherit; }
+
+        /* Header */
         header {
-            background: #0f2027;
-            background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
-            color: white;
-            padding: 20px 50px;
+            background: #fff;
+            padding: 15px 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        .logo h1 {
-            font-size: 22px;
-            color: #00ff88;
-        }
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 20px;
-        }
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        nav ul li a:hover {
-            color: #00ff88;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-        .shop-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-        .shop-header h2 {
-            color: #203a43;
-        }
-        .cart-info {
-            background: #203a43;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 14px;
-        }
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-        }
+        .brand-section { display: flex; align-items: center; gap: 15px; }
+        .logo-img { height: 45px; width: auto; }
+        .company-title h1 { font-size: 18px; color: #0f2027; font-weight: 700; }
+        nav ul { list-style: none; display: flex; gap: 20px; }
+        nav ul li a { font-weight: 600; font-size: 14px; }
+        nav ul li a:hover { color: #00b359; }
+
+        /* Shop Container */
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .shop-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .shop-header h2 { color: #0f2027; font-size: 28px; }
+        .cart-info { background: #0f2027; color: white; padding: 8px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; }
+
+        /* Product Grid */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
         .product-card {
             background: white;
             padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            border-top: 4px solid #00ff88;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-top: 5px solid #00ff88;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            transition: transform 0.3s;
         }
-        .product-card h3 {
-            font-size: 20px;
-            color: #0f2027;
-            margin-bottom: 10px;
-        }
-        .price {
-            font-size: 22px;
-            color: #2c5364;
-            font-weight: 700;
-            margin: 10px 0;
-        }
-        .features {
-            list-style: none;
-            margin: 15px 0;
-            font-size: 13px;
-            color: #666;
-        }
-        .features li {
-            margin-bottom: 6px;
-        }
+        .product-card:hover { transform: translateY(-5px); }
+        .product-card h3 { font-size: 20px; color: #0f2027; margin-bottom: 8px; }
+        .model-badge { display: inline-block; background: #e0f7fa; color: #006064; padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 600; margin-bottom: 12px; }
+        .price { font-size: 24px; color: #2c3e50; font-weight: 700; margin: 10px 0; }
+        .features { list-style: none; font-size: 13px; color: #555; margin: 15px 0; }
+        .features li { margin-bottom: 6px; }
+        .features li::before { content: '✔️ '; color: #00b359; }
+
         .btn {
             background: #00ff88;
             color: #0f2027;
             padding: 10px;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             font-weight: 700;
             cursor: pointer;
             width: 100%;
+            text-align: center;
             transition: 0.3s;
         }
-        .btn:hover {
-            background: #00cc6a;
-        }
+        .btn:hover { background: #00cc6a; }
+
+        /* Coupon Section */
         .coupon-section {
             margin-top: 40px;
             background: white;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             display: flex;
             gap: 15px;
             align-items: center;
         }
-        .coupon-section input {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            flex: 1;
-        }
-        footer {
-            background: #0f2027;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin-top: 50px;
-            font-size: 14px;
+        .coupon-section input { padding: 12px; border: 1px solid #ccc; border-radius: 6px; flex: 1; outline: none; }
+
+        /* Footer */
+        footer { background: #0c1a1f; color: #aaa; padding: 25px; text-align: center; font-size: 13px; margin-top: 50px; }
+
+        @media(max-width: 768px) {
+            header { padding: 15px 20px; flex-direction: column; gap: 15px; }
+            nav ul { flex-wrap: wrap; justify-content: center; }
+            .shop-header { flex-direction: column; gap: 15px; align-items: flex-start; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Header -->
     <header>
-        <div class="logo">
-            <h1>தமிழன் எனர்ஜி சிஸ்டம்</h1>
+        <div class="brand-section">
+            <img src="1.png" alt="Logo" class="logo-img">
+            <div class="company-title">
+                <h1>தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1>
+            </div>
         </div>
         <nav>
             <ul>
@@ -154,51 +113,58 @@
         </nav>
     </header>
 
+    <!-- Shop Content -->
     <div class="container">
         <div class="shop-header">
-            <h2>எங்களது தயாரிப்புகள் (Water Level Controllers)</h2>
+            <h2>எங்கள் வாட்டர் லெவல் கண்ட்ரோலர் தயாரிப்புகள்</h2>
             <div class="cart-info">🛒 கார்ட் பொருட்கள்: <span id="cart-count">0</span></div>
         </div>
 
         <div class="product-grid">
             
+            <!-- Product 1: AWLCP 1.0 -->
             <div class="product-card">
                 <div>
-                    <h3>AWLCP 1.0 (Basic Version)</h3>
-                    <div class="price">₹1,499</div>
+                    <span class="model-badge">Basic Version</span>
+                    <h3>AWLCP 1.0</h3>
+                    <div class="price">₹1,499/-</div>
                     <ul class="features">
-                        <li>✔️ ட்ரைடன் கண்ட்ரோல் (Dry Run Protection)</li>
-                        <li>✔️ ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்</li>
-                        <li>✔️ உறுதியான எலக்ட்ரானிக்ஸ் அமைப்பு</li>
-                        <li>✔️ 1 வருடம் உத்தரவாதம் (Warranty)</li>
+                        <li>ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்</li>
+                        <li>ட்ரைடன் பாதுகாப்பு (Dry Run Protection)</li>
+                        <li>உயர் மின்னழுத்த பாதுகாப்பு</li>
+                        <li>1 வருடம் உத்தரவாதம் (Warranty)</li>
                     </ul>
                 </div>
                 <button class="btn" onclick="addToCart()">கார்ட்டில் சேர்க்கவும்</button>
             </div>
 
+            <!-- Product 2: AWLCW 1.0 -->
             <div class="product-card">
                 <div>
-                    <h3>AWLCW 1.0 (WiFi Model)</h3>
-                    <div class="price">₹2,999</div>
+                    <span class="model-badge" style="background: #e8f5e9; color: #2e7d32;">WiFi Model</span>
+                    <h3>AWLCW 1.0</h3>
+                    <div class="price">₹2,999/-</div>
                     <ul class="features">
-                        <li>✔️ மொபைல் செயலி மூலம் ரிமோட் கண்ட்ரோல்</li>
-                        <li>✔️ ஒயர்டு சென்சார்ஸ் (Wired Sensors)</li>
-                        <li>✔️ ட்ரைடன் டிடெக்ஷன் & அலார்ட்</li>
-                        <li>✔️ 1 வருடம் உத்தரவாதம் (Warranty)</li>
+                        <li>மொபைல் செயலி (App) மூலம் ரிமோட் கண்ட்ரோல்</li>
+                        <li>ஒயர்டு சென்சார்கள் (Wired Sensors)</li>
+                        <li>ட்ரைடன் டிடெக்ஷன் & அலார்ட்</li>
+                        <li>1 வருடம் உத்தரவாதம் (Warranty)</li>
                     </ul>
                 </div>
                 <button class="btn" onclick="addToCart()">கார்ட்டில் சேர்க்கவும்</button>
             </div>
 
+            <!-- Product 3: AWLCWS 1.0 -->
             <div class="product-card">
                 <div>
-                    <h3>AWLCWS 1.0 (WiFi + Solar / Wireless)</h3>
-                    <div class="price">₹4,999</div>
+                    <span class="model-badge" style="background: #fff3e0; color: #ef6c00;">Wireless + Solar</span>
+                    <h3>AWLCWS 1.0</h3>
+                    <div class="price">₹4,999/-</div>
                     <ul class="features">
-                        <li>✔️ வயர்லெஸ் சென்சார் (மேலே & கீழே டிவைஸ்)</li>
-                        <li>✔️ சோலார் பவர் சப்போர்ட்</li>
-                        <li>✔️ வைஃபை & ட்ரைடன் பாதுகாப்பு</li>
-                        <li>✔️ 1 வருடம் உத்தரவாதம் (Warranty)</li>
+                        <li>மேல் & கீழ் தொட்டிக்கு வயர்லெஸ் இணைப்பு</li>
+                        <li>சோலார் பவர் சப்போர்ட்</li>
+                        <li>வைஃபை & ட்ரைடன் பாதுகாப்பு</li>
+                        <li>1 வருடம் உத்தரவாதம் (Warranty)</li>
                     </ul>
                 </div>
                 <button class="btn" onclick="addToCart()">கார்ட்டில் சேர்க்கவும்</button>
@@ -206,16 +172,19 @@
 
         </div>
 
+        <!-- Coupon System -->
         <div class="coupon-section">
             <input type="text" id="coupon-code" placeholder="கூப்பன் குறியீட்டை உள்ளிடவும் (உதாரணமாக: THAMIZHAN10)">
-            <button class="btn" style="width: 200px;" onclick="applyCoupon()">கூப்பன் 적용 / Apply</button>
+            <button class="btn" style="width: 200px;" onclick="applyCoupon()">கூப்பனைப் பயன்படுத்து</button>
         </div>
     </div>
 
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2026 Thamizhan Energy System. All Rights Reserved.</p>
+        <p>&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
     </footer>
 
+    <!-- JavaScript for Interactive Cart & Coupon -->
     <script>
         let cartCount = 0;
         function addToCart() {
