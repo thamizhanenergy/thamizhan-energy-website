@@ -13,7 +13,7 @@
         /* Header */
         header {
             background: #fff;
-            padding: 15px 50px;
+            padding: 15px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -22,34 +22,18 @@
             top: 0;
             z-index: 1000;
         }
-        .brand-section { display: flex; align-items: center; gap: 15px; }
+        .brand-section { display: flex; align-items: center; gap: 12px; }
         .logo-img { height: 45px; width: auto; }
         .company-title h1 { font-size: 18px; color: #0f2027; font-weight: 700; }
-        nav ul { list-style: none; display: flex; gap: 20px; align-items: center; }
-        nav ul li a { font-weight: 600; font-size: 14px; }
-        nav ul li a:hover { color: #00b359; }
+        
+        .nav-icons { display: flex; gap: 20px; align-items: center; }
+        .icon-btn { background: #f0f2f5; border: none; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 6px; transition: 0.3s; }
+        .icon-btn:hover { background: #e4e6eb; }
 
-        .user-status { background: #e0f7fa; color: #006064; padding: 5px 12px; border-radius: 15px; font-size: 13px; font-weight: 600; }
-
-        /* Shop Container */
+        /* Container */
         .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
-        .shop-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .shop-header h2 { color: #0f2027; font-size: 26px; }
-        .cart-info { background: #0f2027; color: white; padding: 8px 18px; border-radius: 20px; font-size: 14px; font-weight: 650; }
-
-        /* Login Modal Box */
-        .login-box {
-            background: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            margin-bottom: 30px;
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            max-width: 500px;
-        }
-        .login-box input { padding: 10px; border: 1px solid #ccc; border-radius: 6px; flex: 1; outline: none; }
+        .shop-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .shop-header h2 { color: #0f2027; font-size: 24px; }
 
         /* Product Grid */
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
@@ -84,15 +68,39 @@
         }
         .btn:hover { background: #00cc6a; }
 
-        /* Footer */
-        footer { background: #0c1a1f; color: #aaa; padding: 25px; text-align: center; font-size: 13px; margin-top: 50px; }
-
-        @media(max-width: 768px) {
-            header { padding: 15px 20px; flex-direction: column; gap: 15px; }
-            nav ul { flex-wrap: wrap; justify-content: center; }
-            .shop-header { flex-direction: column; gap: 15px; align-items: flex-start; }
-            .login-box { flex-direction: column; width: 100%; }
+        /* Modal Popups (Login & Cart) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
         }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 20px; cursor: pointer; color: #888; }
+        .modal-content h3 { margin-bottom: 15px; color: #0f2027; }
+        .modal-content input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; outline: none; }
+        
+        /* Cart List */
+        .cart-items-list { list-style: none; max-height: 200px; overflow-y: auto; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .cart-items-list li { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+        .cart-total { font-weight: 700; font-size: 18px; margin-bottom: 20px; display: flex; justify-content: space-between; color: #2c3e50; }
+
+        /* Payment Gateway Button */
+        .pay-btn { background: #2575fc; color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .pay-btn:hover { background: #1a5db8; }
+
+        footer { background: #0c1a1f; color: #aaa; padding: 25px; text-align: center; font-size: 13px; margin-top: 50px; }
     </style>
 </head>
 <body>
@@ -104,25 +112,21 @@
                 <h1>தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1>
             </div>
         </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">முகப்பு</a></li>
-                <li><a href="shop.html">ஸ்டோர்</a></li>
-                <li><span id="user-display" class="user-status">வருகையாளர் (Guest)</span></li>
-            </ul>
-        </nav>
+        
+        <div class="nav-icons">
+            <a href="index.html" class="icon-btn" style="background: #0f2027; color: white;">முகப்பு</a>
+            <button class="icon-btn" onclick="openLoginModal()">
+                👤 <span id="user-display-name">உள்நுழை (Login)</span>
+            </button>
+            <button class="icon-btn" onclick="openCartModal()">
+                🛒 கார்ட் (<span id="cart-count">0</span>)
+            </button>
+        </div>
     </header>
 
     <div class="container">
-        
-        <div class="login-box" id="login-section">
-            <input type="text" id="username" placeholder="உங்கள் பெயரை உள்ளிடவும் (Login)">
-            <button class="btn" style="width: 150px;" onclick="loginUser()">லாகின் செய்க</button>
-        </div>
-
         <div class="shop-header">
-            <h2>வாட்டர் லெவல் கண்ட்ரோலர் தயாரிப்புகள்</h2>
-            <div class="cart-info">🛒 கார்ட் பொருட்கள்: <span id="cart-count">0</span></div>
+            <h2>எங்கள் வாட்டர் லெவல் கண்ட்ரோலர் தயாரிப்புகள்</h2>
         </div>
 
         <div class="product-grid">
@@ -138,7 +142,7 @@
                         <li>1 வருடம் உத்தரவாதம்</li>
                     </ul>
                 </div>
-                <button class="btn" onclick="addToCart('AWLCP 1.0')">கார்ட்டில் சேர்க்கவும்</button>
+                <button class="btn" onclick="addToCart('AWLCP 1.0', 3499)">கார்ட்டில் சேர்க்கவும்</button>
             </div>
 
             <div class="product-card">
@@ -152,7 +156,7 @@
                         <li>1 வருடம் உத்தரவாதம்</li>
                     </ul>
                 </div>
-                <button class="btn" onclick="addToCart('AWLCW 1.0')">கார்ட்டில் சேர்க்கவும்</button>
+                <button class="btn" onclick="addToCart('AWLCW 1.0', 4999)">கார்ட்டில் சேர்க்கவும்</button>
             </div>
 
             <div class="product-card">
@@ -166,9 +170,38 @@
                         <li>1 வருடம் உத்தரவாதம்</li>
                     </ul>
                 </div>
-                <button class="btn" onclick="addToCart('AWLCWS 1.0')">கார்ட்டில் சேர்க்கவும்</button>
+                <button class="btn" onclick="addToCart('AWLCWS 1.0', 6999)">கார்ட்டில் சேர்க்கவும்</button>
             </div>
 
+        </div>
+    </div>
+
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeLoginModal()">&times;</span>
+            <h3>கஸ்டமர் லாகின் (Login)</h3>
+            <p style="font-size: 13px; color: #666; margin-bottom: 15px;">உங்கள் மின்னஞ்சல் அல்லது மொபைல் எண்ணை உள்ளிடவும்:</p>
+            <input type="text" id="loginInput" placeholder="Email ID அல்லது Mobile Number">
+            <button class="btn" onclick="sendOTP()">OTP பெறுக</button>
+            <div id="otp-section" style="margin-top: 15px; display: none;">
+                <input type="text" id="otpInput" placeholder="4 இலக்க OTP குறியீட்டை உள்ளிடவும்">
+                <button class="btn" onclick="verifyOTP()">உள்ளநுழை (Verify)</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="cartModal">
+        புரிதல் விளக்கங்களுடன்...
+        <div class="modal-content" style="max-width: 450px;">
+            <span class="close-btn" onclick="closeCartModal()">&times;</span>
+            <h3>உங்கள் ஷாப்பிங் கார்ட் (Cart)</h3>
+            <ul class="cart-items-list" id="cartItemsList">
+                </ul>
+            <div class="cart-total">
+                <span>மொத்தத் தொகை:</span>
+                <span id="cartTotalPrice">₹0</span>
+            </div>
+            <button class="pay-btn" onclick="proceedToPayment()">Secured Payment Gateway (Pay Now)</button>
         </div>
     </div>
 
@@ -177,47 +210,98 @@
     </footer>
 
     <script>
-        // Page Load ஆனவுடன் லோக்கல் ஸ்டோரேஜில் உள்ள கார்ட் மற்றும் லாகின் விபரங்களை எடுக்கும்
         document.addEventListener("DOMContentLoaded", function() {
-            updateCartCount();
+            updateCartDisplay();
             checkSavedUser();
         });
 
-        // கார்ட்டில் பொருள் சேமிக்கும் வசதி (Persistent Cart)
-        function addToCart(productName) {
+        // Add to Cart with Price
+        function addToCart(name, price) {
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
-            cart.push(productName);
+            cart.push({name: name, price: price});
             localStorage.setItem('cartItems', JSON.stringify(cart));
-            updateCartCount();
-            alert(productName + ' உங்கள் கார்ட்டில் வெற்றிகரமாக சேர்க்கப்பட்டது!');
+            updateCartDisplay();
+            alert(name + ' கார்ட்டில் சேர்க்கப்பட்டது!');
         }
 
-        // கார்ட் எண்ணிக்கையை அப்டேட் செய்யும்
-        function updateCartCount() {
+        // Update Cart Display & Count
+        function updateCartDisplay() {
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             document.getElementById('cart-count').innerText = cart.length;
-        }
-
-        // கஸ்டமர் லாகின் செய்யும் முறை
-        function loginUser() {
-            let uname = document.getElementById('username').value.trim();
-            if(uname !== "") {
-                localStorage.setItem('loggedInUser', uname);
-                checkSavedUser();
-                alert('வரவேற்கிறோம், ' + uname + '!');
+            
+            let listHTML = '';
+            let total = 0;
+            if(cart.length === 0) {
+                listHTML = '<li style="color:#888; text-align:center;">கார்ட் காலியாக உள்ளது.</li>';
             } else {
-                alert('தயவுசெய்து சரியான பெயரை உள்ளிடவும்.');
+                cart.forEach((item, index) => {
+                    total += item.price;
+                    listHTML += `<li><span>${item.name}</span> <b>₹${item.price}</b></li>`;
+                });
+            }
+            document.getElementById('cartItemsList').innerHTML = listHTML;
+            document.getElementById('cartTotalPrice').innerText = '₹' + total;
+        }
+
+        // Modals Control
+        function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
+        function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+        function openCartModal() { document.getElementById('cartModal').style.display = 'flex'; }
+        function closeCartModal() { document.getElementById('cartModal').style.display = 'none'; }
+
+        // Simulated OTP Login Process
+        function sendOTP() {
+            let val = document.getElementById('loginInput').value.trim();
+            if(val !== '') {
+                alert('உங்கள் மொபைல்/மின்னஞ்சலுக்கு OTP அனுப்பப்பட்டுள்ளது! (மாதிரி குறியீடு: 1234)');
+                document.getElementById('otp-section').style.display = 'block';
+            } else {
+                alert('தயவுசெய்து சரியான மின்னஞ்சல் அல்லது மொபைல் எண்ணை உள்ளிடவும்.');
             }
         }
 
-        // லாகின் செய்த பெயர் அழியாமல் இருக்கச் சரிபார்ப்பது
-        function checkSavedUser() {
-            let savedUser = localStorage.getItem('loggedInUser');
-            if(savedUser) {
-                document.getElementById('user-display').innerText = "👤 " + savedUser;
-                document.getElementById('username').style.display = 'none';
-                document.getElementById('login-section').innerHTML = `<span style="font-weight:600; color:#00b359;">வணக்கம், ${savedUser}! (உள்நுழைந்துள்ளீர்கள்)</span>`;
+        function verifyOTP() {
+            let otp = document.getElementById('otpInput').value.trim();
+            let identifier = document.getElementById('loginInput').value.trim();
+            if(otp === '1234') {
+                localStorage.setItem('loggedInUser', identifier);
+                checkSavedUser();
+                closeLoginModal();
+                alert('வெற்றிகரமாக உள்நுழைந்துவிட்டீர்கள்!');
+            } else {
+                alert('தவறான OTP குறியீடு. மீண்டும் முயற்சிக்கவும்.');
             }
+        }
+
+        function checkSavedUser() {
+            let user = localStorage.getItem('loggedInUser');
+            if(user) {
+                document.getElementById('user-display-name').innerText = user.substring(0, 8) + '...';
+            }
+        }
+
+        // Payment Gateway Simulation
+        function proceedToPayment() {
+            let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+            if(cart.length === 0) {
+                alert('கார்ட்டில் பொருட்கள் எதுவும் இல்லை!');
+                return;
+            }
+            let user = localStorage.getItem('loggedInUser');
+            if(!user) {
+                alert('தயவுசெய்து முதலில் Login செய்யவும்!');
+                closeCartModal();
+                openLoginModal();
+                return;
+            }
+            
+            // Here you can integrate Razorpay or PhonePe Payment Gateway API
+            alert('Payment Gateway-க்கு மாற்றப்படுகிறது... பாதுகாப்பான கட்டணம் செலுத்தப்படுகிறது.');
+            // Clear cart after successful payment simulation
+            localStorage.removeItem('cartItems');
+            updateCartDisplay();
+            closeCartModal();
+            alert('கட்டணம் வெற்றிகரமாக செலுத்தப்பட்டது! உங்கள் ஆர்டர் உறுதி செய்யப்பட்டது.');
         }
     </script>
 
