@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ta" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI சேவை & சிக்கல் தீர்க்கும் உதவி | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f4f7f6; color: #333; line-height: 1.6; }
+        a { text-decoration: none; color: inherit; }
+
+        /* Header */
+        header {
+            background: #fff;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .brand-section { display: flex; align-items: center; gap: 12px; }
+        .logo-img { height: 45px; width: auto; }
+        .company-title h1 { font-size: 18px; color: #0f2027; font-weight: 700; }
+        nav ul { list-style: none; display: flex; gap: 20px; align-items: center; }
+        nav ul li a { font-weight: 600; font-size: 14px; }
+        nav ul li a:hover { color: #00b359; }
+
+        /* Chat Container */
+        .chat-container { max-width: 800px; margin: 40px auto; background: white; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); overflow: hidden; display: flex; flexDirection: column; height: 75vh; }
+        .chat-header { background: #0f2027; color: white; padding: 20px; text-align: center; }
+        .chat-header h2 { font-size: 22px; color: #00ff88; margin-bottom: 5px; }
+        .chat-header p { font-size: 13px; color: #ccc; }
+
+        /* Messages Area */
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background: #fafafa; }
+        .message { max-width: 80%; padding: 12px 18px; border-radius: 10px; font-size: 14px; line-height: 1.5; }
+        .bot-msg { background: #e8f5e9; color: #2e7d32; align-self: flex-start; border-top-left-radius: 0; border: 1px solid #c8e6c9; }
+        .user-msg { background: #0f2027; color: white; align-self: flex-end; border-top-right-radius: 0; }
+
+        /* Input Area */
+        .chat-input-area { padding: 15px 20px; background: white; border-top: 1px solid #eee; display: flex; gap: 10px; }
+        .chat-input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 6px; outline: none; font-size: 14px; }
+        .chat-input:focus { border-color: #00ff88; }
+        .send-btn { background: #00ff88; color: #0f2027; border: none; padding: 0 25px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .send-btn:hover { background: #00cc6a; }
+
+        footer { background: #0c1a1f; color: #aaa; padding: 20px; text-align: center; font-size: 13px; margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-section">
+            <img src="1.png" alt="Logo" class="logo-img">
+            <div class="company-title">
+                <h1 data-ta="தமிழன் எனர்ஜி சிஸ்டம்ஸ்" data-en="Thamizhan Energy Systems">தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html" data-ta="முகப்பு" data-en="Home">முகப்பு</a></li>
+                <li><a href="shop.html" data-ta="ஸ்டோர்" data-en="Store">ஸ்டோர்</a></li>
+                <li><a href="contact.html" data-ta="தொடர்புக்கு" data-en="Contact">தொடர்புக்கு</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container" style="padding: 0 20px;">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h2>AI Troubleshooting Assistant (24×7)</h2>
+                <p>உங்களது மாடல் மற்றும் சீரியல் நம்பரைக் குறிப்பிட்டு உங்களது சிக்கலுக்கான தீர்வைப் பெறுங்கள்.</p>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-msg">
+                    வணக்கம்! தமிழன் எனர்ஜி சிஸ்டம்ஸ் AI உதவி மையத்திற்கு உங்களை வரவேற்கிறோம். உங்களது <b>மாடல் பெயர் (எ.கா: AWLCP 1.0, AWLCW 1.0, AWLCWS 1.0)</b> மற்றும் <b>சீரியல் நம்பர்</b> அல்லது நீங்கள் எதிர்கொள்ளும் சிக்கலை இங்கே தட்டச்சு செய்யவும்.
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                த்துகொள்ளவும்...
+                <input type="text" id="userInput" class="chat-input" placeholder="உங்கள் மாடல், சீரியல் எண் அல்லது சிக்கலை இங்கே எழுதுங்கள்..." onkeypress="handleKeyPress(event)">
+                <button class="send-btn" onclick="sendMessage()">அனுப்பு</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
+    </footer>
+
+    <script>
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            let inputField = document.getElementById('userInput');
+            let text = inputField.value.trim();
+            if (text === '') return;
+
+            // Display User Message
+            appendMessage(text, 'user-msg');
+            inputField.value = '';
+
+            // AI Processing and Troubleshooting Logic
+            setTimeout(() => {
+                let reply = generateAIResponse(text);
+                appendMessage(reply, 'bot-msg');
+            }, 800);
+        }
+
+        function appendMessage(text, className) {
+            let chatMessages = document.getElementById('chatMessages');
+            let msgDiv = document.createElement('div');
+            msgDiv.className = `message ${className}`;
+            msgDiv.innerHTML = text;
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function generateAIResponse(userText) {
+            let lowerText = userText.toLowerCase();
+
+            // Product Matching Logic based on User Input
+            if (lowerText.includes('awlcp') || lowerText.includes('basic') || lowerText.includes('1.0')) {
+                return `<b>மாடல் கண்டறியப்பட்டது: AWLCP 1.0 (Basic Version)</b><br>` +
+                       `• <b>சாத்தியமான சிக்கல்கள் (Possible Issues):</b> மோட்டார் ஆன் ஆகவில்லை அல்லது Dry Run (ட்ரைடன்) பாதுகாப்பு லைட் எரிகிறது.<br>` +
+                       `• <b>தீர்வு (Solutions):</b><br>` +
+                       `1. மேல் மற்றும் கீழ் தொட்டி சென்சார் கம்பிகள் சரியாக இணைக்கப்பட்டுள்ளதா எனச் சரிபார்க்கவும்.<br>` +
+                       `2. மோட்டாரில் தண்ணீர் இல்லாமல் இயங்கும்போது 'ட்ரைடன் டிடெக்ஷன்' தானாகவே மோட்டாரை நிறுத்தும். மோட்டாரில் பிரைமிங் (Priming) செய்துவிட்டு மீண்டும் இயக்கவும்.`;
+            } 
+            else if (lowerText.includes('awlcw') || lowerText.includes('wifi')) {
+                return `<b>மாடல் கண்டறியப்பட்டது: AWLCW 1.0 (WiFi Model)</b><br>` +
+                       `• <b>சாத்தியமான சிக்கல்கள் (Possible Issues):</b> மொபைல் ஆப்-உடன் இணைக்கப்படவில்லை அல்லது WiFi சிக்னல் கிடைக்கவில்லை.<br>` +
+                       `• <b>தீர்வு (Solutions):</b><br>` +
+                       `1. உங்கள் வீட்டின் Wi-Fi ரவுட்டர் ஆன் செய்யப்பட்டுள்ளதா மற்றும் பாஸ்வேர்ட் சரியாக உள்ளதா எனச் சரிபார்க்கவும்.<br>` +
+                       `2. சாதனத்தை ஒருமுறை ரீஸ்டார்ட் (Power Reset) செய்து மொபைல் ஆப் மூலம் இணைக்கவும்.`;
+            }
+            else if (lowerText.includes('awlcws') || lowerText.includes('solar') || lowerText.includes('wireless')) {
+                return `<b>மாடல் கண்டறியப்பட்டது: AWLCWS 1.0 (Wireless + Solar)</b><br>` +
+                       `• <b>சாத்தியமான சிக்கல்கள் (Possible Issues):</b> வயர்லெஸ் டிரான்ஸ்மிட்டர் சிக்னல் கிடைக்கவில்லை அல்லது சோலார் பேட்டரி சார்ஜ் குறைவாக உள்ளது.<br>` +
+                       `• <b>தீர்வு (Solutions):</b><br>` +
+                       `1. மேல் மற்றும் கீழ் யூனிட்டுகளுக்கு இடையே உள்ள வயர்லெஸ் கம்யூனிகேஷன் இணைப்பைச் சரிபார்க்கவும்.<` +
+                       `2. சோலார் பேனல் மீது தூசி படிந்திருந்தால் துடைத்துவிட்டு பேட்டரி சார்ஜ் அளவைச் சரிபார்க்கவும்.`;
+            }
+            else {
+                return `தங்களது தகவலைப் பெற்றோம். நீங்கள் குறிப்பிட்ட சீரியல் எண் மற்றும் மாடலுக்கான துல்லியமான சிக்கலை கண்டறிய முடியவில்லை. தயவுசெய்து எங்களது WhatsApp AI எண் <b>8903008906</b> மூலமாகவோ அல்லது சப்போர்ட் டிக்கெட் மூலமாகவோ தொடர்புகொள்ளவும்.`;
+            }
+        }
+    </script>
+
+</body>
+</html>
