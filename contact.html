@@ -60,6 +60,16 @@
         .whatsapp-icon { font-size: 30px; }
         .whatsapp-link { font-weight: 700; color: #2e7d32; font-size: 16px; }
 
+        /* Chatbot Redirect Button Box */
+        .chatbot-box {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid #bbdefb;
+            text-align: center;
+        }
+
         /* Ticket Form */
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #333; }
@@ -78,8 +88,18 @@
             text-align: center;
             transition: 0.3s;
             font-size: 15px;
+            display: inline-block;
         }
         .btn:hover { background: #00cc6a; }
+
+        .chatbot-btn {
+            background: #0f2027;
+            color: #00ff88;
+            margin-top: 10px;
+        }
+        .chatbot-btn:hover {
+            background: #1a2a32;
+        }
 
         /* Footer */
         footer { background: #0c1a1f; color: #aaa; padding: 25px; text-align: center; font-size: 13px; margin-top: 50px; }
@@ -99,6 +119,7 @@
                 <li><a href="index.html">முகப்பு</a></li>
                 <li><a href="shop.html">ஸ்டோர்</a></li>
                 <li><a href="contact.html" style="color: #00b359;">தொடர்புக்கு</a></li>
+                <li><a href="chatbot.html">AI சாட் போட்</a></li>
             </ul>
         </nav>
     </header>
@@ -110,7 +131,7 @@
             
             <div class="card">
                 <h3>WhatsApp AI சேட் உதவி (24×7)</h3>
-                <p>உங்களது சந்தேகங்கள், வாட்டர் லெவல் கண்ட்ரோலர் சிக்கல்கள் மற்றும் விலை விவரங்களை உடனுக்குடன் பெற எங்களது WhatsApp AI அசிஸ்டன்ட்டைத் தொடர்புகொள்ளுங்கள்.</p>
+                <p>உங்களது சந்தேகங்கள் மற்றும் வாட்டர் லெவல் கண்ட்ரோலர் சிக்கல்களை வாட்ஸ்அப் மூலமாக உடனுக்குடன் கேட்டுப் பெறலாம்.</p>
                 
                 <div class="whatsapp-box">
                     <span class="whatsapp-icon">💬</span>
@@ -119,8 +140,12 @@
                         <a href="https://wa.me/918903008906?text=Vanakkam%20Thamizhan%20Energy%20Systems,%20I%20need%20assistance." target="_blank" class="whatsapp-link">+91 8903008906</a>
                     </div>
                 </div>
-                
-                <p style="margin-top: 20px; font-size: 13px; color: #777;">மேலே உள்ள எண்ணைக் கிளிக் செய்தால் நேரடியாக வாட்ஸ்அப் அரட்டைக்குச் செல்லலாம்.</p>
+
+                <div class="chatbot-box">
+                    <h4 style="color: #0d47a1; margin-bottom: 8px; font-size: 16px;">🤖 AI சிக்கல் தீர்க்கும் போட் (Troubleshooting AI)</h4>
+                    <p style="font-size: 13px; margin-bottom: 12px; color: #333;">உங்கள் தயாரிப்பு மாடல் மற்றும் சீரியல் எண்ணை உள்ளிட்டு சிக்கல்களுக்கு உடனடித் தீர்வைப் பெறுக.</p>
+                    <a href="chatbot.html" class="btn chatbot-btn">AI சாட் போட்டைத் திறக்க (Open AI Chatbot)</a>
+                </div>
             </div>
 
             <div class="card">
@@ -165,14 +190,12 @@
             
             let name = document.getElementById('custName').value;
             let phone = document.getElementById('custPhone').value;
-            let prodId = document.getElementById('prodId').value;
+            let prodId = document.getElementById('prodId-val'] || document.getElementById('prodId').value;
             
-            // Random Ticket Number Generation
             let ticketNo = Math.floor(100000 + Math.random() * 900000);
             
             alert('நன்றி ' + name + '! உங்களது சேவை புகார் வெற்றிகரமாகப் பதிவு செய்யப்பட்டது.\n\nஉங்கள் டிக்கெட் எண் (Ticket ID): #' + ticketNo + '\nவிரைவில் எங்கள் தொழில்நுட்பக் குழு உங்களைத் தொடர்புகொள்ளும்.');
             
-            // Form-ஐ கிளியர் செய்ய
             document.getElementById('ticketForm').reset();
         }
     </script>
