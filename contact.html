@@ -13,7 +13,7 @@
         /* Header */
         header {
             background: #fff;
-            padding: 15px 40px;
+            padding: 10px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -23,8 +23,8 @@
             z-index: 1000;
         }
         .brand-section { display: flex; align-items: center; gap: 12px; }
-        .logo-img { height: 45px; width: auto; }
-        .company-title h1 { font-size: 18px; color: #0f2027; font-weight: 700; }
+        .logo-img { height: 45px; width: auto; display: block; }
+        .company-title h1 { font-size: 16px; color: #0f2027; font-weight: 700; line-height: 1.2; }
         
         .nav-container { display: flex; align-items: center; gap: 20px; }
         nav ul { list-style: none; display: flex; gap: 20px; align-items: center; }
@@ -50,8 +50,8 @@
             display: none;
             flex-direction: column;
             justify-content: space-between;
-            width: 30px;
-            height: 21px;
+            width: 28px;
+            height: 20px;
             cursor: pointer;
             background: transparent;
             border: none;
@@ -66,20 +66,20 @@
 
         /* Container */
         .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
-        .page-title { text-align: center; color: #0f2027; font-size: 30px; margin-bottom: 30px; }
+        .page-title { text-align: center; color: #0f2027; font-size: 26px; margin-bottom: 30px; }
 
         .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
         @media(max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } }
 
         .card {
             background: white;
-            padding: 30px;
+            padding: 25px;
             border-radius: 12px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             border-top: 5px solid #00ff88;
         }
-        .card h3 { color: #0f2027; font-size: 22px; margin-bottom: 15px; }
-        .card p { color: #555; font-size: 14px; margin-bottom: 20px; }
+        .card h3 { color: #0f2027; font-size: 20px; margin-bottom: 12px; }
+        .card p { color: #555; font-size: 13px; margin-bottom: 15px; }
 
         /* WhatsApp Box */
         .whatsapp-box {
@@ -87,18 +87,18 @@
             align-items: center;
             gap: 15px;
             background: #e8f5e9;
-            padding: 15px;
+            padding: 12px;
             border-radius: 8px;
             margin-top: 15px;
             border: 1px solid #c8e6c9;
         }
-        .whatsapp-icon { font-size: 30px; }
-        .whatsapp-link { font-weight: 700; color: #2e7d32; font-size: 16px; }
+        .whatsapp-icon { font-size: 26px; }
+        .whatsapp-link { font-weight: 700; color: #2e7d32; font-size: 15px; }
 
         /* Chatbot Redirect Button Box */
         .chatbot-box {
             background: #e3f2fd;
-            padding: 20px;
+            padding: 15px;
             border-radius: 8px;
             margin-top: 20px;
             border: 1px solid #bbdefb;
@@ -106,15 +106,15 @@
         }
 
         /* Ticket Form */
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #333; }
-        .form-control { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; outline: none; font-size: 14px; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #333; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; outline: none; font-size: 13px; }
         .form-control:focus { border-color: #00ff88; }
 
         .btn {
             background: #00ff88;
             color: #0f2027;
-            padding: 12px;
+            padding: 10px;
             border: none;
             border-radius: 6px;
             font-weight: 700;
@@ -122,7 +122,7 @@
             width: 100%;
             text-align: center;
             transition: 0.3s;
-            font-size: 15px;
+            font-size: 14px;
             display: inline-block;
         }
         .btn:hover { background: #00cc6a; }
@@ -130,36 +130,42 @@
         .chatbot-btn {
             background: #0f2027;
             color: #00ff88;
-            margin-top: 10px;
+            margin-top: 8px;
         }
         .chatbot-btn:hover { background: #1a2a32; }
 
         /* Footer */
-        footer { background: #0c1a1f; color: #aaa; padding: 25px; text-align: center; font-size: 13px; margin-top: 50px; }
+        footer { background: #0c1a1f; color: #aaa; padding: 25px; text-align: center; font-size: 12px; margin-top: 50px; }
 
         /* Mobile Responsive Styles */
         @media (max-width: 768px) {
-            header { padding: 15px 20px; }
+            header { padding: 10px 15px; }
             .menu-toggle { display: flex; }
             
             .nav-container {
                 position: absolute;
-                top: 75px;
+                top: 65px;
                 left: 0;
                 width: 100%;
                 background: #fff;
                 flex-direction: column;
                 align-items: flex-start;
-                padding: 20px 30px;
+                padding: 0 20px;
                 box-shadow: 0 10px 15px rgba(0,0,0,0.1);
                 max-height: 0;
                 overflow: hidden;
-                transition: max-height 0.3s ease-in-out;
+                visibility: hidden;
+                transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out, visibility 0.3s;
             }
-            .nav-container.active { max-height: 350px; }
-            nav ul { flex-direction: column; width: 100%; gap: 15px; }
-            nav ul li { width: 100%; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-            .lang-btn { width: 100%; text-align: center; margin-top: 10px; }
+            .nav-container.active {
+                max-height: 350px;
+                visibility: visible;
+                padding: 15px 20px;
+            }
+            nav { width: 100%; }
+            nav ul { flex-direction: column; width: 100%; gap: 12px; }
+            nav ul li { width: 100%; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+            .lang-btn { width: 100%; text-align: center; margin-top: 5px; }
         }
     </style>
 </head>
@@ -204,14 +210,14 @@
                 <div class="whatsapp-box">
                     <span class="whatsapp-icon">💬</span>
                     <div>
-                        <div style="font-size: 12px; color: #666;" data-ta="WhatsApp AI சேட் எண்" data-en="WhatsApp AI Chat Number">WhatsApp AI சேட் எண்</div>
+                        <div style="font-size: 11px; color: #666;" data-ta="WhatsApp AI சேட் எண்" data-en="WhatsApp AI Chat Number">WhatsApp AI சேட் எண்</div>
                         <a href="https://wa.me/918903008906?text=Vanakkam%20Thamizhan%20Energy%20Systems,%20I%20need%20assistance." target="_blank" class="whatsapp-link">+91 8903008906</a>
                     </div>
                 </div>
 
                 <div class="chatbot-box">
-                    <h4 style="color: #0d47a1; margin-bottom: 8px; font-size: 16px;" data-ta="🤖 AI சிக்கல் தீர்க்கும் போட் (Troubleshooting AI)" data-en="🤖 Troubleshooting AI">🤖 AI சிக்கல் தீர்க்கும் போட் (Troubleshooting AI)</h4>
-                    <p style="font-size: 13px; margin-bottom: 12px; color: #333;" data-ta="உங்கள் தயாரிப்பு மாடல் மற்றும் சீரியல் எண்ணை உள்ளிட்டு சிக்கல்களுக்கு உடனடித் தீர்வைப் பெறுக." data-en="Enter your model and serial number to get instant troubleshooting solutions.">உங்கள் தயாரிப்பு மாடல் மற்றும் சீரியல் எண்ணை உள்ளிட்டு சிக்கல்களுக்கு உடனடித் தீர்வைப் பெறுக.</p>
+                    <h4 style="color: #0d47a1; margin-bottom: 6px; font-size: 15px;" data-ta="🤖 AI சிக்கல் தீர்க்கும் போட் (Troubleshooting AI)" data-en="🤖 Troubleshooting AI">🤖 AI சிக்கல் தீர்க்கும் போட் (Troubleshooting AI)</h4>
+                    <p style="font-size: 12px; margin-bottom: 10px; color: #333;" data-ta="உங்கள் தயாரிப்பு மாடல் மற்றும் சீரியல் எண்ணை உள்ளிட்டு சிக்கல்களுக்கு உடனடித் தீர்வைப் பெறுக." data-en="Enter your model and serial number to get instant troubleshooting solutions.">உங்கள் தயாரிப்பு மாடல் மற்றும் சீரியல் எண்ணை உள்ளிட்டு சிக்கல்களுக்கு உடனடித் தீர்வைப் பெறுக.</p>
                     <a href="chatbot.html" class="btn chatbot-btn" data-ta="AI சாட் போட்டைத் திறக்க" data-en="Open AI Chatbot">AI சாட் போட்டைத் திறக்க (Open AI Chatbot)</a>
                 </div>
             </div>
@@ -241,4 +247,65 @@
                         <textarea id="complaintDesc" class="form-control" rows="3" placeholder="சிக்கலை இங்கே விவரிக்கவும்..." required></textarea>
                     </div>
 
-                    <button type="submit" class="btn"
+                    <button type="submit" class="btn" data-ta="டிக்கெட் சமர்ப்பிக்க" data-en="Submit Ticket">டிக்கெட் சமர்ப்பிக்க (Submit Ticket)</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <p data-ta="&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை." data-en="&copy; 2026 Thamizhan Energy Systems. All Rights Reserved.">&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu, Language Toggle & Ticket Submission -->
+    <script>
+        function toggleMobileMenu() {
+            const navContainer = document.getElementById('navContainer');
+            navContainer.classList.toggle('active');
+        }
+
+        let currentLang = 'ta';
+
+        function toggleLanguage() {
+            if (currentLang === 'ta') {
+                currentLang = 'en';
+                document.getElementById('langToggleBtn').innerText = 'தமிழ்';
+                document.getElementById('htmlRoot').setAttribute('lang', 'en');
+            } else {
+                currentLang = 'ta';
+                document.getElementById('langToggleBtn').innerText = 'English';
+                document.getElementById('htmlRoot').setAttribute('lang', 'ta');
+            }
+
+            const elements = document.querySelectorAll('[data-ta]');
+            elements.forEach(el => {
+                if (currentLang === 'en') {
+                    el.innerText = el.getAttribute('data-en');
+                } else {
+                    el.innerText = el.getAttribute('data-ta');
+                }
+            });
+        }
+
+        function submitTicket(event) {
+            event.preventDefault();
+            
+            let name = document.getElementById('custName').value;
+            let phone = document.getElementById('custPhone').value;
+            let prodId = document.getElementById('prodId').value;
+            
+            let ticketNo = Math.floor(100000 + Math.random() * 900000);
+            
+            if (currentLang === 'ta') {
+                alert('நன்றி ' + name + '! உங்களது சேவை புகார் வெற்றிகரமாகப் பதிவு செய்யப்பட்டது.\n\nஉங்கள் டிக்கெட் எண் (Ticket ID): #' + ticketNo + '\nவிரைவில் எங்கள் தொழில்நுட்பக் குழு உங்களைத் தொடர்புகொள்ளும்.');
+            } else {
+                alert('Thank you ' + name + '! Your service ticket has been successfully registered.\n\nTicket ID: #' + ticketNo + '\nOur technical team will contact you soon.');
+            }
+            
+            document.getElementById('ticketForm').reset();
+        }
+    </script>
+
+</body>
+</html>
