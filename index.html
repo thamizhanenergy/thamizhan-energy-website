@@ -13,7 +13,7 @@
         /* Header & Logo Section */
         header {
             background: #fff;
-            padding: 10px 20px;
+            padding: 10px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -22,15 +22,12 @@
             top: 0;
             z-index: 1000;
         }
-        .brand-section { display: flex; align-items: center; gap: 10px; }
-        
-        /* லோகோ அளவு ஹெடருக்குள் சரியாகப் பொருந்தும் வகையில் குறைக்கப்பட்டுளது (50px) */
-        .logo-img { height: 50px; width: auto; display: block; } 
-        
+        .brand-section { display: flex; align-items: center; gap: 12px; }
+        .logo-img { height: 50px; width: auto; display: block; }
         .company-title h1 { font-size: 16px; color: #0f2027; font-weight: 700; line-height: 1.2; }
         .company-title p { font-size: 10px; color: #555; letter-spacing: 0.5px; }
         
-        .nav-container { display: flex; align-items: center; gap: 15px; }
+        .nav-container { display: flex; align-items: center; gap: 20px; }
         
         nav ul { list-style: none; display: flex; gap: 20px; align-items: center; }
         nav ul li a { font-weight: 600; font-size: 14px; color: #333; }
@@ -55,8 +52,8 @@
             display: none;
             flex-direction: column;
             justify-content: space-between;
-            width: 26px;
-            height: 18px;
+            width: 28px;
+            height: 20px;
             cursor: pointer;
             background: transparent;
             border: none;
@@ -118,16 +115,14 @@
         /* Footer */
         footer { background: #0c1a1f; color: #aaa; padding: 25px; text-align: center; font-size: 12px; }
 
-        /* Mobile View Fixes (<= 768px) */
+        /* Mobile Responsive Styles (<= 768px) */
         @media (max-width: 768px) {
             header { padding: 10px 15px; }
-            .logo-img { height: 40px; } /* மொபைலில் லோகோ மேலும் நேர்த்தியாகச் சிறுப்பிக்கப்பட்டுள்ளது */
-            .company-title h1 { font-size: 14px; }
-            .company-title p { font-size: 9px; }
+            .logo-img { height: 42px; }
             
             .menu-toggle { display: flex; }
             
-            /* மெனு பார் இயல்பாக மறைக்கப்பட்டிருக்கும். மூன்று கோட்டைத் தொட்டால் மட்டுமே கீழே விரியும் */
+            /* திருத்தப்பட்ட பகுதி: முழுமையாக மறைக்கப்பட்டு கிளிக்கில் மட்டும் திறக்கும் */
             .nav-container {
                 position: absolute;
                 top: 65px;
@@ -136,14 +131,20 @@
                 background: #fff;
                 flex-direction: column;
                 align-items: flex-start;
-                padding: 15px 25px;
+                padding: 0 25px;
                 box-shadow: 0 10px 15px rgba(0,0,0,0.1);
                 max-height: 0;
                 overflow: hidden;
-                transition: max-height 0.3s ease-in-out;
+                visibility: hidden;
+                transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out, visibility 0.3s;
             }
             .nav-container.active {
-                max-height: 300px; /* முந்தையப் பிரச்சனை போல முகப்பு வார்த்தை வெளியே தெரியாமல் மறைக்கப்பட்டிருக்கும் */
+                max-height: 350px;
+                visibility: visible;
+                padding: 15px 25px;
+            }
+            nav {
+                width: 100%;
             }
             nav ul {
                 flex-direction: column;
@@ -156,7 +157,7 @@
                 padding-bottom: 8px;
             }
             .lang-btn {
-                margin-top: 10px;
+                margin-top: 5px;
                 width: 100%;
                 text-align: center;
             }
@@ -167,7 +168,6 @@
 </head>
 <body>
 
-    <!-- Header Section -->
     <header>
         <div class="brand-section">
             <img src="1.png" alt="Thamizhi Logo" class="logo-img">
@@ -177,7 +177,6 @@
             </div>
         </div>
         
-        <!-- Three Dash Hamburger Button for Mobile -->
         <button class="menu-toggle" id="mobileMenuBtn" onclick="toggleMobileMenu()">
             <span></span>
             <span></span>
@@ -193,26 +192,22 @@
                     <li><a href="contact.html" data-ta="தொடர்புக்கு & சாட் போட்" data-en="Contact & Chatbot">தொடர்புக்கு & சாட் போட்</a></li>
                 </ul>
             </nav>
-            <!-- Language Switch Button -->
             <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">English</button>
         </div>
     </header>
 
-    <!-- Hero Banner Section -->
     <section class="hero" id="home">
         <h2 data-ta="புரட்சிகரமான நீர் மேலாண்மை" data-en="Revolutionary Water Management">புரட்சிகரமான நீர் மேலாண்மை</h2>
         <p data-ta="இந்தியாவின் நம்பகமான ஆட்டோமேஷன் மற்றும் ஐஓடி தீர்வுகள். உங்கள் நீரை எளிதாகக் கண்காணிக்கவும் கட்டுப்படுத்தவும்." data-en="India's trusted automation and IoT solutions. Easily monitor and control your water.">இந்தியாவின் நம்பகமான ஆட்டோமேஷன் மற்றும் ஐஓடி தீர்வுகள். உங்கள் நீரை எளிதாகக் கண்காணிக்கவும் கட்டுப்படுத்தவும்.</p>
         <a href="shop.html" class="btn" data-ta="எங்கள் தயாரிப்புகள்" data-en="Our Products">எங்கள் தயாரிப்புகள்</a>
     </section>
 
-    <!-- Products Section -->
     <section class="products-section" id="products">
         <h2 class="section-title" data-ta="எங்களது மூன்று ஸ்மார்ட் மாடல்கள்" data-en="Our Three Smart Models">எங்களது மூன்று ஸ்மார்ட் மாடல்கள்</h2>
         <p class="section-desc" data-ta="உங்கள் தேவைகளுக்குப் பொருத்தமான வாட்டர் லெவல் கண்ட்ரோலர் மாடலைத் தேர்ந்தெடுக்கவும்." data-en="Choose the water level controller model that suits your needs.">உங்கள் தேவைகளுக்குப் பொருத்தமான வாட்டர் லெவல் கண்ட்ரோலர் மாடலைத் தேர்ந்தெடுக்கவும்.</p>
         
         <div class="product-grid">
             
-            <!-- Model 1 -->
             <div class="product-card">
                 <span class="model-badge">Basic Version</span>
                 <h3>AWLCP 1.0 (Basic)</h3>
@@ -226,7 +221,6 @@
                 <div class="price-tag">₹3,499/-</div>
             </div>
 
-            <!-- Model 2 -->
             <div class="product-card">
                 <span class="model-badge" style="background: #e8f5e9; color: #2e7d32;">WiFi Model</span>
                 <h3>AWLCW 1.0 (WiFi)</h3>
@@ -240,7 +234,6 @@
                 <div class="price-tag">₹4,999/-</div>
             </div>
 
-            <!-- Model 3 -->
             <div class="product-card">
                 <span class="model-badge" style="background: #fff3e0; color: #ef6c00;">Wireless + Solar</span>
                 <h3>AWLCWS 1.0 (Pro)</h3>
@@ -262,7 +255,6 @@
         </div>
     </section>
 
-    <!-- Future Devices Section -->
     <section class="future-section" id="future">
         <h2 data-ta="எதிர்கால எலக்ட்ரானிக்ஸ் மற்றும் பவர் சாதனங்கள்" data-en="Future Electronics & Power Devices">எதிர்கால எலக்ட்ரானிக்ஸ் மற்றும் பவர் சாதனங்கள்</h2>
         <p data-ta="தமிழன் எனர்ஜி பிரைவேட் லிமிடெட் மூலம் விரைவில் வரவுள்ள நவீன எலக்ட்ரானிக் டிவைஸ்கள்." data-en="Modern electronic devices coming soon from Thamizhan Energy Pvt Ltd.">தமிழன் எனர்ஜி பிரைவேட் லிமிடெட் மூலம் விரைவில் வரவுள்ள நவீன எலக்ட்ரானிக் டிவைஸ்கள்.</p>
@@ -272,12 +264,10 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <p data-ta="&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை." data-en="&copy; 2026 Thamizhan Energy Systems. All Rights Reserved.">&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
     </footer>
 
-    <!-- JavaScript for Mobile Menu & Language Toggle -->
     <script>
         function toggleMobileMenu() {
             const navContainer = document.getElementById('navContainer');
