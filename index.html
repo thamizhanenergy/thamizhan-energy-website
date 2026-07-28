@@ -13,7 +13,7 @@
         /* Header & Logo Section */
         header {
             background: #fff;
-            padding: 15px 40px;
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -22,12 +22,15 @@
             top: 0;
             z-index: 1000;
         }
-        .brand-section { display: flex; align-items: center; gap: 15px; }
-        .logo-img { height: 70px; width: auto; }
-        .company-title h1 { font-size: 20px; color: #0f2027; font-weight: 700; }
-        .company-title p { font-size: 11px; color: #555; letter-spacing: 1px; }
+        .brand-section { display: flex; align-items: center; gap: 10px; }
         
-        .nav-container { display: flex; align-items: center; gap: 20px; }
+        /* லோகோ அளவு ஹெடருக்குள் சரியாகப் பொருந்தும் வகையில் குறைக்கப்பட்டுளது (50px) */
+        .logo-img { height: 50px; width: auto; display: block; } 
+        
+        .company-title h1 { font-size: 16px; color: #0f2027; font-weight: 700; line-height: 1.2; }
+        .company-title p { font-size: 10px; color: #555; letter-spacing: 0.5px; }
+        
+        .nav-container { display: flex; align-items: center; gap: 15px; }
         
         nav ul { list-style: none; display: flex; gap: 20px; align-items: center; }
         nav ul li a { font-weight: 600; font-size: 14px; color: #333; }
@@ -38,10 +41,10 @@
             background: #0f2027;
             color: #00ff88;
             border: 2px solid #00ff88;
-            padding: 6px 14px;
+            padding: 5px 12px;
             border-radius: 20px;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             transition: 0.3s;
         }
@@ -52,8 +55,8 @@
             display: none;
             flex-direction: column;
             justify-content: space-between;
-            width: 30px;
-            height: 21px;
+            width: 26px;
+            height: 18px;
             cursor: pointer;
             background: transparent;
             border: none;
@@ -78,98 +81,103 @@
             color: white;
             padding: 0 20px;
         }
-        .hero h2 { font-size: 42px; margin-bottom: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-        .hero p { font-size: 18px; max-width: 700px; margin-bottom: 30px; }
-        .btn { background: #00ff88; color: #0f2027; padding: 12px 35px; border-radius: 30px; font-weight: 700; font-size: 16px; text-transform: uppercase; }
-        .btn:hover { background: #00cc6a; box-shadow: 0 4px 15px rgba(0,255,136,0.4); }
+        .hero h2 { font-size: 36px; margin-bottom: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .hero p { font-size: 16px; max-width: 700px; margin-bottom: 30px; }
+        .btn { background: #00ff88; color: #0f2027; padding: 12px 30px; border-radius: 30px; font-weight: 700; font-size: 15px; text-transform: uppercase; }
+        .btn:hover { background: #00cc6a; }
 
         /* Products Section */
         .products-section { padding: 60px 20px; max-width: 1200px; margin: 0 auto; text-align: center; }
-        .section-title { font-size: 34px; color: #0f2027; margin-bottom: 15px; }
-        .section-desc { color: #666; margin-bottom: 40px; font-size: 15px; }
+        .section-title { font-size: 28px; color: #0f2027; margin-bottom: 15px; }
+        .section-desc { color: #666; margin-bottom: 40px; font-size: 14px; }
         
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; text-align: left; margin-bottom: 50px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; text-align: left; margin-bottom: 50px; }
         .product-card {
             background: #fff;
-            padding: 30px;
+            padding: 25px;
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.05);
             border-top: 5px solid #00ff88;
-            transition: transform 0.3s;
         }
-        .product-card:hover { transform: translateY(-10px); }
-        .product-card h3 { font-size: 22px; color: #0f2027; margin-bottom: 10px; }
-        .model-badge { display: inline-block; background: #e0f7fa; color: #006064; padding: 5px 12px; border-radius: 5px; font-size: 11px; font-weight: 600; margin-bottom: 15px; }
-        .spec-list { list-style: none; font-size: 14px; color: #555; margin-top: 15px; }
+        .product-card h3 { font-size: 20px; color: #0f2027; margin-bottom: 10px; }
+        .model-badge { display: inline-block; background: #e0f7fa; color: #006064; padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 600; margin-bottom: 15px; }
+        .spec-list { list-style: none; font-size: 13px; color: #555; margin-top: 15px; }
         .spec-list li { margin-bottom: 8px; display: flex; align-items: flex-start; }
-        .spec-list li::before { content: '✔️'; color: #00b359; margin-right: 10px; font-size: 12px; }
-        .price-tag { font-size: 24px; font-weight: 700; color: #2c3e50; margin-top: 20px; }
+        .spec-list li::before { content: '✔️'; color: #00b359; margin-right: 8px; font-size: 11px; }
+        .price-tag { font-size: 22px; font-weight: 700; color: #2c3e50; margin-top: 20px; }
 
-        .specs-image-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-top: 20px; }
+        .specs-image-box { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-top: 20px; }
         .specs-img { width: 100%; height: auto; border-radius: 8px; display: block; }
 
         /* Future Devices Section */
-        .future-section { background: #0f2027; color: #fff; padding: 60px 20px; text-align: center; margin-top: 60px; }
-        .future-section h2 { color: #fff; font-size: 32px; margin-bottom: 15px; }
-        .future-image-box { max-width: 1000px; margin: 30px auto 0 auto; background: #182830; padding: 20px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
+        .future-section { background: #0f2027; color: #fff; padding: 50px 20px; text-align: center; margin-top: 50px; }
+        .future-section h2 { color: #fff; font-size: 26px; margin-bottom: 15px; }
+        .future-image-box { max-width: 1000px; margin: 20px auto 0 auto; background: #182830; padding: 15px; border-radius: 12px; }
         .future-img { width: 100%; height: auto; border-radius: 8px; display: block; }
 
         /* Footer */
-        footer { background: #0c1a1f; color: #aaa; padding: 30px 50px; text-align: center; font-size: 13px; }
+        footer { background: #0c1a1f; color: #aaa; padding: 25px; text-align: center; font-size: 12px; }
 
-        /* Responsive Styles for Mobile View (<= 768px) */
+        /* Mobile View Fixes (<= 768px) */
         @media (max-width: 768px) {
-            header { padding: 15px 20px; }
+            header { padding: 10px 15px; }
+            .logo-img { height: 40px; } /* மொபைலில் லோகோ மேலும் நேர்த்தியாகச் சிறுப்பிக்கப்பட்டுள்ளது */
+            .company-title h1 { font-size: 14px; }
+            .company-title p { font-size: 9px; }
+            
             .menu-toggle { display: flex; }
             
+            /* மெனு பார் இயல்பாக மறைக்கப்பட்டிருக்கும். மூன்று கோட்டைத் தொட்டால் மட்டுமே கீழே விரியும் */
             .nav-container {
                 position: absolute;
-                top: 75px;
+                top: 65px;
                 left: 0;
                 width: 100%;
                 background: #fff;
                 flex-direction: column;
                 align-items: flex-start;
-                padding: 20px 30px;
+                padding: 15px 25px;
                 box-shadow: 0 10px 15px rgba(0,0,0,0.1);
                 max-height: 0;
                 overflow: hidden;
                 transition: max-height 0.3s ease-in-out;
             }
             .nav-container.active {
-                max-height: 400px;
+                max-height: 300px; /* முந்தையப் பிரச்சனை போல முகப்பு வார்த்தை வெளியே தெரியாமல் மறைக்கப்பட்டிருக்கும் */
             }
             nav ul {
                 flex-direction: column;
                 width: 100%;
-                gap: 15px;
+                gap: 12px;
             }
             nav ul li {
                 width: 100%;
                 border-bottom: 1px solid #eee;
-                padding-bottom: 10px;
+                padding-bottom: 8px;
             }
             .lang-btn {
                 margin-top: 10px;
                 width: 100%;
                 text-align: center;
             }
-            .hero h2 { font-size: 28px; }
-            .hero p { font-size: 14px; }
+            .hero h2 { font-size: 24px; }
+            .hero p { font-size: 13px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Header Section -->
     <header>
         <div class="brand-section">
             <img src="1.png" alt="Thamizhi Logo" class="logo-img">
             <div class="company-title">
                 <h1 data-ta="தமிழன் எனர்ஜி சிஸ்டம்ஸ்" data-en="Thamizhan Energy Systems">தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1>
-                <p>The brand name of Thamizhi</p>
+                <p>POWERED BY TAMIZHI</p>
             </div>
         </div>
         
+        <!-- Three Dash Hamburger Button for Mobile -->
         <button class="menu-toggle" id="mobileMenuBtn" onclick="toggleMobileMenu()">
             <span></span>
             <span></span>
@@ -185,22 +193,26 @@
                     <li><a href="contact.html" data-ta="தொடர்புக்கு & சாட் போட்" data-en="Contact & Chatbot">தொடர்புக்கு & சாட் போட்</a></li>
                 </ul>
             </nav>
+            <!-- Language Switch Button -->
             <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">English</button>
         </div>
     </header>
 
+    <!-- Hero Banner Section -->
     <section class="hero" id="home">
         <h2 data-ta="புரட்சிகரமான நீர் மேலாண்மை" data-en="Revolutionary Water Management">புரட்சிகரமான நீர் மேலாண்மை</h2>
         <p data-ta="இந்தியாவின் நம்பகமான ஆட்டோமேஷன் மற்றும் ஐஓடி தீர்வுகள். உங்கள் நீரை எளிதாகக் கண்காணிக்கவும் கட்டுப்படுத்தவும்." data-en="India's trusted automation and IoT solutions. Easily monitor and control your water.">இந்தியாவின் நம்பகமான ஆட்டோமேஷன் மற்றும் ஐஓடி தீர்வுகள். உங்கள் நீரை எளிதாகக் கண்காணிக்கவும் கட்டுப்படுத்தவும்.</p>
         <a href="shop.html" class="btn" data-ta="எங்கள் தயாரிப்புகள்" data-en="Our Products">எங்கள் தயாரிப்புகள்</a>
     </section>
 
+    <!-- Products Section -->
     <section class="products-section" id="products">
         <h2 class="section-title" data-ta="எங்களது மூன்று ஸ்மார்ட் மாடல்கள்" data-en="Our Three Smart Models">எங்களது மூன்று ஸ்மார்ட் மாடல்கள்</h2>
         <p class="section-desc" data-ta="உங்கள் தேவைகளுக்குப் பொருத்தமான வாட்டர் லெவல் கண்ட்ரோலர் மாடலைத் தேர்ந்தெடுக்கவும்." data-en="Choose the water level controller model that suits your needs.">உங்கள் தேவைகளுக்குப் பொருத்தமான வாட்டர் லெவல் கண்ட்ரோலர் மாடலைத் தேர்ந்தெடுக்கவும்.</p>
         
         <div class="product-grid">
             
+            <!-- Model 1 -->
             <div class="product-card">
                 <span class="model-badge">Basic Version</span>
                 <h3>AWLCP 1.0 (Basic)</h3>
@@ -214,6 +226,7 @@
                 <div class="price-tag">₹3,499/-</div>
             </div>
 
+            <!-- Model 2 -->
             <div class="product-card">
                 <span class="model-badge" style="background: #e8f5e9; color: #2e7d32;">WiFi Model</span>
                 <h3>AWLCW 1.0 (WiFi)</h3>
@@ -227,6 +240,7 @@
                 <div class="price-tag">₹4,999/-</div>
             </div>
 
+            <!-- Model 3 -->
             <div class="product-card">
                 <span class="model-badge" style="background: #fff3e0; color: #ef6c00;">Wireless + Solar</span>
                 <h3>AWLCWS 1.0 (Pro)</h3>
@@ -248,27 +262,28 @@
         </div>
     </section>
 
+    <!-- Future Devices Section -->
     <section class="future-section" id="future">
         <h2 data-ta="எதிர்கால எலக்ட்ரானிக்ஸ் மற்றும் பவர் சாதனங்கள்" data-en="Future Electronics & Power Devices">எதிர்கால எலக்ட்ரானிக்ஸ் மற்றும் பவர் சாதனங்கள்</h2>
-        <p data-ta="தமிழன் எனர்ஜி பிரைவேட் லிமிடெட் மூலம் விரைவில் வரவுள்ள நவீன எலக்ட்ரானிக் டிவைஸ்கள்." data-en="Modern electronic devices coming soon from Thamizhan Energy Systems.">தமிழன் எனர்ஜி பிரைவேட் லிமிடெட் மூலம் விரைவில் வரவுள்ள நவீன எலக்ட்ரானிக் டிவைஸ்கள்.</p>
+        <p data-ta="தமிழன் எனர்ஜி பிரைவேட் லிமிடெட் மூலம் விரைவில் வரவுள்ள நவீன எலக்ட்ரானிக் டிவைஸ்கள்." data-en="Modern electronic devices coming soon from Thamizhan Energy Pvt Ltd.">தமிழன் எனர்ஜி பிரைவேட் லிமிடெட் மூலம் விரைவில் வரவுள்ள நவீன எலக்ட்ரானிக் டிவைஸ்கள்.</p>
         
         <div class="future-image-box">
             <img src="2.png" alt="Future Electronic Devices" class="future-img">
         </div>
     </section>
 
+    <!-- Footer -->
     <footer>
         <p data-ta="&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை." data-en="&copy; 2026 Thamizhan Energy Systems. All Rights Reserved.">&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
     </footer>
 
+    <!-- JavaScript for Mobile Menu & Language Toggle -->
     <script>
-        // Mobile Menu Toggle Function
         function toggleMobileMenu() {
             const navContainer = document.getElementById('navContainer');
             navContainer.classList.toggle('active');
         }
 
-        // Language Switching Function
         let currentLang = 'ta';
 
         function toggleLanguage() {
