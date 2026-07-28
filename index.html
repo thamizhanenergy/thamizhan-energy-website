@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: #f4f7f6; color: #333; line-height: 1.6; }
+        body { background-color: #f4f7f6; color: #333; line-height: 1.6; overflow-x: hidden; }
         a { text-decoration: none; color: inherit; transition: 0.3s; }
         
         /* Header & Logo Section */
@@ -23,13 +23,14 @@
             z-index: 1000;
         }
         .brand-section { display: flex; align-items: center; gap: 15px; }
-        .logo-img { height: 80px; width: auto; } /* லோகோ அளவு பெரிதாக்கப்பட்டுள்ளது (80px) */
+        .logo-img { height: 70px; width: auto; }
         .company-title h1 { font-size: 20px; color: #0f2027; font-weight: 700; }
         .company-title p { font-size: 11px; color: #555; letter-spacing: 1px; }
         
         .nav-container { display: flex; align-items: center; gap: 20px; }
-        nav ul { list-style: none; display: flex; gap: 20px; }
-        nav ul li a { font-weight: 600; font-size: 14px; }
+        
+        nav ul { list-style: none; display: flex; gap: 20px; align-items: center; }
+        nav ul li a { font-weight: 600; font-size: 14px; color: #333; }
         nav ul li a:hover { color: #00b359; }
 
         /* Language Toggle Button Style */
@@ -46,7 +47,26 @@
         }
         .lang-btn:hover { background: #00ff88; color: #0f2027; }
 
-        /* Hero Section using Image 4.png */
+        /* Hamburger Menu Icon (Hidden on Desktop) */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+        }
+        .menu-toggle span {
+            width: 100%;
+            height: 3px;
+            background-color: #0f2027;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
         .hero {
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('4.png') no-repeat center center/cover;
             height: 70vh;
@@ -63,12 +83,12 @@
         .btn { background: #00ff88; color: #0f2027; padding: 12px 35px; border-radius: 30px; font-weight: 700; font-size: 16px; text-transform: uppercase; }
         .btn:hover { background: #00cc6a; box-shadow: 0 4px 15px rgba(0,255,136,0.4); }
 
-        /* Products Section - 3 Models Grid */
+        /* Products Section */
         .products-section { padding: 60px 20px; max-width: 1200px; margin: 0 auto; text-align: center; }
         .section-title { font-size: 34px; color: #0f2027; margin-bottom: 15px; }
         .section-desc { color: #666; margin-bottom: 40px; font-size: 15px; }
         
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; text-align: left; margin-bottom: 50px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; text-align: left; margin-bottom: 50px; }
         .product-card {
             background: #fff;
             padding: 30px;
@@ -85,11 +105,10 @@
         .spec-list li::before { content: '✔️'; color: #00b359; margin-right: 10px; font-size: 12px; }
         .price-tag { font-size: 24px; font-weight: 700; color: #2c3e50; margin-top: 20px; }
 
-        /* Full Spec Image Container (Image 3.png) */
         .specs-image-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-top: 20px; }
         .specs-img { width: 100%; height: auto; border-radius: 8px; display: block; }
 
-        /* Future Devices Section using Image 2.png */
+        /* Future Devices Section */
         .future-section { background: #0f2027; color: #fff; padding: 60px 20px; text-align: center; margin-top: 60px; }
         .future-section h2 { color: #fff; font-size: 32px; margin-bottom: 15px; }
         .future-image-box { max-width: 1000px; margin: 30px auto 0 auto; background: #182830; padding: 20px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
@@ -98,17 +117,50 @@
         /* Footer */
         footer { background: #0c1a1f; color: #aaa; padding: 30px 50px; text-align: center; font-size: 13px; }
 
+        /* Responsive Styles for Mobile View (<= 768px) */
         @media (max-width: 768px) {
-            header { padding: 15px 20px; flex-direction: column; gap: 15px; }
-            .nav-container { flex-direction: column; gap: 10px; }
-            nav ul { flex-wrap: wrap; justify-content: center; gap: 15px; }
+            header { padding: 15px 20px; }
+            .menu-toggle { display: flex; }
+            
+            .nav-container {
+                position: absolute;
+                top: 75px;
+                left: 0;
+                width: 100%;
+                background: #fff;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px 30px;
+                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease-in-out;
+            }
+            .nav-container.active {
+                max-height: 400px;
+            }
+            nav ul {
+                flex-direction: column;
+                width: 100%;
+                gap: 15px;
+            }
+            nav ul li {
+                width: 100%;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 10px;
+            }
+            .lang-btn {
+                margin-top: 10px;
+                width: 100%;
+                text-align: center;
+            }
             .hero h2 { font-size: 28px; }
+            .hero p { font-size: 14px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Header Section: Logo 1.png & Language Toggle -->
     <header>
         <div class="brand-section">
             <img src="1.png" alt="Thamizhi Logo" class="logo-img">
@@ -118,35 +170,37 @@
             </div>
         </div>
         
-        <div class="nav-container">
+        <button class="menu-toggle" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div class="nav-container" id="navContainer">
             <nav>
                 <ul>
                     <li><a href="index.html" data-ta="முகப்பு" data-en="Home">முகப்பு</a></li>
-                    <li><a href="shop.html" data-ta="தயாரிப்புகள்" data-en="Products">தயாரிப்புகள்</a></li>
-                    <li><a href="contact.html" data-ta="தொடர்புக்கு" data-en="Contact">தொடர்புக்கு</a></li>
+                    <li><a href="shop.html" data-ta="தயாரிப்புகள் (ஸ்டோர்)" data-en="Store">தயாரிப்புகள் (ஸ்டோர்)</a></li>
+                    <li><a href="dashboard.html" data-ta="IoT டேஷ்போர்டு" data-en="IoT Dashboard">IoT டேஷ்போர்டு</a></li>
+                    <li><a href="contact.html" data-ta="தொடர்புக்கு & சாட் போட்" data-en="Contact & Chatbot">தொடர்புக்கு & சாட் போட்</a></li>
                 </ul>
             </nav>
-            <!-- Language Switch Button -->
             <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">English</button>
         </div>
     </header>
 
-    <!-- Hero Banner Section: Image 4.png -->
     <section class="hero" id="home">
         <h2 data-ta="புரட்சிகரமான நீர் மேலாண்மை" data-en="Revolutionary Water Management">புரட்சிகரமான நீர் மேலாண்மை</h2>
         <p data-ta="இந்தியாவின் நம்பகமான ஆட்டோமேஷன் மற்றும் ஐஓடி தீர்வுகள். உங்கள் நீரை எளிதாகக் கண்காணிக்கவும் கட்டுப்படுத்தவும்." data-en="India's trusted automation and IoT solutions. Easily monitor and control your water.">இந்தியாவின் நம்பகமான ஆட்டோமேஷன் மற்றும் ஐஓடி தீர்வுகள். உங்கள் நீரை எளிதாகக் கண்காணிக்கவும் கட்டுப்படுத்தவும்.</p>
         <a href="shop.html" class="btn" data-ta="எங்கள் தயாரிப்புகள்" data-en="Our Products">எங்கள் தயாரிப்புகள்</a>
     </section>
 
-    <!-- Products Section: 3 Models Separately + Spec Image 3.png -->
     <section class="products-section" id="products">
         <h2 class="section-title" data-ta="எங்களது மூன்று ஸ்மார்ட் மாடல்கள்" data-en="Our Three Smart Models">எங்களது மூன்று ஸ்மார்ட் மாடல்கள்</h2>
         <p class="section-desc" data-ta="உங்கள் தேவைகளுக்குப் பொருத்தமான வாட்டர் லெவல் கண்ட்ரோலர் மாடலைத் தேர்ந்தெடுக்கவும்." data-en="Choose the water level controller model that suits your needs.">உங்கள் தேவைகளுக்குப் பொருத்தமான வாட்டர் லெவல் கண்ட்ரோலர் மாடலைத் தேர்ந்தெடுக்கவும்.</p>
         
-        <!-- 3 Models Cards Grid -->
         <div class="product-grid">
             
-            <!-- Model 1 -->
             <div class="product-card">
                 <span class="model-badge">Basic Version</span>
                 <h3>AWLCP 1.0 (Basic)</h3>
@@ -160,7 +214,6 @@
                 <div class="price-tag">₹3,499/-</div>
             </div>
 
-            <!-- Model 2 -->
             <div class="product-card">
                 <span class="model-badge" style="background: #e8f5e9; color: #2e7d32;">WiFi Model</span>
                 <h3>AWLCW 1.0 (WiFi)</h3>
@@ -174,7 +227,6 @@
                 <div class="price-tag">₹4,999/-</div>
             </div>
 
-            <!-- Model 3 -->
             <div class="product-card">
                 <span class="model-badge" style="background: #fff3e0; color: #ef6c00;">Wireless + Solar</span>
                 <h3>AWLCWS 1.0 (Pro)</h3>
@@ -190,14 +242,12 @@
 
         </div>
 
-        <!-- Detailed Specification Image: 3.png -->
         <h3 style="margin-top: 40px; margin-bottom: 15px; color: #0f2027;" data-ta="தொழில்நுட்ப விவரங்கள் (Specifications Overview)" data-en="Specifications Overview">தொழில்நுட்ப விவரங்கள் (Specifications Overview)</h3>
         <div class="specs-image-box">
             <img src="3.png" alt="Water Level Controller Specifications" class="specs-img">
         </div>
     </section>
 
-    <!-- Future Devices Section: Image 2.png -->
     <section class="future-section" id="future">
         <h2 data-ta="எதிர்கால எலக்ட்ரானிக்ஸ் மற்றும் பவர் சாதனங்கள்" data-en="Future Electronics & Power Devices">எதிர்கால எலக்ட்ரானிக்ஸ் மற்றும் பவர் சாதனங்கள்</h2>
         <p data-ta="தமிழன் எனர்ஜி பிரைவேட் லிமிடெட் மூலம் விரைவில் வரவுள்ள நவீன எலக்ட்ரானிக் டிவைஸ்கள்." data-en="Modern electronic devices coming soon from Thamizhan Energy Pvt Ltd.">தமிழன் எனர்ஜி பிரைவேட் லிமிடெட் மூலம் விரைவில் வரவுள்ள நவீன எலக்ட்ரானிக் டிவைஸ்கள்.</p>
@@ -207,14 +257,19 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <p data-ta="&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை." data-en="&copy; 2026 Thamizhan Energy Systems. All Rights Reserved.">&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
     </footer>
 
-    <!-- Language Switching JavaScript -->
     <script>
-        let currentLang = 'ta'; // Default language is Tamil
+        // Mobile Menu Toggle Function
+        function toggleMobileMenu() {
+            const navContainer = document.getElementById('navContainer');
+            navContainer.classList.toggle('active');
+        }
+
+        // Language Switching Function
+        let currentLang = 'ta';
 
         function toggleLanguage() {
             if (currentLang === 'ta') {
