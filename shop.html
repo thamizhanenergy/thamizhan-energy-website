@@ -10,7 +10,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
     <script>
-      // உங்களது ஃபயர்பேஸ் கன்சோல் புகைப்படத்திலுள்ள சரியான விவரங்கள்
+      // உங்களது ஃபயர்பேஸ் கன்சோல் கான்பிக் விவரங்கள்
       const firebaseConfig = {
         apiKey: "AIzaSyAzHh5yP...",
         authDomain: "thamizhan-energy-systems.firebaseapp.com",
@@ -20,7 +20,6 @@
         appId: "1:148692750392:web:..."
       };
 
-      // Initialize Firebase Compatibility Mode
       if (!firebase.apps.length) {
           firebase.initializeApp(firebaseConfig);
       }
@@ -172,6 +171,9 @@
         .pay-btn { background: #528FF0; color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 14px; }
         .pay-btn:hover { background: #3b74cb; }
 
+        .logout-btn { background: #f44336; color: white; margin-top: 10px; }
+        .logout-btn:hover { background: #d32f2f; }
+
         .tracking-box {
             background: #e8f5e9;
             padding: 15px;
@@ -236,7 +238,7 @@
         <div class="nav-container" id="navContainer">
             <div class="nav-icons">
                 <a href="index.html" class="icon-btn" style="background: #0f2027; color: white;" data-ta="முகப்பு" data-en="Home">முகப்பு</a>
-                <button class="icon-btn" onclick="openLoginModal()">
+                <button class="icon-btn" onclick="handleUserClick()">
                     👤 <span id="user-display-name" data-ta="உள்நுழை (Login)" data-en="Login">உள்நுழை (Login)</span>
                 </button>
                 <button class="icon-btn" onclick="openCartModal()">
@@ -330,6 +332,16 @@
         </div>
     </div>
 
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeProfileModal()">&times;</span>
+            <h3 data-ta="எனது கணக்கு (My Profile)" data-en="My Profile">எனது கணக்கு</h3>
+            <div id="profileDetails" style="font-size: 14px; color: #333; margin-bottom: 20px; line-height: 1.8;">
+                </div>
+            <button class="btn logout-btn" onclick="logoutUser()" data-ta="வெளியேறு (Logout)" data-en="Logout">வெளியேறு (Logout)</button>
+        </div>
+    </div>
+
     <div class="modal" id="cartModal">
         <div class="modal-content" style="max-width: 450px;">
             <span class="close-btn" onclick="closeCartModal()">&times;</span>
@@ -418,14 +430,48 @@
             document.getElementById('cartTotalPrice').innerText = '₹' + total;
         }
 
+        // Handle Profile / Login Click Dynamically
+        function handleUserClick() {
+            let savedData = localStorage.getItem('loggedUserData');
+            if (savedData) {
+                openProfileModal();
+            } else {
+                openLoginModal();
+            }
+        }
+
         function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
         function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+        
+        function openProfileModal() {
+            let savedData = localStorage.getItem('loggedUserData');
+            if (savedData) {
+                let user = JSON.parse(savedData);
+                let profileHTML = `
+                    <p><b>பெயர் (Name):</b> ${user.name}</p>
+                    <p><b>மொபைல் (Phone):</b> ${user.phone}</p>
+                    <p><b>முகவரி (Address):</b> ${user.address}</p>
+                `;
+                document.getElementById('profileDetails').innerHTML = profileHTML;
+            }
+            document.getElementById('profileModal').style.display = 'flex';
+        }
+        function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
+
         function openCartModal() { document.getElementById('cartModal').style.display = 'flex'; }
         function closeCartModal() { document.getElementById('cartModal').style.display = 'none'; }
         function openTrackingModal() { document.getElementById('trackingModal').style.display = 'flex'; }
         function closeTrackingModal() { document.getElementById('trackingModal').style.display = 'none'; }
 
-        // Firebase Phone Authentication Execution (Compat Mode)
+        // Logout Feature
+        function logoutUser() {
+            localStorage.removeItem('loggedUserData');
+            document.getElementById('user-display-name').innerText = currentLang === 'ta' ? 'உள்நுழை (Login)' : 'Login';
+            closeProfileModal();
+            alert(currentLang === 'ta' ? 'வெற்றிகரமாக வெளியேறிவிட்டீர்கள்!' : 'Logged out successfully!');
+        }
+
+        // Firebase Phone Authentication
         function requestFirebaseOTP() {
             let name = document.getElementById('signupName').value.trim();
             let phone = document.getElementById('signupPhone').value.trim();
@@ -447,4 +493,108 @@
             firebase.auth().signInWithPhoneNumber(phone, appVerifier)
                 .then((confirmationResult) => {
                     window.confirmationResult = confirmationResult;
-                    alert(currentLang === '
+                    alert(currentLang === 'ta' ? 'உண்மையான OTP உங்கள் மொபைல் எண்ணுக்கு அனுப்பப்பட்டது!' : 'Real OTP sent to your mobile!');
+                    document.getElementById('otp-section').style.display = 'block';
+                }).catch((error) => {
+                    alert('OTP அனுப்புவதில் பிழை: ' + error.message);
+                });
+        }
+
+        function verifyFirebaseOTP() {
+            let otp = document.getElementById('otpInput').value.trim();
+            let name = document.getElementById('signupName').value.trim();
+            let phone = document.getElementById('signupPhone').value.trim();
+            let address = document.getElementById('signupAddress').value.trim();
+
+            window.confirmationResult.confirm(otp).then((result) => {
+                let userData = { name: name, phone: phone, address: address };
+                localStorage.setItem('loggedUserData', JSON.stringify(userData));
+                checkSavedUser();
+                closeLoginModal();
+                alert(currentLang === 'ta' ? 'வெற்றிகரமாக லாகின் செய்யப்பட்டுவிட்டது!' : 'Logged in successfully!');
+            }).catch((error) => {
+                alert(currentLang === 'ta' ? 'தவறான OTP கோடு!' : 'Invalid OTP code!');
+            });
+        }
+
+        function checkSavedUser() {
+            let savedData = localStorage.getItem('loggedUserData');
+            if(savedData) {
+                let user = JSON.parse(savedData);
+                document.getElementById('user-display-name').innerText = user.name;
+            }
+        }
+
+        function proceedToRazorpay() {
+            let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+            if(cart.length === 0) {
+                alert(currentLang === 'ta' ? 'கார்ட்டில் பொருட்கள் எதுவும் இல்லை!' : 'Cart is empty!');
+                return;
+            }
+            let savedData = localStorage.getItem('loggedUserData');
+            if(!savedData) {
+                alert(currentLang === 'ta' ? 'தயவுசெய்து முதலில் லாகின் செய்யவும்!' : 'Please login first!');
+                closeCartModal();
+                openLoginModal();
+                return;
+            }
+
+            let user = JSON.parse(savedData);
+            let totalAmount = document.getElementById('cartTotalPrice').innerText;
+            let orderId = 'TES-' + Math.floor(10000 + Math.random() * 90000);
+
+            let confirmPay = confirm(currentLang === 'ta' ? `Razorpay செக் அவுட்: மொத்தத் தொகை ${totalAmount}\nடெலிவரி முகவரி: ${user.address}\nபணம் செலுத்த ஒப்புதல் அளிக்கிறீர்களா?` : `Razorpay Checkout: Total Amount ${totalAmount}\nProceed with payment?`);
+            
+            if (confirmPay) {
+                let orderDetails = {
+                    orderId: orderId,
+                    name: user.name,
+                    phone: user.phone,
+                    address: user.address,
+                    amount: totalAmount,
+                    status: 'ஆர்டர் உறுதி செய்யப்பட்டது (Order Confirmed - Dispatched Soon)'
+                };
+                localStorage.setItem('lastOrder_' + orderId, JSON.stringify(orderDetails));
+
+                let waText = `புதிய ஆர்டர் வந்துள்ளது!%0Aஆர்டர் ஐடி: ${orderId}%0Aபெயர்: ${user.name}%0Aபோன்: ${user.phone}%0Aமுகவரி: ${user.address}%0Aதொகை: ${totalAmount}`;
+                let waUrl = `https://wa.me/918903008906?text=` + waText;
+                
+                localStorage.removeItem('cartItems');
+                updateCartDisplay();
+                closeCartModal();
+
+                alert((currentLang === 'ta' ? 'பணம் செலுத்தப்பட்டது! உங்களது ஆர்டர் ஐடி: ' : 'Payment Successful! Your Order ID: ') + orderId);
+                window.open(waUrl, '_blank');
+            }
+        }
+
+        function trackOrder() {
+            let id = document.getElementById('orderIdInput').value.trim();
+            let resultBox = document.getElementById('trackingResult');
+            
+            if(id === "") {
+                alert('தயவுசெய்து ஆர்டர் ஐடியை உள்ளிடவும்.');
+                return;
+            }
+
+            let savedOrder = localStorage.getItem('lastOrder_' + id);
+            if(savedOrder) {
+                let order = JSON.parse(savedOrder);
+                resultBox.innerHTML = `
+                    <div class="tracking-box">
+                        <h4>ஆர்டர் விவரங்கள் bulundu:</h4>
+                        <p><b>ஆர்டர் ஐடி:</b> ${order.orderId}</p>
+                        <p><b>பெயர்:</b> ${order.name}</p>
+                        <p><b>முகவரி:</b> ${order.address}</p>
+                        <p><b>தொகை:</b> ${order.amount}</p>
+                        <p><b>தற்போதைய நிலை:</b> <span style="color:#2e7d32; font-weight:bold;">${order.status}</span></p>
+                    </div>
+                `;
+            } else {
+                resultBox.innerHTML = `<p style="color:#d32f2f; font-size:13px; margin-top:10px;">மன்னிக்கவும், இந்த ஆர்டர் ஐடிக்கான விவரங்கள் கிடைக்கவில்லை.</p>`;
+            }
+        }
+    </script>
+
+</body>
+</html>
