@@ -6,12 +6,13 @@
     <title>ஆன்லைன் ஸ்டோர் | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-      import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
+    <script>
+      // உங்களது ஃபயர்பேஸ் கன்சோல் புகைப்படத்திலுள்ள சரியான விவரங்கள்
       const firebaseConfig = {
-        apiKey: "AIzaSyAzHh5yP... (உங்கள் புகைப்படத்திலுள்ள விபரம்)",
+        apiKey: "AIzaSyAzHh5yP...",
         authDomain: "thamizhan-energy-systems.firebaseapp.com",
         projectId: "thamizhan-energy-systems",
         storageBucket: "thamizhan-energy-systems.appspot.com",
@@ -19,11 +20,10 @@
         appId: "1:148692750392:web:..."
       };
 
-      const app = initializeApp(firebaseConfig);
-      const auth = getAuth(app);
-      window.auth = auth;
-      window.RecaptchaVerifier = RecaptchaVerifier;
-      window.signInWithPhoneNumber = signInWithPhoneNumber;
+      // Initialize Firebase Compatibility Mode
+      if (!firebase.apps.length) {
+          firebase.initializeApp(firebaseConfig);
+      }
     </script>
 
     <style>
@@ -425,7 +425,7 @@
         function openTrackingModal() { document.getElementById('trackingModal').style.display = 'flex'; }
         function closeTrackingModal() { document.getElementById('trackingModal').style.display = 'none'; }
 
-        // Firebase Phone Authentication Execution
+        // Firebase Phone Authentication Execution (Compat Mode)
         function requestFirebaseOTP() {
             let name = document.getElementById('signupName').value.trim();
             let phone = document.getElementById('signupPhone').value.trim();
@@ -437,118 +437,14 @@
             }
 
             if (!window.recaptchaVerifier) {
-                window.recaptchaVerifier = new window.RecaptchaVerifier(window.auth, 'recaptcha-container', {
+                window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
                     'size': 'invisible',
                     'callback': (response) => {}
                 });
             }
 
             let appVerifier = window.recaptchaVerifier;
-            window.signInWithPhoneNumber(window.auth, phone, appVerifier)
+            firebase.auth().signInWithPhoneNumber(phone, appVerifier)
                 .then((confirmationResult) => {
                     window.confirmationResult = confirmationResult;
-                    alert(currentLang === 'ta' ? 'உண்மையான OTP உங்கள் மொபைல் எண்ணுக்கு அனுப்பப்பட்டது!' : 'Real OTP sent to your mobile!');
-                    document.getElementById('otp-section').style.display = 'block';
-                }).catch((error) => {
-                    alert('OTP அனுப்புவதில் பிழை: ' + error.message);
-                });
-        }
-
-        function verifyFirebaseOTP() {
-            let otp = document.getElementById('otpInput').value.trim();
-            let name = document.getElementById('signupName').value.trim();
-            let phone = document.getElementById('signupPhone').value.trim();
-            let address = document.getElementById('signupAddress').value.trim();
-
-            window.confirmationResult.confirm(otp).then((result) => {
-                let userData = { name: name, phone: phone, address: address };
-                localStorage.setItem('loggedUserData', JSON.stringify(userData));
-                checkSavedUser();
-                closeLoginModal();
-                alert(currentLang === 'ta' ? 'வெற்றிகரமாக லாகின் செய்யப்பட்டுவிட்டது!' : 'Logged in successfully!');
-            }).catch((error) => {
-                alert(currentLang === 'ta' ? 'தவறான OTP கோடு!' : 'Invalid OTP code!');
-            });
-        }
-
-        function checkSavedUser() {
-            let savedData = localStorage.getItem('loggedUserData');
-            if(savedData) {
-                let user = JSON.parse(savedData);
-                document.getElementById('user-display-name').innerText = user.name;
-            }
-        }
-
-        function proceedToRazorpay() {
-            let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
-            if(cart.length === 0) {
-                alert(currentLang === 'ta' ? 'கார்ட்டில் பொருட்கள் எதுவும் இல்லை!' : 'Cart is empty!');
-                return;
-            }
-            let savedData = localStorage.getItem('loggedUserData');
-            if(!savedData) {
-                alert(currentLang === 'ta' ? 'தயவுசெய்து முதலில் லாகின் செய்யவும்!' : 'Please login first!');
-                closeCartModal();
-                openLoginModal();
-                return;
-            }
-
-            let user = JSON.parse(savedData);
-            let totalAmount = document.getElementById('cartTotalPrice').innerText;
-            let orderId = 'TES-' + Math.floor(10000 + Math.random() * 90000);
-
-            let confirmPay = confirm(currentLang === 'ta' ? `Razorpay செக் அவுட்: மொத்தத் தொகை ${totalAmount}\nடெலிவரி முகவரி: ${user.address}\nபணம் செலுத்த ஒப்புதல் அளிக்கிறீர்களா?` : `Razorpay Checkout: Total Amount ${totalAmount}\nProceed with payment?`);
-            
-            if (confirmPay) {
-                let orderDetails = {
-                    orderId: orderId,
-                    name: user.name,
-                    phone: user.phone,
-                    address: user.address,
-                    amount: totalAmount,
-                    status: 'ஆர்டர் உறுதி செய்யப்பட்டது (Order Confirmed - Dispatched Soon)'
-                };
-                localStorage.setItem('lastOrder_' + orderId, JSON.stringify(orderDetails));
-
-                let waText = `புதிய ஆர்டர் வந்துள்ளது!%0Aஆர்டர் ஐடி: ${orderId}%0Aபெயர்: ${user.name}%0Aபோன்: ${user.phone}%0Aமுகவரி: ${user.address}%0Aதொகை: ${totalAmount}`;
-                let waUrl = `https://wa.me/918903008906?text=` + waText;
-                
-                localStorage.removeItem('cartItems');
-                updateCartDisplay();
-                closeCartModal();
-
-                alert((currentLang === 'ta' ? 'பணம் செலுத்தப்பட்டது! உங்களது ஆர்டர் ஐடி: ' : 'Payment Successful! Your Order ID: ') + orderId);
-                window.open(waUrl, '_blank');
-            }
-        }
-
-        function trackOrder() {
-            let id = document.getElementById('orderIdInput').value.trim();
-            let resultBox = document.getElementById('trackingResult');
-            
-            if(id === "") {
-                alert('தயவுசெய்து ஆர்டர் ஐடியை உள்ளிடவும்.');
-                return;
-            }
-
-            let savedOrder = localStorage.getItem('lastOrder_' + id);
-            if(savedOrder) {
-                let order = JSON.parse(savedOrder);
-                resultBox.innerHTML = `
-                    <div class="tracking-box">
-                        <h4>ஆர்டர் விவரங்கள் bulundu:</h4>
-                        <p><b>ஆர்டர் ஐடி:</b> ${order.orderId}</p>
-                        <p><b>பெயர்:</b> ${order.name}</p>
-                        <p><b>முகவரி:</b> ${order.address}</p>
-                        <p><b>தொகை:</b> ${order.amount}</p>
-                        <p><b>தற்போதைய நிலை:</b> <span style="color:#2e7d32; font-weight:bold;">${order.status}</span></p>
-                    </div>
-                `;
-            } else {
-                resultBox.innerHTML = `<p style="color:#d32f2f; font-size:13px; margin-top:10px;">மன்னிக்கவும், இந்த ஆர்டர் ஐடிக்கான விவரங்கள் கிடைக்கவில்லை.</p>`;
-            }
-        }
-    </script>
-
-</body>
-</html>
+                    alert(currentLang === '
