@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ta">
+<html lang="ta" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,6 +31,20 @@
         
         .icon-btn { background: #f0f2f5; border: none; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 6px; transition: 0.3s; }
         .icon-btn:hover { background: #e4e6eb; }
+
+        /* Language Toggle Button Style */
+        .lang-btn {
+            background: #0f2027;
+            color: #00ff88;
+            border: 2px solid #00ff88;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .lang-btn:hover { background: #00ff88; color: #0f2027; }
 
         /* Hamburger Menu Icon (Hidden on Desktop) */
         .menu-toggle {
@@ -69,7 +83,6 @@
             justify-content: space-between;
         }
         
-        /* Product Image Style */
         .product-img-box {
             width: 100%;
             height: 180px;
@@ -82,11 +95,7 @@
             justify-content: center;
             border: 1px solid #eee;
         }
-        .product-img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
+        .product-img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
         .product-card h3 { font-size: 20px; color: #0f2027; margin-bottom: 8px; }
         .model-badge { display: inline-block; background: #e0f7fa; color: #006064; padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 600; margin-bottom: 12px; }
@@ -109,7 +118,7 @@
         }
         .btn:hover { background: #00cc6a; }
 
-        /* Modal Popups (Login & Cart) */
+        /* Modal Popups */
         .modal {
             display: none;
             position: fixed;
@@ -132,18 +141,16 @@
         .modal-content h3 { margin-bottom: 15px; color: #0f2027; }
         .modal-content input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; outline: none; }
         
-        /* Cart List */
         .cart-items-list { list-style: none; max-height: 200px; overflow-y: auto; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
         .cart-items-list li { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
         .cart-total { font-weight: 700; font-size: 18px; margin-bottom: 20px; display: flex; justify-content: space-between; color: #2c3e50; }
 
-        /* Payment Gateway Button */
         .pay-btn { background: #2575fc; color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.3s; }
         .pay-btn:hover { background: #1a5db8; }
 
         footer { background: #0c1a1f; color: #aaa; padding: 25px; text-align: center; font-size: 13px; margin-top: 50px; }
 
-        /* Mobile Responsive Hamburger Menu Styles */
+        /* Mobile Responsive Styles */
         @media (max-width: 768px) {
             header { padding: 15px 20px; }
             .menu-toggle { display: flex; }
@@ -162,14 +169,14 @@
                 overflow: hidden;
                 transition: max-height 0.3s ease-in-out;
             }
-            .nav-container.active { max-height: 300px; }
+            .nav-container.active { max-height: 350px; }
             .nav-icons {
                 flex-direction: column;
                 width: 100%;
                 align-items: flex-start;
                 gap: 15px;
             }
-            .icon-btn { width: 100%; justify-content: flex-start; }
+            .icon-btn, .lang-btn { width: 100%; justify-content: center; text-align: center; }
         }
     </style>
 </head>
@@ -179,7 +186,7 @@
         <div class="brand-section">
             <img src="1.png" alt="Logo" class="logo-img">
             <div class="company-title">
-                <h1>தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1>
+                <h1 data-ta="தமிழன் எனர்ஜி சிஸ்டம்ஸ்" data-en="Thamizhan Energy Systems">தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1>
             </div>
         </div>
         
@@ -191,20 +198,21 @@
 
         <div class="nav-container" id="navContainer">
             <div class="nav-icons">
-                <a href="index.html" class="icon-btn" style="background: #0f2027; color: white;">முகப்பு</a>
+                <a href="index.html" class="icon-btn" style="background: #0f2027; color: white;" data-ta="முகப்பு" data-en="Home">முகப்பு</a>
                 <button class="icon-btn" onclick="openLoginModal()">
-                    👤 <span id="user-display-name">உள்நுழை (Login)</span>
+                    👤 <span id="user-display-name" data-ta="உள்நுழை (Login)" data-en="Login">உள்நுழை (Login)</span>
                 </button>
                 <button class="icon-btn" onclick="openCartModal()">
-                    🛒 கார்ட் (<span id="cart-count">0</span>)
+                    🛒 <span data-ta="கார்ட்" data-en="Cart">கார்ட்</span> (<span id="cart-count">0</span>)
                 </button>
+                <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">English</button>
             </div>
         </div>
     </header>
 
     <div class="container">
         <div class="shop-header">
-            <h2>எங்கள் வாட்டர் லெவல் கண்ட்ரோலர் தயாரிப்புகள்</h2>
+            <h2 data-ta="எங்கள் வாட்டர் லெவல் கண்ட்ரோலர் தயாரிப்புகள்" data-en="Our Water Level Controller Products">எங்கள் வாட்டர் லெவல் கண்ட்ரோலர் தயாரிப்புகள்</h2>
         </div>
 
         <div class="product-grid">
@@ -214,16 +222,16 @@
                     <div class="product-img-box">
                         <img src="3.png" alt="AWLCP 1.0" class="product-img">
                     </div>
-                    <span class="model-badge">Basic Version</span>
+                    <span class="model-badge" data-ta="Basic Version" data-en="Basic Version">Basic Version</span>
                     <h3>AWLCP 1.0</h3>
                     <div class="price">₹3,499/-</div>
                     <ul class="features">
-                        <li>ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்</li>
-                        <li>ட்ரைடன் பாதுகாப்பு (Dry Run Protection)</li>
-                        <li>1 வருடம் உத்தரவாதம்</li>
+                        <li data-ta="ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்" data-en="Automatic Tank ON/OFF">ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்</li>
+                        <li data-ta="ட்ரைடன் பாதுகாப்பு (Dry Run Protection)" data-en="Dry Run Protection">ட்ரைடன் பாதுகாப்பு (Dry Run Protection)</li>
+                        <li data-ta="1 வருடம் உத்தரவாதம்" data-en="1 Year Warranty">1 வருடம் உத்தரவாதம்</li>
                     </ul>
                 </div>
-                <button class="btn" onclick="addToCart('AWLCP 1.0', 3499)">கார்ட்டில் சேர்க்கவும்</button>
+                <button class="btn" onclick="addToCart('AWLCP 1.0', 3499)" data-ta="கார்ட்டில் சேர்க்கவும்" data-en="Add to Cart">கார்ட்டில் சேர்க்கவும்</button>
             </div>
 
             <div class="product-card">
@@ -231,16 +239,16 @@
                     <div class="product-img-box">
                         <img src="3.png" alt="AWLCW 1.0" class="product-img">
                     </div>
-                    <span class="model-badge" style="background: #e8f5e9; color: #2e7d32;">WiFi Model</span>
+                    <span class="model-badge" style="background: #e8f5e9; color: #2e7d32;" data-ta="WiFi Model" data-en="WiFi Model">WiFi Model</span>
                     <h3>AWLCW 1.0</h3>
                     <div class="price">₹4,999/-</div>
                     <ul class="features">
-                        <li>மொபைல் செயலி மூலம் ரிமோட் கண்ட்ரோல்</li>
-                        <li>ஒயர்டு சென்சார்கள் & ட்ரைடன் டிடெக்ஷன்</li>
-                        <li>1 வருடம் உத்தரவாதம்</li>
+                        <li data-ta="மொபைல் செயலி மூலம் ரிமோட் கண்ட்ரோல்" data-en="Remote control via Mobile App">மொபைல் செயலி மூலம் ரிமோட் கண்ட்ரோல்</li>
+                        <li data-ta="ஒயர்டு சென்சார்கள் & ட்ரைடன் டிடெக்ஷன்" data-en="Wired Sensors & Dry Run Detection">ஒயர்டு சென்சார்கள் & ட்ரைடன் டிடெக்ஷன்</li>
+                        <li data-ta="1 வருடம் உத்தரவாதம்" data-en="1 Year Warranty">1 வருடம் உத்தரவாதம்</li>
                     </ul>
                 </div>
-                <button class="btn" onclick="addToCart('AWLCW 1.0', 4999)">கார்ட்டில் சேர்க்கவும்</button>
+                <button class="btn" onclick="addToCart('AWLCW 1.0', 4999)" data-ta="கார்ட்டில் சேர்க்கவும்" data-en="Add to Cart">கார்ட்டில் சேர்க்கவும்</button>
             </div>
 
             <div class="product-card">
@@ -248,16 +256,16 @@
                     <div class="product-img-box">
                         <img src="3.png" alt="AWLCWS 1.0" class="product-img">
                     </div>
-                    <span class="model-badge" style="background: #fff3e0; color: #ef6c00;">Wireless + Solar</span>
+                    <span class="model-badge" style="background: #fff3e0; color: #ef6c00;" data-ta="Wireless + Solar" data-en="Wireless + Solar">Wireless + Solar</span>
                     <h3>AWLCWS 1.0</h3>
                     <div class="price">₹6,999/-</div>
                     <ul class="features">
-                        <li>மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு</li>
-                        <li>சோலார் பவர் சப்போர்ட் & வைஃபை</li>
-                        <li>1 வருடம் உத்தரவாதம்</li>
+                        <li data-ta="மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு" data-en="Wireless Upper & Lower Tank Connection">மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு</li>
+                        <li data-ta="சோலார் பவர் சப்போர்ட் & வைஃபை" data-en="Solar Power Support & WiFi">சோலார் பவர் சப்போர்ட் & வைஃபை</li>
+                        <li data-ta="1 வருடம் உத்தரவாதம்" data-en="1 Year Warranty">1 வருடம் உத்தரவாதம்</li>
                     </ul>
                 </div>
-                <button class="btn" onclick="addToCart('AWLCWS 1.0', 6999)">கார்ட்டில் சேர்க்கவும்</button>
+                <button class="btn" onclick="addToCart('AWLCWS 1.0', 6999)" data-ta="கார்ட்டில் சேர்க்கவும்" data-en="Add to Cart">கார்ட்டில் சேர்க்கவும்</button>
             </div>
 
         </div>
@@ -266,13 +274,13 @@
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeLoginModal()">&times;</span>
-            <h3>கஸ்டமர் லாகின் (Login)</h3>
-            <p style="font-size: 13px; color: #666; margin-bottom: 15px;">உங்கள் மின்னஞ்சல் அல்லது மொபைல் எண்ணை உள்ளிடவும்:</p>
-            <input type="text" id="loginInput" placeholder="Email ID அல்லது Mobile Number">
-            <button class="btn" onclick="sendOTP()">OTP பெறுக</button>
+            <h3 data-ta="கஸ்டமர் லாகின் (Login)" data-en="Customer Login">கஸ்டமர் லாகின் (Login)</h3>
+            <p style="font-size: 13px; color: #666; margin-bottom: 15px;" data-ta="உங்கள் மின்னஞ்சல் அல்லது மொபைல் எண்ணை உள்ளிடவும்:" data-en="Enter your email or mobile number:">உங்கள் மின்னஞ்சல் அல்லது மொபைல் எண்ணை உள்ளிடவும்:</p>
+            <input type="text" id="loginInput" placeholder="Email ID / Mobile Number">
+            <button class="btn" onclick="sendOTP()" data-ta="OTP பெறுக" data-en="Get OTP">OTP பெறுக</button>
             <div id="otp-section" style="margin-top: 15px; display: none;">
-                <input type="text" id="otpInput" placeholder="4 இலக்க OTP குறியீட்டை உள்ளிடவும்">
-                <button class="btn" onclick="verifyOTP()">உள்ளநுழை (Verify)</button>
+                <input type="text" id="otpInput" placeholder="4 digit OTP">
+                <button class="btn" onclick="verifyOTP()" data-ta="உள்ளநுழை (Verify)" data-en="Verify">உள்ளநுழை (Verify)</button>
             </div>
         </div>
     </div>
@@ -280,25 +288,47 @@
     <div class="modal" id="cartModal">
         <div class="modal-content" style="max-width: 450px;">
             <span class="close-btn" onclick="closeCartModal()">&times;</span>
-            <h3>உங்கள் ஷாப்பிங் கார்ட் (Cart)</h3>
+            <h3 data-ta="உங்கள் ஷாப்பிங் கார்ட் (Cart)" data-en="Your Shopping Cart">உங்கள் ஷாப்பிங் கார்ட் (Cart)</h3>
             <ul class="cart-items-list" id="cartItemsList"></ul>
             <div class="cart-total">
-                <span>மொத்தத் தொகை:</span>
+                <span data-ta="மொத்தத் தொகை:" data-en="Total Amount:">மொத்தத் தொகை:</span>
                 <span id="cartTotalPrice">₹0</span>
             </div>
-            <button class="pay-btn" onclick="proceedToPayment()">Secured Payment Gateway (Pay Now)</button>
+            <button class="pay-btn" onclick="proceedToPayment()" data-ta="பாதுகாப்பான கட்டணம் செலுத்த (Pay Now)" data-en="Secured Payment (Pay Now)">பாதுகாப்பான கட்டணம் செலுத்த (Pay Now)</button>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
+        <p data-ta="&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை." data-en="&copy; 2026 Thamizhan Energy Systems. All Rights Reserved.">&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
     </footer>
 
     <script>
-        // Mobile Menu Toggle Function
         function toggleMobileMenu() {
             const navContainer = document.getElementById('navContainer');
             navContainer.classList.toggle('active');
+        }
+
+        let currentLang = 'ta';
+
+        function toggleLanguage() {
+            if (currentLang === 'ta') {
+                currentLang = 'en';
+                document.getElementById('langToggleBtn').innerText = 'தமிழ்';
+                document.getElementById('htmlRoot').setAttribute('lang', 'en');
+            } else {
+                currentLang = 'ta';
+                document.getElementById('langToggleBtn').innerText = 'English';
+                document.getElementById('htmlRoot').setAttribute('lang', 'ta');
+            }
+
+            const elements = document.querySelectorAll('[data-ta]');
+            elements.forEach(el => {
+                if (currentLang === 'en') {
+                    el.innerText = el.getAttribute('data-en');
+                } else {
+                    el.innerText = el.getAttribute('data-ta');
+                }
+            });
         }
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -311,7 +341,7 @@
             cart.push({name: name, price: price});
             localStorage.setItem('cartItems', JSON.stringify(cart));
             updateCartDisplay();
-            alert(name + ' கார்ட்டில் சேர்க்கப்பட்டது!');
+            alert(name + (currentLang === 'ta' ? ' கார்ட்டில் சேர்க்கப்பட்டது!' : ' added to cart!'));
         }
 
         function updateCartDisplay() {
@@ -321,7 +351,7 @@
             let listHTML = '';
             let total = 0;
             if(cart.length === 0) {
-                listHTML = '<li style="color:#888; text-align:center;">கார்ட் காலியாக உள்ளது.</li>';
+                listHTML = `<li style="color:#888; text-align:center;">${currentLang === 'ta' ? 'கார்ட் காலியாக உள்ளது.' : 'Cart is empty.'}</li>`;
             } else {
                 cart.forEach((item, index) => {
                     total += item.price;
@@ -340,10 +370,10 @@
         function sendOTP() {
             let val = document.getElementById('loginInput').value.trim();
             if(val !== '') {
-                alert('உங்கள் மொபைல்/மின்னஞ்சலுக்கு OTP அனுப்பப்பட்டுள்ளது! (மாதிரி குறியீடு: 1234)');
+                alert(currentLang === 'ta' ? 'உங்கள் மொபைல்/மின்னஞ்சலுக்கு OTP அனுப்பப்பட்டுள்ளது! (மாதிரி குறியீடு: 1234)' : 'OTP sent! (Demo Code: 1234)');
                 document.getElementById('otp-section').style.display = 'block';
             } else {
-                alert('தயவுசெய்து சரியான மின்னஞ்சல் அல்லது மொபைல் எண்ணை உள்ளிடவும்.');
+                alert(currentLang === 'ta' ? 'தயவுசெய்து சரியான மின்னஞ்சல் அல்லது மொபைல் எண்ணை உள்ளிடவும்.' : 'Please enter valid email or mobile.');
             }
         }
 
@@ -354,9 +384,9 @@
                 localStorage.setItem('loggedInUser', identifier);
                 checkSavedUser();
                 closeLoginModal();
-                alert('வெற்றிகரமாக உள்நுழைந்துவிட்டீர்கள்!');
+                alert(currentLang === 'ta' ? 'வெற்றிகரமாக உள்நுழைந்துவிட்டீர்கள்!' : 'Logged in successfully!');
             } else {
-                alert('தவறான OTP குறியீடு. மீண்டும் முயற்சிக்கவும்.');
+                alert(currentLang === 'ta' ? 'தவறான OTP குறியீடு.' : 'Invalid OTP.');
             }
         }
 
@@ -370,22 +400,22 @@
         function proceedToPayment() {
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             if(cart.length === 0) {
-                alert('கார்ட்டில் பொருட்கள் எதுவும் இல்லை!');
+                alert(currentLang === 'ta' ? 'கார்ட்டில் பொருட்கள் எதுவும் இல்லை!' : 'Cart is empty!');
                 return;
             }
             let user = localStorage.getItem('loggedInUser');
             if(!user) {
-                alert('தயவுசெய்து முதலில் Login செய்யவும்!');
+                alert(currentLang === 'ta' ? 'தயவுசெய்து முதலில் Login செய்யவும்!' : 'Please login first!');
                 closeCartModal();
                 openLoginModal();
                 return;
             }
             
-            alert('Payment Gateway-க்கு மாற்றப்படுகிறது... பாதுகாப்பான கட்டணம் செலுத்தப்படுகிறது.');
+            alert(currentLang === 'ta' ? 'Payment Gateway-க்கு மாற்றப்படுகிறது...' : 'Redirecting to Payment Gateway...');
             localStorage.removeItem('cartItems');
             updateCartDisplay();
             closeCartModal();
-            alert('கட்டணம் வெற்றிகரமாக செலுத்தப்பட்டது! உங்கள் ஆர்டர் உறுதி செய்யப்பட்டது.');
+            alert(currentLang === 'ta' ? 'கட்டணம் வெற்றிகரமாக செலுத்தப்பட்டது!' : 'Payment successful!');
         }
     </script>
 
