@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ta">
+<html lang="ta" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: #f4f7f6; color: #333; line-height: 1.6; }
+        body { background-color: #f4f7f6; color: #333; line-height: 1.6; overflow-x: hidden; }
         a { text-decoration: none; color: inherit; }
 
         /* Header */
@@ -25,9 +25,44 @@
         .brand-section { display: flex; align-items: center; gap: 12px; }
         .logo-img { height: 45px; width: auto; }
         .company-title h1 { font-size: 18px; color: #0f2027; font-weight: 700; }
+        
+        .nav-container { display: flex; align-items: center; gap: 20px; }
         nav ul { list-style: none; display: flex; gap: 20px; align-items: center; }
         nav ul li a { font-weight: 600; font-size: 14px; }
         nav ul li a:hover { color: #00b359; }
+
+        /* Language Toggle Button Style */
+        .lang-btn {
+            background: #0f2027;
+            color: #00ff88;
+            border: 2px solid #00ff88;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .lang-btn:hover { background: #00ff88; color: #0f2027; }
+
+        /* Hamburger Menu Icon (Hidden on Desktop) */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+        }
+        .menu-toggle span {
+            width: 100%;
+            height: 3px;
+            background-color: #0f2027;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
 
         /* Container */
         .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
@@ -97,12 +132,35 @@
             color: #00ff88;
             margin-top: 10px;
         }
-        .chatbot-btn:hover {
-            background: #1a2a32;
-        }
+        .chatbot-btn:hover { background: #1a2a32; }
 
         /* Footer */
         footer { background: #0c1a1f; color: #aaa; padding: 25px; text-align: center; font-size: 13px; margin-top: 50px; }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            header { padding: 15px 20px; }
+            .menu-toggle { display: flex; }
+            
+            .nav-container {
+                position: absolute;
+                top: 75px;
+                left: 0;
+                width: 100%;
+                background: #fff;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px 30px;
+                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease-in-out;
+            }
+            .nav-container.active { max-height: 350px; }
+            nav ul { flex-direction: column; width: 100%; gap: 15px; }
+            nav ul li { width: 100%; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+            .lang-btn { width: 100%; text-align: center; margin-top: 10px; }
+        }
     </style>
 </head>
 <body>
@@ -111,94 +169,76 @@
         <div class="brand-section">
             <img src="1.png" alt="Logo" class="logo-img">
             <div class="company-title">
-                <h1>தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1>
+                <h1 data-ta="தமிழன் எனர்ஜி சிஸ்டம்ஸ்" data-en="Thamizhan Energy Systems">தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1>
             </div>
         </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">முகப்பு</a></li>
-                <li><a href="shop.html">ஸ்டோர்</a></li>
-                <li><a href="contact.html" style="color: #00b359;">தொடர்புக்கு</a></li>
-                <li><a href="chatbot.html">AI சாட் போட்</a></li>
-            </ul>
-        </nav>
+
+        <button class="menu-toggle" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div class="nav-container" id="navContainer">
+            <nav>
+                <ul>
+                    <li><a href="index.html" data-ta="முகப்பு" data-en="Home">முகப்பு</a></li>
+                    <li><a href="shop.html" data-ta="ஸ்டோர்" data-en="Store">ஸ்டோர்</a></li>
+                    <li><a href="contact.html" style="color: #00b359;" data-ta="தொடர்புக்கு" data-en="Contact">தொடர்புக்கு</a></li>
+                    <li><a href="chatbot.html" data-ta="AI சாட் போட்" data-en="AI Chatbot">AI சாட் போட்</a></li>
+                </ul>
+            </nav>
+            <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">English</button>
+        </div>
     </header>
 
     <div class="container">
-        <h2 class="page-title">உதவி & வாடிக்கையாளர் ஆதரவு (Support Center)</h2>
+        <h2 class="page-title" data-ta="உதவி & வாடிக்கையாளர் ஆதரவு (Support Center)" data-en="Support Center">உதவி & வாடிக்கையாளர் ஆதரவு (Support Center)</h2>
 
         <div class="contact-grid">
             
             <div class="card">
-                <h3>WhatsApp AI சேட் உதவி (24×7)</h3>
-                <p>உங்களது சந்தேகங்கள் மற்றும் வாட்டர் லெவல் கண்ட்ரோலர் சிக்கல்களை வாட்ஸ்அப் மூலமாக உடனுக்குடன் கேட்டுப் பெறலாம்.</p>
+                <h3 data-ta="WhatsApp AI சேட் உதவி (24×7)" data-en="WhatsApp AI Chat Support (24x7)">WhatsApp AI சேட் உதவி (24×7)</h3>
+                <p data-ta="உங்களது சந்தேகங்கள் மற்றும் வாட்டர் லெவல் கண்ட்ரோலர் சிக்கல்களை வாட்ஸ்அப் மூலமாக உடனுக்குடன் கேட்டுப் பெறலாம்." data-en="Get instant answers regarding water level controller issues via WhatsApp.">உங்களது சந்தேகங்கள் மற்றும் வாட்டர் லெவல் கண்ட்ரோலர் சிக்கல்களை வாட்ஸ்அப் மூலமாக உடனுக்குடன் கேட்டுப் பெறலாம்.</p>
                 
                 <div class="whatsapp-box">
                     <span class="whatsapp-icon">💬</span>
                     <div>
-                        <div style="font-size: 12px; color: #666;">WhatsApp AI Chat Number</div>
+                        <div style="font-size: 12px; color: #666;" data-ta="WhatsApp AI சேட் எண்" data-en="WhatsApp AI Chat Number">WhatsApp AI சேட் எண்</div>
                         <a href="https://wa.me/918903008906?text=Vanakkam%20Thamizhan%20Energy%20Systems,%20I%20need%20assistance." target="_blank" class="whatsapp-link">+91 8903008906</a>
                     </div>
                 </div>
 
                 <div class="chatbot-box">
-                    <h4 style="color: #0d47a1; margin-bottom: 8px; font-size: 16px;">🤖 AI சிக்கல் தீர்க்கும் போட் (Troubleshooting AI)</h4>
-                    <p style="font-size: 13px; margin-bottom: 12px; color: #333;">உங்கள் தயாரிப்பு மாடல் மற்றும் சீரியல் எண்ணை உள்ளிட்டு சிக்கல்களுக்கு உடனடித் தீர்வைப் பெறுக.</p>
-                    <a href="chatbot.html" class="btn chatbot-btn">AI சாட் போட்டைத் திறக்க (Open AI Chatbot)</a>
+                    <h4 style="color: #0d47a1; margin-bottom: 8px; font-size: 16px;" data-ta="🤖 AI சிக்கல் தீர்க்கும் போட் (Troubleshooting AI)" data-en="🤖 Troubleshooting AI">🤖 AI சிக்கல் தீர்க்கும் போட் (Troubleshooting AI)</h4>
+                    <p style="font-size: 13px; margin-bottom: 12px; color: #333;" data-ta="உங்கள் தயாரிப்பு மாடல் மற்றும் சீரியல் எண்ணை உள்ளிட்டு சிக்கல்களுக்கு உடனடித் தீர்வைப் பெறுக." data-en="Enter your model and serial number to get instant troubleshooting solutions.">உங்கள் தயாரிப்பு மாடல் மற்றும் சீரியல் எண்ணை உள்ளிட்டு சிக்கல்களுக்கு உடனடித் தீர்வைப் பெறுக.</p>
+                    <a href="chatbot.html" class="btn chatbot-btn" data-ta="AI சாட் போட்டைத் திறக்க" data-en="Open AI Chatbot">AI சாட் போட்டைத் திறக்க (Open AI Chatbot)</a>
                 </div>
             </div>
 
             <div class="card">
-                <h3>புகார் / சேவை டிக்கெட் ரைஸ் செய்க</h3>
-                <p>உங்கள் சாதனத்தில் ஏதேனும் குறைபாடுகள் அல்லது சேவை தேவையா? கீழே உள்ள படிவத்தைப் பூர்த்தி செய்து டிக்கெட் பதிவு செய்யவும்.</p>
+                <h3 data-ta="புகார் / சேவை டிக்கெட் ரைஸ் செய்க" data-en="Raise Complaint / Support Ticket">புகார் / சேவை டிக்கெட் ரைஸ் செய்க</h3>
+                <p data-ta="உங்கள் சாதனத்தில் ஏதேனும் குறைபாடுகள் அல்லது சேவை தேவையா? கீழே உள்ள படிவத்தைப் பூர்த்தி செய்து டிக்கெட் பதிவு செய்யவும்." data-en="Need service or facing issues with your device? Fill the form below to register a ticket.">உங்கள் சாதனத்தில் ஏதேனும் குறைபாடுகள் அல்லது சேவை தேவையா? கீழே உள்ள படிவத்தைப் பூர்த்தி செய்து டிக்கெட் பதிவு செய்யவும்.</p>
                 
                 <form id="ticketForm" onsubmit="submitTicket(event)">
                     <div class="form-group">
-                        <label>வாடிக்கையாளர் பெயர் (Customer Name)</label>
+                        <label data-ta="வாடிக்கையாளர் பெயர்" data-en="Customer Name">வாடிக்கையாளர் பெயர் (Customer Name)</label>
                         <input type="text" id="custName" class="form-control" placeholder="உங்கள் பெயரை உள்ளிடவும்" required>
                     </div>
 
                     <div class="form-group">
-                        <label>மொபைல் எண் (Customer Mobile Number)</label>
+                        <label data-ta="மொபைல் எண்" data-en="Mobile Number">மொபைல் எண் (Customer Mobile Number)</label>
                         <input type="tel" id="custPhone" class="form-control" placeholder="10 இலக்க மொபைல் எண்" pattern="[0-9]{10}" required>
                     </div>
 
                     <div class="form-group">
-                        <label>தயாரிப்பு ஐடி / மாடல் (Product ID / Model)</label>
+                        <label data-ta="தயாரிப்பு ஐடி / மாடல்" data-en="Product ID / Model">தயாரிப்பு ஐடி / மாடல் (Product ID / Model)</label>
                         <input type="text" id="prodId" class="form-control" placeholder="எ.கா: AWLCW-1.0 அல்லது Serial No" required>
                     </div>
 
                     <div class="form-group">
-                        <label>பிரச்சனை விவரம் (Complaint Description)</label>
+                        <label data-ta="பிரச்சனை விவரம்" data-en="Complaint Description">பிரச்சனை விவரம் (Complaint Description)</label>
                         <textarea id="complaintDesc" class="form-control" rows="3" placeholder="சிக்கலை இங்கே விவரிக்கவும்..." required></textarea>
                     </div>
 
-                    <button type="submit" class="btn">டிக்கெட் சமர்ப்பிக்க (Submit Ticket)</button>
-                </form>
-            </div>
-
-        </div>
-    </div>
-
-    <footer>
-        <p>&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
-    </footer>
-
-    <script>
-        function submitTicket(event) {
-            event.preventDefault();
-            
-            let name = document.getElementById('custName').value;
-            let phone = document.getElementById('custPhone').value;
-            let prodId = document.getElementById('prodId-val'] || document.getElementById('prodId').value;
-            
-            let ticketNo = Math.floor(100000 + Math.random() * 900000);
-            
-            alert('நன்றி ' + name + '! உங்களது சேவை புகார் வெற்றிகரமாகப் பதிவு செய்யப்பட்டது.\n\nஉங்கள் டிக்கெட் எண் (Ticket ID): #' + ticketNo + '\nவிரைவில் எங்கள் தொழில்நுட்பக் குழு உங்களைத் தொடர்புகொள்ளும்.');
-            
-            document.getElementById('ticketForm').reset();
-        }
-    </script>
-
-</body>
-</html>
+                    <button type="submit" class="btn"
