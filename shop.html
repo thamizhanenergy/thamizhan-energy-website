@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: #f4f7f6; color: #333; line-height: 1.6; }
+        body { background-color: #f4f7f6; color: #333; line-height: 1.6; overflow-x: hidden; }
         a { text-decoration: none; color: inherit; }
 
         /* Header */
@@ -26,9 +26,30 @@
         .logo-img { height: 45px; width: auto; }
         .company-title h1 { font-size: 18px; color: #0f2027; font-weight: 700; }
         
-        .nav-icons { display: flex; gap: 20px; align-items: center; }
+        .nav-container { display: flex; align-items: center; gap: 20px; }
+        .nav-icons { display: flex; gap: 15px; align-items: center; }
+        
         .icon-btn { background: #f0f2f5; border: none; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 6px; transition: 0.3s; }
         .icon-btn:hover { background: #e4e6eb; }
+
+        /* Hamburger Menu Icon (Hidden on Desktop) */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+        }
+        .menu-toggle span {
+            width: 100%;
+            height: 3px;
+            background-color: #0f2027;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
 
         /* Container */
         .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
@@ -47,6 +68,26 @@
             flex-direction: column;
             justify-content: space-between;
         }
+        
+        /* Product Image Style */
+        .product-img-box {
+            width: 100%;
+            height: 180px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #eee;
+        }
+        .product-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
         .product-card h3 { font-size: 20px; color: #0f2027; margin-bottom: 8px; }
         .model-badge { display: inline-block; background: #e0f7fa; color: #006064; padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 600; margin-bottom: 12px; }
         .price { font-size: 24px; color: #2c3e50; font-weight: 700; margin: 10px 0; }
@@ -101,6 +142,35 @@
         .pay-btn:hover { background: #1a5db8; }
 
         footer { background: #0c1a1f; color: #aaa; padding: 25px; text-align: center; font-size: 13px; margin-top: 50px; }
+
+        /* Mobile Responsive Hamburger Menu Styles */
+        @media (max-width: 768px) {
+            header { padding: 15px 20px; }
+            .menu-toggle { display: flex; }
+            
+            .nav-container {
+                position: absolute;
+                top: 75px;
+                left: 0;
+                width: 100%;
+                background: #fff;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px 30px;
+                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease-in-out;
+            }
+            .nav-container.active { max-height: 300px; }
+            .nav-icons {
+                flex-direction: column;
+                width: 100%;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .icon-btn { width: 100%; justify-content: flex-start; }
+        }
     </style>
 </head>
 <body>
@@ -113,14 +183,22 @@
             </div>
         </div>
         
-        <div class="nav-icons">
-            <a href="index.html" class="icon-btn" style="background: #0f2027; color: white;">முகப்பு</a>
-            <button class="icon-btn" onclick="openLoginModal()">
-                👤 <span id="user-display-name">உள்நுழை (Login)</span>
-            </button>
-            <button class="icon-btn" onclick="openCartModal()">
-                🛒 கார்ட் (<span id="cart-count">0</span>)
-            </button>
+        <button class="menu-toggle" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div class="nav-container" id="navContainer">
+            <div class="nav-icons">
+                <a href="index.html" class="icon-btn" style="background: #0f2027; color: white;">முகப்பு</a>
+                <button class="icon-btn" onclick="openLoginModal()">
+                    👤 <span id="user-display-name">உள்நுழை (Login)</span>
+                </button>
+                <button class="icon-btn" onclick="openCartModal()">
+                    🛒 கார்ட் (<span id="cart-count">0</span>)
+                </button>
+            </div>
         </div>
     </header>
 
@@ -133,6 +211,9 @@
             
             <div class="product-card">
                 <div>
+                    <div class="product-img-box">
+                        <img src="3.png" alt="AWLCP 1.0" class="product-img">
+                    </div>
                     <span class="model-badge">Basic Version</span>
                     <h3>AWLCP 1.0</h3>
                     <div class="price">₹3,499/-</div>
@@ -147,6 +228,9 @@
 
             <div class="product-card">
                 <div>
+                    <div class="product-img-box">
+                        <img src="3.png" alt="AWLCW 1.0" class="product-img">
+                    </div>
                     <span class="model-badge" style="background: #e8f5e9; color: #2e7d32;">WiFi Model</span>
                     <h3>AWLCW 1.0</h3>
                     <div class="price">₹4,999/-</div>
@@ -161,6 +245,9 @@
 
             <div class="product-card">
                 <div>
+                    <div class="product-img-box">
+                        <img src="3.png" alt="AWLCWS 1.0" class="product-img">
+                    </div>
                     <span class="model-badge" style="background: #fff3e0; color: #ef6c00;">Wireless + Solar</span>
                     <h3>AWLCWS 1.0</h3>
                     <div class="price">₹6,999/-</div>
@@ -191,12 +278,10 @@
     </div>
 
     <div class="modal" id="cartModal">
-        புரிதல் விளக்கங்களுடன்...
         <div class="modal-content" style="max-width: 450px;">
             <span class="close-btn" onclick="closeCartModal()">&times;</span>
             <h3>உங்கள் ஷாப்பிங் கார்ட் (Cart)</h3>
-            <ul class="cart-items-list" id="cartItemsList">
-                </ul>
+            <ul class="cart-items-list" id="cartItemsList"></ul>
             <div class="cart-total">
                 <span>மொத்தத் தொகை:</span>
                 <span id="cartTotalPrice">₹0</span>
@@ -210,12 +295,17 @@
     </footer>
 
     <script>
+        // Mobile Menu Toggle Function
+        function toggleMobileMenu() {
+            const navContainer = document.getElementById('navContainer');
+            navContainer.classList.toggle('active');
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             updateCartDisplay();
             checkSavedUser();
         });
 
-        // Add to Cart with Price
         function addToCart(name, price) {
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             cart.push({name: name, price: price});
@@ -224,7 +314,6 @@
             alert(name + ' கார்ட்டில் சேர்க்கப்பட்டது!');
         }
 
-        // Update Cart Display & Count
         function updateCartDisplay() {
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             document.getElementById('cart-count').innerText = cart.length;
@@ -243,13 +332,11 @@
             document.getElementById('cartTotalPrice').innerText = '₹' + total;
         }
 
-        // Modals Control
         function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
         function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
         function openCartModal() { document.getElementById('cartModal').style.display = 'flex'; }
         function closeCartModal() { document.getElementById('cartModal').style.display = 'none'; }
 
-        // Simulated OTP Login Process
         function sendOTP() {
             let val = document.getElementById('loginInput').value.trim();
             if(val !== '') {
@@ -280,7 +367,6 @@
             }
         }
 
-        // Payment Gateway Simulation
         function proceedToPayment() {
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             if(cart.length === 0) {
@@ -295,9 +381,7 @@
                 return;
             }
             
-            // Here you can integrate Razorpay or PhonePe Payment Gateway API
             alert('Payment Gateway-க்கு மாற்றப்படுகிறது... பாதுகாப்பான கட்டணம் செலுத்தப்படுகிறது.');
-            // Clear cart after successful payment simulation
             localStorage.removeItem('cartItems');
             updateCartDisplay();
             closeCartModal();
