@@ -31,7 +31,7 @@
         nav ul li a { font-weight: 600; font-size: 14px; color: #ccc; transition: 0.3s; }
         nav ul li a:hover { color: #00ff88; }
 
-        /* Hamburger Menu Icon (Hidden on Desktop) */
+        /* Hamburger Menu Icon */
         .menu-toggle {
             display: none;
             flex-direction: column;
@@ -51,11 +51,30 @@
         }
 
         /* Container */
-        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
-        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
-        .dashboard-header h2 { font-size: 26px; color: #00ff88; }
+        .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
+        
+        /* QR / Serial Number Pairing Card */
+        .pairing-card {
+            background: #1a2a32;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            border: 1px solid #283c48;
+            text-align: center;
+        }
+        .pairing-card h3 { color: #00ff88; font-size: 22px; margin-bottom: 10px; }
+        .pairing-card p { font-size: 14px; color: #aaa; margin-bottom: 20px; }
+        .pairing-input-group { display: flex; justify-content: center; gap: 10px; max-width: 500px; margin: 0 auto; flex-wrap: wrap; }
+        .pairing-input-group input { padding: 12px; border-radius: 6px; border: 1px solid #444; background: #0f2027; color: #fff; flex: 1; outline: none; font-size: 14px; }
+        .pairing-input-group button { background: #00ff88; color: #0f2027; border: none; padding: 12px 25px; border-radius: 6px; font-weight: 700; cursor: pointer; }
 
-        /* Model Selector Dropdown */
+        /* Dashboard Main Area (Hidden until connected) */
+        #dashboardContent { display: none; }
+
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+        .dashboard-header h2 { font-size: 24px; color: #00ff88; }
+
         .selector-box { background: #1a2a32; padding: 10px 15px; border-radius: 8px; border: 1px solid #333; }
         .selector-box select { background: #0f2027; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-size: 14px; outline: none; cursor: pointer; }
 
@@ -123,7 +142,6 @@
 
         footer { background: #081115; color: #aaa; padding: 25px; text-align: center; font-size: 13px; margin-top: 50px; }
 
-        /* Mobile Responsive Hamburger Menu Styles */
         @media (max-width: 768px) {
             header { padding: 15px 20px; }
             .menu-toggle { display: flex; }
@@ -142,19 +160,11 @@
                 overflow: hidden;
                 transition: max-height 0.3s ease-in-out;
             }
-            .nav-container.active {
-                max-height: 350px;
-            }
-            nav ul {
-                flex-direction: column;
-                width: 100%;
-                gap: 15px;
-            }
-            nav ul li {
-                width: 100%;
-                border-bottom: 1px solid #283c48;
-                padding-bottom: 10px;
-            }
+            .nav-container.active { max-height: 350px; }
+            nav ul { flex-direction: column; width: 100%; gap: 15px; }
+            nav ul li { width: 100%; border-bottom: 1px solid #283c48; padding-bottom: 10px; }
+            .pairing-input-group { flex-direction: column; }
+            .pairing-input-group input, .pairing-input-group button { width: 100%; }
         }
     </style>
 </head>
@@ -187,64 +197,77 @@
     </header>
 
     <div class="container">
-        <div class="dashboard-header">
-            <h2>IoT நேரலை கண்காணிப்புப் பலகம் (Live Dashboard)</h2>
-            <div class="selector-box">
-                <label style="font-size: 13px; margin-right: 8px; color: #aaa;">மாடலைத் தேர்ந்தெடுக்கவும்:</label>
-                <select id="modelSelector" onchange="changeModel()">
-                    <option value="AWLCW">AWLCW 1.0 (WiFi - Low/Mid/High)</option>
-                    <option value="AWLCWS">AWLCWS 1.0 (WiFi + Solar - Percentage)</option>
-                </select>
+        
+        <div class="pairing-card" id="pairingCard">
+            <h3>QR கோடு ஸ்கேன் & சாதனம் இணைப்பு (Device Pairing)</h3>
+            <p>உங்களது சாதனத்தின் ஸ்டிக்கரில் உள்ள QR கோடை ஸ்கேன் செய்யவும் அல்லது அதன் சீரியல் எண்ணை உள்ளிட்டு ஆன்லைன் டேஷ்போர்டை இயக்கவும்.</p>
+            <div class="pairing-input-group">
+                <input type="text" id="serialInput" placeholder="எ.கா: TES-AWLCW-1001">
+                <button onclick="pairDevice()">ஆன்லைனில் இணைக்க (Connect)</button>
             </div>
         </div>
 
-        <div class="dashboard-grid">
-            
-            <div class="card">
-                <h3>தொட்டியின் நீர் மட்டம் (Tank Water Level)</h3>
-                <div class="tank-container">
-                    <div class="water-tank">
-                        <div class="water-fill" id="waterFill" style="height: 60%;"></div>
-                    </div>
-                    <div class="tank-label" id="tankLevelText">மட்டம்: 60% (Mid)</div>
-                </div>
-                <p style="font-size: 12px; color: #888; text-align: center; margin-top: 15px;">தொட்டி நிலையைச் சோதிக்கக் கீழே உள்ள பட்டன்களைப் பயன்படுத்தலாம்.</p>
-                <div style="display: flex; gap: 10px; margin-top: 15px; justify-content: center;">
-                    <button class="btn-control" style="padding: 6px 15px; font-size: 12px;" onclick="setTestLevel('low')">Low</button>
-                    <button class="btn-control" style="padding: 6px 15px; font-size: 12px;" onclick="setTestLevel('mid')">Mid</button>
-                    <button class="btn-control" style="padding: 6px 15px; font-size: 12px;" onclick="setTestLevel('high')">High</button>
+        <div id="dashboardContent">
+            <div class="dashboard-header">
+                <h2>இணைக்கப்பட்ட சாதனம்: <span id="connectedDeviceName" style="color: #00ff88;">-</span></h2>
+                <div class="selector-box">
+                    <label style="font-size: 13px; margin-right: 8px; color: #aaa;">மாடலைத் தேர்ந்தெடுக்கவும்:</label>
+                    <select id="modelSelector" onchange="changeModel()">
+                        <option value="AWLCW">AWLCW 1.0 (WiFi - Low/Mid/High)</option>
+                        <option value="AWLCWS">AWLCWS 1.0 (WiFi + Solar - Percentage)</option>
+                    </select>
                 </div>
             </div>
 
-            <div class="card">
-                <h3>சாதன நிலை & கட்டுப்பாடுகள் (Device Controls)</h3>
+            <div class="dashboard-grid">
                 
-                <ul class="status-list">
-                    <li class="status-item">
-                        <span>சாதன இணைப்பு (Device Status):</span>
-                        <span class="badge badge-online" id="deviceStatus">Online (இணைக்கப்பட்டுள்ளது)</span>
-                    </li>
-                    <li class="status-item">
-                        <span>இயக்க முறை (Operating Mode):</span>
-                        <span class="badge badge-active" id="modeStatus">Auto Mode (தானியங்கி)</span>
-                    </li>
-                    <li class="status-item">
-                        <span>மோட்டார் நிலை (Motor Status):</span>
-                        <span class="badge badge-online" id="motorStatusBadge">OFF (நிறுத்தப்பட்டுள்ளது)</span>
-                    </li>
-                    <li class="status-item">
-                        <span>ட்ரைடன் பாதுகாப்பு (Dry Run Detection):</span>
-                        <span class="badge badge-safe" id="dryRunStatus">Safe (தண்ணீர் உள்ளது)</span>
-                    </li>
-                </ul>
-
-                <div class="control-group">
-                    <button class="btn-control" id="modeBtn" onclick="toggleMode()">மோடு மாற்றுக (Switch to Manual)</button>
-                    <button class="btn-control btn-manual" id="motorBtn" onclick="toggleMotor()">மோட்டாரை இயக்கவும் (Turn ON Motor)</button>
+                <div class="card">
+                    <h3>தொட்டியின் நீர் மட்டம் (Tank Water Level)</h3>
+                    <div class="tank-container">
+                        <div class="water-tank">
+                            <div class="water-fill" id="waterFill" style="height: 60%;"></div>
+                        </div>
+                        <div class="tank-label" id="tankLevelText">மட்டம்: 60% (Mid)</div>
+                    </div>
+                    <p style="font-size: 12px; color: #888; text-align: center; margin-top: 15px;">தொட்டி நிலையைச் சோதிக்கக் கீழே உள்ள பட்டன்களைப் பயன்படுத்தலாம்.</p>
+                    <div style="display: flex; gap: 10px; margin-top: 15px; justify-content: center;">
+                        <button class="btn-control" style="padding: 6px 15px; font-size: 12px;" onclick="setTestLevel('low')">Low</button>
+                        <button class="btn-control" style="padding: 6px 15px; font-size: 12px;" onclick="setTestLevel('mid')">Mid</button>
+                        <button class="btn-control" style="padding: 6px 15px; font-size: 12px;" onclick="setTestLevel('high')">High</button>
+                    </div>
                 </div>
-            </div>
 
+                <div class="card">
+                    <h3>சாதன நிலை & கட்டுப்பாடுகள் (Device Controls)</h3>
+                    
+                    <ul class="status-list">
+                        <li class="status-item">
+                            <span>சாதன நிலை (Device Status):</span>
+                            <span class="badge badge-online" id="deviceStatus">Online (இணைக்கப்பட்டுள்ளது)</span>
+                        </li>
+                        <li class="status-item">
+                            <span>இயக்க முறை (Operating Mode):</span>
+                            <span class="badge badge-active" id="modeStatus">Auto Mode (தானியங்கி)</span>
+                        </li>
+                        <li class="status-item">
+                            <span>மோட்டார் நிலை (Motor Status):</span>
+                            <span class="badge badge-online" id="motorStatusBadge">OFF (நிறுத்தப்பட்டுள்ளது)</span>
+                        </li>
+                        <li class="status-item">
+                            <span>ட்ரைடன் பாதுகாப்பு (Dry Run Detection):</span>
+                            <span class="badge badge-safe" id="dryRunStatus">Safe (தண்ணீர் உள்ளது)</span>
+                        </li>
+                    </ul>
+
+                    <div class="control-group">
+                        <button class="btn-control" id="modeBtn" onclick="toggleMode()">மோடு மாற்றுக (Switch to Manual)</button>
+                        <button class="btn-control btn-manual" id="motorBtn" onclick="toggleMotor()">மோட்டாரை இயக்கவும் (Turn ON Motor)</button>
+                    </div>
+                </div>
+
+            </div>
         </div>
+
     </div>
 
     <footer>
@@ -252,16 +275,27 @@
     </footer>
 
     <script>
-        // Mobile Menu Toggle Function
         function toggleMobileMenu() {
             const navContainer = document.getElementById('navContainer');
             navContainer.classList.toggle('active');
         }
 
+        function pairDevice() {
+            let serialNo = document.getElementById('serialInput').value.trim();
+            if (serialNo !== "") {
+                document.getElementById('connectedDeviceName').innerText = serialNo;
+                document.getElementById('pairingCard').style.display = 'none';
+                document.getElementById('dashboardContent').style.display = 'block';
+                document.getElementById('deviceStatus').innerText = "Online (வைஃபையுடன் இணைக்கப்பட்டது)";
+            } else {
+                alert('தயவுசெய்து சரியான சீரியல் எண் அல்லது QR ஐடியை உள்ளிடவும்.');
+            }
+        }
+
         let currentModel = 'AWLCW';
         let isAutoMode = true;
         let isMotorOn = false;
-        let currentLevelPercentage = 60; // Default Mid
+        let currentLevelPercentage = 60;
 
         function changeModel() {
             currentModel = document.getElementById('modelSelector').value;
@@ -286,7 +320,6 @@
             fillDiv.style.height = currentLevelPercentage + '%';
 
             if (currentModel === 'AWLCW') {
-                // AWLCW 1.0 -> Low, Mid, High
                 let textStatus = "Low (குறைவு)";
                 if (currentLevelPercentage > 35 && currentLevelPercentage <= 75) {
                     textStatus = "Mid (நடுத்தரம்)";
@@ -295,7 +328,6 @@
                 }
                 labelDiv.innerText = "நீர் நிலை: " + textStatus;
             } else {
-                // AWLCWS 1.0 -> Percentage
                 labelDiv.innerText = "நீர் நிலை: " + currentLevelPercentage + "% (Percentage)";
             }
         }
@@ -334,7 +366,6 @@
                 motorBtn.style.background = "#f44336";
                 motorBtn.style.color = "#fff";
                 
-                // Simulate Dry Run Check
                 if (currentLevelPercentage <= 15) {
                     dryRunBadge.innerText = "Alert: Dry Run Detected!";
                     dryRunBadge.className = "badge badge-alert";
