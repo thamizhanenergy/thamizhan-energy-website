@@ -28,16 +28,12 @@
         body { background-color: #f4f7f6; color: #333; line-height: 1.6; overflow-x: hidden; }
         a { text-decoration: none; color: inherit; }
 
-        header { background: #fff; padding: 10px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
-        .brand-section { display: flex; align-items: center; gap: 12px; }
-        .logo-img { height: 45px; width: auto; display: block; }
-        .company-title h1 { font-size: 16px; color: #0f2027; font-weight: 700; }
+        header { background: #fff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .brand-section { display: flex; align-items: center; gap: 10px; }
+        .logo-img { height: 40px; width: auto; display: block; }
+        .company-title h1 { font-size: 15px; color: #0f2027; font-weight: 700; }
         
-        .icon-btn { background: #f0f2f5; border: none; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 6px; }
-        .admin-btn { background: #ff5252; color: white; display: none; }
-        .lang-btn { background: #0f2027; color: #00ff88; border: 2px solid #00ff88; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 12px; cursor: pointer; }
-
-        .menu-toggle { display: flex; flex-direction: column; justify-content: space-between; width: 28px; height: 20px; cursor: pointer; background: transparent; border: none; }
+        .menu-toggle { display: flex; flex-direction: column; justify-content: space-between; width: 26px; height: 18px; cursor: pointer; background: transparent; border: none; }
         .menu-toggle span { width: 100%; height: 3px; background-color: #0f2027; border-radius: 3px; }
 
         .sidebar-menu { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: #fff; box-shadow: 5px 0 15px rgba(0,0,0,0.1); z-index: 3000; transition: 0.3s; padding: 20px; overflow-y: auto; }
@@ -86,13 +82,10 @@
         <div class="brand-section">
             <button class="menu-toggle" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
             <img src="1.png" alt="Logo" class="logo-img">
-            <div class="company-title"><h1 data-ta="தமிழன் எனர்ஜி சிஸ்டம்ஸ்" data-en="Thamizhan Energy Systems">தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1></div>
+            <div class="company-title"><h1>தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1></div>
         </div>
-        <div class="nav-container" style="display:flex; gap:10px;">
-            <a href="admin.html" class="icon-btn admin-btn" id="adminPanelBtn">⚙️ அட்மின்</a>
-            <button class="icon-btn" onclick="handleUserClick()">👤 <span id="user-display-name">உள்நுழை</span></button>
-            <button class="icon-btn" onclick="openCartModal()">🛒 கார்ட் (<span id="cart-count">0</span>)</button>
-            <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">English</button>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <button onclick="openCartModal()" style="background:#f0f2f5; border:none; padding:8px 12px; border-radius:20px; font-weight:600; cursor:pointer;">🛒 கார்ட் (<span id="cart-count">0</span>)</button>
         </div>
     </header>
 
@@ -103,26 +96,25 @@
         </div>
         <ul class="sidebar-links">
             <li><a href="index.html">🏠 முகப்பு பக்கம்</a></li>
-            <li><button onclick="toggleSidebar(); handleUserClick();">👤 <span id="sidebar-user-text">எனது கணக்கு & விபரங்கள்</span></button></li>
-            <li><button onclick="toggleSidebar(); openCartModal();">🛒 எனது கார்ட் (<span id="sidebar-cart-count">0</span>)</button></li>
+            <li><button onclick="toggleSidebar(); handleUserClick();">👤 <span id="sidebar-user-text">உள்நுழை / எனது கணக்கு</span></button></li>
+            <li><button onclick="toggleSidebar(); openCartModal();">🛒 எனது கார்ட் பொருட்கள் (<span id="sidebar-cart-count">0</span>)</button></li>
             <li><button onclick="toggleSidebar(); openProfileModal();">📦 எனது ஆர்டர்கள் & டிராக்கிங்</button></li>
             <li><a href="admin.html" id="sidebarAdminBtn" style="display:none; color:#ff5252;">⚙️ அட்மின் டேஷ்போர்டு</a></li>
+            <li><button onclick="toggleLanguage(); toggleSidebar();"><span id="sidebarLangText">🌐 Switch to English</span></button></li>
         </ul>
     </div>
 
     <div class="container">
         <div class="shop-header">
-            <h2 data-ta="எங்கள் வாட்டர் லெவல் கண்ட்ரோலர் தயாரிப்புகள்" data-en="Our Water Level Controller Products">எங்கள் வாட்டர் லெவல் கண்ட்ரோலர் தயாரிப்புகள்</h2>
+            <h2>எங்கள் வாட்டர் லெவல் கண்ட்ரோலர் தயாரிப்புகள்</h2>
         </div>
-
-        <div class="product-grid" id="dynamicProductGrid">
-            </div>
+        <div class="product-grid" id="dynamicProductGrid"></div>
     </div>
 
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeLoginModal()">&times;</span>
-            <h3>கஸ்டமர் உள்நுழைவு & விபரங்கள்</h3>
+            <h3>கஸ்டமர் உள்நுழைவு</h3>
             <p style="font-size: 13px; color: #666; margin-bottom: 12px;">உங்கள் ஜிமெயில் கணக்கு மூலம் உள்நுழையவும்:</p>
             <button class="google-signin-btn" onclick="signInWithGoogle()">Google / Gmail மூலம் உள்நுழைக</button>
         </div>
@@ -175,7 +167,7 @@
         let currentLang = 'ta';
         function toggleLanguage() {
             currentLang = (currentLang === 'ta') ? 'en' : 'ta';
-            document.getElementById('langToggleBtn').innerText = (currentLang === 'en') ? 'தமிழ்' : 'English';
+            document.getElementById('sidebarLangText').innerText = (currentLang === 'en') ? '🌐 தமிழில் மாற்ற' : '🌐 Switch to English';
             document.getElementById('htmlRoot').setAttribute('lang', currentLang);
         }
 
@@ -187,29 +179,24 @@
                 if (user) {
                     let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || null;
                     if (!userExtra) { document.getElementById('detailsModal').style.display = 'flex'; }
-                    document.getElementById('user-display-name').innerText = user.displayName ? user.displayName.split(' ')[0] : 'Account';
                     document.getElementById('sidebar-user-text').innerText = user.email;
 
                     if (user.email === ADMIN_EMAIL) {
-                        document.getElementById('adminPanelBtn').style.display = 'flex';
                         document.getElementById('sidebarAdminBtn').style.display = 'block';
                     } else {
-                        document.getElementById('adminPanelBtn').style.display = 'none';
                         document.getElementById('sidebarAdminBtn').style.display = 'none';
                     }
                 } else {
-                    document.getElementById('user-display-name').innerText = 'உள்நுழை';
-                    document.getElementById('adminPanelBtn').style.display = 'none';
+                    document.getElementById('sidebar-user-text').innerText = 'உள்நுழை / எனது கணக்கு';
                     document.getElementById('sidebarAdminBtn').style.display = 'none';
                 }
             });
         });
 
-        // Load Products dynamically from Admin Inventory Storage
         function loadShopProducts() {
             let products = JSON.parse(localStorage.getItem('adminProducts')) || [
                 {name: "AWLCP 1.0", price: 3499, stock: 15, img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
-                {name: "AWLCW 1.0", price: 4999, stock: 10, img: "3.png", specs: ["மொபைல் செயலி மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
+                {name: "AWLCW 1.0", price: 4999, stock: 10, img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
                 {name: "AWLCWS 1.0", price: 6999, stock: 8, img: "3.png", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
             ];
 
