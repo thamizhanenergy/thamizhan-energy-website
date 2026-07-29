@@ -29,7 +29,7 @@
         a { text-decoration: none; color: inherit; }
 
         header { background: #fff; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
-        .brand-section { display: flex; align-items: center; gap: 12px; }
+        .brand-section { display: flex; align-items: center; gap: 10px; }
         .logo-img { height: 40px; width: auto; display: block; }
         .company-title h1 { font-size: 15px; color: #0f2027; font-weight: 700; }
         
@@ -180,7 +180,7 @@
                     if(el.getAttribute('data-ta')) el.innerText = el.getAttribute('data-ta');
                 }
             });
-            loadShopProducts(); // Reload products to update specs/stock text language
+            loadShopProducts();
         }
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -215,8 +215,9 @@
             let gridHTML = '';
             products.forEach((p) => {
                 let specsHTML = p.specs.map(s => `<li>${s}</li>`).join('');
-                let stockStatus = p.stock > 0 ? `<b style="color:green;">${currentLang === 'ta' ? 'ஸ்டாக் உள்ளது' : 'In Stock'} (${p.stock})</b>` : `<b style="color:red;">${currentLang === 'ta' ? 'ஸ்டாக் காலியாக உள்ளது' : 'Out of Stock'}</b>`;
-                let btnText = (currentLang === 'ta' ? 'கார்ட்டில் சேர்க்கவும்' : 'Add to Cart');
+                let isOutOfStock = p.stock <= 0;
+                let stockStatus = !isOutOfStock ? `<b style="color:green;">${currentLang === 'ta' ? 'ஸ்டாக் உள்ளது' : 'In Stock'} (${p.stock})</b>` : `<b style="color:red;">${currentLang === 'ta' ? 'ஸ்டாக் காலியாக உள்ளது' : 'Out of Stock'}</b>`;
+                let btnText = isOutOfStock ? (currentLang === 'ta' ? 'ஸ்டாக் இல்லை (Out of Stock)' : 'Out of Stock') : (currentLang === 'ta' ? 'கார்ட்டில் சேர்க்கவும்' : 'Add to Cart');
 
                 gridHTML += `
                     <div class="product-card">
@@ -228,7 +229,7 @@
                             <p style="font-size:12px; margin-bottom:8px;">${stockStatus}</p>
                             <ul class="features">${specsHTML}</ul>
                         </div>
-                        <button class="btn" ${p.stock <= 0 ? 'disabled style="background:#ccc; cursor:not-allowed;"' : ''} onclick="addToCart('${p.name}', ${p.price})">${btnText}</button>
+                        <button class="btn" ${isOutOfStock ? 'disabled style="background:#ccc; cursor:not-allowed;"' : ''} onclick="addToCart('${p.name}', ${p.price})">${btnText}</button>
                     </div>
                 `;
             });
@@ -251,6 +252,13 @@
         }
 
         function addToCart(name, price) {
+            let products = JSON.parse(localStorage.getItem('adminProducts')) || [];
+            let prod = products.find(p => p.name === name);
+            if (prod && prod.stock <= 0) {
+                alert(currentLang === 'ta' ? 'மன்னிக்கவும்! இந்தப் பொருள் தற்போது ஸ்டாக் இல்லை.' : 'Sorry! This product is out of stock.');
+                return;
+            }
+
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             cart.push({name: name, price: price});
             localStorage.setItem('cartItems', JSON.stringify(cart));
@@ -328,7 +336,7 @@
         function closeCartModal() { document.getElementById('cartModal').style.display = 'none'; }
 
         function signInWithGoogle() {
-            firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => { closeLoginModal(); });
+            firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => { closeLoginModal(); loadShopProducts(); });
         }
 
         function logoutUser() {
@@ -339,6 +347,16 @@
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             if(cart.length === 0) { alert(currentLang === 'ta' ? 'கார்ட் காலியாக உள்ளது!' : 'Cart is empty!'); return; }
             
+            // Final Stock Validation before Payment
+            let products = JSON.parse(localStorage.getItem('adminProducts')) || [];
+            for (let item of cart) {
+                let prod = products.find(p => p.name === item.name);
+                if (prod && prod.stock <= 0) {
+                    alert(`மன்னிக்கவும்! '${item.name}' தற்போது ஸ்டாக் இல்லை.`);
+                    return;
+                }
+            }
+
             let user = firebase.auth().currentUser;
             let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email));
             let cartTotalText = document.getElementById('cartTotalPrice').innerText.replace('₹', '').replace(',', '');
@@ -352,6 +370,16 @@
                 "name": "தமிழன் எனர்ஜி சிஸ்டம்ஸ்",
                 "description": itemNames,
                 "handler": function (response){
+                    // Deduct Stock after successful payment
+                    let products = JSON.parse(localStorage.getItem('adminProducts')) || [];
+                    cart.forEach(item => {
+                        let prod = products.find(p => p.name === item.name);
+                        if (prod) {
+                            prod.stock = Math.max(0, prod.stock - 1);
+                        }
+                    });
+                    localStorage.setItem('adminProducts', JSON.stringify(products));
+
                     let orderDetails = { orderId: orderId, email: user.email, items: itemNames, address: userExtra.address, amount: "₹" + cartTotalText, status: currentLang === 'ta' ? 'ஆர்டர் உறுதி செய்யப்பட்டது' : 'Order Confirmed', trackingId: '', trackingUrl: '' };
                     let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
                     allOrders.push(orderDetails);
@@ -359,6 +387,7 @@
                     
                     localStorage.removeItem('cartItems');
                     updateCartDisplay();
+                    loadShopProducts();
                     closeCartModal();
                     alert((currentLang === 'ta' ? 'பணம் செலுத்தப்பட்டது! ஆர்டர் ஐடி: ' : 'Payment Successful! Order ID: ') + orderId);
                     openProfileModal();
