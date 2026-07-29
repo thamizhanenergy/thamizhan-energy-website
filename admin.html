@@ -93,7 +93,7 @@
                 <input type="number" id="prodStock" placeholder="ஸ்டாக் அளவு (Stock Qty)">
                 <input type="text" id="prodImg" placeholder="இமேஜ் லிங்க் (எ.கா: 3.png)">
             </div>
-            <textarea id="prodSpecs" rows="2" placeholder="ஸ்பெசிஃபிகேஷன்ஸ் (கமா மூலம் பிரிக்கவும்: ஆட்டோமேட்டிக் டேங்க், ட்ரைடன் பாதுகாப்பு)"></textarea>
+            <textarea id="prodSpecs" rows="2" placeholder="ஸ்பெசிஃபிகேஷன்ஸ் (கமா மூலம் பிரிக்கவும்)"></textarea>
             <button class="btn" onclick="addNewProduct()">தயாரிப்பைச் சேர்க்கவும்</button>
         </div>
 
@@ -104,7 +104,7 @@
                     <tr>
                         <th>தயாரிப்பு பெயர்</th>
                         <th>விலை</th>
-                        <th>ஸ்டாக் (Stock)</th>
+                        <th>ஸ்டாக் (Stock Qty)</th>
                         <th>ஸ்பெசிஃபிகேஷன்ஸ்</th>
                         <th>செயல்</th>
                     </tr>
@@ -139,20 +139,14 @@
     <footer><p>&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ் - அட்மின் பேனல்.</p></footer>
 
     <script>
-        // ** உங்கள் உண்மையான அட்மின் ஜிமெயில் முகவரியை இங்கே உள்ளிடவும் **
-        const ADMIN_EMAIL = "thamizhanes@gmail.com";
+        const ADMIN_EMAIL = "thamizhanes@gmail.com"; // உங்கள் அட்மின் ஈமெயிலை இங்கே மாற்றவும்
 
         document.addEventListener("DOMContentLoaded", function() {
             firebase.auth().onAuthStateChanged((user) => {
-                if (user) {
-                    if (user.email === ADMIN_EMAIL) {
-                        document.getElementById('auth-lock-screen').style.display = 'none';
-                        document.getElementById('admin-main-content').style.display = 'block';
-                        loadAdminData();
-                    } else {
-                        alert("மன்னிக்கவும்! இந்த ஈமெயில் அட்மின் ஈமெயில் அல்ல: " + user.email);
-                        firebase.auth().signOut();
-                    }
+                if (user && user.email === ADMIN_EMAIL) {
+                    document.getElementById('auth-lock-screen').style.display = 'none';
+                    document.getElementById('admin-main-content').style.display = 'block';
+                    loadAdminData();
                 } else {
                     document.getElementById('auth-lock-screen').style.display = 'flex';
                     document.getElementById('admin-main-content').style.display = 'none';
@@ -179,6 +173,14 @@
             loadOrdersTable(allOrders);
         }
 
+        function getDefaultProducts() {
+            return [
+                {name: "AWLCP 1.0", price: 3499, stock: 15, img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
+                {name: "AWLCW 1.0", price: 4999, stock: 10, img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
+                {name: "AWLCWS 1.0", price: 6999, stock: 8, img: "3.png", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
+            ];
+        }
+
         function addNewProduct() {
             let name = document.getElementById('prodName').value.trim();
             let price = document.getElementById('prodPrice').value.trim();
@@ -191,12 +193,7 @@
                 return;
             }
 
-            let products = JSON.parse(localStorage.getItem('adminProducts')) || [
-                {name: "AWLCP 1.0", price: 3499, stock: 15, img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
-                {name: "AWLCW 1.0", price: 4999, stock: 10, img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
-                {name: "AWLCWS 1.0", price: 6999, stock: 8, img: "3.png", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
-            ];
-
+            let products = JSON.parse(localStorage.getItem('adminProducts')) || getDefaultProducts();
             products.push({
                 name: name,
                 price: parseInt(price),
@@ -211,11 +208,7 @@
         }
 
         function loadInventoryTable() {
-            let products = JSON.parse(localStorage.getItem('adminProducts')) || [
-                {name: "AWLCP 1.0", price: 3499, stock: 15, img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
-                {name: "AWLCW 1.0", price: 4999, stock: 10, img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
-                {name: "AWLCWS 1.0", price: 6999, stock: 8, img: "3.png", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
-            ];
+            let products = JSON.parse(localStorage.getItem('adminProducts')) || getDefaultProducts();
 
             let html = '';
             products.forEach((p, index) => {
@@ -223,7 +216,7 @@
                     <tr>
                         <td><b>${p.name}</b></td>
                         <td>₹${p.price}</td>
-                        <td><input type="number" id="stock_${index}" value="${p.stock}" style="width:70px;"></td>
+                        <td><input type="number" id="stock_${index}" value="${p.stock}" style="width:80px;"></td>
                         <td><small>${p.specs.join(', ')}</small></td>
                         <td><button class="btn" style="padding:4px 8px;" onclick="updateStock(${index})">ஸ்டாக் மாற்று</button></td>
                     </tr>
@@ -233,11 +226,12 @@
         }
 
         function updateStock(index) {
-            let products = JSON.parse(localStorage.getItem('adminProducts')) || [];
+            let products = JSON.parse(localStorage.getItem('adminProducts')) || getDefaultProducts();
             let newStock = document.getElementById(`stock_${index}`).value;
             products[index].stock = parseInt(newStock);
             localStorage.setItem('adminProducts', JSON.stringify(products));
-            alert("ஸ்டாக் அளவு மாற்றப்பட்டது!");
+            alert("ஸ்டாக் அளவு வெற்றிகரமாக மாற்றப்பட்டது!");
+            loadInventoryTable();
         }
 
         function loadOrdersTable(allOrders) {
