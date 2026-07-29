@@ -8,6 +8,8 @@
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script>
       const firebaseConfig = {
@@ -45,18 +47,13 @@
         .logo-img { height: 45px; width: auto; display: block; }
         .company-title h1 { font-size: 16px; color: #0f2027; font-weight: 700; line-height: 1.2; }
         
-        .nav-container { display: flex; align-items: center; gap: 12px; }
-        .nav-icons { display: flex; gap: 10px; align-items: center; }
+        .nav-container { display: flex; align-items: center; gap: 15px; }
+        .nav-icons { display: flex; gap: 12px; align-items: center; }
         
         .icon-btn { background: #f0f2f5; border: none; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 6px; transition: 0.3s; }
         .icon-btn:hover { background: #e4e6eb; }
 
-        /* Admin Button Styling (Hidden by default) */
-        .admin-btn {
-            background: #ff5252;
-            color: white;
-            display: none; /* Hidden for normal users */
-        }
+        .admin-btn { background: #ff5252; color: white; display: none; }
         .admin-btn:hover { background: #d32f2f; }
 
         .lang-btn {
@@ -382,8 +379,11 @@
     </footer>
 
     <script>
-        // ** கீழே உள்ள இடத்தில் உங்களது அட்மின் ஜிமெயில் முகவரியை மாற்றவும் **
-        const ADMIN_EMAIL = "thamizhanes@gmail.com";
+        // ** 1. உங்கள் அட்மின் ஜிமெயில் முகவரியை இங்கே உள்ளிடவும் **
+        const ADMIN_EMAIL = "YOUR_ADMIN_EMAIL@gmail.com";
+        
+        // ** 2. உங்கள் Razorpay Key ID-ஐ இங்கே உள்ளிடவும் **
+        const RAZORPAY_KEY_ID = "YOUR_RAZORPAY_KEY_ID";
 
         function toggleMobileMenu() {
             const navContainer = document.getElementById('navContainer');
@@ -426,7 +426,6 @@
                     localStorage.setItem('loggedUserData', JSON.stringify(userData));
                     document.getElementById('user-display-name').innerText = user.displayName ? user.displayName.split(' ')[0] : 'Account';
 
-                    // Check if logged in user is Admin
                     if (user.email === ADMIN_EMAIL) {
                         document.getElementById('adminPanelBtn').style.display = 'flex';
                     } else {
@@ -488,6 +487,11 @@
                     ordersHTML = `<p style="color:#888; font-style:italic;">${currentLang === 'ta' ? 'நீங்கள் இதுவரை எந்த ஆர்டரும் செய்யவில்லை.' : 'You have no orders yet.'}</p>`;
                 } else {
                     userOrders.forEach(ord => {
+                        let trackingInfo = ord.trackingId ? 
+                            `<p><b>டிராக்கிங் ஐடி:</b> ${ord.trackingId}</p>
+                             <p><b>கொரியர் லிங்க்:</b> <a href="${ord.trackingUrl}" target="_blank" style="color:#2980b9; text-decoration:underline;">டிராப் செய்ய கிளிக் செய்க</a></p>` : 
+                            `<p><b>டிராக்கிங் நிலை:</b> விரைவில் வழங்கപ്പെടും</p>`;
+
                         ordersHTML += `
                             <div class="order-history-box">
                                 <p><b>ஆர்டர் ஐடி (Order ID):</b> <span style="color:#2980b9;">${ord.orderId}</span></p>
@@ -495,6 +499,7 @@
                                 <p><b>தொகை:</b> ${ord.amount}</p>
                                 <p><b>முகவரி:</b> ${ord.address}</p>
                                 <p><b>நிலை (Status):</b> <span style="color:#2e7d32; font-weight:bold;">${ord.status}</span></p>
+                                ${trackingInfo}
                             </div>
                         `;
                     });
@@ -504,7 +509,7 @@
                     <p><b>பெயர் (Name):</b> ${user.displayName || 'User'}</p>
                     <p><b>மின்னஞ்சல் (Email):</b> ${user.email}</p>
                     <hr style="margin: 10px 0; border:0; border-top:1px solid #ddd;">
-                    <h4 style="color:#0f2027; margin-bottom:5px;" data-ta="எனது ஆர்டர்கள் (My Orders)" data-en="My Orders">எனது ஆர்டர்கள் & ஐடிகள்</h4>
+                    <h4 style="color:#0f2027; margin-bottom:5px;" data-ta="எனது ஆர்டர்கள் (My Orders)" data-en="My Orders">எனது ஆர்டர்கள் & ட்ராக்கிங்</h4>
                     ${ordersHTML}
                 `;
                 document.getElementById('profileDetails').innerHTML = profileHTML;
@@ -537,6 +542,7 @@
             });
         }
 
+        // Razorpay Payment Gateway Integration
         function proceedToRazorpay() {
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             if(cart.length === 0) {
@@ -558,32 +564,52 @@
                 return;
             }
 
-            let totalAmount = document.getElementById('cartTotalPrice').innerText;
+            let cartTotalText = document.getElementById('cartTotalPrice').innerText.replace('₹', '').replace(',', '');
+            let amountInPaise = parseInt(cartTotalText) * 100; // Razorpay requires amount in paise
             let orderId = 'TES-' + Math.floor(100000 + Math.random() * 900000);
             let itemNames = cart.map(i => i.name).join(', ');
 
-            let confirmPay = confirm(currentLang === 'ta' ? `Razorpay செக் அவுட்: மொத்தத் தொகை ${totalAmount}\nபணம் செலுத்த ஒப்புதல் அளிக்கிறீர்களா?` : `Razorpay Checkout: Total Amount ${totalAmount}\nProceed with payment?`);
+            var options = {
+                "key": RAZORPAY_KEY_ID, 
+                "amount": amountInPaise, 
+                "currency": "INR",
+                "name": "தமிழன் எனர்ஜி சிஸ்டம்ஸ்",
+                "description": itemNames,
+                "handler": function (response){
+                    // Payment Successful Callback
+                    let orderDetails = {
+                        orderId: orderId,
+                        email: user.email,
+                        items: itemNames,
+                        address: address,
+                        amount: "₹" + cartTotalText,
+                        status: 'ஆர்டர் உறுதி செய்யப்பட்டது (Order Confirmed)',
+                        trackingId: '',
+                        trackingUrl: ''
+                    };
+
+                    let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
+                    allOrders.push(orderDetails);
+                    localStorage.setItem('allOrders', JSON.stringify(allOrders));
+                    
+                    localStorage.removeItem('cartItems');
+                    updateCartDisplay();
+                    closeCartModal();
+
+                    alert((currentLang === 'ta' ? 'பணம் வெற்றிகரமாக செலுத்தப்பட்டது! ஆர்டர் ஐடி: ' : 'Payment Successful! Order ID: ') + orderId);
+                    openProfileModal(); // Open profile to show the confirmed order automatically
+                },
+                "prefill": {
+                    "name": user.displayName || "Customer",
+                    "email": user.email,
+                },
+                "theme": {
+                    "color": "#00ff88"
+                }
+            };
             
-            if (confirmPay) {
-                let orderDetails = {
-                    orderId: orderId,
-                    email: user.email,
-                    items: itemNames,
-                    address: address,
-                    amount: totalAmount,
-                    status: 'ஆர்டர் உறுதி செய்யப்பட்டது (Order Confirmed - Dispatched Soon)'
-                };
-
-                let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
-                allOrders.push(orderDetails);
-                localStorage.setItem('allOrders', JSON.stringify(allOrders));
-                
-                localStorage.removeItem('cartItems');
-                updateCartDisplay();
-                closeCartModal();
-
-                alert((currentLang === 'ta' ? 'பணம் செலுத்தப்பட்டது! உங்களது ஆர்டர் ஐடி: ' : 'Payment Successful! Your Order ID: ') + orderId);
-            }
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
         }
     </script>
 
