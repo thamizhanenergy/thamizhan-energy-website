@@ -182,8 +182,11 @@
         }
         .google-signin-btn:hover { background: #3367d6; }
 
-        .cart-items-list { list-style: none; max-height: 150px; overflow-y: auto; margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
-        .cart-items-list li { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; }
+        .cart-items-list { list-style: none; max-height: 180px; overflow-y: auto; margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        .cart-items-list li { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px; background: #f9f9f9; padding: 6px 10px; border-radius: 5px; }
+        .remove-cart-item { background: #ff5252; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; }
+        .remove-cart-item:hover { background: #d32f2f; }
+
         .cart-total { font-weight: 700; font-size: 16px; margin-bottom: 15px; display: flex; justify-content: space-between; color: #2c3e50; }
 
         .pay-btn { background: #528FF0; color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 14px; }
@@ -379,11 +382,8 @@
     </footer>
 
     <script>
-        // ** 1. உங்கள் அட்மின் ஜிமெயில் முகவரியை இங்கே உள்ளிடவும் **
-        const ADMIN_EMAIL = "thamizhanes@gmail.com";
-        
-        // ** 2. உங்கள் Razorpay Key ID-ஐ இங்கே உள்ளிடவும் **
-        const RAZORPAY_KEY_ID = "rzp_live_TJABmArhfi4WPG";
+        const ADMIN_EMAIL = "YOUR_ADMIN_EMAIL@gmail.com";
+        const RAZORPAY_KEY_ID = "YOUR_RAZORPAY_KEY_ID";
 
         function toggleMobileMenu() {
             const navContainer = document.getElementById('navContainer');
@@ -446,6 +446,14 @@
             alert(name + (currentLang === 'ta' ? ' கார்ட்டில் சேர்க்கப்பட்டது!' : ' added to cart!'));
         }
 
+        // Remove item from cart function
+        function removeFromCart(index) {
+            let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('cartItems', JSON.stringify(cart));
+            updateCartDisplay();
+        }
+
         function updateCartDisplay() {
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             document.getElementById('cart-count').innerText = cart.length;
@@ -453,11 +461,15 @@
             let listHTML = '';
             let total = 0;
             if(cart.length === 0) {
-                listHTML = `<li style="color:#888; text-align:center;">${currentLang === 'ta' ? 'கார்ட் காலியாக உள்ளது.' : 'Cart is empty.'}</li>`;
+                listHTML = `<li style="color:#888; text-align:center; justify-content:center;">${currentLang === 'ta' ? 'கார்ட் காலியாக உள்ளது.' : 'Cart is empty.'}</li>`;
             } else {
                 cart.forEach((item, index) => {
                     total += item.price;
-                    listHTML += `<li><span>${item.name}</span> <b>₹${item.price}</b></li>`;
+                    listHTML += `
+                        <li>
+                            <span><b>${item.name}</b> - ₹${item.price}</span>
+                            <button class="remove-cart-item" onclick="removeFromCart(${index})">${currentLang === 'ta' ? 'நீக்கு' : 'Remove'}</button>
+                        </li>`;
                 });
             }
             document.getElementById('cartItemsList').innerHTML = listHTML;
@@ -476,6 +488,7 @@
         function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
         function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
         
+        // Open Profile Modal with User Details & Order History Tracking
         function openProfileModal() {
             let user = firebase.auth().currentUser;
             if (user) {
@@ -490,7 +503,7 @@
                         let trackingInfo = ord.trackingId ? 
                             `<p><b>டிராக்கிங் ஐடி:</b> ${ord.trackingId}</p>
                              <p><b>கொரியர் லிங்க்:</b> <a href="${ord.trackingUrl}" target="_blank" style="color:#2980b9; text-decoration:underline;">டிராப் செய்ய கிளிக் செய்க</a></p>` : 
-                            `<p><b>டிராக்கிங் நிலை:</b> விரைவில் வழங்கப்படும்</p>`;
+                            `<p><b>டிராக்கிங் நிலை:</b> விரைவில் வழங்கப்படும்க</p>`;
 
                         ordersHTML += `
                             <div class="order-history-box">
@@ -565,7 +578,7 @@
             }
 
             let cartTotalText = document.getElementById('cartTotalPrice').innerText.replace('₹', '').replace(',', '');
-            let amountInPaise = parseInt(cartTotalText) * 100; // Razorpay requires amount in paise
+            let amountInPaise = parseInt(cartTotalText) * 100;
             let orderId = 'TES-' + Math.floor(100000 + Math.random() * 900000);
             let itemNames = cart.map(i => i.name).join(', ');
 
@@ -576,7 +589,6 @@
                 "name": "தமிழன் எனர்ஜி சிஸ்டம்ஸ்",
                 "description": itemNames,
                 "handler": function (response){
-                    // Payment Successful Callback
                     let orderDetails = {
                         orderId: orderId,
                         email: user.email,
@@ -597,7 +609,7 @@
                     closeCartModal();
 
                     alert((currentLang === 'ta' ? 'பணம் வெற்றிகரமாக செலுத்தப்பட்டது! ஆர்டர் ஐடி: ' : 'Payment Successful! Order ID: ') + orderId);
-                    openProfileModal(); // Open profile to show the confirmed order automatically
+                    openProfileModal();
                 },
                 "prefill": {
                     "name": user.displayName || "Customer",
