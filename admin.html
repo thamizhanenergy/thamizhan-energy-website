@@ -72,11 +72,11 @@
         
         <div class="stats-grid">
             <div class="stat-card">
-                <h3>இந்த மாத ஆர்டர்கள் (This Month Orders)</h3>
+                <h3>இந்த மாத ஆர்டர்கள்</h3>
                 <div class="value" id="monthOrdersCount">0</div>
             </div>
             <div class="stat-card">
-                <h3>இந்த மாத மொத்த சேல்ஸ் (Revenue)</h3>
+                <h3>இந்த மாத மொத்த சேல்ஸ்</h3>
                 <div class="value" style="color: #2e7d32;" id="monthRevenue">₹0</div>
             </div>
             <div class="stat-card">
@@ -91,7 +91,7 @@
                 <input type="text" id="prodName" placeholder="தயாரிப்பு பெயர் (எ.கா: AWLCP 1.0)">
                 <input type="number" id="prodPrice" placeholder="விலை (₹)">
                 <input type="number" id="prodStock" placeholder="ஸ்டாக் அளவு (Stock Qty)">
-                <input type="text" id="prodImg" placeholder="இமேஜ் லிங்க் அல்லது பெயர் (எ.கா: 3.png)">
+                <input type="text" id="prodImg" placeholder="இமேஜ் லிங்க் (எ.கா: 3.png)">
             </div>
             <textarea id="prodSpecs" rows="2" placeholder="ஸ்பெசிஃபிகேஷன்ஸ் (கமா மூலம் பிரிக்கவும்: ஆட்டோமேட்டிக் டேங்க், ட்ரைடன் பாதுகாப்பு)"></textarea>
             <button class="btn" onclick="addNewProduct()">தயாரிப்பைச் சேர்க்கவும்</button>
@@ -139,14 +139,20 @@
     <footer><p>&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ் - அட்மின் பேனல்.</p></footer>
 
     <script>
-        const ADMIN_EMAIL = "YOUR_ADMIN_EMAIL@gmail.com"; // உங்கள் அட்மின் ஈமெயிலை இங்கே மாற்றுக
+        // ** உங்கள் உண்மையான அட்மின் ஜிமெயில் முகவரியை இங்கே உள்ளிடவும் **
+        const ADMIN_EMAIL = "thamizhanes@gmail.com";
 
         document.addEventListener("DOMContentLoaded", function() {
             firebase.auth().onAuthStateChanged((user) => {
-                if (user && user.email === ADMIN_EMAIL) {
-                    document.getElementById('auth-lock-screen').style.display = 'none';
-                    document.getElementById('admin-main-content').style.display = 'block';
-                    loadAdminData();
+                if (user) {
+                    if (user.email === ADMIN_EMAIL) {
+                        document.getElementById('auth-lock-screen').style.display = 'none';
+                        document.getElementById('admin-main-content').style.display = 'block';
+                        loadAdminData();
+                    } else {
+                        alert("மன்னிக்கவும்! இந்த ஈமெயில் அட்மின் ஈமெயில் அல்ல: " + user.email);
+                        firebase.auth().signOut();
+                    }
                 } else {
                     document.getElementById('auth-lock-screen').style.display = 'flex';
                     document.getElementById('admin-main-content').style.display = 'none';
@@ -156,20 +162,15 @@
 
         function signInAdminGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            firebase.auth().signInWithPopup(provider).then((result) => {
-                if (result.user.email === ADMIN_EMAIL) {
-                    location.reload();
-                } else {
-                    alert("இது அட்மின் ஈமெயில் அல்ல!");
-                    firebase.auth().signOut();
-                }
+            firebase.auth().signInWithPopup(provider).catch((error) => {
+                alert("Login Error: " + error.message);
             });
         }
 
         function loadAdminData() {
             let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
             document.getElementById('totalOrdersCount').innerText = allOrders.length;
-            document.getElementById('monthOrdersCount').innerText = allOrders.length; // Simplified for current month
+            document.getElementById('monthOrdersCount').innerText = allOrders.length;
 
             let totalRev = allOrders.reduce((sum, ord) => sum + parseInt(ord.amount.replace('₹','').replace(',','')), 0);
             document.getElementById('monthRevenue').innerText = '₹' + totalRev;
@@ -192,7 +193,7 @@
 
             let products = JSON.parse(localStorage.getItem('adminProducts')) || [
                 {name: "AWLCP 1.0", price: 3499, stock: 15, img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
-                {name: "AWLCW 1.0", price: 4999, stock: 10, img: "3.png", specs: ["மொபைல் செயலி மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
+                {name: "AWLCW 1.0", price: 4999, stock: 10, img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
                 {name: "AWLCWS 1.0", price: 6999, stock: 8, img: "3.png", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
             ];
 
@@ -212,7 +213,7 @@
         function loadInventoryTable() {
             let products = JSON.parse(localStorage.getItem('adminProducts')) || [
                 {name: "AWLCP 1.0", price: 3499, stock: 15, img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
-                {name: "AWLCW 1.0", price: 4999, stock: 10, img: "3.png", specs: ["மொபைல் செயலி மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
+                {name: "AWLCW 1.0", price: 4999, stock: 10, img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
                 {name: "AWLCWS 1.0", price: 6999, stock: 8, img: "3.png", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
             ];
 
@@ -259,7 +260,7 @@
                     </tr>
                 `;
             });
-            tableBody.innerHTML = html;
+            document.getElementById('adminOrdersTableBody').innerHTML = html;
         }
 
         function saveTracking(index) {
