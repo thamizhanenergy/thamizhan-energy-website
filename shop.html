@@ -10,7 +10,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
     <script>
-      // உங்களது உண்மையான Firebase கான்பிக் விவரங்கள்
       const firebaseConfig = {
         apiKey: "AIzaSyAJwgnJhXAiqNGpnaN0vWOevBcofYR9uxE",
         authDomain: "thamizhan-energy-systems.firebaseapp.com",
@@ -46,11 +45,19 @@
         .logo-img { height: 45px; width: auto; display: block; }
         .company-title h1 { font-size: 16px; color: #0f2027; font-weight: 700; line-height: 1.2; }
         
-        .nav-container { display: flex; align-items: center; gap: 15px; }
-        .nav-icons { display: flex; gap: 12px; align-items: center; }
+        .nav-container { display: flex; align-items: center; gap: 12px; }
+        .nav-icons { display: flex; gap: 10px; align-items: center; }
         
         .icon-btn { background: #f0f2f5; border: none; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 6px; transition: 0.3s; }
         .icon-btn:hover { background: #e4e6eb; }
+
+        /* Admin Button Styling (Hidden by default) */
+        .admin-btn {
+            background: #ff5252;
+            color: white;
+            display: none; /* Hidden for normal users */
+        }
+        .admin-btn:hover { background: #d32f2f; }
 
         .lang-btn {
             background: #0f2027;
@@ -219,7 +226,7 @@
                 transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out, visibility 0.3s;
             }
             .nav-container.active {
-                max-height: 350px;
+                max-height: 380px;
                 visibility: visible;
                 padding: 15px 20px;
             }
@@ -252,6 +259,11 @@
         <div class="nav-container" id="navContainer">
             <div class="nav-icons">
                 <a href="index.html" class="icon-btn" style="background: #0f2027; color: white;" data-ta="முகப்பு" data-en="Home">முகப்பு</a>
+                
+                <a href="admin.html" class="icon-btn admin-btn" id="adminPanelBtn">
+                    ⚙️ <span data-ta="அட்மின் பேனல்" data-en="Admin Panel">அட்மின் பேனல்</span>
+                </a>
+
                 <button class="icon-btn" onclick="handleUserClick()">
                     👤 <span id="user-display-name" data-ta="உள்நுழை (Login)" data-en="Login">உள்நுழை (Login)</span>
                 </button>
@@ -334,8 +346,6 @@
                 <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
                 <span data-ta="Google / Gmail மூலம் உள்நுழைக" data-en="Sign in with Google">Google / Gmail மூலம் உள்நுழைக</span>
             </button>
-            
-            <button class="btn" style="background:#ddd; color:#333; margin-top:5px;" onclick="fallbackDemoLogin()" data-ta="டெமோ லாகின் (Testing Mode)" data-en="Demo Login (Testing Mode)">டெமோ லாகின் (சோதனை முறை)</button>
         </div>
     </div>
 
@@ -372,6 +382,9 @@
     </footer>
 
     <script>
+        // ** கீழே உள்ள இடத்தில் உங்களது அட்மின் ஜிமெயில் முகவரியை மாற்றவும் **
+        const ADMIN_EMAIL = "YOUR_ADMIN_EMAIL@gmail.com";
+
         function toggleMobileMenu() {
             const navContainer = document.getElementById('navContainer');
             navContainer.classList.toggle('active');
@@ -412,14 +425,16 @@
                     };
                     localStorage.setItem('loggedUserData', JSON.stringify(userData));
                     document.getElementById('user-display-name').innerText = user.displayName ? user.displayName.split(' ')[0] : 'Account';
-                } else {
-                    let localUser = localStorage.getItem('loggedUserData');
-                    if(localUser) {
-                        let u = JSON.parse(localUser);
-                        document.getElementById('user-display-name').innerText = u.name.split(' ')[0];
+
+                    // Check if logged in user is Admin
+                    if (user.email === ADMIN_EMAIL) {
+                        document.getElementById('adminPanelBtn').style.display = 'flex';
                     } else {
-                        document.getElementById('user-display-name').innerText = currentLang === 'ta' ? 'உள்நுழை (Login)' : 'Login';
+                        document.getElementById('adminPanelBtn').style.display = 'none';
                     }
+                } else {
+                    document.getElementById('user-display-name').innerText = currentLang === 'ta' ? 'உள்நுழை (Login)' : 'Login';
+                    document.getElementById('adminPanelBtn').style.display = 'none';
                 }
             });
         });
@@ -452,8 +467,7 @@
 
         function handleUserClick() {
             let user = firebase.auth().currentUser;
-            let localUser = localStorage.getItem('loggedUserData');
-            if (user || localUser) {
+            if (user) {
                 openProfileModal();
             } else {
                 openLoginModal();
@@ -465,12 +479,9 @@
         
         function openProfileModal() {
             let user = firebase.auth().currentUser;
-            let localUser = localStorage.getItem('loggedUserData');
-            let userInfo = user ? {name: user.displayName, email: user.email} : (localUser ? JSON.parse(localUser) : null);
-
-            if (userInfo) {
+            if (user) {
                 let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
-                let userOrders = allOrders.filter(o => o.email === userInfo.email);
+                let userOrders = allOrders.filter(o => o.email === user.email);
 
                 let ordersHTML = '';
                 if(userOrders.length === 0) {
@@ -490,8 +501,8 @@
                 }
 
                 let profileHTML = `
-                    <p><b>பெயர் (Name):</b> ${userInfo.name || 'User'}</p>
-                    <p><b>மின்னஞ்சல் (Email):</b> ${userInfo.email}</p>
+                    <p><b>பெயர் (Name):</b> ${user.displayName || 'User'}</p>
+                    <p><b>மின்னஞ்சல் (Email):</b> ${user.email}</p>
                     <hr style="margin: 10px 0; border:0; border-top:1px solid #ddd;">
                     <h4 style="color:#0f2027; margin-bottom:5px;" data-ta="எனது ஆர்டர்கள் (My Orders)" data-en="My Orders">எனது ஆர்டர்கள் & ஐடிகள்</h4>
                     ${ordersHTML}
@@ -516,38 +527,16 @@
                 });
         }
 
-        function fallbackDemoLogin() {
-            let demoUser = {
-                name: "தமிழன் வாடிக்கையாளர்",
-                email: "thamizhan@gmail.com"
-            };
-            localStorage.setItem('loggedUserData', JSON.stringify(demoUser));
-            checkSavedUser();
-            closeLoginModal();
-            alert("சோதனை முறையில் வெற்றிகரமாக லாகின் செய்யப்பட்டது!");
-        }
-
         function logoutUser() {
             firebase.auth().signOut().then(() => {
                 localStorage.removeItem('loggedUserData');
                 document.getElementById('user-display-name').innerText = currentLang === 'ta' ? 'உள்நுழை (Login)' : 'Login';
+                document.getElementById('adminPanelBtn').style.display = 'none';
                 closeProfileModal();
                 alert(currentLang === 'ta' ? 'வெற்றிகரமாக வெளியேறிவிட்டீர்கள்!' : 'Logged out successfully!');
-            }).catch((error) => {
-                localStorage.removeItem('loggedUserData');
-                closeProfileModal();
             });
         }
 
-        function checkSavedUser() {
-            let localUser = localStorage.getItem('loggedUserData');
-            if(localUser) {
-                let u = JSON.parse(localUser);
-                document.getElementById('user-display-name').innerText = u.name.split(' ')[0];
-            }
-        }
-
-        // Razorpay payment (WhatsApp redirection removed, order saved locally & automatically shown in user profile)
         function proceedToRazorpay() {
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             if(cart.length === 0) {
@@ -556,11 +545,8 @@
             }
             
             let user = firebase.auth().currentUser;
-            let localUser = localStorage.getItem('loggedUserData');
-            let userInfo = user ? {name: user.displayName, email: user.email} : (localUser ? JSON.parse(localUser) : null);
-
-            if(!userInfo) {
-                alert(currentLang === 'ta' ? 'தயவுசெய்து முதலில் லாகின் செய்யவும்!' : 'Please login first!');
+            if(!user) {
+                alert(currentLang === 'ta' ? 'தயவுசெய்து முதலில் ஜிமெயில் மூலம் லாகின் செய்யவும்!' : 'Please login with Google first!');
                 closeCartModal();
                 openLoginModal();
                 return;
@@ -581,20 +567,16 @@
             if (confirmPay) {
                 let orderDetails = {
                     orderId: orderId,
-                    email: userInfo.email,
+                    email: user.email,
                     items: itemNames,
                     address: address,
                     amount: totalAmount,
                     status: 'ஆர்டர் உறுதி செய்யப்பட்டது (Order Confirmed - Dispatched Soon)'
                 };
 
-                // Save to allOrders (so customer can see it inside profile automatically)
                 let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
                 allOrders.push(orderDetails);
                 localStorage.setItem('allOrders', JSON.stringify(allOrders));
-
-                // Also save latest order for IoT/Admin Dashboard tracking
-                localStorage.setItem('latestAdminNotification', JSON.stringify(orderDetails));
                 
                 localStorage.removeItem('cartItems');
                 updateCartDisplay();
