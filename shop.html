@@ -10,6 +10,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
     <script>
+      // உங்களது உண்மையான Firebase கான்பிக் விவரங்கள்
       const firebaseConfig = {
         apiKey: "AIzaSyAJwgnJhXAiqNGpnaN0vWOevBcofYR9uxE",
         authDomain: "thamizhan-energy-systems.firebaseapp.com",
@@ -195,7 +196,6 @@
             margin-top: 12px;
             font-size: 13px;
         }
-        .order-history-box h5 { color: #0f2027; margin-bottom: 5px; }
 
         footer { background: #0c1a1f; color: #aaa; padding: 25px; text-align: center; font-size: 12px; margin-top: 50px; }
 
@@ -403,7 +403,6 @@
         document.addEventListener("DOMContentLoaded", function() {
             updateCartDisplay();
             
-            // Check Firebase Auth State or LocalStorage Fallback
             firebase.auth().onAuthStateChanged((user) => {
                 if (user) {
                     let userData = {
@@ -494,7 +493,7 @@
                     <p><b>பெயர் (Name):</b> ${userInfo.name || 'User'}</p>
                     <p><b>மின்னஞ்சல் (Email):</b> ${userInfo.email}</p>
                     <hr style="margin: 10px 0; border:0; border-top:1px solid #ddd;">
-                    <h4 style="color:#0f2027; margin-bottom:5px;" data-ta="எனது ஆர்டர்கள் (My Orders)" data-en="My Orders">எனது ஆர்டர்கள்</h4>
+                    <h4 style="color:#0f2027; margin-bottom:5px;" data-ta="எனது ஆர்டர்கள் (My Orders)" data-en="My Orders">எனது ஆர்டர்கள் & ஐடிகள்</h4>
                     ${ordersHTML}
                 `;
                 document.getElementById('profileDetails').innerHTML = profileHTML;
@@ -506,7 +505,6 @@
         function openCartModal() { document.getElementById('cartModal').style.display = 'flex'; }
         function closeCartModal() { document.getElementById('cartModal').style.display = 'none'; }
 
-        // Google / Gmail Sign-in
         function signInWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithPopup(provider)
@@ -518,7 +516,6 @@
                 });
         }
 
-        // Fallback Demo Login (If Popup is blocked)
         function fallbackDemoLogin() {
             let demoUser = {
                 name: "தமிழன் வாடிக்கையாளர்",
@@ -550,6 +547,7 @@
             }
         }
 
+        // Razorpay payment (WhatsApp redirection removed, order saved locally & automatically shown in user profile)
         function proceedToRazorpay() {
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             if(cart.length === 0) {
@@ -590,19 +588,19 @@
                     status: 'ஆர்டர் உறுதி செய்யப்பட்டது (Order Confirmed - Dispatched Soon)'
                 };
 
+                // Save to allOrders (so customer can see it inside profile automatically)
                 let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
                 allOrders.push(orderDetails);
                 localStorage.setItem('allOrders', JSON.stringify(allOrders));
 
-                let waText = `புதிய ஆர்டர் வந்துள்ளது!%0Aஆர்டர் ஐடி: ${orderId}%0Aபெயர்: ${userInfo.name}%0Aஈமெயில்: ${userInfo.email}%0Aமுகவரி: ${address}%0Aபொருட்கள்: ${itemNames}%0Aதொகை: ${totalAmount}`;
-                let waUrl = `https://wa.me/918903008906?text=` + waText;
+                // Also save latest order for IoT/Admin Dashboard tracking
+                localStorage.setItem('latestAdminNotification', JSON.stringify(orderDetails));
                 
                 localStorage.removeItem('cartItems');
                 updateCartDisplay();
                 closeCartModal();
 
                 alert((currentLang === 'ta' ? 'பணம் செலுத்தப்பட்டது! உங்களது ஆர்டர் ஐடி: ' : 'Payment Successful! Your Order ID: ') + orderId);
-                window.open(waUrl, '_blank');
             }
         }
     </script>
