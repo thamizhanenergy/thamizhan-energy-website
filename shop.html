@@ -8,7 +8,6 @@
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script>
@@ -21,10 +20,7 @@
         appId: "1:727924977035:web:ab34a19d7bd3a65976538e",
         measurementId: "G-0MP2C3NZWK"
       };
-
-      if (!firebase.apps.length) {
-          firebase.initializeApp(firebaseConfig);
-      }
+      if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
     </script>
 
     <style>
@@ -32,245 +28,85 @@
         body { background-color: #f4f7f6; color: #333; line-height: 1.6; overflow-x: hidden; }
         a { text-decoration: none; color: inherit; }
 
-        header {
-            background: #fff;
-            padding: 10px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+        header { background: #fff; padding: 10px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
         .brand-section { display: flex; align-items: center; gap: 12px; }
         .logo-img { height: 45px; width: auto; display: block; }
-        .company-title h1 { font-size: 16px; color: #0f2027; font-weight: 700; line-height: 1.2; }
+        .company-title h1 { font-size: 16px; color: #0f2027; font-weight: 700; }
         
-        .nav-container { display: flex; align-items: center; gap: 15px; }
-        .nav-icons { display: flex; gap: 12px; align-items: center; }
-        
-        .icon-btn { background: #f0f2f5; border: none; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 6px; transition: 0.3s; }
-        .icon-btn:hover { background: #e4e6eb; }
-
+        .icon-btn { background: #f0f2f5; border: none; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 6px; }
         .admin-btn { background: #ff5252; color: white; display: none; }
-        .admin-btn:hover { background: #d32f2f; }
+        .lang-btn { background: #0f2027; color: #00ff88; border: 2px solid #00ff88; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 12px; cursor: pointer; }
 
-        .lang-btn {
-            background: #0f2027;
-            color: #00ff88;
-            border: 2px solid #00ff88;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 12px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .lang-btn:hover { background: #00ff88; color: #0f2027; }
+        .menu-toggle { display: flex; flex-direction: column; justify-content: space-between; width: 28px; height: 20px; cursor: pointer; background: transparent; border: none; }
+        .menu-toggle span { width: 100%; height: 3px; background-color: #0f2027; border-radius: 3px; }
 
-        /* 3-Dash Menu Toggle Button */
-        .menu-toggle {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 28px;
-            height: 20px;
-            cursor: pointer;
-            background: transparent;
-            border: none;
-        }
-        .menu-toggle span {
-            width: 100%;
-            height: 3px;
-            background-color: #0f2027;
-            border-radius: 3px;
-            transition: 0.3s;
-        }
-
-        /* Slide Menu / Sidebar Panel */
-        .sidebar-menu {
-            position: fixed;
-            top: 0; left: -300px; width: 280px; height: 100%;
-            background: #fff;
-            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
-            z-index: 3000;
-            transition: 0.3s ease-in-out;
-            padding: 20px;
-            overflow-y: auto;
-        }
+        .sidebar-menu { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: #fff; box-shadow: 5px 0 15px rgba(0,0,0,0.1); z-index: 3000; transition: 0.3s; padding: 20px; overflow-y: auto; }
         .sidebar-menu.active { left: 0; }
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .sidebar-header h3 { font-size: 16px; color: #0f2027; }
-        .sidebar-close { font-size: 22px; cursor: pointer; color: #666; }
         .sidebar-links { list-style: none; }
         .sidebar-links li { margin-bottom: 15px; }
-        .sidebar-links a, .sidebar-links button { display: block; width: 100%; text-align: left; background: none; border: none; font-size: 14px; font-weight: 600; color: #333; cursor: pointer; padding: 8px 10px; border-radius: 6px; transition: 0.2s; }
+        .sidebar-links a, .sidebar-links button { display: block; width: 100%; text-align: left; background: none; border: none; font-size: 14px; font-weight: 600; color: #333; cursor: pointer; padding: 8px 10px; border-radius: 6px; }
         .sidebar-links a:hover, .sidebar-links button:hover { background: #f0f2f5; color: #00b359; }
 
         .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
-        .shop-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 10px; }
-        .shop-header h2 { color: #0f2027; font-size: 22px; }
-
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .product-card {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border-top: 5px solid #00ff88;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+        .product-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-top: 5px solid #00ff88; display: flex; flex-direction: column; justify-content: space-between; }
         
-        .product-img-box {
-            width: 100%;
-            height: 160px;
-            background: #f9f9f9;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #eee;
-        }
+        .product-img-box { width: 100%; height: 160px; background: #f9f9f9; border-radius: 8px; overflow: hidden; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; border: 1px solid #eee; }
         .product-img { max-width: 100%; max-height: 100%; object-fit: contain; }
-
-        .product-card h3 { font-size: 18px; color: #0f2027; margin-bottom: 8px; }
         .model-badge { display: inline-block; background: #e0f7fa; color: #006064; padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 600; margin-bottom: 12px; }
         .price { font-size: 22px; color: #2c3e50; font-weight: 700; margin: 10px 0; }
         .features { list-style: none; font-size: 13px; color: #555; margin: 15px 0; }
         .features li { margin-bottom: 6px; }
         .features li::before { content: '✔️ '; color: #00b359; }
 
-        .btn {
-            background: #00ff88;
-            color: #0f2027;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            text-align: center;
-            transition: 0.3s;
-            font-size: 14px;
-        }
+        .btn { background: #00ff88; color: #0f2027; padding: 10px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; width: 100%; text-align: center; }
         .btn:hover { background: #00cc6a; }
 
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-        .modal-content {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 480px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: white; padding: 25px; border-radius: 12px; width: 90%; max-width: 480px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); position: relative; max-height: 90vh; overflow-y: auto; }
         .close-btn { position: absolute; top: 12px; right: 18px; font-size: 20px; cursor: pointer; color: #888; }
-        .modal-content h3 { margin-bottom: 12px; color: #0f2027; font-size: 18px; }
-        .modal-content input, .modal-content textarea { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #ccc; border-radius: 6px; outline: none; font-size: 13px; }
+        input, textarea { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #ccc; border-radius: 6px; outline: none; font-size: 13px; }
         
-        .google-signin-btn {
-            background: #4285F4;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 10px;
-            transition: 0.3s;
-            font-size: 14px;
-        }
-        .google-signin-btn:hover { background: #3367d6; }
-
+        .google-signin-btn { background: #4285F4; color: white; padding: 12px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; }
         .cart-items-list { list-style: none; max-height: 180px; overflow-y: auto; margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
         .cart-items-list li { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px; background: #f9f9f9; padding: 6px 10px; border-radius: 5px; }
         .remove-cart-item { background: #ff5252; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; }
-        .remove-cart-item:hover { background: #d32f2f; }
-
         .cart-total { font-weight: 700; font-size: 16px; margin-bottom: 15px; display: flex; justify-content: space-between; color: #2c3e50; }
-
-        .pay-btn { background: #528FF0; color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 14px; }
-        .pay-btn:hover { background: #3b74cb; }
-
+        .pay-btn { background: #528FF0; color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; }
         .logout-btn { background: #f44336; color: white; margin-top: 15px; width: 100%; padding: 10px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; }
-        .logout-btn:hover { background: #d32f2f; }
-
-        .order-history-box {
-            background: #f8f9fa;
-            border: 1px solid #e0e0e0;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 12px;
-            font-size: 13px;
-        }
+        .order-history-box { background: #f8f9fa; border: 1px solid #e0e0e0; padding: 12px; border-radius: 8px; margin-top: 12px; font-size: 13px; }
 
         footer { background: #0c1a1f; color: #aaa; padding: 25px; text-align: center; font-size: 12px; margin-top: 50px; }
-
-        @media (max-width: 768px) {
-            header { padding: 10px 15px; }
-            .nav-container { display: none; } /* Hidden on mobile header, available inside sidebar */
-        }
     </style>
 </head>
 <body>
 
     <header>
         <div class="brand-section">
-            <button class="menu-toggle" onclick="toggleSidebar()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+            <button class="menu-toggle" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
             <img src="1.png" alt="Logo" class="logo-img">
-            <div class="company-title">
-                <h1 data-ta="தமிழன் எனர்ஜி சிஸ்டம்ஸ்" data-en="Thamizhan Energy Systems">தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1>
-            </div>
+            <div class="company-title"><h1 data-ta="தமிழன் எனர்ஜி சிஸ்டம்ஸ்" data-en="Thamizhan Energy Systems">தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1></div>
         </div>
-        
-        <div class="nav-container">
-            <div class="nav-icons">
-                <a href="index.html" class="icon-btn" style="background: #0f2027; color: white;" data-ta="முகப்பு" data-en="Home">முகப்பு</a>
-                <a href="admin.html" class="icon-btn admin-btn" id="adminPanelBtn">⚙️ <span data-ta="அட்மின் பேனல்" data-en="Admin">அட்மின்</span></a>
-                <button class="icon-btn" onclick="handleUserClick()">👤 <span id="user-display-name" data-ta="உள்நுழை" data-en="Login">உள்நுழை</span></button>
-                <button class="icon-btn" onclick="openCartModal()">🛒 <span data-ta="கார்ட்" data-en="Cart">கார்ட்</span> (<span id="cart-count">0</span>)</button>
-                <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">English</button>
-            </div>
+        <div class="nav-container" style="display:flex; gap:10px;">
+            <a href="admin.html" class="icon-btn admin-btn" id="adminPanelBtn">⚙️ அட்மின்</a>
+            <button class="icon-btn" onclick="handleUserClick()">👤 <span id="user-display-name">உள்நுழை</span></button>
+            <button class="icon-btn" onclick="openCartModal()">🛒 கார்ட் (<span id="cart-count">0</span>)</button>
+            <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">English</button>
         </div>
     </header>
 
     <div class="sidebar-menu" id="sidebarMenu">
         <div class="sidebar-header">
-            <h3 data-ta="மெனு பார்" data-en="Menu Bar">மெனு பார்</h3>
+            <h3>மெனு பார்</h3>
             <span class="sidebar-close" onclick="toggleSidebar()">&times;</span>
         </div>
         <ul class="sidebar-links">
-            <li><a href="index.html" data-ta="🏠 முகப்பு பக்கம்" data-en="🏠 Home">🏠 முகப்பு பக்கம்</a></li>
-            <li><button onclick="toggleSidebar(); handleUserClick();">👤 <span id="sidebar-user-text" data-ta="எனது கணக்கு & விபரங்கள்" data-en="My Account & Profile">எனது கணக்கு & விபரங்கள்</span></button></li>
-            <li><button onclick="toggleSidebar(); openCartModal();">🛒 <span data-ta="எனது கார்ட் பொருட்கள்" data-en="My Cart Items">எனது கார்ட் பொருட்கள்</span> (<span id="sidebar-cart-count">0</span>)</button></li>
-            <li><button onclick="toggleSidebar(); openProfileModal();">📦 <span data-ta="எனது ஆர்டர்கள் & டிராக்கிங்" data-en="My Orders & Tracking">எனது ஆர்டர்கள் & டிராக்கிங்</span></button></li>
-            <li><a href="admin.html" id="sidebarAdminBtn" style="display:none; color:#ff5252;" data-ta="⚙️ அட்மின் டேஷ்போர்டு" data-en="⚙️ Admin Dashboard">⚙️ அட்மின் டேஷ்போர்டு</a></li>
-            <li><button onclick="toggleLanguage(); toggleSidebar();"><span id="sidebarLangText">🌐 Switch to English</span></button></li>
+            <li><a href="index.html">🏠 முகப்பு பக்கம்</a></li>
+            <li><button onclick="toggleSidebar(); handleUserClick();">👤 <span id="sidebar-user-text">எனது கணக்கு & விபரங்கள்</span></button></li>
+            <li><button onclick="toggleSidebar(); openCartModal();">🛒 எனது கார்ட் (<span id="sidebar-cart-count">0</span>)</button></li>
+            <li><button onclick="toggleSidebar(); openProfileModal();">📦 எனது ஆர்டர்கள் & டிராக்கிங்</button></li>
+            <li><a href="admin.html" id="sidebarAdminBtn" style="display:none; color:#ff5252;">⚙️ அட்மின் டேஷ்போர்டு</a></li>
         </ul>
     </div>
 
@@ -279,164 +115,78 @@
             <h2 data-ta="எங்கள் வாட்டர் லெவல் கண்ட்ரோலர் தயாரிப்புகள்" data-en="Our Water Level Controller Products">எங்கள் வாட்டர் லெவல் கண்ட்ரோலர் தயாரிப்புகள்</h2>
         </div>
 
-        <div class="product-grid">
-            <div class="product-card">
-                <div>
-                    <div class="product-img-box"><img src="3.png" alt="AWLCP 1.0" class="product-img"></div>
-                    <span class="model-badge" data-ta="Basic Version" data-en="Basic Version">Basic Version</span>
-                    <h3>AWLCP 1.0</h3>
-                    <div class="price">₹3,499/-</div>
-                    <ul class="features">
-                        <li data-ta="ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்" data-en="Automatic Tank ON/OFF">ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்</li>
-                        <li data-ta="ட்ரைடன் பாதுகாப்பு" data-en="Dry Run Protection">ட்ரைடன் பாதுகாப்பு</li>
-                        <li data-ta="1 வருடம் உத்தரவாதம்" data-en="1 Year Warranty">1 வருடம் உத்தரவாதம்</li>
-                    </ul>
-                </div>
-                <button class="btn" onclick="addToCart('AWLCP 1.0', 3499)" data-ta="கார்ட்டில் சேர்க்கவும்" data-en="Add to Cart">கார்ட்டில் சேர்க்கவும்</button>
+        <div class="product-grid" id="dynamicProductGrid">
             </div>
-
-            <div class="product-card">
-                <div>
-                    <div class="product-img-box"><img src="3.png" alt="AWLCW 1.0" class="product-img"></div>
-                    <span class="model-badge" style="background: #e8f5e9; color: #2e7d32;" data-ta="WiFi Model" data-en="WiFi Model">WiFi Model</span>
-                    <h3>AWLCW 1.0</h3>
-                    <div class="price">₹4,999/-</div>
-                    <ul class="features">
-                        <li data-ta="மொபைல் செயலி மூலம் ரிமோட் கண்ட்ரோல்" data-en="Remote control via Mobile App">மொபைல் செயலி மூலம் ரிமோட் கண்ட்ரோல்</li>
-                        <li data-ta="ஒயர்டு சென்சார்கள் & ட்ரைடன்" data-en="Wired Sensors & Dry Run">ஒயர்டு சென்சார்கள் & ட்ரைடன்</li>
-                        <li data-ta="1 வருடம் உத்தரவாதம்" data-en="1 Year Warranty">1 வருடம் உத்தரவாதம்</li>
-                    </ul>
-                </div>
-                <button class="btn" onclick="addToCart('AWLCW 1.0', 4999)" data-ta="கார்ட்டில் சேர்க்கவும்" data-en="Add to Cart">கார்ட்டில் சேர்க்கவும்</button>
-            </div>
-
-            <div class="product-card">
-                <div>
-                    <div class="product-img-box"><img src="3.png" alt="AWLCWS 1.0" class="product-img"></div>
-                    <span class="model-badge" style="background: #fff3e0; color: #ef6c00;" data-ta="Wireless + Solar" data-en="Wireless + Solar">Wireless + Solar</span>
-                    <h3>AWLCWS 1.0</h3>
-                    <div class="price">₹6,999/-</div>
-                    <ul class="features">
-                        <li data-ta="மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு" data-en="Wireless Upper & Lower Connection">மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு</li>
-                        <li data-ta="சோலார் பவர் சப்போர்ட் & வைஃபை" data-en="Solar Power Support & WiFi">சோலார் பவர் சப்போர்ட் & வைஃபை</li>
-                        <li data-ta="1 வருடம் உத்தரவாதம்" data-en="1 Year Warranty">1 வருடம் உத்தரவாதம்</li>
-                    </ul>
-                </div>
-                <button class="btn" onclick="addToCart('AWLCWS 1.0', 6999)" data-ta="கார்ட்டில் சேர்க்கவும்" data-en="Add to Cart">கார்ட்டில் சேர்க்கவும்</button>
-            </div>
-        </div>
     </div>
 
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeLoginModal()">&times;</span>
-            <h3 data-ta="கஸ்டமர் உள்நுழைவு & விபரங்கள்" data-en="Customer Login & Details">கஸ்டமர் உள்நுழைவு & விபரங்கள்</h3>
-            <p style="font-size: 13px; color: #666; margin-bottom: 12px;" data-ta="முதலில் உங்கள் ஜிமெயில் மூலம் உள்நுழையவும்:" data-en="First sign in with your Google account:">முதலில் உங்கள் ஜிமெயில் மூலம் உள்நுழையவும்:</p>
-            
-            <button class="google-signin-btn" onclick="signInWithGoogle()">
-                <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-                <span data-ta="Google / Gmail மூலம் உள்நுழைக" data-en="Sign in with Google">Google / Gmail மூலம் உள்நுழைக</span>
-            </button>
+            <h3>கஸ்டமர் உள்நுழைவு & விபரங்கள்</h3>
+            <p style="font-size: 13px; color: #666; margin-bottom: 12px;">உங்கள் ஜிமெயில் கணக்கு மூலம் உள்நுழையவும்:</p>
+            <button class="google-signin-btn" onclick="signInWithGoogle()">Google / Gmail மூலம் உள்நுழைக</button>
         </div>
     </div>
 
     <div class="modal" id="detailsModal">
         <div class="modal-content">
-            <h3 data-ta="கஸ்டமர் விவரங்களை நிரப்புக" data-en="Complete Your Details">கஸ்டமர் விவரங்களை நிரப்புக</h3>
-            <p style="font-size: 13px; color: #666; margin-bottom: 10px;" data-ta="ஈ-காமர்ஸ் ஆர்டருக்கு தேவையான விபரங்கள்:" data-en="Required e-commerce details:">ஈ-காமர்ஸ் ஆர்டருக்கு தேவையான விபரங்கள்:</p>
+            <h3>கஸ்டமர் விவரங்களை நிரப்புக</h3>
             <input type="text" id="custFullName" placeholder="முழுப் பெயர் (Full Name)">
             <input type="tel" id="custPhone" placeholder="மொபைல் எண் (Phone Number)">
             <textarea id="custAddress" rows="3" placeholder="டெலிவரி முகவரி (Door No, Street, City, Pincode)"></textarea>
-            <button class="btn" onclick="saveCustomerDetails()" data-ta="விவரங்களைச் சேமிக்க (Save Details)" data-en="Save Details">விவரங்களைச் சேமிக்க</button>
+            <button class="btn" onclick="saveCustomerDetails()">விவரங்களைச் சேமிக்க</button>
         </div>
     </div>
 
     <div class="modal" id="profileModal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeProfileModal()">&times;</span>
-            <h3 data-ta="எனது கணக்கு & ஆர்டர்கள்" data-en="My Account & Orders">எனது கணக்கு & ஆர்டர்கள்</h3>
+            <h3>எனது கணக்கு & ஆர்டர்கள்</h3>
             <div id="profileDetails" style="font-size: 14px; color: #333; margin-bottom: 15px; line-height: 1.6;"></div>
-            <button class="btn logout-btn" onclick="logoutUser()" data-ta="வெளியேறு (Logout)" data-en="Logout">வெளியேறு (Logout)</button>
+            <button class="btn logout-btn" onclick="logoutUser()">வெளியேறு (Logout)</button>
         </div>
     </div>
 
     <div class="modal" id="cartModal">
         <div class="modal-content" style="max-width: 450px;">
             <span class="close-btn" onclick="closeCartModal()">&times;</span>
-            <h3 data-ta="உங்கள் ஷாப்பிங் கார்ட்" data-en="Your Shopping Cart">உங்கள் ஷாப்பிங் கார்ட்</h3>
+            <h3>உங்கள் ஷாப்பிங் கார்ட்</h3>
             <ul class="cart-items-list" id="cartItemsList"></ul>
-            <div class="cart-total">
-                <span data-ta="மொத்தத் தொகை:" data-en="Total Amount:">மொத்தத் தொகை:</span>
-                <span id="cartTotalPrice">₹0</span>
-            </div>
+            <div class="cart-total"><span>மொத்தத் தொகை:</span><span id="cartTotalPrice">₹0</span></div>
             
-            <div id="addressVerificationSection" style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ddd;">
-                <p style="font-size: 12px; font-weight: 700; color: #0f2027; margin-bottom: 5px;" data-ta="டெலிவரி முகவரி சரிபார்ப்பு:" data-en="Delivery Address Check:">டெலிவரி முகவரி சரிபார்ப்பு:</p>
+            <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ddd;">
+                <p style="font-size: 12px; font-weight: 700; color: #0f2027; margin-bottom: 5px;">டெலிவரி முகவரி சரிபார்ப்பு:</p>
                 <p id="displaySavedAddress" style="font-size: 12px; color: #555; margin-bottom: 8px;"></p>
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn" style="padding: 6px; font-size: 11px; background:#4CAF50; color:white;" onclick="confirmExistingAddress()" data-ta="✔️ இதுவே சரி" data-en="✔️ Correct">✔️ இதுவே சரி</button>
-                    <button class="btn" style="padding: 6px; font-size: 11px; background:#ff9800; color:white;" onclick="showNewAddressInput()" data-ta="✏️ புதிய முகவரி கொடு" data-en="✏️ New Address">✏️ புதிய முகவரி கொடு</button>
-                </div>
-                <div id="newAddressBox" style="display: none; margin-top: 10px;">
-                    <textarea id="newAddressInput" rows="2" placeholder="புதிய டெலிவரி முகவரியை உள்ளிடவும்"></textarea>
-                    <button class="btn" style="padding: 6px; font-size: 11px;" onclick="saveNewAddress()" data-ta="முகவரியை மாற்று" data-en="Update Address">முகவரியை மாற்று</button>
-                </div>
+                <button class="btn" style="padding: 6px; font-size: 11px; background:#4CAF50; color:white;" onclick="alert('முகவரி உறுதிப்படுத்தப்பட்டது!')">✔️ இதுவே சரி</button>
             </div>
 
-            <button class="pay-btn" onclick="proceedToRazorpay()" data-ta="Razorpay மூலம் பணம் செலுத்த" data-en="Pay Securely via Razorpay">Razorpay மூலம் பணம் செலுத்த</button>
+            <button class="pay-btn" onclick="proceedToRazorpay()">Razorpay மூலம் பணம் செலுத்த</button>
         </div>
     </div>
 
-    <footer>
-        <p data-ta="&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை." data-en="&copy; 2026 Thamizhan Energy Systems. All Rights Reserved.">&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
-    </footer>
+    <footer><p>&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p></footer>
 
     <script>
-        const ADMIN_EMAIL = "thamizhanes@gmail.com";
-        const RAZORPAY_KEY_ID = "rzp_live_TJABmArhfi4WPG";
+        const ADMIN_EMAIL = "YOUR_ADMIN_EMAIL@gmail.com";
+        const RAZORPAY_KEY_ID = "YOUR_RAZORPAY_KEY_ID";
 
-        function toggleSidebar() {
-            document.getElementById('sidebarMenu').classList.toggle('active');
-        }
+        function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('active'); }
 
         let currentLang = 'ta';
-
         function toggleLanguage() {
-            if (currentLang === 'ta') {
-                currentLang = 'en';
-                document.getElementById('langToggleBtn').innerText = 'தமிழ்';
-                document.getElementById('sidebarLangText').innerText = '🌐 தமிழில் மாற்ற';
-                document.getElementById('htmlRoot').setAttribute('lang', 'en');
-            } else {
-                currentLang = 'ta';
-                document.getElementById('langToggleBtn').innerText = 'English';
-                document.getElementById('sidebarLangText').innerText = '🌐 Switch to English';
-                document.getElementById('htmlRoot').setAttribute('lang', 'ta');
-            }
-
-            const elements = document.querySelectorAll('[data-ta]');
-            elements.forEach(el => {
-                if (currentLang === 'en') {
-                    if(el.getAttribute('data-en')) el.innerText = el.getAttribute('data-en');
-                } else {
-                    if(el.getAttribute('data-ta')) el.innerText = el.getAttribute('data-ta');
-                }
-            });
+            currentLang = (currentLang === 'ta') ? 'en' : 'ta';
+            document.getElementById('langToggleBtn').innerText = (currentLang === 'en') ? 'தமிழ்' : 'English';
+            document.getElementById('htmlRoot').setAttribute('lang', currentLang);
         }
 
         document.addEventListener("DOMContentLoaded", function() {
+            loadShopProducts();
             updateCartDisplay();
             
             firebase.auth().onAuthStateChanged((user) => {
                 if (user) {
                     let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || null;
-                    if (!userExtra) {
-                        // Open details modal if missing details
-                        document.getElementById('detailsModal').style.display = 'flex';
-                    } else {
-                        localStorage.setItem('loggedUserData', JSON.stringify({ name: userExtra.name, phone: userExtra.phone, address: userExtra.address, email: user.email }));
-                    }
-
+                    if (!userExtra) { document.getElementById('detailsModal').style.display = 'flex'; }
                     document.getElementById('user-display-name').innerText = user.displayName ? user.displayName.split(' ')[0] : 'Account';
                     document.getElementById('sidebar-user-text').innerText = user.email;
 
@@ -448,31 +198,55 @@
                         document.getElementById('sidebarAdminBtn').style.display = 'none';
                     }
                 } else {
-                    document.getElementById('user-display-name').innerText = currentLang === 'ta' ? 'உள்நுழை' : 'Login';
-                    document.getElementById('sidebar-user-text').innerText = currentLang === 'ta' ? 'எனது கணக்கு & விபரங்கள்' : 'My Account & Profile';
+                    document.getElementById('user-display-name').innerText = 'உள்நுழை';
                     document.getElementById('adminPanelBtn').style.display = 'none';
                     document.getElementById('sidebarAdminBtn').style.display = 'none';
                 }
             });
         });
 
+        // Load Products dynamically from Admin Inventory Storage
+        function loadShopProducts() {
+            let products = JSON.parse(localStorage.getItem('adminProducts')) || [
+                {name: "AWLCP 1.0", price: 3499, stock: 15, img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
+                {name: "AWLCW 1.0", price: 4999, stock: 10, img: "3.png", specs: ["மொபைல் செயலி மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
+                {name: "AWLCWS 1.0", price: 6999, stock: 8, img: "3.png", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
+            ];
+
+            let gridHTML = '';
+            products.forEach((p) => {
+                let specsHTML = p.specs.map(s => `<li>${s}</li>`).join('');
+                let stockStatus = p.stock > 0 ? `<b style="color:green;">ஸ்டாக் உள்ளது (${p.stock})</b>` : `<b style="color:red;">ஸ்டாக் காலியாக உள்ளது</b>`;
+
+                gridHTML += `
+                    <div class="product-card">
+                        <div>
+                            <div class="product-img-box"><img src="${p.img}" alt="${p.name}" class="product-img"></div>
+                            <span class="model-badge">Electronics Model</span>
+                            <h3>${p.name}</h3>
+                            <div class="price">₹${p.price}/-</div>
+                            <p style="font-size:12px; margin-bottom:8px;">${stockStatus}</p>
+                            <ul class="features">${specsHTML}</ul>
+                        </div>
+                        <button class="btn" ${p.stock <= 0 ? 'disabled style="background:#ccc; cursor:not-allowed;"' : ''} onclick="addToCart('${p.name}', ${p.price})">கார்ட்டில் சேர்க்கவும்</button>
+                    </div>
+                `;
+            });
+            document.getElementById('dynamicProductGrid').innerHTML = gridHTML;
+        }
+
         function saveCustomerDetails() {
             let name = document.getElementById('custFullName').value.trim();
             let phone = document.getElementById('custPhone').value.trim();
             let address = document.getElementById('custAddress').value.trim();
 
-            if(!name || !phone || !address) {
-                alert(currentLang === 'ta' ? 'அனைத்து விவரங்களையும் நிரப்பவும்.' : 'Please fill all details.');
-                return;
-            }
+            if(!name || !phone || !address) { alert("அனைத்து விவரங்களையும் நிரப்பவும்."); return; }
 
             let user = firebase.auth().currentUser;
             if(user) {
-                let userExtra = { name: name, phone: phone, address: address };
-                localStorage.setItem('userExtra_' + user.email, JSON.stringify(userExtra));
-                localStorage.setItem('loggedUserData', JSON.stringify({ name: name, phone: phone, address: address, email: user.email }));
+                localStorage.setItem('userExtra_' + user.email, JSON.stringify({ name: name, phone: phone, address: address }));
                 document.getElementById('detailsModal').style.display = 'none';
-                alert(currentLang === 'ta' ? 'விவரங்கள் வெற்றிகரமாக சேமிக்கப்பட்டன!' : 'Details saved successfully!');
+                alert("விவரங்கள் சேமிக்கப்பட்டன!");
             }
         }
 
@@ -481,7 +255,7 @@
             cart.push({name: name, price: price});
             localStorage.setItem('cartItems', JSON.stringify(cart));
             updateCartDisplay();
-            alert(name + (currentLang === 'ta' ? ' கார்ட்டில் சேர்க்கப்பட்டது!' : ' added to cart!'));
+            alert(name + " கார்ட்டில் சேர்க்கப்பட்டது!");
         }
 
         function removeFromCart(index) {
@@ -499,15 +273,11 @@
             let listHTML = '';
             let total = 0;
             if(cart.length === 0) {
-                listHTML = `<li style="color:#888; text-align:center; justify-content:center;">${currentLang === 'ta' ? 'கார்ட் காலியாக உள்ளது.' : 'Cart is empty.'}</li>`;
+                listHTML = `<li style="color:#888; text-align:center; justify-content:center;">கார்ட் காலியாக உள்ளது.</li>`;
             } else {
                 cart.forEach((item, index) => {
                     total += item.price;
-                    listHTML += `
-                        <li>
-                            <span><b>${item.name}</b> - ₹${item.price}</span>
-                            <button class="remove-cart-item" onclick="removeFromCart(${index})">${currentLang === 'ta' ? 'நீக்கு' : 'Remove'}</button>
-                        </li>`;
+                    listHTML += `<li><span><b>${item.name}</b> - ₹${item.price}</span><button class="remove-cart-item" onclick="removeFromCart(${index})">நீக்கு</button></li>`;
                 });
             }
             document.getElementById('cartItemsList').innerHTML = listHTML;
@@ -516,11 +286,7 @@
 
         function handleUserClick() {
             let user = firebase.auth().currentUser;
-            if (user) {
-                openProfileModal();
-            } else {
-                openLoginModal();
-            }
+            if (user) { openProfileModal(); } else { openLoginModal(); }
         }
 
         function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
@@ -533,38 +299,20 @@
                 let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
                 let userOrders = allOrders.filter(o => o.email === user.email);
 
-                let ordersHTML = '';
-                if(userOrders.length === 0) {
-                    ordersHTML = `<p style="color:#888; font-style:italic;">${currentLang === 'ta' ? 'நீங்கள் இதுவரை எந்த ஆர்டரும் செய்யவில்லை.' : 'You have no orders yet.'}</p>`;
-                } else {
-                    userOrders.forEach(ord => {
-                        let trackingInfo = ord.trackingId ? 
-                            `<p><b>டிராக்கிங் ஐடி:</b> ${ord.trackingId}</p><p><b>கொரியர் லிங்க்:</b> <a href="${ord.trackingUrl}" target="_blank" style="color:#2980b9; text-decoration:underline;">டிராப் செய்ய கிளிக் செய்க</a></p>` : 
-                            `<p><b>டிராக்கிங் நிலை:</b> விரைவில் வழங்கப்படுகிறது</p>`;
+                let ordersHTML = userOrders.length === 0 ? `<p style="color:#888;">ஆர்டர்கள் இல்லை.</p>` : userOrders.map(ord => `
+                    <div class="order-history-box">
+                        <p><b>ஆர்டர் ஐடி:</b> <span style="color:#2980b9;">${ord.orderId}</span></p>
+                        <p><b>பொருட்கள்:</b> ${ord.items}</p>
+                        <p><b>தொகை:</b> ${ord.amount}</p>
+                        <p><b>நிலை:</b> <span style="color:#2e7d32; font-weight:bold;">${ord.status}</span></p>
+                        ${ord.trackingId ? `<p><b>டிராக்கிங் ஐடி:</b> ${ord.trackingId} (<a href="${ord.trackingUrl}" target="_blank">லிங்க்</a>)</p>` : ''}
+                    </div>
+                `).join('');
 
-                        ordersHTML += `
-                            <div class="order-history-box">
-                                <p><b>ஆர்டர் ஐடி:</b> <span style="color:#2980b9;">${ord.orderId}</span></p>
-                                <p><b>பொருட்கள்:</b> ${ord.items}</p>
-                                <p><b>தொகை:</b> ${ord.amount}</p>
-                                <p><b>முகவரி:</b> ${ord.address}</p>
-                                <p><b>நிலை:</b> <span style="color:#2e7d32; font-weight:bold;">${ord.status}</span></p>
-                                ${trackingInfo}
-                            </div>
-                        `;
-                    });
-                }
-
-                let profileHTML = `
-                    <p><b>பெயர்:</b> ${userExtra.name}</p>
-                    <p><b>மின்னஞ்சல்:</b> ${user.email}</p>
-                    <p><b>போன் எண்:</b> ${userExtra.phone}</p>
-                    <p><b>முகவரி:</b> ${userExtra.address}</p>
-                    <hr style="margin: 10px 0; border:0; border-top:1px solid #ddd;">
-                    <h4 style="color:#0f2027; margin-bottom:5px;">எனது ஆர்டர்கள் & டிராக்கிங்</h4>
-                    ${ordersHTML}
+                document.getElementById('profileDetails').innerHTML = `
+                    <p><b>பெயர்:</b> ${userExtra.name}</p><p><b>மின்னஞ்சல்:</b> ${user.email}</p><p><b>போன்:</b> ${userExtra.phone}</p><p><b>முகவரி:</b> ${userExtra.address}</p>
+                    <hr style="margin:10px 0;"><h4>எனது ஆர்டர்கள் & டிராக்கிங்</h4>${ordersHTML}
                 `;
-                document.getElementById('profileDetails').innerHTML = profileHTML;
             }
             document.getElementById('profileModal').style.display = 'flex';
         }
@@ -572,93 +320,39 @@
 
         function openCartModal() {
             let user = firebase.auth().currentUser;
-            if(!user) {
-                alert(currentLang === 'ta' ? 'தயவுசெய்து முதலில் லாகின் செய்யவும்!' : 'Please login first!');
-                openLoginModal();
-                return;
-            }
+            if(!user) { alert("தயவுசெய்து லாகின் செய்யவும்!"); openLoginModal(); return; }
             let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || {address: 'முகவரி இல்லை'};
             document.getElementById('displaySavedAddress').innerText = userExtra.address;
-            document.getElementById('newAddressBox').style.display = 'none';
             document.getElementById('cartModal').style.display = 'flex';
         }
         function closeCartModal() { document.getElementById('cartModal').style.display = 'none'; }
 
-        function confirmExistingAddress() {
-            alert(currentLang === 'ta' ? 'முகவரி உறுதி செய்யப்பட்டது!' : 'Address confirmed!');
-        }
-
-        function showNewAddressInput() {
-            document.getElementById('newAddressBox').style.display = 'block';
-        }
-
-        function saveNewAddress() {
-            let newAddr = document.getElementById('newAddressInput').value.trim();
-            let user = firebase.auth().currentUser;
-            if(newAddr && user) {
-                let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email));
-                userExtra.address = newAddr;
-                localStorage.setItem('userExtra_' + user.email, JSON.stringify(userExtra));
-                document.getElementById('displaySavedAddress').innerText = newAddr;
-                document.getElementById('newAddressBox').style.display = 'none';
-                alert(currentLang === 'ta' ? 'புதிய முகவரி மாற்றப்பட்டது!' : 'New address updated!');
-            }
-        }
-
         function signInWithGoogle() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            firebase.auth().signInWithPopup(provider)
-                .then((result) => {
-                    closeLoginModal();
-                }).catch((error) => {
-                    alert('Login Error: ' + error.message);
-                });
+            firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => { closeLoginModal(); });
         }
 
         function logoutUser() {
-            firebase.auth().signOut().then(() => {
-                localStorage.removeItem('loggedUserData');
-                document.getElementById('user-display-name').innerText = currentLang === 'ta' ? 'உள்நுழை' : 'Login';
-                document.getElementById('adminPanelBtn').style.display = 'none';
-                document.getElementById('sidebarAdminBtn').style.display = 'none';
-                closeProfileModal();
-                alert(currentLang === 'ta' ? 'வெற்றிகரமாக வெளியேறிவிட்டீர்கள்!' : 'Logged out successfully!');
-            });
+            firebase.auth().signOut().then(() => { location.reload(); });
         }
 
         function proceedToRazorpay() {
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
-            if(cart.length === 0) {
-                alert(currentLang === 'ta' ? 'கார்ட்டில் பொருட்கள் எதுவும் இல்லை!' : 'Cart is empty!');
-                return;
-            }
+            if(cart.length === 0) { alert("கார்ட் காலியாக உள்ளது!"); return; }
             
             let user = firebase.auth().currentUser;
             let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email));
-
             let cartTotalText = document.getElementById('cartTotalPrice').innerText.replace('₹', '').replace(',', '');
-            let amountInPaise = parseInt(cartTotalText) * 100;
             let orderId = 'TES-' + Math.floor(100000 + Math.random() * 900000);
             let itemNames = cart.map(i => i.name).join(', ');
 
             var options = {
                 "key": RAZORPAY_KEY_ID, 
-                "amount": amountInPaise, 
+                "amount": parseInt(cartTotalText) * 100, 
                 "currency": "INR",
                 "name": "தமிழன் எனர்ஜி சிஸ்டம்ஸ்",
                 "description": itemNames,
                 "handler": function (response){
-                    let orderDetails = {
-                        orderId: orderId,
-                        email: user.email,
-                        items: itemNames,
-                        address: userExtra.address,
-                        amount: "₹" + cartTotalText,
-                        status: 'ஆர்டர் உறுதி செய்யப்பட்டது (Order Confirmed)',
-                        trackingId: '',
-                        trackingUrl: ''
-                    };
-
+                    let orderDetails = { orderId: orderId, email: user.email, items: itemNames, address: userExtra.address, amount: "₹" + cartTotalText, status: 'ஆர்டர் உறுதி செய்யப்பட்டது', trackingId: '', trackingUrl: '' };
                     let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
                     allOrders.push(orderDetails);
                     localStorage.setItem('allOrders', JSON.stringify(allOrders));
@@ -666,24 +360,15 @@
                     localStorage.removeItem('cartItems');
                     updateCartDisplay();
                     closeCartModal();
-
-                    alert((currentLang === 'ta' ? 'பணம் வெற்றிகரமாக செலுத்தப்பட்டது! ஆர்டர் ஐடி: ' : 'Payment Successful! Order ID: ') + orderId);
+                    alert("பணம் செலுத்தப்பட்டது! ஆர்டர் ஐடி: " + orderId);
                     openProfileModal();
                 },
-                "prefill": {
-                    "name": userExtra.name,
-                    "email": user.email,
-                    "contact": userExtra.phone
-                },
-                "theme": {
-                    "color": "#00ff88"
-                }
+                "prefill": { "name": userExtra.name, "email": user.email, "contact": userExtra.phone },
+                "theme": { "color": "#00ff88" }
             };
-            
             var rzp1 = new Razorpay(options);
             rzp1.open();
         }
     </script>
-
 </body>
 </html>
