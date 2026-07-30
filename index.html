@@ -29,7 +29,7 @@
         
         .nav-container { display: flex; align-items: center; gap: 15px; }
         
-        nav ul { list-style: none; display: flex; gap: 15px; align-items: center; }
+        nav ul { list-style: none; display: flex; gap: 12px; align-items: center; }
         
         /* Header Menu Buttons Style */
         nav ul li a {
@@ -208,12 +208,11 @@
         <div class="nav-container" id="navContainer">
             <nav>
                 <ul>
-                    <li><a href="index.html" data-ta="முகப்பு" data-en="Home">முகப்பு</a></li>
-                    <li><a href="products.html" data-ta="தயாரிப்புகள்" data-en="Products">தயாரிப்புகள்</a></li>
-                    <li><a href="shop.html" data-ta="ஸ்டோர்" data-en="Store">ஸ்டோர்</a></li>
-                    <li><a href="dashboard.html" data-ta="IoT டேஷ்போர்டு" data-en="IoT Dashboard">IoT டேஷ்போர்டு</a></li>
-                    <li><a href="contact.html" data-ta="தொடர்புக்கு" data-en="Contact">தொடர்புக்கு</a></li>
-                    <li><a href="aboutus.html" data-ta="எங்களைப் பற்றி" data-en="About Us">எங்களைப் பற்றி</a></li>
+                    <li><a href="index.html" data-ta="🏠 முகப்பு" data-en="🏠 Home">🏠 முகப்பு</a></li>
+                    <li><a href="shop.html" data-ta="🛒 ஸ்டோர்" data-en="🛒 Store">🛒 ஸ்டோர்</a></li>
+                    <li><a href="dashboard.html" data-ta="🌐 IoT டேஷ்போர்டு" data-en="🌐 IoT Dashboard">🌐 IoT டேஷ்போர்டு</a></li>
+                    <li><a href="contact.html" data-ta="📞 தொடர்புக்கு" data-en="📞 Contact">📞 தொடர்புக்கு</a></li>
+                    <li><a href="aboutus.html" data-ta="ℹ️ எங்களைப் பற்றி" data-en="ℹ️ About Us">ℹ️ எங்களைப் பற்றி</a></li>
                 </ul>
             </nav>
             <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">English</button>
@@ -298,15 +297,23 @@
             navContainer.classList.toggle('active');
         }
 
-        let currentLang = 'ta';
+        let currentLang = localStorage.getItem('siteLang') || 'ta';
+
+        document.addEventListener("DOMContentLoaded", function() {
+            applyLanguage();
+        });
 
         function toggleLanguage() {
-            if (currentLang === 'ta') {
-                currentLang = 'en';
+            currentLang = (currentLang === 'ta') ? 'en' : 'ta';
+            localStorage.setItem('siteLang', currentLang);
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            if (currentLang === 'en') {
                 document.getElementById('langToggleBtn').innerText = 'தமிழ்';
                 document.getElementById('htmlRoot').setAttribute('lang', 'en');
             } else {
-                currentLang = 'ta';
                 document.getElementById('langToggleBtn').innerText = 'English';
                 document.getElementById('htmlRoot').setAttribute('lang', 'ta');
             }
@@ -314,9 +321,9 @@
             const elements = document.querySelectorAll('[data-ta]');
             elements.forEach(el => {
                 if (currentLang === 'en') {
-                    el.innerText = el.getAttribute('data-en');
+                    if(el.getAttribute('data-en')) el.innerText = el.getAttribute('data-en');
                 } else {
-                    el.innerText = el.getAttribute('data-ta');
+                    if(el.getAttribute('data-ta')) el.innerText = el.getAttribute('data-ta');
                 }
             });
         }
