@@ -27,9 +27,22 @@
         .company-title h1 { font-size: 16px; color: #0f2027; font-weight: 700; line-height: 1.2; }
         
         .nav-container { display: flex; align-items: center; gap: 20px; }
-        nav ul { list-style: none; display: flex; gap: 20px; align-items: center; }
-        nav ul li a { font-weight: 600; font-size: 14px; }
-        nav ul li a:hover { color: #00b359; }
+        nav ul { list-style: none; display: flex; gap: 15px; align-items: center; }
+        
+        nav ul li a {
+            background: #f0f2f5;
+            color: #333;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        nav ul li a:hover {
+            background: #0f2027;
+            color: #00ff88;
+        }
 
         /* Language Toggle Button Style */
         .lang-btn {
@@ -163,8 +176,10 @@
                 padding: 15px 20px;
             }
             nav { width: 100%; }
-            nav ul { flex-direction: column; width: 100%; gap: 12px; }
-            nav ul li { width: 100%; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+            nav ul { flex-direction: column; width: 100%; gap: 10px; }
+            nav ul li { width: 100%; border-bottom: 1px solid #eee; padding-bottom: 6px; }
+            nav ul li a { display: block; background: transparent; padding: 5px 0; }
+            nav ul li a:hover { color: #00b359; background: transparent; }
             .lang-btn { width: 100%; text-align: center; margin-top: 5px; }
         }
     </style>
@@ -188,10 +203,11 @@
         <div class="nav-container" id="navContainer">
             <nav>
                 <ul>
-                    <li><a href="index.html" data-ta="முகப்பு" data-en="Home">முகப்பு</a></li>
-                    <li><a href="shop.html" data-ta="ஸ்டோர்" data-en="Store">ஸ்டோர்</a></li>
-                    <li><a href="contact.html" style="color: #00b359;" data-ta="தொடர்புக்கு" data-en="Contact">தொடர்புக்கு</a></li>
-                    <li><a href="chatbot.html" data-ta="AI சாட் போட்" data-en="AI Chatbot">AI சாட் போட்</a></li>
+                    <li><a href="index.html" data-ta="🏠 முகப்பு" data-en="🏠 Home">🏠 முகப்பு</a></li>
+                    <li><a href="shop.html" data-ta="🛒 ஸ்டோர்" data-en="🛒 Store">🛒 ஸ்டோர்</a></li>
+                    <li><a href="dashboard.html" data-ta="🌐 IoT டேஷ்போர்டு" data-en="🌐 IoT Dashboard">🌐 IoT டேஷ்போர்டு</a></li>
+                    <li><a href="contact.html" style="color: #00ff88; background: #0f2027;" data-ta="📞 தொடர்புக்கு" data-en="📞 Contact">📞 தொடர்புக்கு</a></li>
+                    <li><a href="aboutus.html" data-ta="ℹ️ எங்களைப் பற்றி" data-en="ℹ️ About Us">ℹ️ எங்களைப் பற்றி</a></li>
                 </ul>
             </nav>
             <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">English</button>
@@ -233,13 +249,18 @@
                     </div>
 
                     <div class="form-group">
+                        <label data-ta="மின்னஞ்சல் முகவரி" data-en="Email Address">மின்னஞ்சல் முகவரி (Email Address)</label>
+                        <input type="email" id="custEmail" class="form-control" placeholder="example@gmail.com" required>
+                    </div>
+
+                    <div class="form-group">
                         <label data-ta="மொபைல் எண்" data-en="Mobile Number">மொபைல் எண் (Customer Mobile Number)</label>
                         <input type="tel" id="custPhone" class="form-control" placeholder="10 இலக்க மொபைல் எண்" pattern="[0-9]{10}" required>
                     </div>
 
                     <div class="form-group">
                         <label data-ta="தயாரிப்பு ஐடி / மாடல்" data-en="Product ID / Model">தயாரிப்பு ஐடி / மாடல் (Product ID / Model)</label>
-                        <input type="text" id="prodId" class="form-control" placeholder="எ.கா: AWLCW-1.0 அல்லது Serial No" required>
+                        <input type="text" id="prodId" class="form-control" placeholder="எ.கா: AWLCW 1.0" required>
                     </div>
 
                     <div class="form-group">
@@ -258,22 +279,29 @@
         <p data-ta="&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை." data-en="&copy; 2026 Thamizhan Energy Systems. All Rights Reserved.">&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
     </footer>
 
-    <!-- JavaScript for Mobile Menu, Language Toggle & Ticket Submission -->
     <script>
         function toggleMobileMenu() {
             const navContainer = document.getElementById('navContainer');
             navContainer.classList.toggle('active');
         }
 
-        let currentLang = 'ta';
+        let currentLang = localStorage.getItem('siteLang') || 'ta';
+
+        document.addEventListener("DOMContentLoaded", function() {
+            applyLanguage();
+        });
 
         function toggleLanguage() {
-            if (currentLang === 'ta') {
-                currentLang = 'en';
+            currentLang = (currentLang === 'ta') ? 'en' : 'ta';
+            localStorage.setItem('siteLang', currentLang);
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            if (currentLang === 'en') {
                 document.getElementById('langToggleBtn').innerText = 'தமிழ்';
                 document.getElementById('htmlRoot').setAttribute('lang', 'en');
             } else {
-                currentLang = 'ta';
                 document.getElementById('langToggleBtn').innerText = 'English';
                 document.getElementById('htmlRoot').setAttribute('lang', 'ta');
             }
@@ -281,26 +309,43 @@
             const elements = document.querySelectorAll('[data-ta]');
             elements.forEach(el => {
                 if (currentLang === 'en') {
-                    el.innerText = el.getAttribute('data-en');
+                    if(el.getAttribute('data-en')) el.innerText = el.getAttribute('data-en');
                 } else {
-                    el.innerText = el.getAttribute('data-ta');
+                    if(el.getAttribute('data-ta')) el.innerText = el.getAttribute('data-ta');
                 }
             });
         }
 
+        // Support Ticket Submission linked with supportTickets LocalStorage Key
         function submitTicket(event) {
             event.preventDefault();
             
-            let name = document.getElementById('custName').value;
-            let phone = document.getElementById('custPhone').value;
-            let prodId = document.getElementById('prodId').value;
+            let name = document.getElementById('custName').value.trim();
+            let email = document.getElementById('custEmail').value.trim();
+            let phone = document.getElementById('custPhone').value.trim();
+            let prodId = document.getElementById('prodId').value.trim();
+            let desc = document.getElementById('complaintDesc').value.trim();
             
-            let ticketNo = Math.floor(100000 + Math.random() * 900000);
+            let ticketId = 'TIC-' + Math.floor(100000 + Math.random() * 900000);
+            
+            let newTicket = {
+                ticketId: ticketId,
+                name: name,
+                email: email,
+                phone: phone,
+                serviceType: prodId,
+                message: desc,
+                status: 'Open (செயலில் உள்ளது)'
+            };
+
+            let tickets = JSON.parse(localStorage.getItem('supportTickets')) || [];
+            tickets.push(newTicket);
+            localStorage.setItem('supportTickets', JSON.stringify(tickets));
             
             if (currentLang === 'ta') {
-                alert('நன்றி ' + name + '! உங்களது சேவை புகார் வெற்றிகரமாகப் பதிவு செய்யப்பட்டது.\n\nஉங்கள் டிக்கெட் எண் (Ticket ID): #' + ticketNo + '\nவிரைவில் எங்கள் தொழில்நுட்பக் குழு உங்களைத் தொடர்புகொள்ளும்.');
+                alert('நன்றி ' + name + '! உங்களது சேவை புகார் வெற்றிகரமாகப் பதிவு செய்யப்பட்டது.\n\nஉங்கள் டிக்கெட் எண் (Ticket ID): #' + ticketId + '\nவிரைவில் எங்கள் தொழில்நுட்பக் குழு உங்களைத் தொடர்புகொள்ளும்.');
             } else {
-                alert('Thank you ' + name + '! Your service ticket has been successfully registered.\n\nTicket ID: #' + ticketNo + '\nOur technical team will contact you soon.');
+                alert('Thank you ' + name + '! Your service ticket has been successfully registered.\n\nTicket ID: #' + ticketId + '\nOur technical team will contact you soon.');
             }
             
             document.getElementById('ticketForm').reset();
