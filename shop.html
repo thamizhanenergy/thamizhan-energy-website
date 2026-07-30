@@ -145,10 +145,14 @@
 
     <div class="modal" id="detailsModal">
         <div class="modal-content">
-            <h3 data-ta="கஸ்டமர் விவரங்களை நிரப்புக" data-en="Complete Your Details">கஸ்டமர் விவரங்களை நிரப்புக</h3>
-            <input type="text" id="custFullName" placeholder="முழுப் பெயர் (Full Name)">
-            <input type="tel" id="custPhone" placeholder="மொபைல் எண் (Phone Number)">
-            <textarea id="custAddress" rows="3" placeholder="டெலிவரி முகவரி (Door No, Street, City, Pincode)"></textarea>
+            <h3 data-ta="கஸ்டமர் கட்டாய விவரங்கள்" data-en="Complete Your Details">கஸ்டமர் கட்டாய விவரங்கள்</h3>
+            <p style="font-size: 12px; color: #666; margin-bottom: 10px;" data-ta="தொடர உங்களது முழு விவரங்களைப் பதிவு செய்யவும்:" data-en="Please enter your full details to proceed:">தொடர உங்களது முழு விவரங்களைப் பதிவு செய்யவும்:</p>
+            
+            <input type="text" id="custFullName" placeholder="முழுப் பெயர் (Full Name)" required>
+            <input type="tel" id="custPhone" placeholder="மொபைல் எண் (Phone Number)" required>
+            <input type="email" id="custEmailInput" placeholder="ஈமெயில் ஐடி (Email ID)" required readonly style="background:#eee;">
+            <textarea id="custAddress" rows="3" placeholder="டெலிவரி முகவரி (Door No, Street, City, Pincode)" required></textarea>
+            
             <button class="btn" onclick="saveCustomerDetails()" data-ta="விவரங்களைச் சேமிக்க" data-en="Save Details">விவரங்களைச் சேமிக்க</button>
         </div>
     </div>
@@ -224,7 +228,10 @@
             firebase.auth().onAuthStateChanged((user) => {
                 if (user) {
                     let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || null;
-                    if (!userExtra) { document.getElementById('detailsModal').style.display = 'flex'; }
+                    if (!userExtra || !userExtra.name || !userExtra.phone || !userExtra.address) {
+                        document.getElementById('custEmailInput').value = user.email;
+                        document.getElementById('detailsModal').style.display = 'flex';
+                    }
                     document.getElementById('sidebar-user-text').innerText = user.email;
 
                     if (user.email === ADMIN_EMAIL) {
@@ -299,15 +306,19 @@
         function saveCustomerDetails() {
             let name = document.getElementById('custFullName').value.trim();
             let phone = document.getElementById('custPhone').value.trim();
+            let email = document.getElementById('custEmailInput').value.trim();
             let address = document.getElementById('custAddress').value.trim();
 
-            if(!name || !phone || !address) { alert(currentLang === 'ta' ? 'அனைத்து விவரங்களையும் நிரப்பவும்.' : 'Please fill all details.'); return; }
+            if(!name || !phone || !email || !address) { 
+                alert(currentLang === 'ta' ? 'தயவுசெய்து பெயர், போன் நம்பர், ஈமெயில் மற்றும் முகவரி அனைத்தையும் நிரப்பவும்.' : 'Please fill Name, Phone, Email and Address.'); 
+                return; 
+            }
 
             let user = firebase.auth().currentUser;
             if(user) {
-                localStorage.setItem('userExtra_' + user.email, JSON.stringify({ name: name, phone: phone, address: address }));
+                localStorage.setItem('userExtra_' + user.email, JSON.stringify({ name: name, phone: phone, email: email, address: address }));
                 document.getElementById('detailsModal').style.display = 'none';
-                alert(currentLang === 'ta' ? 'விவரங்கள் சேமிக்கப்பட்டன!' : 'Details saved successfully!');
+                alert(currentLang === 'ta' ? 'அனைத்து விவரங்களும் வெற்றிகரமாகச் சேமிக்கப்பட்டன!' : 'All details saved successfully!');
             }
         }
 
@@ -363,7 +374,7 @@
         function openProfileModal() {
             let user = firebase.auth().currentUser;
             if (user) {
-                let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || {name:'User', phone:'N/A', address:'N/A'};
+                let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || {name:'N/A', phone:'N/A', email:user.email, address:'N/A'};
                 let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
                 let userOrders = allOrders.filter(o => o.email === user.email);
 
@@ -399,7 +410,6 @@
         }
         function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
 
-        // Cart Modal & Confirm Order Address Flow
         function openCartModal() {
             let user = firebase.auth().currentUser;
             if(!user) { alert(currentLang === 'ta' ? 'தயவுசெய்து லாகின் செய்யவும்!' : 'Please login!'); openLoginModal(); return; }
@@ -407,15 +417,14 @@
             let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || null;
             let addressBox = document.getElementById('displaySavedAddress');
             
-            // Reset confirmation view on open
             document.getElementById('addressOptions').style.display = 'flex';
             document.getElementById('newAddressForm').style.display = 'none';
             document.getElementById('paymentOptionsBox').style.display = 'none';
 
-            if (userExtra && userExtra.address) {
-                addressBox.innerText = userExtra.address;
+            if (userExtra && userExtra.address && userExtra.phone) {
+                addressBox.innerText = userExtra.address + " (Phone: " + userExtra.phone + ")";
             } else {
-                addressBox.innerText = currentLang === 'ta' ? 'முகவரி இல்லை. தயவுசெய்து புதிய முகவரியை உள்ளிடவும்.' : 'No address. Please enter new address.';
+                addressBox.innerText = currentLang === 'ta' ? 'முழுமையான விவரங்கள் இல்லை. தயவுசெய்து முகவரியை உள்ளிடவும்.' : 'Incomplete details. Please enter address.';
                 document.getElementById('addressOptions').style.display = 'none';
                 document.getElementById('newAddressForm').style.display = 'block';
             }
@@ -424,14 +433,12 @@
         }
 
         function confirmAddressYes() {
-            // Address is correct -> Show Payment options (Razorpay & COD)
             document.getElementById('addressOptions').style.display = 'none';
             document.getElementById('newAddressForm').style.display = 'none';
             document.getElementById('paymentOptionsBox').style.display = 'block';
         }
 
         function confirmAddressNo() {
-            // Address is incorrect -> Show alternative address textarea
             document.getElementById('addressOptions').style.display = 'none';
             document.getElementById('newAddressForm').style.display = 'block';
         }
@@ -445,7 +452,7 @@
             userExtra.address = altAddr;
             localStorage.setItem('userExtra_' + user.email, JSON.stringify(userExtra));
 
-            document.getElementById('displaySavedAddress').innerText = altAddr;
+            document.getElementById('displaySavedAddress').innerText = altAddr + " (Phone: " + (userExtra.phone || 'N/A') + ")";
             document.getElementById('newAddressForm').style.display = 'none';
             document.getElementById('paymentOptionsBox').style.display = 'block';
             alert(currentLang === 'ta' ? 'மாற்று முகவரி சேமிக்கப்பட்டது!' : 'Alternative address saved!');
@@ -454,7 +461,16 @@
         function closeCartModal() { document.getElementById('cartModal').style.display = 'none'; }
 
         function signInWithGoogle() {
-            firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => { closeLoginModal(); loadShopProducts(); });
+            firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider()).then((result) => {
+                let user = result.user;
+                let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || null;
+                if (!userExtra || !userExtra.name || !userExtra.phone || !userExtra.address) {
+                    document.getElementById('custEmailInput').value = user.email;
+                    document.getElementById('detailsModal').style.display = 'flex';
+                }
+                closeLoginModal(); 
+                loadShopProducts(); 
+            });
         }
 
         function logoutUser() {
@@ -484,6 +500,7 @@
             let orderDetails = { 
                 orderId: orderId, 
                 email: user.email, 
+                phone: userExtra.phone || 'N/A',
                 items: itemNames, 
                 address: userExtra.address, 
                 amount: "₹" + cartTotalText, 
@@ -542,6 +559,7 @@
                     let orderDetails = { 
                         orderId: orderId, 
                         email: user.email, 
+                        phone: userExtra.phone || 'N/A',
                         items: itemNames, 
                         address: userExtra.address, 
                         amount: "₹" + cartTotalText, 
