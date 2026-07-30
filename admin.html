@@ -8,11 +8,13 @@
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
     <script>
       const firebaseConfig = {
         apiKey: "AIzaSyAJwgnJhXAiqNGpnaN0vWOevBcofYR9uxE",
         authDomain: "thamizhan-energy-systems.firebaseapp.com",
+        databaseURL: "https://thamizhan-energy-systems-default-rtdb.firebaseio.com",
         projectId: "thamizhan-energy-systems",
         storageBucket: "thamizhan-energy-systems.firebasestorage.app",
         messagingSenderId: "727924977035",
@@ -20,6 +22,7 @@
         measurementId: "G-0MP2C3NZWK"
       };
       if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+      const database = firebase.database();
     </script>
 
     <style>
@@ -54,20 +57,8 @@
         .btn:hover { background: #00cc6a; }
         .print-btn { background: #2196F3; color: white; padding: 6px 12px; border: none; border-radius: 5px; font-weight: 700; cursor: pointer; font-size: 12px; }
         .print-btn:hover { background: #0b7dda; }
-        
-        .close-ticket-btn { 
-            background: #ff9800; 
-            color: white; 
-            padding: 6px 12px; 
-            border: none; 
-            border-radius: 5px; 
-            font-weight: 700; 
-            cursor: pointer; 
-            font-size: 12px; 
-            transition: 0.3s; 
-        }
+        .close-ticket-btn { background: #ff9800; color: white; padding: 6px 12px; border: none; border-radius: 5px; font-weight: 700; cursor: pointer; font-size: 12px; }
         .close-ticket-btn:hover { background: #e68900; }
-
         .delete-btn { background: #ff5252; color: white; padding: 6px 12px; border: none; border-radius: 5px; font-weight: 700; cursor: pointer; font-size: 12px; }
         .delete-btn:hover { background: #d32f2f; }
 
@@ -181,7 +172,7 @@
         </div>
 
         <div class="panel-box">
-            <h3>➕ புதிய தயாரிப்பைச் சேர்க்க (Add New Product)</h3>
+            <h3>➕ புதிய தயாரிப்பைச் சேர்க்க (Add New Product - Cloud Sync)</h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 10px;">
                 <input type="text" id="newProdName" placeholder="தயாரிப்பு பெயர் (Model Name)">
                 <input type="number" id="newProdPrice" placeholder="அசல் விலை (Original Price ₹)">
@@ -191,7 +182,7 @@
                 <input type="text" id="newProdImg" placeholder="இமேஜ் லிங்க் (எ.கா: 3.png)">
             </div>
             <textarea id="newProdSpecs" rows="2" placeholder="ஸ்பெசிஃபிகேஷன்ஸ் (கமா மூலம் பிரிக்கவும்)"></textarea>
-            <button class="btn" onclick="addNewProduct()">புதிய தயாரிப்பைச் சேர்க்கவும்</button>
+            <button class="btn" onclick="addNewProduct()">கிளவுட்டில் புதிய தயாரிப்பைச் சேர்க்கவும்</button>
         </div>
 
         <div class="panel-box">
@@ -209,7 +200,7 @@
                     </tr>
                 </thead>
                 <tbody id="adminProductsTableBody">
-                    <tr><td colspan="7" style="text-align:center; color:#888;">தயாரிப்புகள் எதுவும் இல்லை.</td></tr>
+                    <tr><td colspan="7" style="text-align:center; color:#888;">தயாரிப்புகள் லோட் ஆகிறது...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -397,7 +388,6 @@
             }
         }
 
-        // Updated Shipping Label Printing with Customer Phone Number
         function printShippingLabel(index) {
             let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
             let ord = allOrders[index];
@@ -441,61 +431,43 @@
             printSec.style.display = 'none';
         }
 
-        function loadIoTDevicesList() {
-            let iotDevices = JSON.parse(localStorage.getItem('adminIoTDevices')) || [
-                { deviceId: "TES-IoT-9011", model: "AWLCW 1.0 (WiFi)", ownerName: "ரமேஷ் குமார்", ownerEmail: "ramesh@gmail.com", status: "Online (Active)" },
-                { deviceId: "TES-IoT-9012", model: "AWLCWS 1.0 (Solar)", ownerName: "புவனேேஷ்", ownerEmail: "bhuvan@gmail.com", status: "Online (Active)" },
-                { deviceId: "TES-IoT-9013", model: "AWLCP 1.0 (Basic)", ownerName: "கார்த்திக்", ownerEmail: "karthik@gmail.com", status: "Offline" }
-            ];
-
-            document.getElementById('iotDeviceCount').innerText = iotDevices.length + " Devices";
-
-            let html = '';
-            iotDevices.forEach(d => {
-                let statusColor = d.status.includes('Online') ? 'color:green; font-weight:bold;' : 'color:red; font-weight:bold;';
-                html += `
-                    <tr>
-                        <td><code>${d.deviceId}</code></td>
-                        <td>${d.model}</td>
-                        <td><b>${d.ownerName}</b></td>
-                        <td>${d.ownerEmail}</td>
-                        <td><span style="${statusColor}">${d.status}</span></td>
-                    </tr>
-                `;
-            });
-            document.getElementById('iotDevicesTableBody').innerHTML = html;
-        }
-
-        function getDefaultProducts() {
-            return [
-                {name: "AWLCP 1.0", price: 3999, discount: 3499, stock: 15, offerTag: "Save ₹500", img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
-                {name: "AWLCW 1.0", price: 5499, discount: 4999, stock: 10, offerTag: "WiFi Model", img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
-                {name: "AWLCWS 1.0", price: 7499, discount: 6999, stock: 8, offerTag: "Solar + WiFi", img: "3.png", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
-            ];
-        }
-
+        // Firebase Cloud Sync Functions for Products
         function loadAdminProductsTable() {
-            let products = JSON.parse(localStorage.getItem('adminProducts')) || getDefaultProducts();
-            let html = '';
+            database.ref('products').on('value', (snapshot) => {
+                let productsData = snapshot.val();
+                let products = [];
+                if (productsData) {
+                    products = Object.keys(productsData).map(key => ({ id: key, ...productsData[key] }));
+                } else {
+                    products = [
+                        {name: "AWLCP 1.0", price: 3999, discount: 3499, stock: 15, offerTag: "Save ₹500", img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
+                        {name: "AWLCW 1.0", price: 5499, discount: 4999, stock: 10, offerTag: "WiFi Model", img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
+                        {name: "AWLCWS 1.0", price: 7499, discount: 6999, stock: 8, offerTag: "Solar + WiFi", img: "3.png", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
+                    ];
+                    database.ref('products').set(products);
+                }
 
-            products.forEach((p, index) => {
-                let specsStr = p.specs ? p.specs.join(', ') : '';
-                html += `
-                    <tr>
-                        <td><input type="text" id="name_${index}" value="${p.name}"></td>
-                        <td><input type="number" id="price_${index}" value="${p.price}" style="width:70px;"></td>
-                        <td><input type="number" id="discount_${index}" value="${p.discount || p.price}" style="width:70px;"></td>
-                        <td><input type="number" id="stock_${index}" value="${p.stock}" style="width:60px;"></td>
-                        <td><input type="text" id="offerTag_${index}" value="${p.offerTag || ''}" placeholder="Offer"></td>
-                        <td><textarea id="specs_${index}" rows="2">${specsStr}</textarea></td>
-                        <td>
-                            <button class="btn" style="padding:5px 8px; margin-bottom:4px;" onclick="updateProduct(${index})">புதுப்பி</button>
-                            <button class="btn delete-btn" style="padding:5px 8px;" onclick="deleteProduct(${index})">நீக்கு</button>
-                        </td>
-                    </tr>
-                `;
+                let html = '';
+                products.forEach((p, index) => {
+                    let specsStr = p.specs ? p.specs.join(', ') : '';
+                    html += `
+                        <tr>
+                            <td><input type="text" id="name_${index}" value="${p.name}"></td>
+                            <td><input type="number" id="price_${index}" value="${p.price}" style="width:70px;"></td>
+                            <td><input type="number" id="discount_${index}" value="${p.discount || p.price}" style="width:70px;"></td>
+                            <td><input type="number" id="stock_${index}" value="${p.stock}" style="width:60px;"></td>
+                            <td><input type="text" id="offerTag_${index}" value="${p.offerTag || ''}" placeholder="Offer"></td>
+                            <td><textarea id="specs_${index}" rows="2">${specsStr}</textarea></td>
+                            <td>
+                                <button class="btn" style="padding:5px 8px; margin-bottom:4px;" onclick="updateProduct('${p.id}', ${index})">புதுப்பி</button>
+                                <button class="btn delete-btn" style="padding:5px 8px;" onclick="deleteProduct('${p.id}')">நீக்கு</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('adminProductsTableBody').innerHTML = html;
+                window.adminLoadedProducts = products;
             });
-            document.getElementById('adminProductsTableBody').innerHTML = html;
         }
 
         function addNewProduct() {
@@ -512,8 +484,7 @@
                 return;
             }
 
-            let products = JSON.parse(localStorage.getItem('adminProducts')) || getDefaultProducts();
-            products.push({
+            let newProd = {
                 name: name,
                 price: parseInt(price),
                 discount: discount ? parseInt(discount) : parseInt(price),
@@ -521,38 +492,69 @@
                 offerTag: offerTag,
                 img: img,
                 specs: specs ? specs.split(',').map(s => s.trim()) : ["உத்தரவாதம் உள்ளது"]
+            };
+
+            database.ref('products').push(newProd).then(() => {
+                alert("புதிய தயாரிப்பு கிளவுட்டில் வெற்றிகரமாக சேர்க்கப்பட்டது!");
+                document.getElementById('newProdName').value = '';
+                document.getElementById('newProdPrice').value = '';
+                document.getElementById('newProdDiscount').value = '';
+                document.getElementById('newProdStock').value = '';
+                document.getElementById('newProdOffer').value = '';
+                document.getElementById('newProdSpecs').value = '';
             });
-
-            localStorage.setItem('adminProducts', JSON.stringify(products));
-            alert("புதிய தயாரிப்பு வெற்றிகரமாக சேர்க்கப்பட்டது!");
-            location.reload();
         }
 
-        function updateProduct(index) {
-            let products = JSON.parse(localStorage.getItem('adminProducts')) || getDefaultProducts();
-            
-            products[index].name = document.getElementById(`name_${index}`).value.trim();
-            products[index].price = parseInt(document.getElementById(`price_${index}`).value);
-            products[index].discount = parseInt(document.getElementById(`discount_${index}`).value);
-            products[index].stock = parseInt(document.getElementById(`stock_${index}`).value);
-            products[index].offerTag = document.getElementById(`offerTag_${index}`).value.trim();
-            
+        function updateProduct(id, index) {
+            let name = document.getElementById(`name_${index}`).value.trim();
+            let price = parseInt(document.getElementById(`price_${index}`).value);
+            let discount = parseInt(document.getElementById(`discount_${index}`).value);
+            let stock = parseInt(document.getElementById(`stock_${index}`).value);
+            let offerTag = document.getElementById(`offerTag_${index}`).value.trim();
             let specsText = document.getElementById(`specs_${index}`).value.trim();
-            products[index].specs = specsText ? specsText.split(',').map(s => s.trim()) : [];
+            let specs = specsText ? specsText.split(',').map(s => s.trim()) : [];
 
-            localStorage.setItem('adminProducts', JSON.stringify(products));
-            alert("தயாரிப்பு விவரங்கள் வெற்றிகரமாகப் புதுப்பிக்கப்பட்டன!");
-            loadAdminProductsTable();
+            database.ref('products/' + id).update({
+                name: name,
+                price: price,
+                discount: discount,
+                stock: stock,
+                offerTag: offerTag,
+                specs: specs
+            }).then(() => {
+                alert("தயாரிப்பு விவரங்கள் கிளவுட்டில் புதுப்பிக்கப்பட்டன!");
+            });
         }
 
-        function deleteProduct(index) {
+        function deleteProduct(id) {
             if(confirm("இந்தத் தயாரிப்பை நீக்க விரும்புகிறீர்களா?")) {
-                let products = JSON.parse(localStorage.getItem('adminProducts')) || getDefaultProducts();
-                products.splice(index, 1);
-                localStorage.setItem('adminProducts', JSON.stringify(products));
-                alert("தயாரிப்பு நீக்கப்பட்டது!");
-                loadAdminProductsTable();
+                database.ref('products/' + id).remove().then(() => {
+                    alert("தயாரிப்பு நீக்கப்பட்டது!");
+                });
             }
+        }
+
+        function loadIoTDevicesList() {
+            let iotDevices = [
+                { deviceId: "TES-IoT-9011", model: "AWLCW 1.0 (WiFi)", ownerName: "ரமேஷ் குமார்", ownerEmail: "ramesh@gmail.com", status: "Online (Active)" },
+                { deviceId: "TES-IoT-9012", model: "AWLCWS 1.0 (Solar)", ownerName: "புவனேேஷ்", ownerEmail: "bhuvan@gmail.com", status: "Online (Active)" },
+                { deviceId: "TES-IoT-9013", model: "AWLCP 1.0 (Basic)", ownerName: "கார்த்திக்", ownerEmail: "karthik@gmail.com", status: "Offline" }
+            ];
+            document.getElementById('iotDeviceCount').innerText = iotDevices.length + " Devices";
+            let html = '';
+            iotDevices.forEach(d => {
+                let statusColor = d.status.includes('Online') ? 'color:green; font-weight:bold;' : 'color:red; font-weight:bold;';
+                html += `
+                    <tr>
+                        <td><code>${d.deviceId}</code></td>
+                        <td>${d.model}</td>
+                        <td><b>${d.ownerName}</b></td>
+                        <td>${d.ownerEmail}</td>
+                        <td><span style="${statusColor}">${d.status}</span></td>
+                    </tr>
+                `;
+            });
+            document.getElementById('iotDevicesTableBody').innerHTML = html;
         }
     </script>
 </body>
