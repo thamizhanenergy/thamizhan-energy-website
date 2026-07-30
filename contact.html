@@ -54,8 +54,21 @@
         .btn:hover { background: #00cc6a; }
         .print-btn { background: #2196F3; color: white; }
         .print-btn:hover { background: #0b7dda; }
-        .close-ticket-btn { background: #ff9800; color: white; padding: 5px 10px; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; }
+        
+        /* Close Button Styling */
+        .close-ticket-btn { 
+            background: #ff9800; 
+            color: white; 
+            padding: 6px 12px; 
+            border: none; 
+            border-radius: 5px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            font-size: 12px; 
+            transition: 0.3s; 
+        }
         .close-ticket-btn:hover { background: #e68900; }
+
         .delete-btn { background: #ff5252; color: white; }
         .delete-btn:hover { background: #d32f2f; }
 
@@ -331,13 +344,13 @@
             }
         }
 
-        // Load Support & Complaint Tickets with Close Option
+        // Load Support & Complaint Tickets with Close Button
         function loadAdminTicketsTable() {
             let allTickets = JSON.parse(localStorage.getItem('supportTickets')) || [];
             let tableBody = document.getElementById('adminTicketsTableBody');
             
             if(allTickets.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#888;">புதிய டிக்கெட்டுகள் எதுவும் இல்லை.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#888;">புகார் டிக்கெட்டுகள் எதுவும் இல்லை.</td></tr>`;
                 return;
             }
 
@@ -345,7 +358,11 @@
             allTickets.forEach((t, index) => {
                 let isClosed = t.status && t.status.includes('Closed');
                 let statusColor = isClosed ? 'color:gray; font-weight:bold;' : 'color:#d32f2f; font-weight:bold;';
-                let closeBtn = isClosed ? '<span style="color:gray; font-size:11px;">மூடப்பட்டது</span>' : `<button class="close-ticket-btn" onclick="closeTicket(${index})">Close Ticket</button>`;
+                
+                // Close Button implementation
+                let actionBtn = isClosed ? 
+                    '<span style="color:gray; font-size:12px; font-weight:600;">மூடப்பட்டது (Closed)</span>' : 
+                    `<button class="close-ticket-btn" onclick="closeTicket(${index})">Close Ticket</button>`;
 
                 html += `
                     <tr>
@@ -354,7 +371,7 @@
                         <td><span style="background:#e0f7fa; color:#006064; padding:2px 6px; border-radius:4px; font-weight:600;">${t.serviceType}</span></td>
                         <td>${t.message}</td>
                         <td><span style="${statusColor}">${t.status || 'Open (செயலில் உள்ளது)'}</span></td>
-                        <td>${closeBtn}</td>
+                        <td>${actionBtn}</td>
                     </tr>
                 `;
             });
@@ -367,7 +384,7 @@
             if(allTickets[index]) {
                 allTickets[index].status = 'Closed (மூடப்பட்டது)';
                 localStorage.setItem('supportTickets', JSON.stringify(allTickets));
-                alert("இந்த புகார் டிக்கெட் வெற்றிகரமாக மூடப்பட்டது (Closed)!");
+                alert("இந்த புகார் டிக்கெட் வெற்றிகரமாக மூடப்பட்டது (Closed)! ");
                 loadAdminTicketsTable();
             }
         }
