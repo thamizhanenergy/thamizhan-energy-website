@@ -27,18 +27,32 @@
         .company-title h1 { font-size: 16px; color: #0f2027; font-weight: 700; line-height: 1.2; }
         .company-title p { font-size: 10px; color: #555; letter-spacing: 0.5px; }
         
-        .nav-container { display: flex; align-items: center; gap: 20px; }
+        .nav-container { display: flex; align-items: center; gap: 15px; }
         
-        nav ul { list-style: none; display: flex; gap: 20px; align-items: center; }
-        nav ul li a { font-weight: 600; font-size: 14px; color: #333; }
-        nav ul li a:hover { color: #00b359; }
+        nav ul { list-style: none; display: flex; gap: 15px; align-items: center; }
+        
+        /* Header Menu Buttons Style */
+        nav ul li a {
+            background: #f0f2f5;
+            color: #333;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        nav ul li a:hover {
+            background: #0f2027;
+            color: #00ff88;
+        }
 
         /* Language Toggle Button Style */
         .lang-btn {
             background: #0f2027;
             color: #00ff88;
             border: 2px solid #00ff88;
-            padding: 5px 12px;
+            padding: 6px 14px;
             border-radius: 20px;
             font-weight: 700;
             font-size: 12px;
@@ -138,7 +152,7 @@
                 transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out, visibility 0.3s;
             }
             .nav-container.active {
-                max-height: 400px;
+                max-height: 420px;
                 visibility: visible;
                 padding: 15px 25px;
             }
@@ -148,15 +162,24 @@
             nav ul {
                 flex-direction: column;
                 width: 100%;
-                gap: 12px;
+                gap: 10px;
             }
             nav ul li {
                 width: 100%;
                 border-bottom: 1px solid #eee;
-                padding-bottom: 8px;
+                padding-bottom: 6px;
+            }
+            nav ul li a {
+                display: block;
+                background: transparent;
+                padding: 5px 0;
+            }
+            nav ul li a:hover {
+                color: #00b359;
+                background: transparent;
             }
             .lang-btn {
-                margin-top: 5px;
+                margin-top: 10px;
                 width: 100%;
                 text-align: center;
             }
@@ -186,9 +209,10 @@
             <nav>
                 <ul>
                     <li><a href="index.html" data-ta="முகப்பு" data-en="Home">முகப்பு</a></li>
-                    <li><a href="shop.html" data-ta="தயாரிப்புகள் (ஸ்டோர்)" data-en="Store">தயாரிப்புகள் (ஸ்டோர்)</a></li>
+                    <li><a href="products.html" data-ta="தயாரிப்புகள்" data-en="Products">தயாரிப்புகள்</a></li>
+                    <li><a href="shop.html" data-ta="ஸ்டோர்" data-en="Store">ஸ்டோர்</a></li>
                     <li><a href="dashboard.html" data-ta="IoT டேஷ்போர்டு" data-en="IoT Dashboard">IoT டேஷ்போர்டு</a></li>
-                    <li><a href="contact.html" data-ta="தொடர்புக்கு & சாட் போட்" data-en="Contact & Chatbot">தொடர்புக்கு & சாட் போட்</a></li>
+                    <li><a href="contact.html" data-ta="தொடர்புக்கு" data-en="Contact">தொடர்புக்கு</a></li>
                     <li><a href="aboutus.html" data-ta="எங்களைப் பற்றி" data-en="About Us">எங்களைப் பற்றி</a></li>
                 </ul>
             </nav>
