@@ -36,7 +36,6 @@
         .menu-toggle { display: flex; flex-direction: column; justify-content: space-between; width: 26px; height: 18px; cursor: pointer; background: transparent; border: none; }
         .menu-toggle span { width: 100%; height: 3px; background-color: #0f2027; border-radius: 3px; }
 
-        /* Search Bar Section */
         .search-container { background: #0f2027; padding: 15px 20px; text-align: center; box-shadow: inset 0 3px 5px rgba(0,0,0,0.1); }
         .search-box { max-width: 600px; margin: 0 auto; display: flex; background: white; border-radius: 30px; overflow: hidden; padding: 5px 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .search-box input { flex: 1; border: none; outline: none; padding: 8px; font-size: 14px; background: transparent; }
@@ -60,7 +59,6 @@
         .product-img { max-width: 100%; max-height: 100%; object-fit: contain; }
         
         .offer-tag { position: absolute; top: 8px; right: 8px; background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; padding: 5px 10px; font-size: 11px; font-weight: 700; border-radius: 20px; box-shadow: 0 3px 6px rgba(255, 65, 108, 0.4); z-index: 5; text-transform: uppercase; letter-spacing: 0.5px; }
-        
         .model-badge { display: inline-block; background: #e0f7fa; color: #006064; padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 600; margin-bottom: 12px; }
         
         .price-box { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
@@ -85,8 +83,8 @@
         .remove-cart-item { background: #ff5252; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; }
         .cart-total { font-weight: 700; font-size: 16px; margin-bottom: 15px; display: flex; justify-content: space-between; color: #2c3e50; }
         
-        .pay-btn { background: #528FF0; color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; margin-bottom: 8px; }
-        .cod-btn { background: #ff9800; color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; }
+        .pay-btn { background: #528FF0; color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; margin-bottom: 8px; display: none; }
+        .cod-btn { background: #ff9800; color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; display: none; }
 
         .logout-btn { background: #f44336; color: white; margin-top: 15px; width: 100%; padding: 10px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; }
         .order-history-box { background: #f8f9fa; border: 1px solid #e0e0e0; padding: 12px; border-radius: 8px; margin-top: 12px; font-size: 13px; }
@@ -167,18 +165,29 @@
     <div class="modal" id="cartModal">
         <div class="modal-content" style="max-width: 450px;">
             <span class="close-btn" onclick="closeCartModal()">&times;</span>
-            <h3 data-ta="உங்கள் ஷாப்பிங் கார்ட்" data-en="Your Shopping Cart">உங்கள் ஷாப்பிங் கார்ட்</h3>
+            <h3 data-ta="உங்கள் ஷாப்பிங் கார்ட் & கன்பார்ம் ஆர்டர்" data-en="Your Cart & Confirm Order">உங்கள் ஷாப்பிங் கார்ட் & கன்பார்ம் ஆர்டர்</h3>
             <ul class="cart-items-list" id="cartItemsList"></ul>
             <div class="cart-total"><span data-ta="மொத்தத் தொகை:" data-en="Total Amount:">மொத்தத் தொகை:</span><span id="cartTotalPrice">₹0</span></div>
             
-            <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ddd;">
+            <div id="addressVerifyBox" style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ddd;">
                 <p style="font-size: 12px; font-weight: 700; color: #0f2027; margin-bottom: 5px;" data-ta="டெலிவரி முகவரி சரிபார்ப்பு:" data-en="Delivery Address Check:">டெலிவரி முகவரி சரிபார்ப்பு:</p>
                 <p id="displaySavedAddress" style="font-size: 12px; color: #555; margin-bottom: 8px;"></p>
-                <button class="btn" id="addressCheckBtn" style="padding: 6px; font-size: 11px; background:#4CAF50; color:white;" onclick="handleAddressAction()">✔️ இது சரியானது</button>
+                
+                <div id="addressOptions" style="display: flex; gap: 8px;">
+                    <button class="btn" style="padding: 6px; font-size: 11px; background:#4CAF50; color:white; flex:1;" onclick="confirmAddressYes()">✔️ சரியானது</button>
+                    <button class="btn" style="padding: 6px; font-size: 11px; background:#ff5252; color:white; flex:1;" onclick="confirmAddressNo()">❌ சரியில்லை (மாற்று முகவரி)</button>
+                </div>
+
+                <div id="newAddressForm" style="display: none; margin-top: 10px;">
+                    <textarea id="altCustAddress" rows="2" placeholder="புதிய டெலிவரி முகவரியை உள்ளிடவும்..."></textarea>
+                    <button class="btn" style="padding: 6px; font-size: 11px; background:#ff9800; color:white;" onclick="saveAlternativeAddress()">முகவரியைச் சேமித்து தொடர</button>
+                </div>
             </div>
 
-            <button class="pay-btn" onclick="proceedToRazorpay()" data-ta="Razorpay மூலம் பணம் செலுத்த" data-en="Pay Securely via Razorpay">Razorpay மூலம் பணம் செலுத்த</button>
-            <button class="cod-btn" onclick="proceedToCOD()" data-ta="கேஷ் ஆன் டெலிவரி (COD)" data-en="Cash on Delivery (COD)">கேஷ் ஆன் டெலிவரி (COD)</button>
+            <div id="paymentOptionsBox" style="display: none;">
+                <button class="pay-btn" onclick="proceedToRazorpay()" data-ta="Razorpay மூலம் பணம் செலுத்த" data-en="Pay Securely via Razorpay">Razorpay மூலம் பணம் செலுத்த</button>
+                <button class="cod-btn" onclick="proceedToCOD()" data-ta="கேஷ் ஆன் டெலிவரி (COD)" data-en="Cash on Delivery (COD)">கேஷ் ஆன் டெலிவரி (COD)</button>
+            </div>
         </div>
     </div>
 
@@ -390,37 +399,56 @@
         }
         function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
 
-        // Dynamic Address Check and UI Handling
+        // Cart Modal & Confirm Order Address Flow
         function openCartModal() {
             let user = firebase.auth().currentUser;
             if(!user) { alert(currentLang === 'ta' ? 'தயவுசெய்து லாகின் செய்யவும்!' : 'Please login!'); openLoginModal(); return; }
             
             let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || null;
             let addressBox = document.getElementById('displaySavedAddress');
-            let addressBtn = document.getElementById('addressCheckBtn');
+            
+            // Reset confirmation view on open
+            document.getElementById('addressOptions').style.display = 'flex';
+            document.getElementById('newAddressForm').style.display = 'none';
+            document.getElementById('paymentOptionsBox').style.display = 'none';
 
             if (userExtra && userExtra.address) {
                 addressBox.innerText = userExtra.address;
-                addressBtn.innerText = currentLang === 'ta' ? '✔️ இது சரியானது' : '✔️ Correct';
-                addressBtn.style.background = '#4CAF50';
             } else {
-                addressBox.innerText = currentLang === 'ta' ? 'முகவரி பதிவு செய்யப்படவில்லை!' : 'Address not registered!';
-                addressBtn.innerText = currentLang === 'ta' ? '➕ முகவரியைச் சேர்க்க (Add Address)' : '➕ Add Address';
-                addressBtn.style.background = '#ff9800';
+                addressBox.innerText = currentLang === 'ta' ? 'முகவரி இல்லை. தயவுசெய்து புதிய முகவரியை உள்ளிடவும்.' : 'No address. Please enter new address.';
+                document.getElementById('addressOptions').style.display = 'none';
+                document.getElementById('newAddressForm').style.display = 'block';
             }
 
             document.getElementById('cartModal').style.display = 'flex';
         }
 
-        function handleAddressAction() {
+        function confirmAddressYes() {
+            // Address is correct -> Show Payment options (Razorpay & COD)
+            document.getElementById('addressOptions').style.display = 'none';
+            document.getElementById('newAddressForm').style.display = 'none';
+            document.getElementById('paymentOptionsBox').style.display = 'block';
+        }
+
+        function confirmAddressNo() {
+            // Address is incorrect -> Show alternative address textarea
+            document.getElementById('addressOptions').style.display = 'none';
+            document.getElementById('newAddressForm').style.display = 'block';
+        }
+
+        function saveAlternativeAddress() {
+            let altAddr = document.getElementById('altCustAddress').value.trim();
+            if(!altAddr) { alert(currentLang === 'ta' ? 'தயவுசெய்து மாற்று முகவரியை உள்ளிடவும்.' : 'Please enter alternative address.'); return; }
+
             let user = firebase.auth().currentUser;
-            let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || null;
-            if (userExtra && userExtra.address) {
-                alert(currentLang === 'ta' ? 'முகவரி உறுதிப்படுத்தப்பட்டது!' : 'Address confirmed!');
-            } else {
-                closeCartModal();
-                document.getElementById('detailsModal').style.display = 'flex';
-            }
+            let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || {};
+            userExtra.address = altAddr;
+            localStorage.setItem('userExtra_' + user.email, JSON.stringify(userExtra));
+
+            document.getElementById('displaySavedAddress').innerText = altAddr;
+            document.getElementById('newAddressForm').style.display = 'none';
+            document.getElementById('paymentOptionsBox').style.display = 'block';
+            alert(currentLang === 'ta' ? 'மாற்று முகவரி சேமிக்கப்பட்டது!' : 'Alternative address saved!');
         }
 
         function closeCartModal() { document.getElementById('cartModal').style.display = 'none'; }
@@ -433,20 +461,13 @@
             firebase.auth().signOut().then(() => { location.reload(); });
         }
 
-        // Cash on Delivery (COD) Option Handler
         function proceedToCOD() {
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             if(cart.length === 0) { alert(currentLang === 'ta' ? 'கார்ட் காலியாக உள்ளது!' : 'Cart is empty!'); return; }
             
             let user = firebase.auth().currentUser;
             let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email));
-            if(!userExtra || !userExtra.address) {
-                alert(currentLang === 'ta' ? 'தயவுசெய்து உங்கள் முகவரியைச் சேர்க்கவும்!' : 'Please add your address!');
-                closeCartModal();
-                document.getElementById('detailsModal').style.display = 'flex';
-                return;
-            }
-
+            
             let cartTotalText = document.getElementById('cartTotalPrice').innerText.replace('₹', '').replace(',', '');
             let orderId = 'TES-COD-' + Math.floor(100000 + Math.random() * 900000);
             let itemNames = cart.map(i => i.name).join(', ');
@@ -488,12 +509,6 @@
             
             let user = firebase.auth().currentUser;
             let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email));
-            if(!userExtra || !userExtra.address) {
-                alert(currentLang === 'ta' ? 'தயவுசெய்து உங்கள் முகவரியைச் சேர்க்கவும்!' : 'Please add your address!');
-                closeCartModal();
-                document.getElementById('detailsModal').style.display = 'flex';
-                return;
-            }
 
             let products = JSON.parse(localStorage.getItem('adminProducts')) || [];
             for (let item of cart) {
