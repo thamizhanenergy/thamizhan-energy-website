@@ -219,7 +219,7 @@
 
     <div id="printSection" style="display:none;"></div>
 
-    <footer><p>&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ் - அட்மின் பேனல்.</p></footer>
+    <footer><p>&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p></footer>
 
     <script>
         const ADMIN_EMAIL = "thamizhanes@gmail.com"; 
@@ -349,7 +349,7 @@
             let allTickets = JSON.parse(localStorage.getItem('supportTickets')) || [];
             let tableBody = document.getElementById('adminTicketsTableBody');
             
-            if(allTickets.length === 0) {
+            if(!allTickets || allTickets.length === 0) {
                 tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#888;">புகார் டிக்கெட்டுகள் எதுவும் இல்லை.</td></tr>`;
                 return;
             }
@@ -359,7 +359,6 @@
                 let isClosed = t.status && t.status.includes('Closed');
                 let statusColor = isClosed ? 'color:gray; font-weight:bold;' : 'color:#d32f2f; font-weight:bold;';
                 
-                // Close Button implementation
                 let actionBtn = isClosed ? 
                     '<span style="color:gray; font-size:12px; font-weight:600;">மூடப்பட்டது (Closed)</span>' : 
                     `<button class="close-ticket-btn" onclick="closeTicket(${index})">Close Ticket</button>`;
@@ -384,7 +383,7 @@
             if(allTickets[index]) {
                 allTickets[index].status = 'Closed (மூடப்பட்டது)';
                 localStorage.setItem('supportTickets', JSON.stringify(allTickets));
-                alert("இந்த புகார் டிக்கெட் வெற்றிகரமாக மூடப்பட்டது (Closed)! ");
+                alert("இந்த புகார் டிக்கெட் வெற்றிகரமாக மூடப்பட்டது (Closed)!");
                 loadAdminTicketsTable();
             }
         }
