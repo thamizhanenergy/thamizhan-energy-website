@@ -249,19 +249,25 @@
             });
         });
 
-        // Load Products from Firebase Realtime Database
+        // Load Products from Firebase Realtime Database with LocalStorage Fallback
         function loadShopProducts() {
             database.ref('products').on('value', (snapshot) => {
                 let productsData = snapshot.val();
                 let products = [];
                 if (productsData) {
                     products = Object.keys(productsData).map(key => ({ id: key, ...productsData[key] }));
+                    localStorage.setItem('adminProducts', JSON.stringify(products));
                 } else {
-                    products = [
-                        {name: "AWLCP 1.0", price: 3999, discount: 3499, stock: 15, offerTag: "Save ₹500", img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
-                        {name: "AWLCW 1.0", price: 5499, discount: 4999, stock: 10, offerTag: "WiFi Model", img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
-                        {name: "AWLCWS 1.0", price: 7499, discount: 6999, stock: 8, offerTag: "Solar + WiFi", img: "3.png", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
-                    ];
+                    let localSaved = JSON.parse(localStorage.getItem('adminProducts'));
+                    if (localSaved && localSaved.length > 0) {
+                        products = localSaved;
+                    } else {
+                        products = [
+                            {id: "p1", name: "AWLCP 1.0", price: 3999, discount: 3499, stock: 15, offerTag: "Save ₹500", img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
+                            {id: "p2", name: "AWLCW 1.0", price: 5499, discount: 4999, stock: 10, offerTag: "WiFi Model", img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
+                            {id: "p3", name: "AWLCWS 1.0", price: 7499, discount: 6999, stock: 8, offerTag: "Solar + WiFi", img: "3.png", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
+                        ];
+                    }
                 }
                 renderProducts(products);
             });
@@ -334,22 +340,19 @@
         }
 
         function addToCart(name, price) {
-            database.ref('products').once('value', (snapshot) => {
-                let productsData = snapshot.val();
-                let products = productsData ? Object.values(productsData) : [];
-                let prod = products.find(p => p.name === name);
-                
-                if (prod && prod.stock <= 0) {
-                    alert(currentLang === 'ta' ? 'மன்னிக்கவும்! இந்தப் பொருள் தற்போது ஸ்டாக் இல்லை.' : 'Sorry! This product is out of stock.');
-                    return;
-                }
+            let localProducts = JSON.parse(localStorage.getItem('adminProducts')) || [];
+            let prod = localProducts.find(p => p.name === name);
+            
+            if (prod && prod.stock <= 0) {
+                alert(currentLang === 'ta' ? 'மன்னிக்கவும்! இந்தப் பொருள் தற்போது ஸ்டாக் இல்லை.' : 'Sorry! This product is out of stock.');
+                return;
+            }
 
-                let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
-                cart.push({name: name, price: price});
-                localStorage.setItem('cartItems', JSON.stringify(cart));
-                updateCartDisplay();
-                alert(name + (currentLang === 'ta' ? ' கார்ட்டில் சேர்க்கப்பட்டது!' : ' added to cart!'));
-            });
+            let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+            cart.push({name: name, price: price});
+            localStorage.setItem('cartItems', JSON.stringify(cart));
+            updateCartDisplay();
+            alert(name + (currentLang === 'ta' ? ' கார்ட்டில் சேர்க்கப்பட்டது!' : ' added to cart!'));
         }
 
         function removeFromCart(index) {
@@ -593,7 +596,7 @@
                             trackingUrl: '' 
                         };
                         let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
-                        allOrders.allOrders.push(orderDetails);
+                        allOrders.push(orderDetails);
                         localStorage.setItem('allOrders', JSON.stringify(allOrders));
                         
                         localStorage.removeItem('cartItems');
