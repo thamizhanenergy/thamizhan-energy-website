@@ -466,7 +466,6 @@
                     `;
                 });
                 document.getElementById('adminProductsTableBody').innerHTML = html;
-                window.adminLoadedProducts = products;
             });
         }
 
@@ -502,6 +501,8 @@
                 document.getElementById('newProdStock').value = '';
                 document.getElementById('newProdOffer').value = '';
                 document.getElementById('newProdSpecs').value = '';
+            }).catch((error) => {
+                alert("பிழை ஏற்பட்டது: " + error.message);
             });
         }
 
