@@ -394,4 +394,78 @@
             document.getElementById('displaySavedAddress').innerText = userExtra.address;
             document.getElementById('cartModal').style.display = 'flex';
         }
-        function closeCartModal() { document.getElementById('cartModal').style
+        function closeCartModal() { document.getElementById('cartModal').style.display = 'none'; }
+
+        function signInWithGoogle() {
+            firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => { closeLoginModal(); loadShopProducts(); });
+        }
+
+        function logoutUser() {
+            firebase.auth().signOut().then(() => { location.reload(); });
+        }
+
+        function proceedToRazorpay() {
+            let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+            if(cart.length === 0) { alert(currentLang === 'ta' ? 'கார்ட் காலியாக உள்ளது!' : 'Cart is empty!'); return; }
+            
+            let products = JSON.parse(localStorage.getItem('adminProducts')) || [];
+            for (let item of cart) {
+                let prod = products.find(p => p.name === item.name);
+                if (prod && prod.stock <= 0) {
+                    alert(`மன்னிக்கவும்! '${item.name}' தற்போது ஸ்டாக் இல்லை.`);
+                    return;
+                }
+            }
+
+            let user = firebase.auth().currentUser;
+            let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email));
+            let cartTotalText = document.getElementById('cartTotalPrice').innerText.replace('₹', '').replace(',', '');
+            let orderId = 'TES-' + Math.floor(100000 + Math.random() * 900000);
+            let itemNames = cart.map(i => i.name).join(', ');
+
+            var options = {
+                "key": RAZORPAY_KEY_ID, 
+                "amount": parseInt(cartTotalText) * 100, 
+                "currency": "INR",
+                "name": "தமிழன் எனர்ஜி சிஸ்டம்ஸ்",
+                "description": itemNames,
+                "handler": function (response){
+                    let products = JSON.parse(localStorage.getItem('adminProducts')) || [];
+                    cart.forEach(item => {
+                        let prod = products.find(p => p.name === item.name);
+                        if (prod) {
+                            prod.stock = Math.max(0, prod.stock - 1);
+                        }
+                    });
+                    localStorage.setItem('adminProducts', JSON.stringify(products));
+
+                    let orderDetails = { 
+                        orderId: orderId, 
+                        email: user.email, 
+                        items: itemNames, 
+                        address: userExtra.address, 
+                        amount: "₹" + cartTotalText, 
+                        status: currentLang === 'ta' ? 'ஆர்டர் உறுதி செய்யப்பட்டது (Order Confirmed)' : 'Order Confirmed', 
+                        trackingId: '', 
+                        trackingUrl: '' 
+                    };
+                    let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
+                    allOrders.push(orderDetails);
+                    localStorage.setItem('allOrders', JSON.stringify(allOrders));
+                    
+                    localStorage.removeItem('cartItems');
+                    updateCartDisplay();
+                    loadShopProducts();
+                    closeCartModal();
+                    alert((currentLang === 'ta' ? 'பணம் செலுத்தப்பட்டது! ஆர்டர் ஐடி: ' : 'Payment Successful! Order ID: ') + orderId);
+                    openProfileModal();
+                },
+                "prefill": { "name": userExtra.name, "email": user.email, "contact": userExtra.phone },
+                "theme": { "color": "#00ff88" }
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+        }
+    </script>
+</body>
+</html>
