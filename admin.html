@@ -451,7 +451,6 @@
                     database.ref('products').set(products);
                 }
                 
-                // Save backup to localStorage for offline safety
                 localStorage.setItem('adminProducts', JSON.stringify(products));
 
                 let html = '';
@@ -500,7 +499,7 @@
                 specs: specs ? specs.split(',').map(s => s.trim()) : ["உத்தரவாதம் உள்ளது"]
             };
 
-            // Push to Firebase and LocalStorage simultaneously
+            // Push to Firebase and update LocalStorage simultaneously
             database.ref('products').push(newProd).then(() => {
                 let currentLocal = JSON.parse(localStorage.getItem('adminProducts')) || [];
                 currentLocal.push(newProd);
