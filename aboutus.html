@@ -16,9 +16,23 @@
         .logo-img { height: 40px; width: auto; display: block; }
         .company-title h1 { font-size: 16px; color: #0f2027; font-weight: 700; }
 
-        .nav-links { display: flex; gap: 15px; align-items: center; }
+        .nav-links { display: flex; gap: 12px; align-items: center; }
         .nav-btn { background: #0f2027; color: #00ff88; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 13px; transition: 0.3s; }
         .nav-btn:hover { background: #00ff88; color: #0f2027; }
+
+        /* Language Toggle Button Style */
+        .lang-btn {
+            background: #0f2027;
+            color: #00ff88;
+            border: 2px solid #00ff88;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .lang-btn:hover { background: #00ff88; color: #0f2027; }
 
         .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
         
@@ -53,49 +67,75 @@
     <header>
         <div class="brand-section">
             <img src="1.png" alt="Logo" class="logo-img">
-            <div class="company-title"><h1>தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1></div>
+            <div class="company-title"><h1 data-ta="தமிழன் எனர்ஜி சிஸ்டம்ஸ்" data-en="Thamizhan Energy Systems">தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1></div>
         </div>
         <div class="nav-links">
-            <a href="shop.html" class="nav-btn">🛒 ஆன்லைன் ஸ்டோர்</a>
-            <a href="index.html" class="nav-btn" style="background:#f0f2f5; color:#333;">முகப்பு</a>
+            <a href="shop.html" class="nav-btn" data-ta="🛒 ஆன்லைன் ஸ்டோர்" data-en="🛒 Store">🛒 ஆன்லைன் ஸ்டோர்</a>
+            <a href="index.html" class="nav-btn" style="background:#f0f2f5; color:#333;" data-ta="முகப்பு" data-en="Home">முகப்பு</a>
+            <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">English</button>
         </div>
     </header>
 
     <div class="container">
         
         <div class="about-hero">
-            <h2>எங்களைப் பற்றி (About Us)</h2>
-            <p>நவீன தொழில்நுட்பம் மற்றும் ஆட்டோமேஷன் தீர்வுகளுடன் உங்கள் வாழ்க்கையை எளிமையாக்குவதில் தமிழன் எனர்ஜி சிஸ்டம்ஸ் முன்னணி வகிக்கிறது.</p>
+            <h2 data-ta="எங்களைப் பற்றி (About Us)" data-en="About Us">எங்களைப் பற்றி (About Us)</h2>
+            <p data-ta="நவீன தொழில்நுட்பம் மற்றும் ஆட்டோமேஷன் தீர்வுகளுடன் உங்கள் வாழ்க்கையை எளிமையாக்குவதில் தமிழன் எனர்ஜி சிஸ்டம்ஸ் முன்னணி வகிக்கிறது." data-en="Thamizhan Energy Systems leads in simplifying your life with modern technology and automation solutions.">நவீன தொழில்நுட்பம் மற்றும் ஆட்டோமேஷன் தீர்வுகளுடன் உங்கள் வாழ்க்கையை எளிமையாக்குவதில் தமிழன் எனர்ஜி சிஸ்டம்ஸ் முன்னணி வகிக்கிறது.</p>
         </div>
 
         <div class="content-card">
-            <h3>எங்களது பயணம் & வரலாறு (Our Journey)</h3>
-            <p>2018 முதல் <b>'தமிழன் எலக்ட்ரானிக் சர்வீஸ் பிரொவைடர்'</b> என்ற பெயரில் எலக்ட்ரானிக்ஸ் மற்றும் எலக்ட்ரிக்கல் துறையில் வாடிக்கையாளர்களுக்குச் சிறந்த முறையில் சேவைகளை வழங்கி வெற்றிகரமாக இயங்கி வந்தது. வாடிக்கையாளர்களிடம் எங்களுக்குக் கிடைத்த நம்பிக்கையும் வரவேற்பும் தான் எங்களை அடுத்த கட்டத்திற்கு நகர்த்தியது.</p>
-            <p>இதன் தொடர்ச்சியாக, எங்களது நீண்ட கால அனுபவத்தையும் தொழில்நுட்ப அறிவையும் கொண்டு, உலகத் தரம் வாய்ந்த சொந்த தயாரிப்புகளை அறிமுகப்படுத்தும் நோக்கில் உருவாக்கப்பட்டதுதான் <b>'தமிழன் எனர்ஜி சிஸ்டம்ஸ்' (Thamizhan Energy Systems)</b> ஆகும். தற்போது IoT (இன்டர்நெட் ஆஃப் திங்ஸ்) மற்றும் ஆட்டோமேஷன் தொழில்நுட்பத்தில் அதிநவீன வாட்டர் லெவல் கண்ட்ரோலர் (Water Level Controller) சாதனங்களை வெற்றிகரமாகத் தயாரித்து வழங்கி வருகிறோம்.</p>
+            <h3 data-ta="எங்களது பயணம் & வரலாறு (Our Journey)" data-en="Our Journey">எங்களது பயணம் & வரலாறு (Our Journey)</h3>
+            <p data-ta="2018 முதல் 'தமிழன் எலக்ட்ரானிக் சர்வீஸ் பிரொவைடர்' என்ற பெயரில் எலக்ட்ரானிக்ஸ் மற்றும் எலக்ட்ரிக்கல் துறையில் வாடிக்கையாளர்களுக்குச் சிறந்த முறையில் சேவைகளை வழங்கி வெற்றிகரமாக இயங்கி வந்தது. வாடிக்கையாளர்களிடம் எங்களுக்குக் கிடைத்த நம்பிக்கையும் வரவேற்பும் தான் எங்களை அடுத்த கட்டத்திற்கு நகர்த்தியது." data-en="Since 2018, we have been successfully operating as a service provider in the electronics and electrical sector under the name 'Thamizhan Electronic Service Provider'. The trust and welcome we received from our customers pushed us to the next level.">2018 முதல் <b>'தமிழன் எலக்ட்ரானிக் சர்வீஸ் பிரொவைடர்'</b> என்ற பெயரில் எலக்ட்ரானிக்ஸ் மற்றும் எலக்ட்ரிக்கல் துறையில் வாடிக்கையாளர்களுக்குச் சிறந்த முறையில் சேவைகளை வழங்கி வெற்றிகரமாக இயங்கி வந்தது. வாடிக்கையாளர்களிடம் எங்களுக்குக் கிடைத்த நம்பிக்கையும் வரவேற்பும் தான் எங்களை அடுத்த கட்டத்திற்கு நகர்த்தியது.</p>
+            <p data-ta="இதன் தொடர்ச்சியாக, எங்களது நீண்ட கால அனுபவத்தையும் தொழில்நுட்ப அறிவையும் கொண்டு, உலகத் தரம் வாய்ந்த சொந்த தயாரிப்புகளை அறிமுகப்படுத்தும் நோக்கில் உருவாக்கப்பட்டதுதான் 'தமிழன் எனர்ஜி சிஸ்டம்ஸ்' (Thamizhan Energy Systems) ஆகும். தற்போது IoT (இன்டர்நெட் ஆஃப் திங்ஸ்) மற்றும் ஆட்டோமேஷன் தொழில்நுட்பத்தில் அதிநவீன வாட்டர் லெவல் கண்ட்ரோலர் (Water Level Controller) சாதனங்களை வெற்றிகரமாகத் தயாரித்து வழங்கி வருகிறோம்." data-en="Following this, with our long-term experience and technical knowledge, 'Thamizhan Energy Systems' was created with the aim of introducing world-class own products. Currently, we successfully manufacture and supply state-of-the-art Water Level Controller devices in IoT and automation technology.">இதன் தொடர்ச்சியாக, எங்களது நீண்ட கால அனுபவத்தையும் தொழில்நுட்ப அறிவையும் கொண்டு, உலகத் தரம் வாய்ந்த சொந்த தயாரிப்புகளை அறிமுகப்படுத்தும் நோக்கில் உருவாக்கப்பட்டதுதான் <b>'தமிழன் எனர்ஜி சிஸ்டம்ஸ்' (Thamizhan Energy Systems)</b> ஆகும். தற்போது IoT (இன்டர்நெட் ஆஃப் திங்ஸ்) மற்றும் ஆட்டோமேஷன் தொழில்நுட்பத்தில் அதிநவீன வாட்டர் லெவல் கண்ட்ரோலர் (Water Level Controller) சாதனங்களை வெற்றிகரமாகத் தயாரித்து வழங்கி வருகிறோம்.</p>
         </div>
 
         <div class="vision-mission-grid">
             <div class="vm-card">
-                <h4>🎯 எங்களது முக்கிய நோக்கம் (Our Mission)</h4>
-                <p>உயர்தரமான எலக்ட்ரானிக் சாதனங்களை மிகச் சரியான மற்றும் நியாயமான விலையில் அனைத்து தர மக்களுக்கும் விநியோகிப்பது. புதிய மற்றும் மேம்பட்ட டெக்னாலஜிகள் மூலம் மனிதர்களின் அன்றாடப் பணிகளை எளிதாக்கி, உலகை அடுத்த கட்டத்திற்கு எடுத்துச் செல்வதே எங்களது பிரதான நோக்கமாகும்.</p>
+                <h4 data-ta="🎯 எங்களது முக்கிய நோக்கம் (Our Mission)" data-en="🎯 Our Mission">🎯 எங்களது முக்கிய நோக்கம் (Our Mission)</h4>
+                <p data-ta="உயர்தரமான எலக்ட்ரானிக் சாதனங்களை மிகச் சரியான மற்றும் நியாயமான விலையில் அனைத்து தர மக்களுக்கும் விநியோகிப்பது. புதிய மற்றும் மேம்பட்ட டெக்னாலஜிகள் மூலம் மனிதர்களின் அன்றாடப் பணிகளை எளிதாக்கி, உலகை அடுத்த கட்டத்திற்கு எடுத்துச் செல்வதே எங்களது பிரதான நோக்கமாகும்." data-en="To distribute high-quality electronic devices at very fair and reasonable prices to all strata of people. Our main objective is to simplify people's daily chores through new and advanced technologies and take the world to the next level.">உயர்தரமான எலக்ட்ரானிக் சாதனங்களை மிகச் சரியான மற்றும் நியாயமான விலையில் அனைத்து தர மக்களுக்கும் விநியோகிப்பது. புதிய மற்றும் மேம்பட்ட டெக்னாலஜிகள் மூலம் மனிதர்களின் அன்றாடப் பணிகளை எளிதாக்கி, உலகை அடுத்த கட்டத்திற்கு எடுத்துச் செல்வதே எங்களது பிரதான நோக்கமாகும்.</p>
             </div>
             <div class="vm-card">
-                <h4>💡 எதிர்கால இலக்கு (Our Vision)</h4>
-                <p>இந்தியாவின் முன்னணி ஸ்மார்ட் ஆட்டோமேஷன் மற்றும் ஐஓடி (IoT) தயாரிப்பு நிறுவனமாக உருவெடுப்பதுடன், வீடுகள் மற்றும் தொழிற்சாலைகளுக்குத் தேவையான அதிநவீன மின்சாதனத் தீர்வுகளைத் தொடர்ச்சியாக வழங்குவது.</p>
+                <h4 data-ta="💡 எதிர்கால இலக்கு (Our Vision)" data-en="💡 Our Vision">💡 எதிர்கால இலக்கு (Our Vision)</h4>
+                <p data-ta="இந்தியாவின் முன்னணி ஸ்மார்ட் ஆட்டோமேஷன் மற்றும் ஐஓடி (IoT) தயாரிப்பு நிறுவனமாக உருவெடுப்பதுடன், வீடுகள் மற்றும் தொழிற்சாலைகளுக்குத் தேவையான அதிநவீன மின்சாதனத் தீர்வுகளைத் தொடர்ச்சியாக வழங்குவது." data-en="To emerge as India's leading smart automation and IoT manufacturing company, and continuously provide state-of-the-art electrical appliance solutions required for homes and industries.">இந்தியாவின் முன்னணி ஸ்மார்ட் ஆட்டோமேஷன் மற்றும் ஐஓடி (IoT) தயாரிப்பு நிறுவனமாக உருவெடுப்பதுடன், வீடுகள் மற்றும் தொழிற்சாலைகளுக்குத் தேவையான அதிநவீன மின்சாதனத் தீர்வுகளைத் தொடர்ச்சியாக வழங்குவது.</p>
             </div>
         </div>
 
         <div class="founder-section">
-            <h3>சி. பாலசுப்பிரமணியம் B.E</h3>
-            <div class="title">CEO & Founder - தமிழன் எனர்ஜி சிஸ்டம்ஸ்</div>
-            <p>"தொழில்நுட்பம் எளிமையானதாகவும், அனைவரையும் சென்றடையும் வகையிலும் இருக்க வேண்டும் என்ற லட்சியத்துடன் எங்கள் தயாரிப்புகள் உருவாக்கப்படுகின்றன."</p>
+            <h3 data-ta="சி. பாலசுப்பிரமணியம் B.E" data-en="C. Balasubramanian B.E">சி. பாலசுப்பிரமணியம் B.E</h3>
+            <div class="title" data-ta="CEO & Founder - தமிழன் எனர்ஜி சிஸ்டம்ஸ்" data-en="CEO & Founder - Thamizhan Energy Systems">CEO & Founder - தமிழன் எனர்ஜி சிஸ்டம்ஸ்</div>
+            <p data-ta='"தொழில்நுட்பம் எளிமையானதாகவும், அனைவரையும் சென்றடையும் வகையிலும் இருக்க வேண்டும் என்ற லட்சியத்துடன் எங்கள் தயாரிப்புகள் உருவாக்கப்படுகின்றன."' data-en='"Our products are created with the ambition that technology should be simple and accessible to everyone.'">"தொழில்நுட்பம் எளிமையானதாகவும், அனைவரையும் சென்றடையும் வகையிலும் இருக்க வேண்டும் என்ற லட்சியத்துடன் எங்கள் தயாரிப்புகள் உருவாக்கப்படுகின்றன."</p>
         </div>
 
     </div>
 
     <footer>
-        <p>&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
+        <p data-ta="&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை." data-en="&copy; 2026 Thamizhan Energy Systems. All Rights Reserved.">&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
     </footer>
+
+    <script>
+        let currentLang = 'ta';
+
+        function toggleLanguage() {
+            if (currentLang === 'ta') {
+                currentLang = 'en';
+                document.getElementById('langToggleBtn').innerText = 'தமிழ்';
+                document.getElementById('htmlRoot').setAttribute('lang', 'en');
+            } else {
+                currentLang = 'ta';
+                document.getElementById('langToggleBtn').innerText = 'English';
+                document.getElementById('htmlRoot').setAttribute('lang', 'ta');
+            }
+
+            const elements = document.querySelectorAll('[data-ta]');
+            elements.forEach(el => {
+                if (currentLang === 'en') {
+                    if(el.getAttribute('data-en')) el.innerText = el.getAttribute('data-en');
+                } else {
+                    if(el.getAttribute('data-ta')) el.innerText = el.getAttribute('data-ta');
+                }
+            });
+        }
+    </script>
 
 </body>
 </html>
