@@ -344,7 +344,6 @@
             }
         }
 
-        // Delete Order Function
         function deleteOrder(index) {
             if(confirm("இந்த ஆர்டரை நீக்க விரும்புகிறீர்களா?")) {
                 let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
@@ -398,7 +397,7 @@
             }
         }
 
-        // Updated Shipping Label Printing format as requested
+        // Updated Shipping Label Printing with Customer Phone Number
         function printShippingLabel(index) {
             let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
             let ord = allOrders[index];
@@ -420,9 +419,9 @@
 
                     <div style="margin-bottom: 15px; font-size: 14px;">
                         <b style="color: #555; text-transform: uppercase; font-size: 11px;">TO (பெறுநர் / கஸ்டமர்):</b><br>
-                        <b>பெயர்:</b> ${ord.email}<br>
+                        <b>கஸ்டமர் பெயர் (Email):</b> ${ord.email}<br>
                         <b>ஆர்டர் ஐடி:</b> <span style="font-size: 15px; font-weight: bold;">${ord.orderId}</span><br>
-                        <b>போன் நம்பர்:</b> N/A<br>
+                        <b>போன் நம்பர்:</b> <span style="font-size: 14px; font-weight: bold;">${ord.phone || 'N/A'}</span><br>
                         <b>டெலிவரி முகவரி:</b><br>
                         <div style="background: #f9f9f9; padding: 8px; border: 1px solid #ccc; margin-top: 4px; font-weight: bold; font-size: 14px;">
                             ${ord.address}
@@ -535,7 +534,7 @@
             products[index].name = document.getElementById(`name_${index}`).value.trim();
             products[index].price = parseInt(document.getElementById(`price_${index}`).value);
             products[index].discount = parseInt(document.getElementById(`discount_${index}`).value);
-            products[index].stock = parseInt(document.getElementById(`stock_${index}`.value));
+            products[index].stock = parseInt(document.getElementById(`stock_${index}`).value);
             products[index].offerTag = document.getElementById(`offerTag_${index}`).value.trim();
             
             let specsText = document.getElementById(`specs_${index}`).value.trim();
