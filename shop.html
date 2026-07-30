@@ -345,4 +345,53 @@
             if (user) { openProfileModal(); } else { openLoginModal(); }
         }
 
-        function openLoginModal() { document.getElementById('loginModal').
+        function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
+        function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+        
+        function openProfileModal() {
+            let user = firebase.auth().currentUser;
+            if (user) {
+                let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || {name:'User', phone:'N/A', address:'N/A'};
+                let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
+                let userOrders = allOrders.filter(o => o.email === user.email);
+
+                let ordersHTML = userOrders.length === 0 ? `<p style="color:#888;">${currentLang === 'ta' ? 'ஆர்டர்கள் இல்லை.' : 'No orders.'}</p>` : userOrders.map(ord => {
+                    let trackingInfo = ord.trackingId ? 
+                        `<p style="margin-top: 5px;"><b>${currentLang === 'ta' ? 'டிராக்கிங் ஐடி' : 'Tracking ID'}:</b> <span style="color:#0f2027; background:#e0f7fa; padding:2px 6px; border-radius:4px;">${ord.trackingId}</span></p>
+                         <p style="margin-top: 3px;"><b>${currentLang === 'ta' ? 'கொரியர் லிங்க்' : 'Courier Link'}:</b> <a href="${ord.trackingUrl}" target="_blank" style="color:#2980b9; text-decoration:underline; font-weight:600;">${currentLang === 'ta' ? 'டிரா செய்ய கிளிக் செய்க' : 'Click to Track'} ↗</a></p>` : 
+                        `<p style="margin-top: 5px; color:#e67e22; font-size:12px;"><b>${currentLang === 'ta' ? 'டிராக்கிங் நிலை' : 'Tracking Status'}:</b> ${currentLang === 'ta' ? 'விரைவில் கொரியர் செய்யப்படும்' : 'Will be shipped soon'}</p>`;
+
+                    return `
+                        <div class="order-history-box" style="border-left: 4px solid #2980b9; margin-bottom: 12px; background: #fff; padding: 10px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);">
+                            <p><b>${currentLang === 'ta' ? 'ஆர்டர் ஐடி' : 'Order ID'}:</b> <span style="color:#2980b9;">${ord.orderId}</span></p>
+                            <p><b>${currentLang === 'ta' ? 'பொருட்கள்' : 'Items'}:</b> ${ord.items}</p>
+                            <p><b>${currentLang === 'ta' ? 'தொகை' : 'Amount'}:</b> ${ord.amount}</p>
+                            <p><b>${currentLang === 'ta' ? 'முகவரி' : 'Address'}:</b> ${ord.address}</p>
+                            <p><b>${currentLang === 'ta' ? 'ஆர்டர் நிலை' : 'Order Status'}:</b> <span style="color:#2e7d32; font-weight:bold;">${ord.status}</span></p>
+                            ${trackingInfo}
+                        </div>
+                    `;
+                }).join('');
+
+                document.getElementById('profileDetails').innerHTML = `
+                    <p><b>${currentLang === 'ta' ? 'பெயர்' : 'Name'}:</b> ${userExtra.name}</p>
+                    <p><b>${currentLang === 'ta' ? 'மின்னஞ்சல்' : 'Email'}:</b> ${user.email}</p>
+                    <p><b>${currentLang === 'ta' ? 'போன்' : 'Phone'}:</b> ${userExtra.phone}</p>
+                    <p><b>${currentLang === 'ta' ? 'முகவரி' : 'Address'}:</b> ${userExtra.address}</p>
+                    <hr style="margin:12px 0; border:0; border-top:1px solid #ddd;">
+                    <h4 style="margin-bottom:8px; color:#0f2027;">${currentLang === 'ta' ? 'எனது ஆர்டர்கள் & டிராக்கிங்' : 'My Orders & Tracking'}</h4>
+                    ${ordersHTML}
+                `;
+            }
+            document.getElementById('profileModal').style.display = 'flex';
+        }
+        function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
+
+        function openCartModal() {
+            let user = firebase.auth().currentUser;
+            if(!user) { alert(currentLang === 'ta' ? 'தயவுசெய்து லாகின் செய்யவும்!' : 'Please login!'); openLoginModal(); return; }
+            let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || {address: currentLang === 'ta' ? 'முகவரி இல்லை' : 'No Address'};
+            document.getElementById('displaySavedAddress').innerText = userExtra.address;
+            document.getElementById('cartModal').style.display = 'flex';
+        }
+        function closeCartModal() { document.getElementById('cartModal').style
