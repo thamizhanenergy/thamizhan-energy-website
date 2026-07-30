@@ -127,7 +127,7 @@
                     </tr>
                 </thead>
                 <tbody id="adminOrdersTableBody">
-                    <tr><td colspan="5" style="text-align:center; color:#888;">ஆர்டர்கள் எதுவும் இல்லை.</td></tr>
+                    <tr><td colspan="5" style="text-align:center; color:#888;">ஆர்டர்கள் எதுவும் இல்லை. (ஷாப் பக்கத்தில் ஆர்டர் செய்யவும்)</td></tr>
                 </tbody>
             </table>
         </div>
@@ -263,7 +263,8 @@
         function loadAdminOrdersTable() {
             let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
             let tableBody = document.getElementById('adminOrdersTableBody');
-            if(allOrders.length === 0) {
+            
+            if(!allOrders || allOrders.length === 0) {
                 tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#888;">ஆர்டர்கள் எதுவும் இல்லை.</td></tr>`;
                 return;
             }
