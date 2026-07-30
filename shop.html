@@ -8,12 +8,14 @@
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script>
       const firebaseConfig = {
         apiKey: "AIzaSyAJwgnJhXAiqNGpnaN0vWOevBcofYR9uxE",
         authDomain: "thamizhan-energy-systems.firebaseapp.com",
+        databaseURL: "https://thamizhan-energy-systems-default-rtdb.firebaseio.com",
         projectId: "thamizhan-energy-systems",
         storageBucket: "thamizhan-energy-systems.firebasestorage.app",
         messagingSenderId: "727924977035",
@@ -21,6 +23,7 @@
         measurementId: "G-0MP2C3NZWK"
       };
       if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+      const database = firebase.database();
     </script>
 
     <style>
@@ -246,14 +249,22 @@
             });
         });
 
+        // Load Products from Firebase Realtime Database
         function loadShopProducts() {
-            let products = JSON.parse(localStorage.getItem('adminProducts')) || [
-                {name: "AWLCP 1.0", price: 3999, discount: 3499, stock: 15, offerTag: "Save ₹500", img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
-                {name: "AWLCW 1.0", price: 5499, discount: 4999, stock: 10, offerTag: "WiFi Model", img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
-                {name: "AWLCWS 1.0", price: 7499, discount: 6999, stock: 8, offerTag: "Solar + WiFi", img: "3.png", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
-            ];
-
-            renderProducts(products);
+            database.ref('products').on('value', (snapshot) => {
+                let productsData = snapshot.val();
+                let products = [];
+                if (productsData) {
+                    products = Object.keys(productsData).map(key => ({ id: key, ...productsData[key] }));
+                } else {
+                    products = [
+                        {name: "AWLCP 1.0", price: 3999, discount: 3499, stock: 15, offerTag: "Save ₹500", img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
+                        {name: "AWLCW 1.0", price: 5499, discount: 4999, stock: 10, offerTag: "WiFi Model", img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
+                        {name: "AWLCWS 1.0", price: 7499, discount: 6999, stock: 8, offerTag: "Solar + WiFi", img: "3.png", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
+                    ];
+                }
+                renderProducts(products);
+            });
         }
 
         function renderProducts(products) {
@@ -323,18 +334,22 @@
         }
 
         function addToCart(name, price) {
-            let products = JSON.parse(localStorage.getItem('adminProducts')) || [];
-            let prod = products.find(p => p.name === name);
-            if (prod && prod.stock <= 0) {
-                alert(currentLang === 'ta' ? 'மன்னிக்கவும்! இந்தப் பொருள் தற்போது ஸ்டாக் இல்லை.' : 'Sorry! This product is out of stock.');
-                return;
-            }
+            database.ref('products').once('value', (snapshot) => {
+                let productsData = snapshot.val();
+                let products = productsData ? Object.values(productsData) : [];
+                let prod = products.find(p => p.name === name);
+                
+                if (prod && prod.stock <= 0) {
+                    alert(currentLang === 'ta' ? 'மன்னிக்கவும்! இந்தப் பொருள் தற்போது ஸ்டாக் இல்லை.' : 'Sorry! This product is out of stock.');
+                    return;
+                }
 
-            let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
-            cart.push({name: name, price: price});
-            localStorage.setItem('cartItems', JSON.stringify(cart));
-            updateCartDisplay();
-            alert(name + (currentLang === 'ta' ? ' கார்ட்டில் சேர்க்கப்பட்டது!' : ' added to cart!'));
+                let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+                cart.push({name: name, price: price});
+                localStorage.setItem('cartItems', JSON.stringify(cart));
+                updateCartDisplay();
+                alert(name + (currentLang === 'ta' ? ' கார்ட்டில் சேர்க்கப்பட்டது!' : ' added to cart!'));
+            });
         }
 
         function removeFromCart(index) {
@@ -488,14 +503,20 @@
             let orderId = 'TES-COD-' + Math.floor(100000 + Math.random() * 900000);
             let itemNames = cart.map(i => i.name).join(', ');
 
-            let products = JSON.parse(localStorage.getItem('adminProducts')) || [];
-            cart.forEach(item => {
-                let prod = products.find(p => p.name === item.name);
-                if (prod) {
-                    prod.stock = Math.max(0, prod.stock - 1);
+            database.ref('products').once('value', (snapshot) => {
+                let productsData = snapshot.val();
+                if (productsData) {
+                    Object.keys(productsData).forEach(key => {
+                        let prod = productsData[key];
+                        cart.forEach(item => {
+                            if (prod.name === item.name) {
+                                let newStock = Math.max(0, prod.stock - 1);
+                                database.ref('products/' + key).update({ stock: newStock });
+                            }
+                        });
+                    });
                 }
             });
-            localStorage.setItem('adminProducts', JSON.stringify(products));
 
             let orderDetails = { 
                 orderId: orderId, 
@@ -514,7 +535,6 @@
             
             localStorage.removeItem('cartItems');
             updateCartDisplay();
-            loadShopProducts();
             closeCartModal();
             alert((currentLang === 'ta' ? 'கேஷ் ஆன் டெலிவரி ஆர்டர் வெற்றிகரமாக உறுதி செய்யப்பட்டது! ஆர்டர் ஐடி: ' : 'COD Order Confirmed Successfully! Order ID: ') + orderId);
             openProfileModal();
@@ -527,62 +547,67 @@
             let user = firebase.auth().currentUser;
             let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email));
 
-            let products = JSON.parse(localStorage.getItem('adminProducts')) || [];
-            for (let item of cart) {
-                let prod = products.find(p => p.name === item.name);
-                if (prod && prod.stock <= 0) {
-                    alert(`மன்னிக்கவும்! '${item.name}' தற்போது ஸ்டாக் இல்லை.`);
-                    return;
+            database.ref('products').once('value', (snapshot) => {
+                let productsData = snapshot.val();
+                let products = productsData ? Object.values(productsData) : [];
+                for (let item of cart) {
+                    let prod = products.find(p => p.name === item.name);
+                    if (prod && prod.stock <= 0) {
+                        alert(`மன்னிக்கவும்! '${item.name}' தற்போது ஸ்டாக் இல்லை.`);
+                        return;
+                    }
                 }
-            }
 
-            let cartTotalText = document.getElementById('cartTotalPrice').innerText.replace('₹', '').replace(',', '');
-            let orderId = 'TES-' + Math.floor(100000 + Math.random() * 900000);
-            let itemNames = cart.map(i => i.name).join(', ');
+                let cartTotalText = document.getElementById('cartTotalPrice').innerText.replace('₹', '').replace(',', '');
+                let orderId = 'TES-' + Math.floor(100000 + Math.random() * 900000);
+                let itemNames = cart.map(i => i.name).join(', ');
 
-            var options = {
-                "key": RAZORPAY_KEY_ID, 
-                "amount": parseInt(cartTotalText) * 100, 
-                "currency": "INR",
-                "name": "தமிழன் எனர்ஜி சிஸ்டம்ஸ்",
-                "description": itemNames,
-                "handler": function (response){
-                    let products = JSON.parse(localStorage.getItem('adminProducts')) || [];
-                    cart.forEach(item => {
-                        let prod = products.find(p => p.name === item.name);
-                        if (prod) {
-                            prod.stock = Math.max(0, prod.stock - 1);
+                var options = {
+                    "key": RAZORPAY_KEY_ID, 
+                    "amount": parseInt(cartTotalText) * 100, 
+                    "currency": "INR",
+                    "name": "தமிழன் எனர்ஜி சிஸ்டம்ஸ்",
+                    "description": itemNames,
+                    "handler": function (response){
+                        if (productsData) {
+                            Object.keys(productsData).forEach(key => {
+                                let prod = productsData[key];
+                                cart.forEach(item => {
+                                    if (prod.name === item.name) {
+                                        let newStock = Math.max(0, prod.stock - 1);
+                                        database.ref('products/' + key).update({ stock: newStock });
+                                    }
+                                });
+                            });
                         }
-                    });
-                    localStorage.setItem('adminProducts', JSON.stringify(products));
 
-                    let orderDetails = { 
-                        orderId: orderId, 
-                        email: user.email, 
-                        phone: userExtra.phone || 'N/A',
-                        items: itemNames, 
-                        address: userExtra.address, 
-                        amount: "₹" + cartTotalText, 
-                        status: currentLang === 'ta' ? 'ஆர்டர் உறுதி செய்யப்பட்டது (Paid)' : 'Order Confirmed (Paid)', 
-                        trackingId: '', 
-                        trackingUrl: '' 
-                    };
-                    let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
-                    allOrders.push(orderDetails);
-                    localStorage.setItem('allOrders', JSON.stringify(allOrders));
-                    
-                    localStorage.removeItem('cartItems');
-                    updateCartDisplay();
-                    loadShopProducts();
-                    closeCartModal();
-                    alert((currentLang === 'ta' ? 'பணம் செலுத்தப்பட்டது! ஆர்டர் ஐடி: ' : 'Payment Successful! Order ID: ') + orderId);
-                    openProfileModal();
-                },
-                "prefill": { "name": userExtra.name, "email": user.email, "contact": userExtra.phone },
-                "theme": { "color": "#00ff88" }
-            };
-            var rzp1 = new Razorpay(options);
-            rzp1.open();
+                        let orderDetails = { 
+                            orderId: orderId, 
+                            email: user.email, 
+                            phone: userExtra.phone || 'N/A',
+                            items: itemNames, 
+                            address: userExtra.address, 
+                            amount: "₹" + cartTotalText, 
+                            status: currentLang === 'ta' ? 'ஆர்டர் உறுதி செய்யப்பட்டது (Paid)' : 'Order Confirmed (Paid)', 
+                            trackingId: '', 
+                            trackingUrl: '' 
+                        };
+                        let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
+                        allOrders.push(orderDetails);
+                        localStorage.setItem('allOrders', JSON.stringify(allOrders));
+                        
+                        localStorage.removeItem('cartItems');
+                        updateCartDisplay();
+                        closeCartModal();
+                        alert((currentLang === 'ta' ? 'பணம் செலுத்தப்பட்டது! ஆர்டர் ஐடி: ' : 'Payment Successful! Order ID: ') + orderId);
+                        openProfileModal();
+                    },
+                    "prefill": { "name": userExtra.name, "email": user.email, "contact": userExtra.phone },
+                    "theme": { "color": "#00ff88" }
+                };
+                var rzp1 = new Razorpay(options);
+                rzp1.open();
+            });
         }
     </script>
 </body>
