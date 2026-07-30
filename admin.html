@@ -172,7 +172,7 @@
         </div>
 
         <div class="panel-box">
-            <h3>➕ புதிய தயாரிப்பைச் சேர்க்க (Add New Product - Cloud Sync)</h3>
+            <h3>➕ புதிய தயாரிப்பைச் சேர்க்க (Add New Product)</h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 10px;">
                 <input type="text" id="newProdName" placeholder="தயாரிப்பு பெயர் (Model Name)">
                 <input type="number" id="newProdPrice" placeholder="அசல் விலை (Original Price ₹)">
@@ -182,7 +182,7 @@
                 <input type="text" id="newProdImg" placeholder="இமேஜ் லிங்க் (எ.கா: 3.png)">
             </div>
             <textarea id="newProdSpecs" rows="2" placeholder="ஸ்பெசிஃபிகேஷன்ஸ் (கமா மூலம் பிரிக்கவும்)"></textarea>
-            <button class="btn" onclick="addNewProduct()">கிளவுட்டில் புதிய தயாரிப்பைச் சேர்க்கவும்</button>
+            <button class="btn" onclick="addNewProduct()">புதிய தயாரிப்பைச் சேர்க்கவும்</button>
         </div>
 
         <div class="panel-box">
@@ -431,6 +431,15 @@
             printSec.style.display = 'none';
         }
 
+        // Hybrid Sync Functions for Products (Firebase Cloud + LocalStorage Backup)
+        function getDefaultProducts() {
+            return [
+                {id: "p1", name: "AWLCP 1.0", price: 3999, discount: 3499, stock: 15, offerTag: "Save ₹500", img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
+                {id: "p2", name: "AWLCW 1.0", price: 5499, discount: 4999, stock: 10, offerTag: "WiFi Model", img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
+                {id: "p3", name: "AWLCWS 1.0", price: 7499, discount: 6999, stock: 8, offerTag: "Solar + WiFi", img: "3.png", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
+            ];
+        }
+
         function loadAdminProductsTable() {
             database.ref('products').on('value', (snapshot) => {
                 let productsData = snapshot.val();
@@ -438,13 +447,12 @@
                 if (productsData) {
                     products = Object.keys(productsData).map(key => ({ id: key, ...productsData[key] }));
                 } else {
-                    products = [
-                        {name: "AWLCP 1.0", price: 3999, discount: 3499, stock: 15, offerTag: "Save ₹500", img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
-                        {name: "AWLCW 1.0", price: 5499, discount: 4999, stock: 10, offerTag: "WiFi Model", img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
-                        {name: "AWLCWS 1.0", price: 7499, discount: 6999, stock: 8, offerTag: "Solar + WiFi", img: "3.png", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
-                    ];
+                    products = getDefaultProducts();
                     database.ref('products').set(products);
                 }
+                
+                // Save backup to localStorage for offline safety
+                localStorage.setItem('adminProducts', JSON.stringify(products));
 
                 let html = '';
                 products.forEach((p, index) => {
@@ -492,16 +500,22 @@
                 specs: specs ? specs.split(',').map(s => s.trim()) : ["உத்தரவாதம் உள்ளது"]
             };
 
+            // Push to Firebase and LocalStorage simultaneously
             database.ref('products').push(newProd).then(() => {
-                alert("புதிய தயாரிப்பு கிளவுட்டில் வெற்றிகரமாக சேர்க்கப்பட்டது!");
+                let currentLocal = JSON.parse(localStorage.getItem('adminProducts')) || [];
+                currentLocal.push(newProd);
+                localStorage.setItem('adminProducts', JSON.stringify(currentLocal));
+
+                alert("புதிய தயாரிப்பு கிளவுட்டில் மற்றும் இன்வென்டரியில் வெற்றிகரமாக சேர்க்கப்பட்டது!");
                 document.getElementById('newProdName').value = '';
                 document.getElementById('newProdPrice').value = '';
                 document.getElementById('newProdDiscount').value = '';
                 document.getElementById('newProdStock').value = '';
                 document.getElementById('newProdOffer').value = '';
+                document.getElementById('newProdImg').value = '';
                 document.getElementById('newProdSpecs').value = '';
             }).catch((error) => {
-                alert("சேர்ப்பதில் பிழை: " + error.message);
+                alert("கிளவுடில் சேர்ப்பதில் பிழை: " + error.message);
             });
         }
 
