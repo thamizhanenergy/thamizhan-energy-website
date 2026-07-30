@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>அட்மின் ப்ராடக்ட் மேனேஜ்மென்ட் | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
+    <title>அட்மின் ப்ராடக்ட் & ஆர்டர் மேனேஜ்மென்ட் | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -62,7 +62,7 @@
 <body>
 
     <header>
-        <div class="brand-title"><h1>அட்மின் ப்ராடக்ட் & இன்வென்டரி மேனேஜ்மென்ட்</h1></div>
+        <div class="brand-title"><h1>அட்மின் ப்ராடக்ட் & ஆர்டர் மேனேஜ்மென்ட்</h1></div>
         <div><a href="shop.html" class="nav-link">🛒 ஆன்லைன் ஸ்டோர் செல்ல</a></div>
     </header>
 
@@ -102,8 +102,27 @@
                         <th>மாத வருமானம் (Monthly Revenue)</th>
                     </tr>
                 </thead>
-                <tbody id="monthlySalesTableBody">
-                    </tbody>
+                <tbody id="monthlySalesTableBody"></tbody>
+            </table>
+        </div>
+
+        <div class="panel-box">
+            <h3>📦 கஸ்டமர் ஆர்டர்கள் & மேனுவல் டிராக்கிங் மேனேஜ்மென்ட்</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ஆர்டர் ஐடி & விவரம்</th>
+                        <th>வாடிக்கையாளர் ஈமெயில்</th>
+                        <th>முகவரி & தொகை</th>
+                        <th>ஆர்டர் நிலை (Status)</th>
+                        <th>டிராக்கிங் ஐடி (Tracking ID)</th>
+                        <th>டிராக்கிங் யூஆர்எல் (Tracking URL)</th>
+                        <th>செயல் (Action)</th>
+                    </tr>
+                </thead>
+                <tbody id="adminOrdersTableBody">
+                    <tr><td colspan="7" style="text-align:center; color:#888;">ஆர்டர்கள் எதுவும் இல்லை.</td></tr>
+                </tbody>
             </table>
         </div>
 
@@ -119,8 +138,7 @@
                         <th>நிலை (Status)</th>
                     </tr>
                 </thead>
-                <tbody id="iotDevicesTableBody">
-                    </tbody>
+                <tbody id="iotDevicesTableBody"></tbody>
             </table>
         </div>
 
@@ -193,12 +211,12 @@
             loadAdminProductsTable();
             loadTurnoverAndMonthlySales();
             loadIoTDevicesList();
+            loadAdminOrdersTable();
         }
 
         function loadTurnoverAndMonthlySales() {
             let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
             
-            // Financial Year 2026-2027 Months breakdown structure
             let months = [
                 "ஏப்ரல் 2026", "மே 2026", "ஜூன் 2026", "ஜூலை 2026", "ஆகஸ்ட் 2026", "செப்டம்பர் 2026",
                 "அக்டோபர் 2026", "நவம்பர் 2026", "டிசம்பர் 2026", "ஜனவரி 2027", "பிப்ரவரி 2027", "மார்ச் 2027"
@@ -214,8 +232,7 @@
                 let amt = parseInt(ord.amount.replace('₹','').replace(',','')) || 0;
                 totalTurnover += amt;
                 
-                // For demo/simulation, distribute orders or attribute to current month
-                let targetMonth = "ஜூலை 2026"; // Current simulated context month
+                let targetMonth = "ஜூலை 2026"; 
                 monthlyData[targetMonth].revenue += amt;
                 monthlyData[targetMonth].units += 1;
                 currentMonthRev = monthlyData[targetMonth].revenue;
@@ -237,8 +254,51 @@
             document.getElementById('monthlySalesTableBody').innerHTML = tableHTML;
         }
 
+        function loadAdminOrdersTable() {
+            let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
+            let tableBody = document.getElementById('adminOrdersTableBody');
+            if(allOrders.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#888;">ஆர்டர்கள் எதுவும் இல்லை.</td></tr>`;
+                return;
+            }
+
+            let html = '';
+            allOrders.forEach((ord, index) => {
+                let trackingIdVal = ord.trackingId || '';
+                let trackingUrlVal = ord.trackingUrl || '';
+                
+                html += `
+                    <tr>
+                        <td><b>${ord.orderId}</b><br><small style="color:#666;">${ord.items}</small></td>
+                        <td>${ord.email}</td>
+                        <td>${ord.address}<br><b>${ord.amount}</b></td>
+                        <td><span style="color:#2e7d32; font-weight:bold;">${ord.status}</span></td>
+                        <td><input type="text" id="trackId_${index}" value="${trackingIdVal}" placeholder="TRK98421"></td>
+                        <td><input type="text" id="trackUrl_${index}" value="${trackingUrlVal}" placeholder="https://courier.com/..."></td>
+                        <td><button class="btn" style="padding:5px 10px;" onclick="saveTracking(${index})">சேமி</button></td>
+                    </tr>
+                `;
+            });
+            tableBody.innerHTML = html;
+        }
+
+        function saveTracking(index) {
+            let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
+            if(allOrders[index]) {
+                let tId = document.getElementById(`trackId_${index}`).value.trim();
+                let tUrl = document.getElementById(`trackUrl_${index}`).value.trim();
+
+                allOrders[index].trackingId = tId;
+                allOrders[index].trackingUrl = tUrl;
+                allOrders[index].status = tId ? 'பொருள் அனுப்பப்பட்டது (Dispatched)' : 'ஆர்டர் உறுதி செய்யப்பட்டது (Confirmed)';
+
+                localStorage.setItem('allOrders', JSON.stringify(allOrders));
+                alert("டிராக்கிங் விபரங்கள் வெற்றிகரமாக சேமிக்கப்பட்டன!");
+                loadAdminOrdersTable();
+            }
+        }
+
         function loadIoTDevicesList() {
-            // Simulated registered IoT devices linked by customers
             let iotDevices = JSON.parse(localStorage.getItem('adminIoTDevices')) || [
                 { deviceId: "TES-IoT-9011", model: "AWLCW 1.0 (WiFi)", ownerName: "ரமேஷ் குமார்", ownerEmail: "ramesh@gmail.com", status: "Online (Active)" },
                 { deviceId: "TES-IoT-9012", model: "AWLCWS 1.0 (Solar)", ownerName: "புவனேேஷ்", ownerEmail: "bhuvan@gmail.com", status: "Online (Active)" },
@@ -298,7 +358,7 @@
         function addNewProduct() {
             let name = document.getElementById('newProdName').value.trim();
             let price = document.getElementById('newProdPrice').value.trim();
-            let discount = document.getElementById('newProdDiscount').value.trim();
+            let discount = document.getElementById('newProdDiscount.value').trim();
             let stock = document.getElementById('newProdStock').value.trim();
             let offerTag = document.getElementById('newProdOffer').value.trim();
             let img = document.getElementById('newProdImg').value.trim() || '3.png';
