@@ -59,7 +59,6 @@
         .product-img-box { width: 100%; height: 160px; background: #f9f9f9; border-radius: 8px; overflow: hidden; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; border: 1px solid #eee; position: relative; }
         .product-img { max-width: 100%; max-height: 100%; object-fit: contain; }
         
-        /* Stylish Badge on Top Right Corner of Image */
         .offer-tag { position: absolute; top: 8px; right: 8px; background: linear-gradient(135deg, #ff416c, #ff4b2b); color: white; padding: 5px 10px; font-size: 11px; font-weight: 700; border-radius: 20px; box-shadow: 0 3px 6px rgba(255, 65, 108, 0.4); z-index: 5; text-transform: uppercase; letter-spacing: 0.5px; }
         
         .model-badge { display: inline-block; background: #e0f7fa; color: #006064; padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 600; margin-bottom: 12px; }
@@ -85,7 +84,10 @@
         .cart-items-list li { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px; background: #f9f9f9; padding: 6px 10px; border-radius: 5px; }
         .remove-cart-item { background: #ff5252; color: white; border: none; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; }
         .cart-total { font-weight: 700; font-size: 16px; margin-bottom: 15px; display: flex; justify-content: space-between; color: #2c3e50; }
-        .pay-btn { background: #528FF0; color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; }
+        
+        .pay-btn { background: #528FF0; color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; margin-bottom: 8px; }
+        .cod-btn { background: #ff9800; color: white; width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; }
+
         .logout-btn { background: #f44336; color: white; margin-top: 15px; width: 100%; padding: 10px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; }
         .order-history-box { background: #f8f9fa; border: 1px solid #e0e0e0; padding: 12px; border-radius: 8px; margin-top: 12px; font-size: 13px; }
 
@@ -172,10 +174,11 @@
             <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ddd;">
                 <p style="font-size: 12px; font-weight: 700; color: #0f2027; margin-bottom: 5px;" data-ta="டெலிவரி முகவரி சரிபார்ப்பு:" data-en="Delivery Address Check:">டெலிவரி முகவரி சரிபார்ப்பு:</p>
                 <p id="displaySavedAddress" style="font-size: 12px; color: #555; margin-bottom: 8px;"></p>
-                <button class="btn" style="padding: 6px; font-size: 11px; background:#4CAF50; color:white;" onclick="alert(currentLang === 'ta' ? 'முகவரி உறுதிப்படுத்தப்பட்டது!' : 'Address confirmed!')" data-ta="✔️ இதுவே சரி" data-en="✔️ Correct">✔️ இதுவே சரி</button>
+                <button class="btn" id="addressCheckBtn" style="padding: 6px; font-size: 11px; background:#4CAF50; color:white;" onclick="handleAddressAction()">✔️ இது சரியானது</button>
             </div>
 
             <button class="pay-btn" onclick="proceedToRazorpay()" data-ta="Razorpay மூலம் பணம் செலுத்த" data-en="Pay Securely via Razorpay">Razorpay மூலம் பணம் செலுத்த</button>
+            <button class="cod-btn" onclick="proceedToCOD()" data-ta="கேஷ் ஆன் டெலிவரி (COD)" data-en="Cash on Delivery (COD)">கேஷ் ஆன் டெலிவரி (COD)</button>
         </div>
     </div>
 
@@ -187,9 +190,10 @@
 
         function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('active'); }
 
-        let currentLang = 'ta';
+        let currentLang = localStorage.getItem('siteLang') || 'ta';
         function toggleLanguage() {
             currentLang = (currentLang === 'ta') ? 'en' : 'ta';
+            localStorage.setItem('siteLang', currentLang);
             document.getElementById('sidebarLangText').innerText = (currentLang === 'en') ? '🌐 தமிழில் மாற்ற' : '🌐 Switch to English';
             document.getElementById('htmlRoot').setAttribute('lang', currentLang);
 
@@ -269,7 +273,6 @@
             document.getElementById('dynamicProductGrid').innerHTML = gridHTML;
         }
 
-        // Search Filter Function
         function filterProducts() {
             let input = document.getElementById('productSearchInput').value.toLowerCase();
             let cards = document.querySelectorAll('.product-card');
@@ -387,13 +390,39 @@
         }
         function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
 
+        // Dynamic Address Check and UI Handling
         function openCartModal() {
             let user = firebase.auth().currentUser;
             if(!user) { alert(currentLang === 'ta' ? 'தயவுசெய்து லாகின் செய்யவும்!' : 'Please login!'); openLoginModal(); return; }
-            let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || {address: currentLang === 'ta' ? 'முகவரி இல்லை' : 'No Address'};
-            document.getElementById('displaySavedAddress').innerText = userExtra.address;
+            
+            let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || null;
+            let addressBox = document.getElementById('displaySavedAddress');
+            let addressBtn = document.getElementById('addressCheckBtn');
+
+            if (userExtra && userExtra.address) {
+                addressBox.innerText = userExtra.address;
+                addressBtn.innerText = currentLang === 'ta' ? '✔️ இது சரியானது' : '✔️ Correct';
+                addressBtn.style.background = '#4CAF50';
+            } else {
+                addressBox.innerText = currentLang === 'ta' ? 'முகவரி பதிவு செய்யப்படவில்லை!' : 'Address not registered!';
+                addressBtn.innerText = currentLang === 'ta' ? '➕ முகவரியைச் சேர்க்க (Add Address)' : '➕ Add Address';
+                addressBtn.style.background = '#ff9800';
+            }
+
             document.getElementById('cartModal').style.display = 'flex';
         }
+
+        function handleAddressAction() {
+            let user = firebase.auth().currentUser;
+            let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || null;
+            if (userExtra && userExtra.address) {
+                alert(currentLang === 'ta' ? 'முகவரி உறுதிப்படுத்தப்பட்டது!' : 'Address confirmed!');
+            } else {
+                closeCartModal();
+                document.getElementById('detailsModal').style.display = 'flex';
+            }
+        }
+
         function closeCartModal() { document.getElementById('cartModal').style.display = 'none'; }
 
         function signInWithGoogle() {
@@ -404,10 +433,68 @@
             firebase.auth().signOut().then(() => { location.reload(); });
         }
 
+        // Cash on Delivery (COD) Option Handler
+        function proceedToCOD() {
+            let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+            if(cart.length === 0) { alert(currentLang === 'ta' ? 'கார்ட் காலியாக உள்ளது!' : 'Cart is empty!'); return; }
+            
+            let user = firebase.auth().currentUser;
+            let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email));
+            if(!userExtra || !userExtra.address) {
+                alert(currentLang === 'ta' ? 'தயவுசெய்து உங்கள் முகவரியைச் சேர்க்கவும்!' : 'Please add your address!');
+                closeCartModal();
+                document.getElementById('detailsModal').style.display = 'flex';
+                return;
+            }
+
+            let cartTotalText = document.getElementById('cartTotalPrice').innerText.replace('₹', '').replace(',', '');
+            let orderId = 'TES-COD-' + Math.floor(100000 + Math.random() * 900000);
+            let itemNames = cart.map(i => i.name).join(', ');
+
+            let products = JSON.parse(localStorage.getItem('adminProducts')) || [];
+            cart.forEach(item => {
+                let prod = products.find(p => p.name === item.name);
+                if (prod) {
+                    prod.stock = Math.max(0, prod.stock - 1);
+                }
+            });
+            localStorage.setItem('adminProducts', JSON.stringify(products));
+
+            let orderDetails = { 
+                orderId: orderId, 
+                email: user.email, 
+                items: itemNames, 
+                address: userExtra.address, 
+                amount: "₹" + cartTotalText, 
+                status: currentLang === 'ta' ? 'ஆர்டர் உறுதி செய்யப்பட்டது (COD)' : 'Order Confirmed (COD)', 
+                trackingId: '', 
+                trackingUrl: '' 
+            };
+            let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
+            allOrders.push(orderDetails);
+            localStorage.setItem('allOrders', JSON.stringify(allOrders));
+            
+            localStorage.removeItem('cartItems');
+            updateCartDisplay();
+            loadShopProducts();
+            closeCartModal();
+            alert((currentLang === 'ta' ? 'கேஷ் ஆன் டெலிவரி ஆர்டர் வெற்றிகரமாக உறுதி செய்யப்பட்டது! ஆர்டர் ஐடி: ' : 'COD Order Confirmed Successfully! Order ID: ') + orderId);
+            openProfileModal();
+        }
+
         function proceedToRazorpay() {
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             if(cart.length === 0) { alert(currentLang === 'ta' ? 'கார்ட் காலியாக உள்ளது!' : 'Cart is empty!'); return; }
             
+            let user = firebase.auth().currentUser;
+            let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email));
+            if(!userExtra || !userExtra.address) {
+                alert(currentLang === 'ta' ? 'தயவுசெய்து உங்கள் முகவரியைச் சேர்க்கவும்!' : 'Please add your address!');
+                closeCartModal();
+                document.getElementById('detailsModal').style.display = 'flex';
+                return;
+            }
+
             let products = JSON.parse(localStorage.getItem('adminProducts')) || [];
             for (let item of cart) {
                 let prod = products.find(p => p.name === item.name);
@@ -417,8 +504,6 @@
                 }
             }
 
-            let user = firebase.auth().currentUser;
-            let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email));
             let cartTotalText = document.getElementById('cartTotalPrice').innerText.replace('₹', '').replace(',', '');
             let orderId = 'TES-' + Math.floor(100000 + Math.random() * 900000);
             let itemNames = cart.map(i => i.name).join(', ');
@@ -445,7 +530,7 @@
                         items: itemNames, 
                         address: userExtra.address, 
                         amount: "₹" + cartTotalText, 
-                        status: currentLang === 'ta' ? 'ஆர்டர் உறுதி செய்யப்பட்டது (Order Confirmed)' : 'Order Confirmed', 
+                        status: currentLang === 'ta' ? 'ஆர்டர் உறுதி செய்யப்பட்டது (Paid)' : 'Order Confirmed (Paid)', 
                         trackingId: '', 
                         trackingUrl: '' 
                     };
