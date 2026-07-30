@@ -593,7 +593,7 @@
                             trackingUrl: '' 
                         };
                         let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
-                        allOrders.push(orderDetails);
+                        allOrders.allOrders.push(orderDetails);
                         localStorage.setItem('allOrders', JSON.stringify(allOrders));
                         
                         localStorage.removeItem('cartItems');
