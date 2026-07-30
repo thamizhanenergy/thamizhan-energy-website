@@ -431,7 +431,6 @@
             printSec.style.display = 'none';
         }
 
-        // Firebase Cloud Sync Functions for Products
         function loadAdminProductsTable() {
             database.ref('products').on('value', (snapshot) => {
                 let productsData = snapshot.val();
