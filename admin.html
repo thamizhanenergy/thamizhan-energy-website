@@ -52,9 +52,23 @@
         
         .btn { background: #00ff88; color: #0f2027; border: none; padding: 7px 14px; border-radius: 5px; font-weight: 700; cursor: pointer; font-size: 12px; }
         .btn:hover { background: #00cc6a; }
-        .print-btn { background: #2196F3; color: white; }
+        .print-btn { background: #2196F3; color: white; padding: 6px 12px; border: none; border-radius: 5px; font-weight: 700; cursor: pointer; font-size: 12px; }
         .print-btn:hover { background: #0b7dda; }
-        .delete-btn { background: #ff5252; color: white; }
+        
+        .close-ticket-btn { 
+            background: #ff9800; 
+            color: white; 
+            padding: 6px 12px; 
+            border: none; 
+            border-radius: 5px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            font-size: 12px; 
+            transition: 0.3s; 
+        }
+        .close-ticket-btn:hover { background: #e68900; }
+
+        .delete-btn { background: #ff5252; color: white; padding: 6px 12px; border: none; border-radius: 5px; font-weight: 700; cursor: pointer; font-size: 12px; }
         .delete-btn:hover { background: #d32f2f; }
 
         footer { background: #0c1a1f; color: #aaa; padding: 20px; text-align: center; font-size: 12px; margin-top: 40px; }
@@ -114,7 +128,7 @@
         </div>
 
         <div class="panel-box">
-            <h3>📦 கஸ்டமர் ஆர்டர்கள் & மேனுவல் டிராக்கிங் மேனேஜ்மென்ட் (Shipping Label)</h3>
+            <h3>📦 கஸ்டமர் ஆர்டர்கள் & மேனுவல் டிராக்கிங் மேனேஜ்மென்ட்</h3>
             <table>
                 <thead>
                     <tr>
@@ -141,10 +155,11 @@
                         <th>சேவை வகை (Service Type)</th>
                         <th>செய்தி / புகார் விவரம்</th>
                         <th>நிலை (Status)</th>
+                        <th>செயல் (Action)</th>
                     </tr>
                 </thead>
                 <tbody id="adminTicketsTableBody">
-                    <tr><td colspan="5" style="text-align:center; color:#888;">புகார் டிக்கெட்டுகள் எதுவும் இல்லை.</td></tr>
+                    <tr><td colspan="6" style="text-align:center; color:#888;">புகார் டிக்கெட்டுகள் எதுவும் இல்லை.</td></tr>
                 </tbody>
             </table>
         </div>
@@ -303,8 +318,9 @@
                             <input type="text" id="trackUrl_${index}" value="${trackingUrlVal}" placeholder="Courier URL">
                         </td>
                         <td>
-                            <button class="btn" style="padding:4px 8px; margin-bottom:4px;" onclick="saveTracking(${index})">சேமி</button><br>
-                            <button class="btn print-btn" style="padding:4px 8px;" onclick="printShippingLabel(${index})">🖨️ லேபிள் பிரிண்ட்</button>
+                            <button class="btn" style="padding:5px 10px; margin-bottom:4px;" onclick="saveTracking(${index})">சேமி</button><br>
+                            <button class="print-btn" style="padding:5px 10px; margin-bottom:4px;" onclick="printShippingLabel(${index})">🖨️ லேபிள் பிரிண்ட்</button><br>
+                            <button class="delete-btn" onclick="deleteOrder(${index})">🗑️ நீக்கு</button>
                         </td>
                     </tr>
                 `;
@@ -328,31 +344,61 @@
             }
         }
 
-        // Load Support & Complaint Tickets from Contact Form
+        // Delete Order Function
+        function deleteOrder(index) {
+            if(confirm("இந்த ஆர்டரை நீக்க விரும்புகிறீர்களா?")) {
+                let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
+                allOrders.splice(index, 1);
+                localStorage.setItem('allOrders', JSON.stringify(allOrders));
+                alert("ஆர்டர் வெற்றிகரமாக நீக்கப்பட்டது!");
+                loadAdminOrdersTable();
+                loadTurnoverAndMonthlySales();
+            }
+        }
+
         function loadAdminTicketsTable() {
             let allTickets = JSON.parse(localStorage.getItem('supportTickets')) || [];
             let tableBody = document.getElementById('adminTicketsTableBody');
             
-            if(allTickets.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#888;">புதிய டிக்கெட்டுகள் எதுவும் இல்லை.</td></tr>`;
+            if(!allTickets || allTickets.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#888;">புகார் டிக்கெட்டுகள் எதுவும் இல்லை.</td></tr>`;
                 return;
             }
 
             let html = '';
-            allTickets.forEach((t) => {
+            allTickets.forEach((t, index) => {
+                let isClosed = t.status && t.status.includes('Closed');
+                let statusColor = isClosed ? 'color:gray; font-weight:bold;' : 'color:#d32f2f; font-weight:bold;';
+                
+                let actionBtn = isClosed ? 
+                    '<span style="color:gray; font-size:12px; font-weight:600;">மூடப்பட்டது (Closed)</span>' : 
+                    `<button class="close-ticket-btn" onclick="closeTicket(${index})">Close Ticket</button>`;
+
                 html += `
                     <tr>
                         <td><code>${t.ticketId}</code></td>
-                        <td><b>${t.name}</b><br>${t.email}</td>
+                        <td><b>${t.name}</b><br><small>${t.email}</small></td>
                         <td><span style="background:#e0f7fa; color:#006064; padding:2px 6px; border-radius:4px; font-weight:600;">${t.serviceType}</span></td>
                         <td>${t.message}</td>
-                        <td><span style="color:#d32f2f; font-weight:bold;">${t.status || 'Open (செயலில் உள்ளது)'}</span></td>
+                        <td><span style="${statusColor}">${t.status || 'Open (செயலில் உள்ளது)'}</span></td>
+                        <td>${actionBtn}</td>
                     </tr>
                 `;
             });
             tableBody.innerHTML = html;
         }
 
+        function closeTicket(index) {
+            let allTickets = JSON.parse(localStorage.getItem('supportTickets')) || [];
+            if(allTickets[index]) {
+                allTickets[index].status = 'Closed (மூடப்பட்டது)';
+                localStorage.setItem('supportTickets', JSON.stringify(allTickets));
+                alert("இந்த புகார் டிக்கெட் வெற்றிகரமாக மூடப்பட்டது (Closed)!");
+                loadAdminTicketsTable();
+            }
+        }
+
+        // Updated Shipping Label Printing format as requested
         function printShippingLabel(index) {
             let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
             let ord = allOrders[index];
@@ -367,25 +413,20 @@
                         <b>தமிழன் எனர்ஜி சிஸ்டம்ஸ்</b><br>
                         எலக்ட்ரானிக்ஸ் & ஐஓடி ஆட்டோமேஷன் தயாரிப்பாளர்<br>
                         தமிழ்நாடு, இந்தியா.<br>
-                        தொடர்புக்கு: support@thamizhanenergy.com
+                        <b>தொடர்புக்கு:</b> 8903008906
                     </div>
 
                     <hr style="border: 1px dashed #000; margin: 12px 0;">
 
                     <div style="margin-bottom: 15px; font-size: 14px;">
                         <b style="color: #555; text-transform: uppercase; font-size: 11px;">TO (பெறுநர் / கஸ்டமர்):</b><br>
+                        <b>பெயர்:</b> ${ord.email}<br>
                         <b>ஆர்டர் ஐடி:</b> <span style="font-size: 15px; font-weight: bold;">${ord.orderId}</span><br>
-                        <b>மின்னஞ்சல்:</b> ${ord.email}<br>
+                        <b>போன் நம்பர்:</b> N/A<br>
                         <b>டெலிவரி முகவரி:</b><br>
                         <div style="background: #f9f9f9; padding: 8px; border: 1px solid #ccc; margin-top: 4px; font-weight: bold; font-size: 14px;">
                             ${ord.address}
                         </div>
-                    </div>
-
-                    <div style="border-top: 2px solid #000; padding-top: 10px; font-size: 13px;">
-                        <b>பொருட்கள்:</b> ${ord.items}<br>
-                        <b>மொத்தத் தொகை:</b> ${ord.amount} (Paid via Razorpay)<br>
-                        <b>டிராக்கிங் ஐடி:</b> ${ord.trackingId || 'N/A'}
                     </div>
 
                     <div style="text-align: center; margin-top: 20px; font-size: 11px; color: #666;">
@@ -494,7 +535,7 @@
             products[index].name = document.getElementById(`name_${index}`).value.trim();
             products[index].price = parseInt(document.getElementById(`price_${index}`).value);
             products[index].discount = parseInt(document.getElementById(`discount_${index}`).value);
-            products[index].stock = parseInt(document.getElementById(`stock_${index}`).value);
+            products[index].stock = parseInt(document.getElementById(`stock_${index}`.value));
             products[index].offerTag = document.getElementById(`offerTag_${index}`).value.trim();
             
             let specsText = document.getElementById(`specs_${index}`).value.trim();
