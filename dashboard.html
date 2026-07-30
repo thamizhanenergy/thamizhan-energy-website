@@ -52,4 +52,406 @@
         }
 
         /* Container */
-        .container { max-width
+        .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
+        
+        /* QR & Pairing Card */
+        .pairing-card {
+            background: #1a2a32;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            border: 1px solid #283c48;
+            text-align: center;
+        }
+        .pairing-card h3 { color: #00ff88; font-size: 20px; margin-bottom: 8px; }
+        .pairing-card p { font-size: 13px; color: #aaa; margin-bottom: 15px; }
+        
+        #reader { width: 100%; max-width: 350px; margin: 0 auto 15px auto; border-radius: 8px; overflow: hidden; display: none; }
+        
+        .pairing-input-group { display: flex; justify-content: center; gap: 10px; max-width: 500px; margin: 0 auto; flex-wrap: wrap; }
+        .pairing-input-group input { padding: 10px; border-radius: 6px; border: 1px solid #444; background: #0f2027; color: #fff; flex: 1; outline: none; font-size: 13px; }
+        .pairing-input-group button { background: #00ff88; color: #0f2027; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px; }
+        .cam-btn { background: #2196F3 !important; color: white !important; }
+
+        /* Wi-Fi Provisioning Card inside Dashboard */
+        .wifi-config-box {
+            background: #14222a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 1px solid #203542;
+        }
+        .wifi-config-box h4 { color: #00ff88; font-size: 16px; margin-bottom: 10px; }
+        .wifi-form { display: flex; gap: 10px; flex-wrap: wrap; }
+        .wifi-form input { padding: 8px 12px; border-radius: 6px; border: 1px solid #444; background: #0f2027; color: #fff; flex: 1; font-size: 13px; }
+
+        /* Dashboard Main Area (Hidden until connected) */
+        #dashboardContent { display: none; }
+
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
+        .dashboard-header h2 { font-size: 22px; color: #00ff88; }
+
+        .selector-box { background: #1a2a32; padding: 8px 12px; border-radius: 8px; border: 1px solid #333; }
+        .selector-box select { background: #0f2027; color: #fff; border: none; padding: 6px 10px; border-radius: 6px; font-size: 13px; outline: none; cursor: pointer; }
+
+        /* Grid Layout */
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        @media(max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
+
+        .card {
+            background: #1a2a32;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            border: 1px solid #283c48;
+        }
+        .card h3 { font-size: 18px; margin-bottom: 15px; color: #00ff88; border-bottom: 1px solid #283c48; padding-bottom: 8px; }
+
+        /* Water Tank Graphic */
+        .tank-container { display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 15px 0; }
+        .water-tank {
+            width: 120px;
+            height: 180px;
+            border: 4px solid #fff;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            background: #0f2027;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+        }
+        .water-fill {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(to top, #0072ff, #00c6ff);
+            transition: height 0.5s ease-in-out;
+        }
+        .tank-label { margin-top: 12px; font-size: 16px; font-weight: 700; color: #00ff88; }
+
+        /* Status & Indicators */
+        .status-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+        .status-item { display: flex; justify-content: space-between; align-items: center; background: #0f2027; padding: 10px 15px; border-radius: 8px; font-size: 13px; border: 1px solid #22333d; }
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+        .badge-online { background: #1b5e20; color: #a5d6a7; }
+        .badge-offline { background: #b71c1c; color: #ef9a9a; }
+        .badge-active { background: #006064; color: #80deea; }
+        .badge-safe { background: #0d47a1; color: #90caf9; }
+        .badge-alert { background: #b71c1c; color: #ffccbc; }
+
+        /* Controls */
+        .control-group { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
+        .btn-control {
+            background: #00ff88;
+            color: #0f2027;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+        }
+        .btn-control:hover { background: #00cc6a; box-shadow: 0 4px 15px rgba(0,255,136,0.3); }
+        .btn-manual { background: #ff9800; color: #fff; }
+        .btn-manual:hover { background: #e68900; }
+
+        footer { background: #081115; color: #aaa; padding: 25px; text-align: center; font-size: 12px; margin-top: 50px; }
+
+        @media (max-width: 768px) {
+            header { padding: 10px 15px; }
+            .menu-toggle { display: flex; }
+            
+            .nav-container {
+                position: absolute;
+                top: 65px;
+                left: 0;
+                width: 100%;
+                background: #182832;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 0 20px;
+                box-shadow: 0 10px 15px rgba(0,0,0,0.3);
+                max-height: 0;
+                overflow: hidden;
+                visibility: hidden;
+                transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out, visibility 0.3s;
+            }
+            .nav-container.active {
+                max-height: 300px;
+                visibility: visible;
+                padding: 15px 20px;
+            }
+            nav { width: 100%; }
+            nav ul { flex-direction: column; width: 100%; gap: 12px; }
+            nav ul li { width: 100%; border-bottom: 1px solid #283c48; padding-bottom: 8px; }
+            .pairing-input-group { flex-direction: column; }
+            .pairing-input-group input, .pairing-input-group button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-section">
+            <img src="1.png" alt="Logo" class="logo-img">
+            <div class="company-title">
+                <h1>தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1>
+            </div>
+        </div>
+
+        <button class="menu-toggle" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div class="nav-container" id="navContainer">
+            <nav>
+                <ul>
+                    <li><a href="index.html">முகப்பு</a></li>
+                    <li><a href="shop.html">ஸ்டோர்</a></li>
+                    <li><a href="contact.html">தொடர்புக்கு</a></li>
+                    <li><a href="dashboard.html" style="color: #00ff88;">IoT டேஷ்போர்டு</a></li>
+                    <li><a href="aboutus.html">எங்களைப் பற்றி</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <div class="pairing-card" id="pairingCard">
+            <h3>QR கோடு ஸ்கேன் & சாதனம் இணைப்பு (Device Pairing)</h3>
+            <p>சாதனத்தின் ஸ்டிக்கரில் உள்ள QR கோடை கேமரா மூலம் ஸ்கேன் செய்யவும் அல்லது சீரியல் எண்ணை உள்ளிடவும்.</p>
+            
+            <div id="reader"></div>
+            
+            <div class="pairing-input-group" style="margin-bottom: 15px;">
+                <button class="btn-control cam-btn" onclick="startScanner()">📷 QR கேமரா ஸ்கேன் செய்க</button>
+            </div>
+
+            <div class="pairing-input-group">
+                <input type="text" id="serialInput" placeholder="எ.கா: TES-AWLCW-1001">
+                <button onclick="pairDevice()">ஆன்லைனில் இணைக்க</button>
+            </div>
+        </div>
+
+        <div id="dashboardContent">
+            
+            <div class="wifi-config-box">
+                <h4>📶 சாதன வைஃபை இணைப்பு (Device Wi-Fi Setup)</h4>
+                <p style="font-size: 12px; color: #aaa; margin-bottom: 10px;">உங்கள் வீட்டு வைஃபை விவரங்களைச் சாதனத்திற்கு அனுப்பவும்:</p>
+                <div class="wifi-form">
+                    <input type="text" id="wifiSsid" placeholder="Home Wi-Fi Name (SSID)">
+                    <input type="password" id="wifiPass" placeholder="Wi-Fi Password">
+                    <button class="btn-control" style="padding: 8px 15px; font-size: 13px; width: auto;" onclick="sendWiFiConfig()">வைஃபை இணைக்க</button>
+                </div>
+            </div>
+
+            <div class="dashboard-header">
+                <h2>இணைக்கப்பட்ட சாதனம்: <span id="connectedDeviceName" style="color: #00ff88;">-</span></h2>
+                <div class="selector-box">
+                    <label style="font-size: 12px; margin-right: 6px; color: #aaa;">மாடல்:</label>
+                    <select id="modelSelector" onchange="changeModel()">
+                        <option value="AWLCW">AWLCW 1.0 (Low/Mid/High)</option>
+                        <option value="AWLCWS">AWLCWS 1.0 (Percentage)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                
+                <div class="card">
+                    <h3>தொட்டியின் நீர் மட்டம் (Tank Water Level)</h3>
+                    <div class="tank-container">
+                        <div class="water-tank">
+                            <div class="water-fill" id="waterFill" style="height: 60%;"></div>
+                        </div>
+                        <div class="tank-label" id="tankLevelText">மட்டம்: 60% (Mid)</div>
+                    </div>
+                    <p style="font-size: 11px; color: #888; text-align: center; margin-top: 10px;">மட்டத்தைச் சோதிக்கப் பட்டன்களைப் பயன்படுத்தவும்:</p>
+                    <div style="display: flex; gap: 8px; margin-top: 10px; justify-content: center;">
+                        <button class="btn-control" style="padding: 5px 12px; font-size: 11px;" onclick="setTestLevel('low')">Low</button>
+                        <button class="btn-control" style="padding: 5px 12px; font-size: 11px;" onclick="setTestLevel('mid')">Mid</button>
+                        <button class="btn-control" style="padding: 5px 12px; font-size: 11px;" onclick="setTestLevel('high')">High</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>சாதன நிலை & கட்டுப்பாடுகள் (Device Controls)</h3>
+                    
+                    <ul class="status-list">
+                        <li class="status-item">
+                            <span>சாதன நிலை:</span>
+                            <span class="badge badge-online" id="deviceStatus">Online (இணைக்கப்பட்டுள்ளது)</span>
+                        </li>
+                        <li class="status-item">
+                            <span>இயக்க முறை:</span>
+                            <span class="badge badge-active" id="modeStatus">Auto Mode (தானியங்கி)</span>
+                        </li>
+                        <li class="status-item">
+                            <span>மோட்டார் நிலை:</span>
+                            <span class="badge badge-online" id="motorStatusBadge">OFF (நிறுத்தப்பட்டுள்ளது)</span>
+                        </li>
+                        <li class="status-item">
+                            <span>ட்ரைடன் பாதுகாப்பு:</span>
+                            <span class="badge badge-safe" id="dryRunStatus">Safe (பாதுகாப்பானது)</span>
+                        </li>
+                    </ul>
+
+                    <div class="control-group">
+                        <button class="btn-control" id="modeBtn" onclick="toggleMode()">மோடு மாற்றுக (Switch to Manual)</button>
+                        <button class="btn-control btn-manual" id="motorBtn" onclick="toggleMotor()">மோட்டாரை இயக்கவும் (Turn ON Motor)</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const navContainer = document.getElementById('navContainer');
+            navContainer.classList.toggle('active');
+        }
+
+        function startScanner() {
+            document.getElementById('reader').style.display = 'block';
+            const html5QrCode = new Html5Qrcode("reader");
+            html5QrCode.start(
+                { facingMode: "environment" }, 
+                { fps: 10, qrbox: { width: 200, height: 200 } },
+                (decodedText, decodedResult) => {
+                    document.getElementById('serialInput').value = decodedText;
+                    html5QrCode.stop().then(() => {
+                        document.getElementById('reader').style.display = 'none';
+                        pairDevice();
+                    }).catch(err => { console.error("Stop failed.", err); });
+                },
+                (errorMessage) => { }
+            ).catch(err => {
+                alert('கேமரா அனுமதியை வழங்குவதில் சிக்கல் அல்லது கேமரா கிடைக்கவில்லை.');
+            });
+        }
+
+        function pairDevice() {
+            let serialNo = document.getElementById('serialInput').value.trim();
+            if (serialNo !== "") {
+                document.getElementById('connectedDeviceName').innerText = serialNo;
+                document.getElementById('pairingCard').style.display = 'none';
+                document.getElementById('dashboardContent').style.display = 'block';
+                document.getElementById('deviceStatus').innerText = "Online (இணைக்கப்பட்டுள்ளது)";
+            } else {
+                alert('தயவுசெய்து சரியான சீரியல் எண் அல்லது QR கோடை உள்ளிடவும்.');
+            }
+        }
+
+        function sendWiFiConfig() {
+            let ssid = document.getElementById('wifiSsid').value.trim();
+            let pass = document.getElementById('wifiPass').value.trim();
+            if(ssid !== "" && pass !== "") {
+                alert(`வைஃபை விவரங்கள் சாதனத்திற்கு அனுப்பப்பட்டன!\nSSID: ${ssid}\nசாதனம் இப்போது உங்கள் வீட்டு வைஃபையுடன் ஆன்லைனில் இணைகிறது.`);
+            } else {
+                alert('தயவுசெய்து வைஃபை பெயர் மற்றும் கடவுச்சொல்லை உள்ளிடவும்.');
+            }
+        }
+
+        let currentModel = 'AWLCW';
+        let isAutoMode = true;
+        let isMotorOn = false;
+        let currentLevelPercentage = 60;
+
+        function changeModel() {
+            currentModel = document.getElementById('modelSelector').value;
+            updateTankDisplay();
+        }
+
+        function setTestLevel(level) {
+            if (level === 'low') {
+                currentLevelPercentage = 20;
+            } else if (level === 'mid') {
+                currentLevelPercentage = 60;
+            } else if (level === 'high') {
+                currentLevelPercentage = 95;
+            }
+            updateTankDisplay();
+        }
+
+        function updateTankDisplay() {
+            let fillDiv = document.getElementById('waterFill');
+            let labelDiv = document.getElementById('tankLevelText');
+            
+            fillDiv.style.height = currentLevelPercentage + '%';
+
+            if (currentModel === 'AWLCW') {
+                let textStatus = "Low (குறைவு)";
+                if (currentLevelPercentage > 35 && currentLevelPercentage <= 75) {
+                    textStatus = "Mid (நடுத்தரம்)";
+                } else if (currentLevelPercentage > 75) {
+                    textStatus = "High (நிறைந்துள்ளது)";
+                }
+                labelDiv.innerText = "நீர் நிலை: " + textStatus;
+            } else {
+                labelDiv.innerText = "நீர் நிலை: " + currentLevelPercentage + "% (Percentage)";
+            }
+        }
+
+        function toggleMode() {
+            isAutoMode = !isAutoMode;
+            let modeBadge = document.getElementById('modeStatus');
+            let modeBtn = document.getElementById('modeBtn');
+
+            if (isAutoMode) {
+                modeBadge.innerText = "Auto Mode (தானியங்கி)";
+                modeBadge.className = "badge badge-active";
+                modeBtn.innerText = "மோடு மாற்றுக (Switch to Manual)";
+            } else {
+                modeBadge.innerText = "Manual Mode (கைமுறை)";
+                modeBadge.className = "badge badge-alert";
+                modeBtn.innerText = "மோடு மாற்றுக (Switch to Auto)";
+            }
+        }
+
+        function toggleMotor() {
+            if (isAutoMode) {
+                alert('தற்போது ஆட்டோ மோடில் உள்ளது! மோட்டாரைக் கைமுறையாகக் கட்டுப்படுத்த "Manual Mode"-க்கு மாற்றவும்.');
+                return;
+            }
+
+            isMotorOn = !isMotorOn;
+            let motorBadge = document.getElementById('motorStatusBadge');
+            let motorBtn = document.getElementById('motorBtn');
+            let dryRunBadge = document.getElementById('dryRunStatus');
+
+            if (isMotorOn) {
+                motorBadge.innerText = "ON (இயங்குகிறது)";
+                motorBadge.className = "badge badge-online";
+                motorBtn.innerText = "மோட்டாரை நிறுத்தவும் (Turn OFF Motor)";
+                motorBtn.style.background = "#f44336";
+                motorBtn.style.color = "#fff";
+                
+                if (currentLevelPercentage <= 15) {
+                    dryRunBadge.innerText = "Alert: Dry Run Detected!";
+                    dryRunBadge.className = "badge badge-alert";
+                }
+            } else {
+                motorBadge.innerText = "OFF (நிறுத்தப்பட்டுள்ளது)";
+                motorBadge.className = "badge badge-offline";
+                motorBtn.innerText = "மோட்டாரை இயக்கவும் (Turn ON Motor)";
+                motorBtn.style.background = "#ff9800";
+                motorBtn.style.color = "#fff";
+                dryRunBadge.innerText = "Safe (பாதுகாப்பானது)";
+                dryRunBadge.className = "badge badge-safe";
+            }
+        }
+    </script>
+
+</body>
+</html>
