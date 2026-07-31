@@ -594,4 +594,16 @@
                 trackingUrl: '' 
             };
 
-            let allOrders = JSON.parse(
+            let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
+            allOrders.push(orderDetails);
+            localStorage.setItem('allOrders', JSON.stringify(allOrders));
+            
+            localStorage.removeItem('cartItems');
+            updateCartDisplay();
+            closeCartModal();
+            alert((currentLang === 'ta' ? 'ஆர்டர் வெற்றிகரமாக உறுதி செய்யப்பட்டது! ஆர்டர் ஐடி: ' : 'Order confirmed successfully! Order ID: ') + orderId);
+            openProfileModal();
+        }
+    </script>
+</body>
+</html>
