@@ -499,7 +499,7 @@
                 specs: specs ? specs.split(',').map(s => s.trim()) : ["உத்தரவாதம் உள்ளது"]
             };
 
-            // Push to Firebase and update LocalStorage simultaneously
+            // Push to Firebase and update LocalStorage simultaneously with error handling
             database.ref('products').push(newProd).then(() => {
                 let currentLocal = JSON.parse(localStorage.getItem('adminProducts')) || [];
                 currentLocal.push(newProd);
@@ -514,6 +514,7 @@
                 document.getElementById('newProdImg').value = '';
                 document.getElementById('newProdSpecs').value = '';
             }).catch((error) => {
+                console.error("Firebase Push Error: ", error);
                 alert("கிளவுடில் சேர்ப்பதில் பிழை: " + error.message);
             });
         }
@@ -536,6 +537,8 @@
                 specs: specs
             }).then(() => {
                 alert("தயாரிப்பு விவரங்கள் கிளவுட்டில் புதுப்பிக்கப்பட்டன!");
+            }).catch((error) => {
+                alert("புதுப்பிப்பதில் பிழை: " + error.message);
             });
         }
 
@@ -543,6 +546,8 @@
             if(confirm("இந்தத் தயாரிப்பை நீக்க விரும்புகிறீர்களா?")) {
                 database.ref('products/' + id).remove().then(() => {
                     alert("தயாரிப்பு நீக்கப்பட்டது!");
+                }).catch((error) => {
+                    alert("நீக்குவதில் பிழை: " + error.message);
                 });
             }
         }
