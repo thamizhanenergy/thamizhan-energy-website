@@ -182,7 +182,7 @@
                 <input type="text" id="newProdImg" placeholder="இமேஜ் லிங்க் (எ.கா: 3.png)">
             </div>
             <textarea id="newProdSpecs" rows="2" placeholder="ஸ்பெசிஃபிகேஷன்ஸ் (கமா மூலம் பிரிக்கவும்)"></textarea>
-            <button class="btn" onclick="addNewProduct()">புதிய தயாரிப்பைச் சேர்க்கவும்</button>
+            <button type="button" class="btn" onclick="addNewProduct()">புதிய தயாரிப்பைச் சேர்க்கவும்</button>
         </div>
 
         <div class="panel-box">
@@ -465,8 +465,8 @@
                             <td><input type="text" id="offerTag_${index}" value="${p.offerTag || ''}" placeholder="Offer"></td>
                             <td><textarea id="specs_${index}" rows="2">${specsStr}</textarea></td>
                             <td>
-                                <button class="btn" style="padding:5px 8px; margin-bottom:4px;" onclick="updateProduct('${p.id}', ${index})">புதுப்பி</button>
-                                <button class="btn delete-btn" style="padding:5px 8px;" onclick="deleteProduct('${p.id}')">நீக்கு</button>
+                                <button type="button" class="btn" style="padding:5px 8px; margin-bottom:4px;" onclick="updateProduct('${p.id}', ${index})">புதுப்பி</button>
+                                <button type="button" class="btn delete-btn" style="padding:5px 8px;" onclick="deleteProduct('${p.id}')">நீக்கு</button>
                             </td>
                         </tr>
                     `;
@@ -475,7 +475,10 @@
             });
         }
 
+        // பிழை கண்டறியும் வசதியுடன் (Debugging) மேம்படுத்தப்பட்ட addNewProduct பங்க்ஷன்
         function addNewProduct() {
+            console.log("Add Product Button Clicked Successfully!");
+
             let name = document.getElementById('newProdName').value.trim();
             let price = document.getElementById('newProdPrice').value.trim();
             let discount = document.getElementById('newProdDiscount').value.trim();
@@ -491,21 +494,26 @@
 
             let newProd = {
                 name: name,
-                price: parseInt(price),
-                discount: discount ? parseInt(discount) : parseInt(price),
-                stock: parseInt(stock),
+                price: Number(price),
+                discount: discount ? Number(discount) : Number(price),
+                stock: Number(stock),
                 offerTag: offerTag,
                 img: img,
                 specs: specs ? specs.split(',').map(s => s.trim()) : ["உத்தரவாதம் உள்ளது"]
             };
 
-            // Push to Firebase and update LocalStorage simultaneously with error handling
-            database.ref('products').push(newProd).then(() => {
+            // Firebase-ல் டேட்டாவை தள்ளுதல் (Push)
+            database.ref('products').push(newProd)
+            .then((ref) => {
+                console.log("Firebase Push Success. Key:", ref.key);
+                
                 let currentLocal = JSON.parse(localStorage.getItem('adminProducts')) || [];
                 currentLocal.push(newProd);
                 localStorage.setItem('adminProducts', JSON.stringify(currentLocal));
 
                 alert("புதிய தயாரிப்பு கிளவுட்டில் மற்றும் இன்வென்டரியில் வெற்றிகரமாக சேர்க்கப்பட்டது!");
+                
+                // இன்புட் பாக்ஸ்களை காலியாக்குதல்
                 document.getElementById('newProdName').value = '';
                 document.getElementById('newProdPrice').value = '';
                 document.getElementById('newProdDiscount').value = '';
@@ -513,17 +521,18 @@
                 document.getElementById('newProdOffer').value = '';
                 document.getElementById('newProdImg').value = '';
                 document.getElementById('newProdSpecs').value = '';
-            }).catch((error) => {
-                console.error("Firebase Push Error: ", error);
+            })
+            .catch((error) => {
+                console.error("Firebase Push Error:", error);
                 alert("கிளவுடில் சேர்ப்பதில் பிழை: " + error.message);
             });
         }
 
         function updateProduct(id, index) {
             let name = document.getElementById(`name_${index}`).value.trim();
-            let price = parseInt(document.getElementById(`price_${index}`).value);
-            let discount = parseInt(document.getElementById(`discount_${index}`).value);
-            let stock = parseInt(document.getElementById(`stock_${index}`).value);
+            let price = Number(document.getElementById(`price_${index}`).value);
+            let discount = Number(document.getElementById(`discount_${index}`).value);
+            let stock = Number(document.getElementById(`stock_${index}`).value);
             let offerTag = document.getElementById(`offerTag_${index}`).value.trim();
             let specsText = document.getElementById(`specs_${index}`).value.trim();
             let specs = specsText ? specsText.split(',').map(s => s.trim()) : [];
