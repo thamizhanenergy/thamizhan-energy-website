@@ -99,6 +99,14 @@
         .logout-btn { background: #d9534f; color: white; margin-top: 15px; width: 100%; padding: 10px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; }
 
         .order-history-box { background: #fff; border: 1px solid #ddd; padding: 12px; border-radius: 8px; margin-top: 12px; font-size: 13px; border-left: 4px solid #2874f0; }
+
+        /* Success Checkmark Animation Styles */
+        .success-animation-box { text-align: center; padding: 20px; }
+        .checkmark-circle { width: 80px; height: 80px; position: relative; border-radius: 50%; background: #4CAF50; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; animation: popUp 0.4s ease-in-out; }
+        .checkmark { width: 40px; height: 25px; border-left: 5px solid white; border-bottom: 5px solid white; transform: rotate(-45deg); margin-top: -5px; animation: checkDraw 0.4s ease-in-out forwards; }
+        @keyframes popUp { 0% { transform: scale(0); } 70% { transform: scale(1.15); } 100% { transform: scale(1); } }
+        @keyframes checkDraw { 0% { opacity: 0; width: 0; height: 0; } 50% { opacity: 1; width: 0; height: 25px; } 100% { opacity: 1; width: 40px; height: 25px; } }
+
         footer { background: #131921; color: #ccc; padding: 30px; text-align: center; font-size: 12px; margin-top: 50px; }
     </style>
 </head>
@@ -224,6 +232,19 @@
             <div id="paymentOptionsBox" style="display: none;">
                 <button type="button" class="pay-btn" onclick="proceedToRazorpay()" data-ta="💳 Razorpay மூலம் ஆன்லைன் பேமெண்ட்" data-en="💳 Pay Online via Razorpay">💳 Razorpay மூலம் ஆன்லைன் பேமெண்ட்</button>
                 <button type="button" class="cod-btn" onclick="proceedToCOD()" data-ta="💵 கேஷ் ஆன் டெலிவரி (COD)" data-en="💵 Cash on Delivery (COD)">💵 கேஷ் ஆன் டெலிவரி (COD)</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="successModal">
+        <div class="modal-content" style="max-width: 380px; text-align: center;">
+            <div class="success-animation-box">
+                <div class="checkmark-circle">
+                    <div class="checkmark"></div>
+                </div>
+                <h3 style="color: #2874f0; margin-bottom: 10px;" data-ta="ஆர்டர் கன்பார்ம்டு சக்சஸ்ஃபுல்லி!" data-en="Order Confirmed Successfully!">ஆர்டர் கன்பார்ம்டு சக்சஸ்ஃபுல்லி!</h3>
+                <p style="font-size: 13px; color: #666; margin-bottom: 20px;" id="successOrderIdText"></p>
+                <button type="button" class="btn" style="background:#2874f0; color:white;" onclick="closeSuccessModal()" data-ta="சரி (OK)" data-en="OK">சரி (OK)</button>
             </div>
         </div>
     </div>
@@ -617,8 +638,15 @@
             localStorage.removeItem('cartItems');
             updateCartDisplay();
             closeCartModal();
-            alert((currentLang === 'ta' ? 'ஆர்டர் வெற்றிகரமாக உறுதி செய்யப்பட்டது! ஆர்டர் ஐடி: ' : 'Order confirmed successfully! Order ID: ') + orderId);
-            openTrackingModal();
+
+            // Show Success Animation Modal
+            document.getElementById('successOrderIdText').innerText = (currentLang === 'ta' ? 'ஆர்டர் ஐடி: ' : 'Order ID: ') + orderId;
+            document.getElementById('successModal').style.display = 'flex';
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').style.display = 'none';
+            openTrackingModal(); // Open tracking modal to show order
         }
     </script>
 </body>
