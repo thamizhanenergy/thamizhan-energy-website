@@ -133,9 +133,9 @@
         </div>
         <ul class="sidebar-links">
             <li><a href="index.html" data-ta="🏠 முகப்பு பக்கம் (Home)" data-en="🏠 Home Page">🏠 முகப்பு பக்கம் (Home)</a></li>
-            <li><button type="button" onclick="toggleSidebar(); handleUserClick();">👤 <span id="sidebar-user-text" data-ta="உள்நுழை / எனது கணக்கு" data-en="Login / My Account">உள்நுழை / எனது கணக்கு</span></button></li>
+            <li><button type="button" onclick="toggleSidebar(); handleUserClick();">👤 <span id="sidebar-user-text" data-ta="எனது கணக்கு & விவரங்கள்" data-en="My Account & Details">எனது கணக்கு & விவரங்கள்</span></button></li>
             <li><button type="button" onclick="toggleSidebar(); openCartModal();"><span data-ta="🛒 எனது கார்ட் பொருட்கள்" data-en="🛒 My Cart Items">🛒 எனது கார்ட் பொருட்கள்</span> (<span id="sidebar-cart-count">0</span>)</button></li>
-            <li><button type="button" onclick="toggleSidebar(); openProfileModal();"><span data-ta="📦 எனது ஆர்டர்கள் & டிராக்கிங்" data-en="📦 My Orders & Tracking">📦 எனது ஆர்டர்கள் & டிராக்கிங்</span></button></li>
+            <li><button type="button" onclick="toggleSidebar(); openTrackingModal();"><span data-ta="📦 ஆர்டர்கள் & டிராக்கிங்" data-en="📦 Orders & Tracking">📦 ஆர்டர்கள் & டிராக்கிங்</span></button></li>
             <li><a href="admin.html" id="sidebarAdminBtn" style="display:none; color:#cc0c39;" data-ta="⚙️ அட்மின் டேஷ்போர்டு" data-en="⚙️ Admin Dashboard">⚙️ அட்மின் டேஷ்போர்டு</a></li>
             <li><button type="button" onclick="toggleLanguage();"><span id="sidebarLangText">🌐 Switch to English</span></button></li>
         </ul>
@@ -174,7 +174,7 @@
     <div class="modal" id="profileModal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeProfileModal()">&times;</span>
-            <h3 data-ta="எனது கணக்கு & ஆர்டர்கள் விவரங்கள்" data-en="My Account & Orders Details">எனது கணக்கு & ஆர்டர்கள் விவரங்கள்</h3>
+            <h3 data-ta="எனது கணக்கு விவரங்கள்" data-en="My Account Details">எனது கணக்கு விவரங்கள்</h3>
             
             <div id="profileViewSection" style="font-size: 14px; color: #333; margin-bottom: 15px; line-height: 1.6;"></div>
             <button type="button" id="editProfileToggleBtn" class="btn" style="background:#ff9900; color:#131921; margin-bottom:10px;" onclick="toggleEditProfile()" data-ta="✏️ விவரங்களை எடிட் செய்ய" data-en="✏️ Edit Details">✏️ விவரங்களை எடிட் செய்ய</button>
@@ -188,6 +188,14 @@
             </div>
 
             <button type="button" class="btn logout-btn" onclick="logoutUser()" data-ta="வெளியேறு (Logout)" data-en="Logout">வெளியேறு (Logout)</button>
+        </div>
+    </div>
+
+    <div class="modal" id="trackingModal">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="close-btn" onclick="closeTrackingModal()">&times;</span>
+            <h3 data-ta="எனது ஆர்டர்கள் & டிராக்கிங்" data-en="My Orders & Tracking">எனது ஆர்டர்கள் & டிராக்கிங்</h3>
+            <div id="trackingDetailsContainer" style="margin-top: 15px; max-height: 350px; overflow-y: auto;"></div>
         </div>
     </div>
 
@@ -392,44 +400,20 @@
             firebase.auth().signOut().then(() => { location.reload(); });
         }
 
-        // Profile Modal & Editing
+        // Profile Modal (Only User Details & Editing)
         function openProfileModal() {
             let user = firebase.auth().currentUser;
             if (!user) { openLoginModal(); return; }
 
             let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || {name:'N/A', phone:'N/A', email:user.email, address:'N/A'};
-            let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
-            let userOrders = allOrders.filter(o => o.email === user.email);
-
-            let ordersHTML = userOrders.length === 0 ? `<p style="color:#888;">${currentLang === 'ta' ? 'ஆர்டர்கள் எதுவும் இல்லை.' : 'No orders found.'}</p>` : userOrders.map(ord => {
-                let trackingInfo = ord.trackingId ? 
-                    `<p style="margin-top: 5px;"><b>${currentLang === 'ta' ? 'டிராக்கிங் ஐடி' : 'Tracking ID'}:</b> <span style="background:#e0f7fa; padding:2px 6px; border-radius:4px;">${ord.trackingId}</span></p>
-                     <p style="margin-top: 3px;"><b>${currentLang === 'ta' ? 'கொரியர் லிங்க்' : 'Courier Link'}:</b> <a href="${ord.trackingUrl}" target="_blank" style="color:#2874f0; text-decoration:underline;">${currentLang === 'ta' ? 'டிரா செய்ய கிளிக் செய்க ↗' : 'Click to Track ↗'}</a></p>` : 
-                    `<p style="margin-top: 5px; color:#e67e22; font-size:12px;"><b>${currentLang === 'ta' ? 'நிலை' : 'Status'}:</b> ${currentLang === 'ta' ? 'விரைவில் கொரியர் செய்யப்படும்' : 'Will be shipped soon'}</p>`;
-
-                return `
-                    <div class="order-history-box">
-                        <p><b>${currentLang === 'ta' ? 'ஆர்டர் ஐடி' : 'Order ID'}:</b> <span style="color:#2874f0;">${ord.orderId}</span></p>
-                        <p><b>${currentLang === 'ta' ? 'பொருட்கள்' : 'Items'}:</b> ${ord.items}</p>
-                        <p><b>${currentLang === 'ta' ? 'தொகை' : 'Amount'}:</b> ${ord.amount}</p>
-                        <p><b>${currentLang === 'ta' ? 'முகவரி' : 'Address'}:</b> ${ord.address}</p>
-                        <p><b>${currentLang === 'ta' ? 'நிலை' : 'Status'}:</b> <span style="color:#007600; font-weight:bold;">${ord.status}</span></p>
-                        ${trackingInfo}
-                    </div>
-                `;
-            }).join('');
 
             document.getElementById('profileViewSection').innerHTML = `
-                <p><b>${currentLang === 'ta' ? 'பெயர்' : 'Name'}:</b> <span id="viewName">${userExtra.name}</span></p>
+                <p><b>${currentLang === 'ta' ? 'பெயர்' : 'Name'}:</b> ${userExtra.name}</p>
                 <p><b>${currentLang === 'ta' ? 'மின்னஞ்சல்' : 'Email'}:</b> ${user.email}</p>
-                <p><b>${currentLang === 'ta' ? 'போன் எண்' : 'Phone'}:</b> <span id="viewPhone">${userExtra.phone}</span></p>
-                <p><b>${currentLang === 'ta' ? 'முகவரி' : 'Address'}:</b> <span id="viewAddress">${userExtra.address}</span></p>
-                <hr style="margin:12px 0; border:0; border-top:1px solid #ddd;">
-                <h4 style="margin-bottom:8px; color:#131921;">${currentLang === 'ta' ? 'எனது ஆர்டர்கள் & டிராக்கிங்' : 'My Orders & Tracking'}</h4>
-                ${ordersHTML}
+                <p><b>${currentLang === 'ta' ? 'போன் எண்' : 'Phone'}:</b> ${userExtra.phone}</p>
+                <p><b>${currentLang === 'ta' ? 'முகவரி' : 'Address'}:</b> ${userExtra.address}</p>
             `;
 
-            // Fill edit inputs
             document.getElementById('editName').value = userExtra.name;
             document.getElementById('editPhone').value = userExtra.phone;
             document.getElementById('editAddress').value = userExtra.address;
@@ -460,10 +444,42 @@
             localStorage.setItem('userExtra_' + user.email, JSON.stringify(userExtra));
 
             alert(currentLang === 'ta' ? 'விவரங்கள் வெற்றிகரமாக மாற்றப்பட்டன!' : 'Details updated successfully!');
-            openProfileModal(); // Refresh modal view
+            openProfileModal();
         }
 
         function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
+
+        // Separate Orders & Tracking Modal
+        function openTrackingModal() {
+            let user = firebase.auth().currentUser;
+            if (!user) { alert(currentLang === 'ta' ? 'தயவுசெய்து முதலில் லாகின் செய்யவும்!' : 'Please login first!'); openLoginModal(); return; }
+
+            let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
+            let userOrders = allOrders.filter(o => o.email === user.email);
+
+            let ordersHTML = userOrders.length === 0 ? `<p style="color:#888; text-align:center;">${currentLang === 'ta' ? 'ஆர்டர்கள் எதுவும் இல்லை.' : 'No orders found.'}</p>` : userOrders.map(ord => {
+                let trackingInfo = ord.trackingId ? 
+                    `<p style="margin-top: 5px;"><b>${currentLang === 'ta' ? 'டிராக்கிங் ஐடி' : 'Tracking ID'}:</b> <span style="background:#e0f7fa; padding:2px 6px; border-radius:4px;">${ord.trackingId}</span></p>
+                     <p style="margin-top: 3px;"><b>${currentLang === 'ta' ? 'கொரியர் லிங்க்' : 'Courier Link'}:</b> <a href="${ord.trackingUrl}" target="_blank" style="color:#2874f0; text-decoration:underline;">${currentLang === 'ta' ? 'டிரா செய்ய கிளிக் செய்க ↗' : 'Click to Track ↗'}</a></p>` : 
+                    `<p style="margin-top: 5px; color:#e67e22; font-size:12px;"><b>${currentLang === 'ta' ? 'நிலை' : 'Status'}:</b> ${currentLang === 'ta' ? 'விரைவில் கொரியர் செய்யப்படும்' : 'Will be shipped soon'}</p>`;
+
+                return `
+                    <div class="order-history-box">
+                        <p><b>${currentLang === 'ta' ? 'ஆர்டர் ஐடி' : 'Order ID'}:</b> <span style="color:#2874f0;">${ord.orderId}</span></p>
+                        <p><b>${currentLang === 'ta' ? 'பொருட்கள்' : 'Items'}:</b> ${ord.items}</p>
+                        <p><b>${currentLang === 'ta' ? 'தொகை' : 'Amount'}:</b> ${ord.amount}</p>
+                        <p><b>${currentLang === 'ta' ? 'முகவரி' : 'Address'}:</b> ${ord.address}</p>
+                        <p><b>${currentLang === 'ta' ? 'நிலை' : 'Status'}:</b> <span style="color:#007600; font-weight:bold;">${ord.status}</span></p>
+                        ${trackingInfo}
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('trackingDetailsContainer').innerHTML = ordersHTML;
+            document.getElementById('trackingModal').style.display = 'flex';
+        }
+
+        function closeTrackingModal() { document.getElementById('trackingModal').style.display = 'none'; }
 
         function addToCart(name, price) {
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
@@ -602,7 +618,7 @@
             updateCartDisplay();
             closeCartModal();
             alert((currentLang === 'ta' ? 'ஆர்டர் வெற்றிகரமாக உறுதி செய்யப்பட்டது! ஆர்டர் ஐடி: ' : 'Order confirmed successfully! Order ID: ') + orderId);
-            openProfileModal();
+            openTrackingModal();
         }
     </script>
 </body>
