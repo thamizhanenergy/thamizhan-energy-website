@@ -31,11 +31,13 @@
         body { background-color: #f8f9fa; color: #333; line-height: 1.6; overflow-x: hidden; }
         a { text-decoration: none; color: inherit; }
 
-        header { background: #131921; color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .brand-section { display: flex; align-items: center; gap: 15px; }
+        header { background: #131921; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .brand-section { display: flex; align-items: center; gap: 12px; }
         .menu-toggle { display: flex; flex-direction: column; justify-content: space-between; width: 26px; height: 18px; cursor: pointer; background: transparent; border: none; }
         .menu-toggle span { width: 100%; height: 3px; background-color: white; border-radius: 3px; }
-        .company-title h1 { font-size: 16px; color: #ff9900; font-weight: 700; }
+        
+        .logo-img { height: 38px; width: auto; display: block; object-fit: contain; }
+        .company-title h1 { font-size: 15px; color: #ff9900; font-weight: 700; }
 
         .header-actions { display: flex; align-items: center; gap: 15px; }
         .cart-icon-btn { background: #ff9900; color: #131921; border: none; padding: 8px 16px; border-radius: 4px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; }
@@ -107,6 +109,7 @@
             <button type="button" class="menu-toggle" onclick="toggleSidebar()">
                 <span></span><span></span><span></span>
             </button>
+            <img src="1.png" alt="Logo" class="logo-img">
             <div class="company-title"><h1>தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1></div>
         </div>
         <div class="header-actions">
@@ -172,7 +175,18 @@
         <div class="modal-content">
             <span class="close-btn" onclick="closeProfileModal()">&times;</span>
             <h3 data-ta="எனது கணக்கு & ஆர்டர்கள் விவரங்கள்" data-en="My Account & Orders Details">எனது கணக்கு & ஆர்டர்கள் விவரங்கள்</h3>
-            <div id="profileDetails" style="font-size: 14px; color: #333; margin-bottom: 15px; line-height: 1.6;"></div>
+            
+            <div id="profileViewSection" style="font-size: 14px; color: #333; margin-bottom: 15px; line-height: 1.6;"></div>
+            <button type="button" id="editProfileToggleBtn" class="btn" style="background:#ff9900; color:#131921; margin-bottom:10px;" onclick="toggleEditProfile()" data-ta="✏️ விவரங்களை எடிட் செய்ய" data-en="✏️ Edit Details">✏️ விவரங்களை எடிட் செய்ய</button>
+
+            <div id="profileEditSection" style="display:none; background:#f1f3f6; padding:12px; border-radius:8px; margin-bottom:15px;">
+                <h4 style="font-size:13px; margin-bottom:8px;" data-ta="விவரங்களை மாற்றுக:" data-en="Update Details:">விவரங்களை மாற்றுக:</h4>
+                <input type="text" id="editName" placeholder="பெயர் (Name)">
+                <input type="tel" id="editPhone" placeholder="போன் எண் (Phone)">
+                <textarea id="editAddress" rows="2" placeholder="முகவரி (Address)"></textarea>
+                <button type="button" class="btn" style="background:#388e3c; color:white; padding:6px; font-size:12px;" onclick="saveEditedProfile()" data-ta="மாற்றங்களைச் சேமி" data-en="Save Changes">மாற்றங்களைச் சேமி</button>
+            </div>
+
             <button type="button" class="btn logout-btn" onclick="logoutUser()" data-ta="வெளியேறு (Logout)" data-en="Logout">வெளியேறு (Logout)</button>
         </div>
     </div>
@@ -212,7 +226,7 @@
         const ADMIN_EMAIL = "thamizhanes@gmail.com";
         const RAZORPAY_KEY_ID = "rzp_live_TJABmArhfi4WPG";
 
-        // மேனுவலாக உள்ளிடப்பட்ட உங்களது மூன்று ப்ராடக்ட்கள் (Manual Products Array)
+        // மேனுவலாக உள்ளிடப்பட்ட உங்களது மூன்று வாட்டர் லெவல் கண்ட்ரோலர் தயாரிப்புகள்
         const manualProducts = [
             {
                 id: "p1",
@@ -378,6 +392,7 @@
             firebase.auth().signOut().then(() => { location.reload(); });
         }
 
+        // Profile Modal & Editing
         function openProfileModal() {
             let user = firebase.auth().currentUser;
             if (!user) { openLoginModal(); return; }
@@ -404,17 +419,50 @@
                 `;
             }).join('');
 
-            document.getElementById('profileDetails').innerHTML = `
-                <p><b>${currentLang === 'ta' ? 'பெயர்' : 'Name'}:</b> ${userExtra.name}</p>
+            document.getElementById('profileViewSection').innerHTML = `
+                <p><b>${currentLang === 'ta' ? 'பெயர்' : 'Name'}:</b> <span id="viewName">${userExtra.name}</span></p>
                 <p><b>${currentLang === 'ta' ? 'மின்னஞ்சல்' : 'Email'}:</b> ${user.email}</p>
-                <p><b>${currentLang === 'ta' ? 'போன் எண்' : 'Phone'}:</b> ${userExtra.phone}</p>
-                <p><b>${currentLang === 'ta' ? 'முகவரி' : 'Address'}:</b> ${userExtra.address}</p>
+                <p><b>${currentLang === 'ta' ? 'போன் எண்' : 'Phone'}:</b> <span id="viewPhone">${userExtra.phone}</span></p>
+                <p><b>${currentLang === 'ta' ? 'முகவரி' : 'Address'}:</b> <span id="viewAddress">${userExtra.address}</span></p>
                 <hr style="margin:12px 0; border:0; border-top:1px solid #ddd;">
                 <h4 style="margin-bottom:8px; color:#131921;">${currentLang === 'ta' ? 'எனது ஆர்டர்கள் & டிராக்கிங்' : 'My Orders & Tracking'}</h4>
                 ${ordersHTML}
             `;
+
+            // Fill edit inputs
+            document.getElementById('editName').value = userExtra.name;
+            document.getElementById('editPhone').value = userExtra.phone;
+            document.getElementById('editAddress').value = userExtra.address;
+            document.getElementById('profileEditSection').style.display = 'none';
+
             document.getElementById('profileModal').style.display = 'flex';
         }
+
+        function toggleEditProfile() {
+            let editSec = document.getElementById('profileEditSection');
+            editSec.style.display = (editSec.style.display === 'none') ? 'block' : 'none';
+        }
+
+        function saveEditedProfile() {
+            let user = firebase.auth().currentUser;
+            if(!user) return;
+
+            let newName = document.getElementById('editName').value.trim();
+            let newPhone = document.getElementById('editPhone').value.trim();
+            let newAddress = document.getElementById('editAddress').value.trim();
+
+            if(!newName || !newPhone || !newAddress) {
+                alert(currentLang === 'ta' ? 'அனைத்து புலங்களையும் நிரப்பவும்.' : 'Please fill all fields.');
+                return;
+            }
+
+            let userExtra = { name: newName, phone: newPhone, email: user.email, address: newAddress };
+            localStorage.setItem('userExtra_' + user.email, JSON.stringify(userExtra));
+
+            alert(currentLang === 'ta' ? 'விவரங்கள் வெற்றிகரமாக மாற்றப்பட்டன!' : 'Details updated successfully!');
+            openProfileModal(); // Refresh modal view
+        }
+
         function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
 
         function addToCart(name, price) {
@@ -546,16 +594,4 @@
                 trackingUrl: '' 
             };
 
-            let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
-            allOrders.push(orderDetails);
-            localStorage.setItem('allOrders', JSON.stringify(allOrders));
-            
-            localStorage.removeItem('cartItems');
-            updateCartDisplay();
-            closeCartModal();
-            alert((currentLang === 'ta' ? 'ஆர்டர் வெற்றிகரமாக உறுதி செய்யப்பட்டது! ஆர்டர் ஐடி: ' : 'Order confirmed successfully! Order ID: ') + orderId);
-            openProfileModal();
-        }
-    </script>
-</body>
-</html>
+            let allOrders = JSON.parse(
