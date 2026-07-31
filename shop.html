@@ -99,12 +99,12 @@
 
     <header>
         <div class="brand-section">
-            <button class="menu-toggle" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+            <button type="button" class="menu-toggle" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
             <img src="1.png" alt="Logo" class="logo-img">
             <div class="company-title"><h1>தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1></div>
         </div>
         <div style="display:flex; gap:10px; align-items:center;">
-            <button onclick="openCartModal()" style="background:#f0f2f5; border:none; padding:8px 14px; border-radius:20px; font-weight:600; cursor:pointer;">🛒 <span id="cartText" data-ta="கார்ட்" data-en="Cart">கார்ட்</span> (<span id="cart-count">0</span>)</button>
+            <button type="button" onclick="openCartModal()" style="background:#f0f2f5; border:none; padding:8px 14px; border-radius:20px; font-weight:600; cursor:pointer;">🛒 <span id="cartText" data-ta="கார்ட்" data-en="Cart">கார்ட்</span> (<span id="cart-count">0</span>)</button>
         </div>
     </header>
 
@@ -122,11 +122,11 @@
         </div>
         <ul class="sidebar-links">
             <li><a href="index.html"><span id="menuHome" data-ta="🏠 முகப்பு பக்கம்" data-en="🏠 Home Page">🏠 முகப்பு பக்கம்</span></a></li>
-            <li><button onclick="toggleSidebar(); handleUserClick();">👤 <span id="sidebar-user-text" data-ta="உள்நுழை / எனது கணக்கு" data-en="Login / My Account">உள்நுழை / எனது கணக்கு</span></button></li>
-            <li><button onclick="toggleSidebar(); openCartModal();">🛒 <span id="menuCart" data-ta="எனது கார்ட் பொருட்கள்" data-en="My Cart Items">எனது கார்ட் பொருட்கள்</span> (<span id="sidebar-cart-count">0</span>)</button></li>
-            <li><button onclick="toggleSidebar(); openProfileModal();"><span id="menuOrders" data-ta="📦 எனது ஆர்டர்கள் & டிராக்கிங்" data-en="📦 My Orders & Tracking">📦 எனது ஆர்டர்கள் & டிராக்கிங்</span></button></li>
+            <li><button type="button" onclick="toggleSidebar(); handleUserClick();">👤 <span id="sidebar-user-text" data-ta="உள்நுழை / எனது கணக்கு" data-en="Login / My Account">உள்நுழை / எனது கணக்கு</span></button></li>
+            <li><button type="button" onclick="toggleSidebar(); openCartModal();">🛒 <span id="menuCart" data-ta="எனது கார்ட் பொருட்கள்" data-en="My Cart Items">எனது கார்ட் பொருட்கள்</span> (<span id="sidebar-cart-count">0</span>)</button></li>
+            <li><button type="button" onclick="toggleSidebar(); openProfileModal();"><span id="menuOrders" data-ta="📦 எனது ஆர்டர்கள் & டிராக்கிங்" data-en="📦 My Orders & Tracking">📦 எனது ஆர்டர்கள் & டிராக்கிங்</span></button></li>
             <li><a href="admin.html" id="sidebarAdminBtn" style="display:none; color:#ff5252;" data-ta="⚙️ அட்மின் டேஷ்போர்டு" data-en="⚙️ Admin Dashboard">⚙️ அட்மின் டேஷ்போர்டு</a></li>
-            <li><button onclick="toggleLanguage(); toggleSidebar();"><span id="sidebarLangText">🌐 Switch to English</span></button></li>
+            <li><button type="button" onclick="toggleLanguage(); toggleSidebar();"><span id="sidebarLangText">🌐 Switch to English</span></button></li>
         </ul>
     </div>
 
@@ -142,7 +142,7 @@
             <span class="close-btn" onclick="closeLoginModal()">&times;</span>
             <h3 data-ta="கஸ்டமர் உள்நுழைவு" data-en="Customer Login">கஸ்டமர் உள்நுழைவு</h3>
             <p style="font-size: 13px; color: #666; margin-bottom: 12px;" data-ta="உங்கள் ஜிமெயில் கணக்கு மூலம் உள்நுழையவும்:" data-en="Sign in using your Google account:">உங்கள் ஜிமெயில் கணக்கு மூலம் உள்நுழையவும்:</p>
-            <button class="google-signin-btn" onclick="signInWithGoogle()">Google / Gmail மூலம் உள்நுழைக</button>
+            <button type="button" class="google-signin-btn" onclick="signInWithGoogle()">Google / Gmail மூலம் உள்நுழைக</button>
         </div>
     </div>
 
@@ -156,7 +156,7 @@
             <input type="email" id="custEmailInput" placeholder="ஈமெயில் ஐடி (Email ID)" required readonly style="background:#eee;">
             <textarea id="custAddress" rows="3" placeholder="டெலிவரி முகவரி (Door No, Street, City, Pincode)" required></textarea>
             
-            <button class="btn" onclick="saveCustomerDetails()" data-ta="விவரங்களைச் சேமிக்க" data-en="Save Details">விவரங்களைச் சேமிக்க</button>
+            <button type="button" class="btn" onclick="saveCustomerDetails()" data-ta="விவரங்களைச் சேமிக்க" data-en="Save Details">விவரங்களைச் சேமிக்க</button>
         </div>
     </div>
 
@@ -165,7 +165,7 @@
             <span class="close-btn" onclick="closeProfileModal()">&times;</span>
             <h3 data-ta="எனது கணக்கு & ஆர்டர்கள்" data-en="My Account & Orders">எனது கணக்கு & ஆர்டர்கள்</h3>
             <div id="profileDetails" style="font-size: 14px; color: #333; margin-bottom: 15px; line-height: 1.6;"></div>
-            <button class="btn logout-btn" onclick="logoutUser()" data-ta="வெளியேறு (Logout)" data-en="Logout">வெளியேறு (Logout)</button>
+            <button type="button" class="btn logout-btn" onclick="logoutUser()" data-ta="வெளியேறு (Logout)" data-en="Logout">வெளியேறு (Logout)</button>
         </div>
     </div>
 
@@ -181,19 +181,19 @@
                 <p id="displaySavedAddress" style="font-size: 12px; color: #555; margin-bottom: 8px;"></p>
                 
                 <div id="addressOptions" style="display: flex; gap: 8px;">
-                    <button class="btn" style="padding: 6px; font-size: 11px; background:#4CAF50; color:white; flex:1;" onclick="confirmAddressYes()">✔️ முகவரி சரியானது</button>
-                    <button class="btn" style="padding: 6px; font-size: 11px; background:#ff5252; color:white; flex:1;" onclick="confirmAddressNo()">❌ முகவரி சரியில்லை (மாற்று முகவரி)</button>
+                    <button type="button" class="btn" style="padding: 6px; font-size: 11px; background:#4CAF50; color:white; flex:1;" onclick="confirmAddressYes()">✔️ முகவரி சரியானது</button>
+                    <button type="button" class="btn" style="padding: 6px; font-size: 11px; background:#ff5252; color:white; flex:1;" onclick="confirmAddressNo()">❌ முகவரி சரியில்லை (மாற்று முகவரி)</button>
                 </div>
 
                 <div id="newAddressForm" style="display: none; margin-top: 10px;">
                     <textarea id="altCustAddress" rows="2" placeholder="புதிய டெலிவரி முகவரியை உள்ளிடவும்..."></textarea>
-                    <button class="btn" style="padding: 6px; font-size: 11px; background:#ff9800; color:white;" onclick="saveAlternativeAddress()">முகவரியைச் சேமித்து தொடர</button>
+                    <button type="button" class="btn" style="padding: 6px; font-size: 11px; background:#ff9800; color:white;" onclick="saveAlternativeAddress()">முகவரியைச் சேமித்து தொடர</button>
                 </div>
             </div>
 
             <div id="paymentOptionsBox" style="display: none;">
-                <button class="pay-btn" onclick="proceedToRazorpay()" data-ta="Razorpay மூலம் பணம் செலுத்த" data-en="Pay Securely via Razorpay">Razorpay மூலம் பணம் செலுத்த</button>
-                <button class="cod-btn" onclick="proceedToCOD()" data-ta="கேஷ் ஆன் டெலிவரி (COD)" data-en="Cash on Delivery (COD)">கேஷ் ஆன் டெலிவரி (COD)</button>
+                <button type="button" class="pay-btn" onclick="proceedToRazorpay()" data-ta="Razorpay மூலம் பணம் செலுத்த" data-en="Pay Securely via Razorpay">Razorpay மூலம் பணம் செலுத்த</button>
+                <button type="button" class="cod-btn" onclick="proceedToCOD()" data-ta="கேஷ் ஆன் டெலிவரி (COD)" data-en="Cash on Delivery (COD)">கேஷ் ஆன் டெலிவரி (COD)</button>
             </div>
         </div>
     </div>
@@ -249,7 +249,7 @@
             });
         });
 
-        // Load Products from Firebase Realtime Database with LocalStorage Fallback
+        // Firebase Realtime Database மூலம் லைவ்வாக தயாரிப்புகளை fetch செய்தல்
         function loadShopProducts() {
             database.ref('products').on('value', (snapshot) => {
                 let productsData = snapshot.val();
@@ -258,18 +258,17 @@
                     products = Object.keys(productsData).map(key => ({ id: key, ...productsData[key] }));
                     localStorage.setItem('adminProducts', JSON.stringify(products));
                 } else {
-                    let localSaved = JSON.parse(localStorage.getItem('adminProducts'));
-                    if (localSaved && localSaved.length > 0) {
-                        products = localSaved;
-                    } else {
-                        products = [
-                            {id: "p1", name: "AWLCP 1.0", price: 3999, discount: 3499, stock: 15, offerTag: "Save ₹500", img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
-                            {id: "p2", name: "AWLCW 1.0", price: 5499, discount: 4999, stock: 10, offerTag: "WiFi Model", img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
-                            {id: "p3", name: "AWLCWS 1.0", price: 7499, discount: 6999, stock: 8, offerTag: "Solar + WiFi", img: "3.png", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
-                        ];
-                    }
+                    products = [
+                        {id: "p1", name: "AWLCP 1.0", price: 3999, discount: 3499, stock: 15, offerTag: "Save ₹500", img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
+                        {id: "p2", name: "AWLCW 1.0", price: 5499, discount: 4999, stock: 10, offerTag: "WiFi Model", img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
+                        {id: "p3", name: "AWLCWS 1.0", price: 7499, discount: 6999, stock: 8, offerTag: "Solar + WiFi", img: "3.png", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
+                    ];
                 }
                 renderProducts(products);
+            }, (error) => {
+                console.error("Error loading products:", error);
+                let localSaved = JSON.parse(localStorage.getItem('adminProducts')) || [];
+                renderProducts(localSaved);
             });
         }
 
@@ -299,7 +298,7 @@
                             <p style="font-size:12px; margin-bottom:8px;">${stockStatus}</p>
                             <ul class="features">${specsHTML}</ul>
                         </div>
-                        <button class="btn" ${isOutOfStock ? 'disabled style="background:#ccc; cursor:not-allowed;"' : ''} onclick="addToCart('${p.name}', ${finalPriceToCart})">${btnText}</button>
+                        <button type="button" class="btn" ${isOutOfStock ? 'disabled style="background:#ccc; cursor:not-allowed;"' : ''} onclick="addToCart('${p.name}', ${finalPriceToCart})">${btnText}</button>
                     </div>
                 `;
             });
@@ -374,7 +373,7 @@
             } else {
                 cart.forEach((item, index) => {
                     total += item.price;
-                    listHTML += `<li><span><b>${item.name}</b> - ₹${item.price}</span><button class="remove-cart-item" onclick="removeFromCart(${index})">${currentLang === 'ta' ? 'நீக்கு' : 'Remove'}</button></li>`;
+                    listHTML += `<li><span><b>${item.name}</b> - ₹${item.price}</span><button type="button" class="remove-cart-item" onclick="removeFromCart(${index})">${currentLang === 'ta' ? 'நீக்கு' : 'Remove'}</button></li>`;
                 });
             }
             document.getElementById('cartItemsList').innerHTML = listHTML;
