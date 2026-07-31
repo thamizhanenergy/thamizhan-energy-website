@@ -173,16 +173,18 @@
 
         <div class="panel-box">
             <h3>➕ புதிய தயாரிப்பைச் சேர்க்க (Add New Product)</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 10px;">
-                <input type="text" id="newProdName" placeholder="தயாரிப்பு பெயர் (Model Name)">
-                <input type="number" id="newProdPrice" placeholder="அசல் விலை (Original Price ₹)">
-                <input type="number" id="newProdDiscount" placeholder="தள்ளுபடி விலை (Discounted Price ₹)">
-                <input type="number" id="newProdStock" placeholder="ஸ்டாக் அளவு (Stock Qty)">
-                <input type="text" id="newProdOffer" placeholder="ஆஃபர் டேக் (எ.கா: 20% OFF)">
-                <input type="text" id="newProdImg" placeholder="இமேஜ் லிங்க் (எ.கா: 3.png)">
-            </div>
-            <textarea id="newProdSpecs" rows="2" placeholder="ஸ்பெசிஃபிகேஷன்ஸ் (கமா மூலம் பிரிக்கவும்)"></textarea>
-            <button type="button" class="btn" onclick="addNewProduct()">புதிய தயாரிப்பைச் சேர்க்கவும்</button>
+            <form id="addProductForm" onsubmit="addNewProductForm(event)">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 10px;">
+                    <input type="text" id="newProdName" placeholder="தயாரிப்பு பெயர் (Model Name)" required>
+                    <input type="number" id="newProdPrice" placeholder="அசல் விலை (Original Price ₹)" required>
+                    <input type="number" id="newProdDiscount" placeholder="தள்ளுபடி விலை (Discounted Price ₹)">
+                    <input type="number" id="newProdStock" placeholder="ஸ்டாக் அளவு (Stock Qty)" required>
+                    <input type="text" id="newProdOffer" placeholder="ஆஃபர் டேக் (எ.கா: 20% OFF)">
+                    <input type="text" id="newProdImg" placeholder="இமேஜ் லிங்க் (எ.கா: 3.png)">
+                </div>
+                <textarea id="newProdSpecs" rows="2" placeholder="ஸ்பெசிஃபிகேஷன்ஸ் (கமா மூலம் பிரிக்கவும்)"></textarea>
+                <button type="submit" class="btn">புதிய தயாரிப்பைச் சேர்க்கவும்</button>
+            </form>
         </div>
 
         <div class="panel-box">
@@ -309,9 +311,9 @@
                             <input type="text" id="trackUrl_${index}" value="${trackingUrlVal}" placeholder="Courier URL">
                         </td>
                         <td>
-                            <button class="btn" style="padding:5px 10px; margin-bottom:4px;" onclick="saveTracking(${index})">சேமி</button><br>
-                            <button class="print-btn" style="padding:5px 10px; margin-bottom:4px;" onclick="printShippingLabel(${index})">🖨️ லேபிள் பிரிண்ட்</button><br>
-                            <button class="delete-btn" onclick="deleteOrder(${index})">🗑️ நீக்கு</button>
+                            <button type="button" class="btn" style="padding:5px 10px; margin-bottom:4px;" onclick="saveTracking(${index})">சேமி</button><br>
+                            <button type="button" class="print-btn" style="padding:5px 10px; margin-bottom:4px;" onclick="printShippingLabel(${index})">🖨️ லேபிள் பிரிண்ட்</button><br>
+                            <button type="button" class="delete-btn" onclick="deleteOrder(${index})">🗑️ நீக்கு</button>
                         </td>
                     </tr>
                 `;
@@ -362,7 +364,7 @@
                 
                 let actionBtn = isClosed ? 
                     '<span style="color:gray; font-size:12px; font-weight:600;">மூடப்பட்டது (Closed)</span>' : 
-                    `<button class="close-ticket-btn" onclick="closeTicket(${index})">Close Ticket</button>`;
+                    `<button type="button" class="close-ticket-btn" onclick="closeTicket(${index})">Close Ticket</button>`;
 
                 html += `
                     <tr>
@@ -431,15 +433,6 @@
             printSec.style.display = 'none';
         }
 
-        // Hybrid Sync Functions for Products (Firebase Cloud + LocalStorage Backup)
-        function getDefaultProducts() {
-            return [
-                {id: "p1", name: "AWLCP 1.0", price: 3999, discount: 3499, stock: 15, offerTag: "Save ₹500", img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
-                {id: "p2", name: "AWLCW 1.0", price: 5499, discount: 4999, stock: 10, offerTag: "WiFi Model", img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
-                {id: "p3", name: "AWLCWS 1.0", price: 7499, discount: 6999, stock: 8, offerTag: "Solar + WiFi", img: "3.png", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
-            ];
-        }
-
         function loadAdminProductsTable() {
             database.ref('products').on('value', (snapshot) => {
                 let productsData = snapshot.val();
@@ -447,7 +440,11 @@
                 if (productsData) {
                     products = Object.keys(productsData).map(key => ({ id: key, ...productsData[key] }));
                 } else {
-                    products = getDefaultProducts();
+                    products = [
+                        {id: "p1", name: "AWLCP 1.0", price: 3999, discount: 3499, stock: 15, offerTag: "Save ₹500", img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
+                        {id: "p2", name: "AWLCW 1.0", price: 5499, discount: 4999, stock: 10, offerTag: "WiFi Model", img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
+                        {id: "p3", name: "AWLCWS 1.0", price: 7499, discount: 6999, stock: 8, offerTag: "Solar + WiFi", img: "3.png", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
+                    ];
                     database.ref('products').set(products);
                 }
                 
@@ -475,9 +472,9 @@
             });
         }
 
-        // பிழை கண்டறியும் வசதியுடன் (Debugging) மேம்படுத்தப்பட்ட addNewProduct பங்க்ஷன்
-        function addNewProduct() {
-            console.log("Add Product Button Clicked Successfully!");
+        // Form Submit முறையான புதிய தயாரிப்பு சேர்க்கும் பங்க்ஷன்
+        function addNewProductForm(event) {
+            event.preventDefault(); // பக்கம் ரீப்ரெஷ் ஆவதை தடுத்தல்
 
             let name = document.getElementById('newProdName').value.trim();
             let price = document.getElementById('newProdPrice').value.trim();
@@ -502,29 +499,11 @@
                 specs: specs ? specs.split(',').map(s => s.trim()) : ["உத்தரவாதம் உள்ளது"]
             };
 
-            // Firebase-ல் டேட்டாவை தள்ளுதல் (Push)
-            database.ref('products').push(newProd)
-            .then((ref) => {
-                console.log("Firebase Push Success. Key:", ref.key);
-                
-                let currentLocal = JSON.parse(localStorage.getItem('adminProducts')) || [];
-                currentLocal.push(newProd);
-                localStorage.setItem('adminProducts', JSON.stringify(currentLocal));
-
-                alert("புதிய தயாரிப்பு கிளவுட்டில் மற்றும் இன்வென்டரியில் வெற்றிகரமாக சேர்க்கப்பட்டது!");
-                
-                // இன்புட் பாக்ஸ்களை காலியாக்குதல்
-                document.getElementById('newProdName').value = '';
-                document.getElementById('newProdPrice').value = '';
-                document.getElementById('newProdDiscount').value = '';
-                document.getElementById('newProdStock').value = '';
-                document.getElementById('newProdOffer').value = '';
-                document.getElementById('newProdImg').value = '';
-                document.getElementById('newProdSpecs').value = '';
-            })
-            .catch((error) => {
-                console.error("Firebase Push Error:", error);
-                alert("கிளவுடில் சேர்ப்பதில் பிழை: " + error.message);
+            database.ref('products').push(newProd).then(() => {
+                alert("புதிய தயாரிப்பு வெற்றிகரமாக சேர்க்கப்பட்டது!");
+                document.getElementById('addProductForm').reset();
+            }).catch((error) => {
+                alert("பிழை: " + error.message);
             });
         }
 
@@ -546,8 +525,6 @@
                 specs: specs
             }).then(() => {
                 alert("தயாரிப்பு விவரங்கள் கிளவுட்டில் புதுப்பிக்கப்பட்டன!");
-            }).catch((error) => {
-                alert("புதுப்பிப்பதில் பிழை: " + error.message);
             });
         }
 
@@ -555,8 +532,6 @@
             if(confirm("இந்தத் தயாரிப்பை நீக்க விரும்புகிறீர்களா?")) {
                 database.ref('products/' + id).remove().then(() => {
                     alert("தயாரிப்பு நீக்கப்பட்டது!");
-                }).catch((error) => {
-                    alert("நீக்குவதில் பிழை: " + error.message);
                 });
             }
         }
