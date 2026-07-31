@@ -292,7 +292,7 @@
                     <div class="product-card" data-name="${p.name.toLowerCase()}">
                         ${offerBadge}
                         <div>
-                            <div class="product-img-box"><img src="${p.img}" alt="${p.name}" class="product-img"></div>
+                            <div class="product-img-box"><img src="${p.img || '3.png'}" alt="${p.name}" class="product-img"></div>
                             <span class="model-badge">Electronics Model</span>
                             <h3>${p.name}</h3>
                             ${priceSection}
