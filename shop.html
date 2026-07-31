@@ -255,39 +255,48 @@
         const ADMIN_EMAIL = "thamizhanes@gmail.com";
         const RAZORPAY_KEY_ID = "rzp_live_TJABmArhfi4WPG";
 
-        // மேனுவலாக உள்ளிடப்பட்ட உங்களது மூன்று வாட்டர் லெவல் கண்ட்ரோலர் தயாரிப்புகள்
-        const manualProducts = [
-            {
-                id: "p1",
-                name: "AWLCP 1.0",
-                price: 3999,
-                discount: 3499,
-                stock: 15,
-                offerTag: "Save ₹500",
-                img: "3.png",
-                specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]
-            },
-            {
-                id: "p2",
-                name: "AWLCW 1.0",
-                price: 5499,
-                discount: 4999,
-                stock: 10,
-                offerTag: "WiFi Model",
-                img: "3.png",
-                specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]
-            },
-            {
-                id: "p3",
-                name: "AWLCWS 1.0",
-                price: 7499,
-                discount: 6999,
-                stock: 8,
-                offerTag: "Solar + WiFi",
-                img: "3.png",
-                specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]
+        // காமன் ஸ்டோரேஜ் (LocalStorage) மூலம் இன்வென்டரி மேனேஜ்மென்ட் உடன் இணைக்கப்பட்ட தயாரிப்புகள்
+        function getShopProducts() {
+            let saved = localStorage.getItem('shopProducts');
+            if (saved) {
+                return JSON.parse(saved);
+            } else {
+                let defaultProducts = [
+                    {
+                        id: "p1",
+                        name: "AWLCP 1.0",
+                        price: 3999,
+                        discount: 3499,
+                        stock: 15,
+                        offerTag: "Save ₹500",
+                        img: "3.png",
+                        specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]
+                    },
+                    {
+                        id: "p2",
+                        name: "AWLCW 1.0",
+                        price: 5499,
+                        discount: 4999,
+                        stock: 10,
+                        offerTag: "WiFi Model",
+                        img: "3.png",
+                        specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]
+                    },
+                    {
+                        id: "p3",
+                        name: "AWLCWS 1.0",
+                        price: 7499,
+                        discount: 6999,
+                        stock: 8,
+                        offerTag: "Solar + WiFi",
+                        img: "3.png",
+                        specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]
+                    }
+                ];
+                localStorage.setItem('shopProducts', JSON.stringify(defaultProducts));
+                return defaultProducts;
             }
-        ];
+        }
 
         function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('active'); }
 
@@ -306,7 +315,7 @@
                     if(el.getAttribute('data-ta')) el.innerText = el.getAttribute('data-ta');
                 }
             });
-            renderProducts(manualProducts);
+            renderProducts(getShopProducts());
         }
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -317,7 +326,7 @@
                 elements.forEach(el => { if(el.getAttribute('data-en')) el.innerText = el.getAttribute('data-en'); });
             }
 
-            renderProducts(manualProducts);
+            renderProducts(getShopProducts());
             updateCartDisplay();
             
             firebase.auth().onAuthStateChanged((user) => {
@@ -503,6 +512,13 @@
         function closeTrackingModal() { document.getElementById('trackingModal').style.display = 'none'; }
 
         function addToCart(name, price) {
+            let products = getShopProducts();
+            let prod = products.find(p => p.name === name);
+            if(prod && prod.stock <= 0) {
+                alert(currentLang === 'ta' ? 'மன்னிக்கவும்! இந்தப் பொருள் ஸ்டாக் இல்லை.' : 'Sorry! Product is out of stock.');
+                return;
+            }
+
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             cart.push({name, price});
             localStorage.setItem('cartItems', JSON.stringify(cart));
@@ -613,6 +629,17 @@
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             if(cart.length === 0) return;
             
+            // ஸ்டாக் அளவைக் குறைத்தல் (Inventory Management)
+            let products = getShopProducts();
+            cart.forEach(item => {
+                let prod = products.find(p => p.name === item.name);
+                if (prod && prod.stock > 0) {
+                    prod.stock -= 1;
+                }
+            });
+            localStorage.setItem('shopProducts', JSON.stringify(products));
+            renderProducts(products);
+
             let user = firebase.auth().currentUser;
             let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || {};
             let cartTotalText = document.getElementById('cartTotalPrice').innerText.replace('₹', '').replace(',', '');
@@ -631,6 +658,7 @@
                 trackingUrl: '' 
             };
 
+            // அட்மின் பக்கம் ஆர்டர்களைக் காண காமன் ஸ்டோரேஜில் சேமித்தல்
             let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
             allOrders.push(orderDetails);
             localStorage.setItem('allOrders', JSON.stringify(allOrders));
@@ -639,14 +667,14 @@
             updateCartDisplay();
             closeCartModal();
 
-            // Show Success Animation Modal
+            // Success Animation Modal காட்டுதல்
             document.getElementById('successOrderIdText').innerText = (currentLang === 'ta' ? 'ஆர்டர் ஐடி: ' : 'Order ID: ') + orderId;
             document.getElementById('successModal').style.display = 'flex';
         }
 
         function closeSuccessModal() {
             document.getElementById('successModal').style.display = 'none';
-            openTrackingModal(); // Open tracking modal to show order
+            openTrackingModal();
         }
     </script>
 </body>
