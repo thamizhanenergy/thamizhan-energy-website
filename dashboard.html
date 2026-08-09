@@ -15,8 +15,8 @@
         .pairing-card { background: #1a2a32; padding: 25px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #283c48; text-align: center; }
         .pairing-card h3 { color: #00ff88; font-size: 18px; margin-bottom: 8px; }
         .pairing-card p { font-size: 13px; color: #aaa; margin-bottom: 15px; }
-        .pairing-input-group { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
-        .pairing-input-group input { padding: 10px; border-radius: 6px; border: 1px solid #444; background: #0f2027; color: #fff; width: 250px; outline: none; font-size: 13px; }
+        .pairing-input-group { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+        .pairing-input-group input { padding: 10px; border-radius: 6px; border: 1px solid #444; background: #0f2027; color: #fff; width: 260px; outline: none; font-size: 13px; }
         .pairing-input-group button { background: #00ff88; color: #0f2027; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px; }
         .btn-ble { background: #2196F3 !important; color: white !important; }
 
@@ -52,23 +52,30 @@
 <body>
     <div class="container">
         <header>
-            <h1>தமிழன் எனர்ஜி சிஸ்டம்ஸ் - IoT டேஷ்போர்டு</h1>
+            <h1>தமிழன் எனர்ஜி சிஸ்டம்ஸ் - AWLCW 1.0 டேஷ்போர்டு</h1>
         </header>
 
         <div class="pairing-card" id="pairingCard">
-            <h3>சாதன வைஃபை அமைப்பு (BLE Wi-Fi Setup)</h3>
-            <p>உங்களது வீட்டு வைஃபை விவரங்களை ப்ளூடூத் மூலம் நேரடியாக ESP32-க்கு அனுப்பவும்</p>
+            <h3>ESP32 ப்ளூடூத் வைஃபை இணைப்பு</h3>
+            <p>முதலில் ப்ளூடூத் மூலம் உங்கள் சாதனத்தைத் தேடி இணைக்கவும்</p>
             
             <div class="pairing-input-group">
-                <input type="text" id="wifiSsid" placeholder="Home Wi-Fi Name (SSID)">
+                <button class="btn-ble" onclick="searchAndConnectBLE()">🔍 ESP32-ஐத் தேடி இணைக்கவும் (Scan BLE)</button>
             </div>
-            <div class="pairing-input-group">
-                <input type="password" id="wifiPass" placeholder="Home Wi-Fi Password">
+            <p id="bleStatus" style="font-size:13px; color:#ffeb3b; margin: 10px 0;"></p>
+
+            <div id="wifiForm" style="display:none; margin-top: 15px; border-top: 1px solid #283c48; padding-top: 15px;">
+                <p style="color: #00ff88; margin-bottom: 10px;">இணைப்பு வெற்றி! உங்கள் வீட்டு வைஃபை விவரங்களை உள்ளிடவும்:</p>
+                <div class="pairing-input-group">
+                    <input type="text" id="wifiSsid" placeholder="Home Wi-Fi Name (SSID)">
+                </div>
+                <div class="pairing-input-group">
+                    <input type="password" id="wifiPass" placeholder="Home Wi-Fi Password">
+                </div>
+                <div class="pairing-input-group">
+                    <button onclick="sendWiFiToESP32()">ஹோம் வைஃபை இணைக்கவும் (Connect)</button>
+                </div>
             </div>
-            <div class="pairing-input-group">
-                <button class="btn-ble" onclick="configureWiFiViaBLE()">🔵ப்ளூடூத் மூலம் வைஃபை இணைக்கவும்</button>
-            </div>
-            <p id="bleStatus" style="font-size:12px; color:#00ff88; margin-top:10px;"></p>
         </div>
 
         <div id="dashboardContent" style="display:none;">
@@ -79,13 +86,13 @@
                         <div class="water-tank">
                             <div class="water-fill" id="waterFill" style="height: 15%;"></div>
                         </div>
-                        <div class="tank-label" id="tankLevelText">மட்டம்: காலியாகிறது...</div>
+                        <div class="tank-label" id="tankLevelText">மட்டம்: ஆய்வு செய்கிறது...</div>
                         <div class="timer-text" id="timerDisplay"></div>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h3>சாதன நிலை & கட்டுப்பாடுகள் (1001)</h3>
+                    <h3>சாதன நிலை & கட்டுப்பாடுகள் (AWLCW-1001)</h3>
                     <ul class="status-list">
                         <li class="status-item">
                             <span>இயக்க முறை (Mode):</span>
@@ -129,12 +136,38 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
+        let bleCharacteristic;
         let currentAutoMode = 1;
         let currentMotorState = 0;
         let deviceId = "1001";
 
-        // Web Bluetooth API மூலம் ESP32-க்கு வைஃபை பாஸ்வேர்ட் அனுப்புவது
-        async function configureWiFiViaBLE() {
+        // 1. ப்ளூடூத் மூலம் ESP32-ஐத் தேடி இணைக்கும் ஃபங்ஷன்
+        async function searchAndConnectBLE() {
+            let statusText = document.getElementById('bleStatus');
+            try {
+                statusText.innerText = "ப்ளூடூத் சாதனத்தைத் தேடுகிறது ('TES-AWLCW-1001')...";
+                
+                const device = await navigator.bluetooth.requestDevice({
+                    filters: [{ name: 'TES-AWLCW-1001' }],
+                    optionalServices: ['4fafc201-1fb5-459e-8fcc-c5c9c331914b']
+                });
+
+                statusText.innerText = "ப்ளூடூத் இணைக்கப்படுகிறது (Connecting)...";
+                const server = await device.gatt.connect();
+                const service = await server.getPrimaryService('4fafc201-1fb5-459e-8fcc-c5c9c331914b');
+                bleCharacteristic = await service.getCharacteristic('beb5483e-36e1-4688-b7f5-ea07361b26ace');
+
+                statusText.innerText = "இணைப்பு வெற்றிகரமாக உருவாக்கப்பட்டது!";
+                document.getElementById('wifiForm').style.display = 'block';
+
+            } catch (error) {
+                console.error(error);
+                statusText.innerText = "ப்ளூடூத் இணைப்பு தோல்வியுற்றது அல்லது ரத்து செய்யப்பட்டது.";
+            }
+        }
+
+        // 2. வைஃபை பெயர் மற்றும் பாஸ்வேர்டை ESP32-க்கு அனுப்புதல்
+        async function sendWiFiToESP32() {
             let ssid = document.getElementById('wifiSsid').value.trim();
             let pass = document.getElementById('wifiPass').value.trim();
             let statusText = document.getElementById('bleStatus');
@@ -145,22 +178,13 @@
             }
 
             try {
-                statusText.innerText = "ப்ளூடூத் சாதனம் தேடப்படுகிறது...";
-                const device = await navigator.bluetooth.requestDevice({
-                    filters: [{ name: 'TES-AWLCW-1001' }],
-                    optionalServices: ['4fafc201-1fb5-459e-8fcc-c5c9c331914b']
-                });
-
-                statusText.innerText = "ப்ளூடூத் இணைக்கப்படுகிறது...";
-                const server = await device.gatt.connect();
-                const service = await server.getPrimaryService('4fafc201-1fb5-459e-8fcc-c5c9c331914b');
-                const characteristic = await service.getCharacteristic('beb5483e-36e1-4688-b7f5-ea07361b26ace');
-
+                statusText.innerText = "வீட்டு வைஃபை விவரங்கள் ESP32-க்கு அனுப்பப்படுகிறது...";
                 let dataString = ssid + ":" + pass;
                 let encoder = new TextEncoder();
-                await characteristic.writeValue(encoder.encode(dataString));
+                await bleCharacteristic.writeValue(encoder.encode(dataString));
 
-                statusText.innerText = "வைஃபை விவரங்கள் அனுப்பப்பட்டது! சாதனம் ஆன்லைனுக்கு வருகிறது...";
+                statusText.innerText = "வைஃபை தகவல்கள் பெறப்பட்டது! சாதனம் ரீஸ்டார்ட் ஆகிறது...";
+                
                 setTimeout(() => {
                     document.getElementById('pairingCard').style.display = 'none';
                     document.getElementById('dashboardContent').style.display = 'block';
@@ -169,10 +193,11 @@
 
             } catch (error) {
                 console.error(error);
-                statusText.innerText = "இணைப்பு தோல்வியுற்றது. ப்ளூடூத் ஆன் செய்யப்பட்டுள்ளதா எனப் பார்க்கவும்.";
+                statusText.innerText = "தரவு அனுப்புவதில் பிழை ஏற்பட்டது.";
             }
         }
 
+        // 3. ஃபயர்பேஸ் டேட்டாவைக் கண்காணித்து டேஷ்போர்டை இயக்குவது
         function initFirebaseListener() {
             database.ref('devices/' + deviceId).on('value', (snapshot) => {
                 const data = snapshot.val();
