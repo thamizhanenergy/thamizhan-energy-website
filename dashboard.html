@@ -464,7 +464,7 @@
                 let encoder = new TextEncoder();
                 await bleCharacteristic.writeValue(encoder.encode(dataString));
 
-                statusText.innerText = currentLang === 'ta' ? "⏳ வைஃபை விவரங்கள் அனுப்பப்படுகிறது..." : "⏳ Sending Wi-Fi credentials...";
+                statusText.innerText = currentLang === 'ta' ? "⏳ Connecting to Wi-Fi, Please wait..." : "⏳ Connecting to Wi-Fi, Please wait...";
                 
                 let user = auth.currentUser;
                 if (user) {
@@ -472,18 +472,14 @@
                     await database.ref('devices/' + targetId).update({ boundUser: user.uid });
                 }
 
+                // ESP32 வைஃபையுடன் இணைந்து ஃபயர்பேஸில் டேட்டா அனுப்ப 8 விநாடிகள் தாமதம் கொடுத்து உறுதி செய்தல்
                 setTimeout(() => {
-                    // வைஃபை இணைக்கப்பட்ட வெற்றிகரமான செய்தி
-                    statusText.innerHTML = `<b style="color:var(--accent-green); font-size:15px;">${currentLang === 'ta' ? '🎉 Device Connected Successfully to your Wi-Fi!' : '🎉 Device Connected Successfully to your Wi-Fi!'}</b>`;
+                    statusText.innerHTML = `<b style="color:var(--accent-green); font-size:15px;">🎉 Device Connected Successfully to your Wi-Fi!</b>`;
                     
                     setTimeout(() => {
-                        activeDeviceId = targetId;
-                        document.getElementById('pairingCard').style.display = 'none';
-                        document.getElementById('dashboardContent').style.display = 'block';
-                        updateUIStrings();
-                        initFirebaseListener();
+                        backToSelector(); // நேராக டிவைஸ் செலக்டர் பக்கத்திற்குச் செல்லுதல்
                     }, 2500);
-                }, 3000);
+                }, 8000);
 
             } catch (error) {
                 statusText.innerText = (currentLang === 'ta' ? "❌ அனுப்புவதில் பிழை: " : "❌ Transmission Error: ") + error.message;
