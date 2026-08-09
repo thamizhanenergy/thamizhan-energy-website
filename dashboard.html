@@ -43,6 +43,13 @@
         .btn-ble { background: var(--accent-blue) !important; color: white !important; }
         .btn-danger { background: var(--accent-red) !important; color: white !important; }
 
+        /* Popup Modal Styles */
+        #popupModal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
+        .modal-content { background: var(--bg-card); padding: 30px; border-radius: 14px; border: 1px solid var(--accent-green); text-align: center; max-width: 400px; width: 90%; box-shadow: 0 10px 30px rgba(0,230,118,0.3); }
+        .modal-content h3 { color: var(--accent-green); font-size: 18px; margin-bottom: 10px; }
+        .modal-content p { color: var(--text-main); font-size: 14px; margin-bottom: 20px; text-align: center; }
+        .modal-content button { background: var(--accent-green); color: var(--bg-primary); border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; }
+
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         @media(max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
 
@@ -83,6 +90,14 @@
                 <span class="user-badge" id="userInfo">Guest</span>
             </div>
         </header>
+
+        <div id="popupModal">
+            <div class="modal-content">
+                <h3 id="modalTitle">Success</h3>
+                <p id="modalMsg">Device Connected Successfully to your Wi-Fi!</p>
+                <button onclick="closeModal()" id="modalBtn">OK</button>
+            </div>
+        </div>
 
         <div class="card" id="authCard">
             <h3 id="tAuthTitle">Enterprise Secure Login</h3>
@@ -238,7 +253,9 @@
                 resetBtnText: "ட்ரை ரன் ரீசெட் (Reset Dry Run)",
                 delDev: "🗑️ இந்த சாதனத்தை நீக்கு (Delete Device)",
                 switchDev: "← சாதனங்கள் பட்டியல் (Switch Device)",
-                logout2: "வெளியேறு (Logout)"
+                logout2: "வெளியேறு (Logout)",
+                successTitle: "வெற்றி (Success)",
+                successMsg: "Device Connected Successfully to your Wi-Fi!"
             },
             en: {
                 authTitle: "Enterprise Secure Login",
@@ -276,7 +293,9 @@
                 resetBtnText: "Reset Dry Run Trip",
                 delDev: "🗑️ Unbind / Delete Device",
                 switchDev: "← Switch Controller Instance",
-                logout2: "Sign Out"
+                logout2: "Sign Out",
+                successTitle: "Success",
+                successMsg: "Device Connected Successfully to your Wi-Fi!"
             }
         };
 
@@ -313,6 +332,8 @@
             document.getElementById('tDelDev').innerText = t.delDev;
             document.getElementById('tSwitchDev').innerText = t.switchDev;
             document.getElementById('tLogout2').innerText = t.logout2;
+            document.getElementById('modalTitle').innerText = t.successTitle;
+            document.getElementById('modalMsg').innerText = t.successMsg;
 
             if(currentAutoMode === 1) {
                 document.getElementById('modeStatus').innerText = t.modeAuto;
@@ -400,6 +421,7 @@
             auth.signOut().then(() => { location.reload(); });
         }
 
+        // ஸ்கேன் டைமர் மற்றும் லோடிங் உடன் ப்ளூடூத் ஸ்கேன்
         async function searchAndConnectBLE() {
             let targetId = document.getElementById('targetDeviceId').value.trim();
             let statusText = document.getElementById('bleStatus');
@@ -407,8 +429,13 @@
             if (!targetId) { alert(currentLang === 'ta' ? "Device ID-ஐ உள்ளிடவும்." : "Please enter Device ID."); return; }
 
             try {
-                statusText.innerText = currentLang === 'ta' ? "⏳ ப்ளூடூத் மூலம் இணைக்கிறது, வைஃபை நெட்வொர்க்குகள் ஸ்கேன் செய்யப்படுகிறது..." : "⏳ Connecting BLE & Scanning Wi-Fi networks, please wait...";
-                
+                let seconds = 0;
+                statusText.innerText = (currentLang === 'ta' ? "⏳ Scanning Wi-Fi Networks... (" : "⏳ Scanning Wi-Fi Networks... (") + seconds + "s)";
+                let scanTimer = setInterval(() => {
+                    seconds++;
+                    statusText.innerText = (currentLang === 'ta' ? "⏳ Scanning Wi-Fi Networks... (" : "⏳ Scanning Wi-Fi Networks... (") + seconds + "s)";
+                }, 1000);
+
                 const device = await navigator.bluetooth.requestDevice({
                     filters: [{ name: 'TES-AWLCW-' + targetId }, { name: 'TES-AWLCW-1001' }],
                     optionalServices: [SERVICE_UUID]
@@ -418,11 +445,10 @@
                 const service = await server.getPrimaryService(SERVICE_UUID);
                 bleCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
-                statusText.innerText = currentLang === 'ta' ? "✅ ப்ளூடூத் இணைக்கப்பட்டது! வைஃபை பட்டியல் பெறப்படுகிறது..." : "✅ BLE Connected! Fetching Wi-Fi list...";
-
                 await bleCharacteristic.startNotifications();
                 
                 bleCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
+                    clearInterval(scanTimer); // டைமர் நிறுத்துதல்
                     let decoder = new TextDecoder('utf-8');
                     let wifiString = decoder.decode(event.target.value);
                     let networks = wifiString.split(',');
@@ -451,6 +477,7 @@
             }
         }
 
+        // வைஃபை பாஸ்வேர்ட் சப்மிட் செய்தவுடன் டைமர் மற்றும் சக்சஸ் பாப்-அப்
         async function sendWiFiToESP32() {
             let ssid = document.getElementById('wifiSsidSelect').value;
             let pass = document.getElementById('wifiPass').value.trim();
@@ -464,7 +491,12 @@
                 let encoder = new TextEncoder();
                 await bleCharacteristic.writeValue(encoder.encode(dataString));
 
-                statusText.innerText = currentLang === 'ta' ? "⏳ Connecting to Wi-Fi, Please wait..." : "⏳ Connecting to Wi-Fi, Please wait...";
+                let connSec = 0;
+                statusText.innerText = (currentLang === 'ta' ? "⏳ Connecting to Wi-Fi, Please wait... (" : "⏳ Connecting to Wi-Fi, Please wait... (") + connSec + "s)";
+                let connTimer = setInterval(() => {
+                    connSec++;
+                    statusText.innerText = (currentLang === 'ta' ? "⏳ Connecting to Wi-Fi, Please wait... (" : "⏳ Connecting to Wi-Fi, Please wait... (") + connSec + "s)";
+                }, 1000);
                 
                 let user = auth.currentUser;
                 if (user) {
@@ -472,18 +504,24 @@
                     await database.ref('devices/' + targetId).update({ boundUser: user.uid });
                 }
 
-                // ESP32 வைஃபையுடன் இணைந்து ஃபயர்பேஸில் டேட்டா அனுப்ப 8 விநாடிகள் தாமதம் கொடுத்து உறுதி செய்தல்
                 setTimeout(() => {
-                    statusText.innerHTML = `<b style="color:var(--accent-green); font-size:15px;">🎉 Device Connected Successfully to your Wi-Fi!</b>`;
+                    clearInterval(connTimer);
+                    statusText.innerText = "✅ Connected!";
                     
-                    setTimeout(() => {
-                        backToSelector(); // நேராக டிவைஸ் செலக்டர் பக்கத்திற்குச் செல்லுதல்
-                    }, 2500);
+                    // சக்சஸ் பாப்-அப் மோடல் காட்டுதல்
+                    document.getElementById('popupModal').style.display = 'flex';
                 }, 8000);
 
             } catch (error) {
                 statusText.innerText = (currentLang === 'ta' ? "❌ அனுப்புவதில் பிழை: " : "❌ Transmission Error: ") + error.message;
             }
+        }
+
+        function closeModal() {
+            document.getElementById('popupModal').style.display = 'none';
+            document.getElementById('pairingCard').style.display = 'none';
+            let user = auth.currentUser;
+            if (user) loadUserDevices(user.uid); // நேராக டிவைஸ் செலக்டர் பக்கத்திற்குச் செல்லுதல்
         }
 
         function deleteCurrentDevice() {
