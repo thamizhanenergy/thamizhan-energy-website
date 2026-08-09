@@ -162,6 +162,10 @@
                     <h3 id="tCtrlTitle">Controller Operations</h3>
                     <ul class="status-list">
                         <li class="status-item">
+                            <span id="tDevStatusLabel">Device Status:</span>
+                            <span class="badge badge-offline" id="deviceOnlineStatus">Offline</span>
+                        </li>
+                        <li class="status-item">
                             <span id="tModeLabel">Operating Mode:</span>
                             <span class="badge badge-active" id="modeStatus">Auto Mode</span>
                         </li>
@@ -237,6 +241,9 @@
                 tankTitle: "தொட்டியின் நீர் மட்டம்",
                 tankAnalyzing: "மட்டம்: ஆய்வு செய்கிறது...",
                 ctrlTitle: "சாதன நிலை & கட்டுப்பாடுகள்",
+                devStatusLabel: "சாதன நிலை:",
+                onlineText: "Online (இணையத்தில் உள்ளது)",
+                offlineText: "Offline (இணைப்பில் இல்லை)",
                 modeLabel: "இயக்க முறை (Mode):",
                 motorLabel: "மோட்டார் நிலை:",
                 dryLabel: "ட்ரை ரன் பாதுகாப்பு:",
@@ -279,6 +286,9 @@
                 tankTitle: "Hydro Tank Status",
                 tankAnalyzing: "Status: Analyzing...",
                 ctrlTitle: "Controller Operations",
+                devStatusLabel: "Device Status:",
+                onlineText: "Online",
+                offlineText: "Offline",
                 modeLabel: "Operating Mode:",
                 motorLabel: "Motor Actuator:",
                 dryLabel: "Dry Run Protection:",
@@ -330,6 +340,7 @@
             document.getElementById('tBackBtn').innerText = t.backBtn;
             document.getElementById('tTankTitle').innerHTML = (currentLang === 'ta' ? 'தொட்டியின் நீர் மட்டம் (' : 'Hydro Tank Status (') + `<span id="activeDeviceTitle">${activeDeviceId || '1001'}</span>)`;
             document.getElementById('tCtrlTitle').innerText = t.ctrlTitle;
+            document.getElementById('tDevStatusLabel').innerText = t.devStatusLabel;
             document.getElementById('tModeLabel').innerText = t.modeLabel;
             document.getElementById('tMotorLabel').innerText = t.motorLabel;
             document.getElementById('tDryLabel').innerText = t.dryLabel;
@@ -573,7 +584,27 @@
             
             dbRef.on('value', (snapshot) => {
                 const data = snapshot.val();
-                if (!data) return;
+                let onlineBadge = document.getElementById('deviceOnlineStatus');
+                let t = translations[currentLang];
+
+                if (!data) {
+                    onlineBadge.innerText = t.offlineText;
+                    onlineBadge.className = "badge badge-offline";
+                    return;
+                }
+
+                // ஆன்லைன் / ஆஃப்லைன் கண்டறிதல் (இறுதியாக டேட்டா வந்து 10 விநாடிகளுக்கு மேல் ஆகிவிட்டதா எனப் பார்த்தல்)
+                let lastTime = data.lastSeen || 0;
+                let currentTime = Date.now();
+                let isOnline = (currentTime - lastTime < 15000); // 15 விநாடிகளுக்குள் டேட்டா வந்திருந்தால் Online
+
+                if (isOnline) {
+                    onlineBadge.innerText = t.onlineText;
+                    onlineBadge.className = "badge badge-online";
+                } else {
+                    onlineBadge.innerText = t.offlineText;
+                    onlineBadge.className = "badge badge-offline";
+                }
 
                 let fillDiv = document.getElementById('waterFill');
                 let labelDiv = document.getElementById('tankLevelText');
@@ -584,7 +615,6 @@
                 let modeBtn = document.getElementById('modeBtn');
                 let resetBtn = document.getElementById('resetBtn');
                 let timerDiv = document.getElementById('timerDisplay');
-                let t = translations[currentLang];
 
                 currentHighSensor = (data.highSensor !== undefined) ? Number(data.highSensor) : 1;
                 let midSensor = (data.midSensor !== undefined) ? Number(data.midSensor) : 1;
