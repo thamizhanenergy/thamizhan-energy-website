@@ -127,7 +127,7 @@
             authDomain: "thamizhan-energy-systems.firebaseapp.com",
             databaseURL: "https://thamizhan-energy-systems-default-rtdb.asia-southeast1.firebasedatabase.app",
             projectId: "thamizhan-energy-systems",
-            storageBucket: "thamizhan-energy-systems.firebasestorage.app",
+            storageBucket: "thamizhan-energy-systems.appspot.com",
             messagingSenderId: "727924977035",
             appId: "1:727924977035:web:ab34a19d7bd3a65976538e",
             measurementId: "G-0MP2C3NZWK"
@@ -141,9 +141,9 @@
         let currentMotorState = 0;
         let deviceId = "1001";
 
-        // UUID-கள் அனைத்தும் பெரிய எழுத்துக்களில் (Uppercase) திருத்தப்பட்டுள்ளன
-        const SERVICE_UUID = "4FAFC201-1FB5-459E-8FCC-C5C9C331914B";
-        const CHARACTERISTIC_UUID = "BEB5483E-36E1-4688-B7F5-EA07361B26AC";
+        // ESP32 கோடுடன் சரியாகப் பொருந்தும் முழுமையான UUID-கள் (Lowercase-ல் கொடுக்கப்பட்டுள்ளது)
+        const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
+        const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26ace";
 
         async function searchAndConnectBLE() {
             let statusText = document.getElementById('bleStatus');
@@ -152,17 +152,17 @@
                 
                 const device = await navigator.bluetooth.requestDevice({
                     filters: [{ name: 'TES-AWLCW-1001' }],
-                    optionalServices: [SERVICE_UUID.toLowerCase()]
+                    optionalServices: [SERVICE_UUID]
                 });
 
                 statusText.innerText = "சாதனத்துடன் இணைக்கப்படுகிறது...";
                 const server = await device.gatt.connect();
                 
                 statusText.innerText = "Bluetooth Service பெறப்படுகிறது...";
-                const service = await server.getPrimaryService(SERVICE_UUID.toLowerCase());
+                const service = await server.getPrimaryService(SERVICE_UUID);
                 
                 statusText.innerText = "Characteristic பெறப்படுகிறது...";
-                bleCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID.toLowerCase());
+                bleCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
                 statusText.innerText = "✅ புளூடூத் இணைப்பு வெற்றிகரமாக உருவாக்கப்பட்டது!";
                 document.getElementById('wifiForm').style.display = 'block';
