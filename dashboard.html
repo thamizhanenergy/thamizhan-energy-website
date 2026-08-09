@@ -3,21 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AWLCW 1.0 IoT டேஷ்போர்டு | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
+    <title>AWLCW 1.0 பாதுகாப்பான டேஷ்போர்டு | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background-color: #0f2027; color: #fff; line-height: 1.6; padding: 20px; }
         .container { max-width: 900px; margin: 0 auto; }
-        header { background: #182832; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        header { background: #182832; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); position: relative; }
         header h1 { font-size: 20px; color: #00ff88; font-weight: 700; }
         
-        .pairing-card { background: #1a2a32; padding: 25px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #283c48; text-align: center; }
-        .pairing-card h3 { color: #00ff88; font-size: 18px; margin-bottom: 8px; }
-        .pairing-card p { font-size: 13px; color: #aaa; margin-bottom: 15px; }
-        .pairing-input-group { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
-        .pairing-input-group input { padding: 10px; border-radius: 6px; border: 1px solid #444; background: #0f2027; color: #fff; width: 260px; outline: none; font-size: 13px; }
-        .pairing-input-group button { background: #00ff88; color: #0f2027; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px; }
+        /* Login Card Styles */
+        .auth-card, .pairing-card { background: #1a2a32; padding: 25px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #283c48; text-align: center; }
+        .auth-card h3, .pairing-card h3 { color: #00ff88; font-size: 18px; margin-bottom: 8px; }
+        .auth-card p, .pairing-card p { font-size: 13px; color: #aaa; margin-bottom: 15px; }
+        
+        .input-group { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .input-group input { padding: 10px; border-radius: 6px; border: 1px solid #444; background: #0f2027; color: #fff; width: 280px; outline: none; font-size: 13px; }
+        .input-group button { background: #00ff88; color: #0f2027; border: none; padding: 10px 25px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px; }
         .btn-ble { background: #2196F3 !important; color: white !important; }
 
         #dashboardContent { display: none; }
@@ -47,32 +49,40 @@
         .btn-manual { background: #ff9800; color: #fff; }
         .btn-reset { background: #d32f2f; color: #fff; display: none; }
         .timer-text { font-size: 13px; color: #ffeb3b; text-align: center; margin-top: 8px; font-weight: 600; }
+        .user-info { font-size: 12px; color: #00ff88; position: absolute; right: 15px; top: 15px; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>தமிழன் எனர்ஜி சிஸ்டம்ஸ் - AWLCW 1.0 டேஷ்போர்டு</h1>
+            <h1>தமிழன் எனர்ஜி சிஸ்டம்ஸ் - AWLCW 1.0</h1>
+            <span class="user-info" id="userInfo"></span>
         </header>
 
-        <div class="pairing-card" id="pairingCard">
-            <h3>ESP32 ப்ளூடூத் வைஃபை இணைப்பு</h3>
-            <p>ப்ளூடூத் மூலம் உங்கள் சாதனத்தைத் தேடி இணைத்து வீட்டு வைஃபையை உள்ளிடவும்</p>
-            
-            <div class="pairing-input-group">
+        <div class="auth-card" id="authCard">
+            <h3>பயனர் கணக்கு (User Account Login)</h3>
+            <p>உங்கள் கணக்கில் உள்நுழையவும் அல்லது புதிய கணக்கை உருவாக்கவும்</p>
+            <div class="input-group">
+                <input type="text" id="userEmail" placeholder="Email / Username">
+                <input type="password" id="userPass" placeholder="Password">
+                <button onclick="handleLogin()">உள்நுழை / பதிவு செய் (Login)</button>
+            </div>
+            <p id="authStatus" style="font-size:12px; color:#ffeb3b;"></p>
+        </div>
+
+        <div class="pairing-card" id="pairingCard" style="display:none;">
+            <h3>சாதனப் பிணைப்பு (Device Pairing - 1001)</h3>
+            <p>ப்ளூடூத் மூலம் உங்கள் ESP32 சாதனத்தைத் தேடி இணைத்து வீட்டு வைஃபையை உள்ளிடவும்</p>
+            <div class="input-group">
                 <button class="btn-ble" onclick="searchAndConnectBLE()">🔍 ESP32-ஐத் தேடி இணைக்கவும் (Scan BLE)</button>
             </div>
             <p id="bleStatus" style="font-size:13px; color:#ffeb3b; margin: 10px 0;"></p>
 
             <div id="wifiForm" style="display:none; margin-top: 15px; border-top: 1px solid #283c48; padding-top: 15px;">
-                <p style="color: #00ff88; margin-bottom: 10px;">இணைப்பு வெற்றி! உங்கள் வீட்டு வைஃபை விவரங்களை உள்ளிடவும்:</p>
-                <div class="pairing-input-group">
+                <p style="color: #00ff88; margin-bottom: 10px;">வீட்டு வைஃபை விவரங்களை உள்ளிடவும்:</p>
+                <div class="input-group">
                     <input type="text" id="wifiSsid" placeholder="Home Wi-Fi Name (SSID)">
-                </div>
-                <div class="pairing-input-group">
                     <input type="password" id="wifiPass" placeholder="Home Wi-Fi Password">
-                </div>
-                <div class="pairing-input-group">
                     <button onclick="sendWiFiToESP32()">ஹோம் வைஃபை இணைக்கவும் (Connect)</button>
                 </div>
             </div>
@@ -92,7 +102,7 @@
                 </div>
 
                 <div class="card">
-                    <h3>சாதன நிலை & கட்டுப்பாடுகள் (AWLCW-1001)</h3>
+                    <h3>சாதன நிலை & கட்டுப்பாடுகள் (1001)</h3>
                     <ul class="status-list">
                         <li class="status-item">
                             <span>இயக்க முறை (Mode):</span>
@@ -113,6 +123,7 @@
                         <button class="btn-control btn-manual" id="motorBtn" onclick="toggleMotor()" disabled>மோட்டாரை இயக்கவும் (Manual)</button>
                         <button class="btn-control btn-reset" id="resetBtn" onclick="resetDryRun()">ட்ரை ரன் ரீசெட் (Reset Dry Run)</button>
                     </div>
+                    <button class="logout-btn" onclick="userLogout()" style="background:#b71c1c; color:#fff; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; margin-top:15px; width:100%;">வெளியேறு (Logout)</button>
                 </div>
             </div>
         </div>
@@ -120,6 +131,7 @@
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
     <script>
         const firebaseConfig = {
@@ -135,21 +147,74 @@
 
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
+        const auth = firebase.auth();
 
         let bleCharacteristic;
         let currentAutoMode = 1;
         let currentMotorState = 0;
         let deviceId = "1001";
 
-        // Short UUID முறை (பிரவுசர் எரர் வராமல் தடுக்கப் பயன்படுவது)
         const SERVICE_UUID = 0x180F;
         const CHARACTERISTIC_UUID = 0x2A19;
+
+        // பேஜ் லோட் ஆகும்போது யூசர் லாகின் மற்றும் சாதனம் இணைக்கப்பட்டுள்ளதா எனச் சோதித்தல்
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById('authCard').style.display = 'none';
+                document.getElementById('userInfo').innerText = "User: " + user.email;
+                
+                // ஃபயர்பேஸில் இந்த யூசருக்கு சாதனம் பைண்ட் செய்யப்பட்டுள்ளதா எனச் சரிபார்த்தல்
+                database.ref('users/' + user.uid + '/pairedDevice').once('value').then((snapshot) => {
+                    if (snapshot.exists() && snapshot.val() === deviceId) {
+                        // ஏற்கனவே இணைக்கப்பட்டுள்ளது -> நேராக டேஷ்போர்டுக்குச் செல்லும்
+                        document.getElementById('pairingCard').style.display = 'none';
+                        document.getElementById('dashboardContent').style.display = 'block';
+                        initFirebaseListener();
+                    } else {
+                        // லாகின் செய்யப்பட்டுள்ளது, ஆனால் சாதனம் இணைக்கப்படவில்லை -> ப்ளூடூத் பேஜ் காட்டும்
+                        document.getElementById('pairingCard').style.display = 'block';
+                        document.getElementById('dashboardContent').style.display = 'none';
+                    }
+                });
+            } else {
+                // லாகின் செய்யப்படவில்லை -> லாகின் கார்டு மட்டும் காட்டும்
+                document.getElementById('authCard').style.display = 'block';
+                document.getElementById('pairingCard').style.display = 'none';
+                document.getElementById('dashboardContent').style.display = 'none';
+            }
+        });
+
+        // யூசர் லாகின் அல்லது சைன் அப் செய்யும் ஃபங்ஷன்
+        function handleLogin() {
+            let email = document.getElementById('userEmail').value.trim();
+            let pass = document.getElementById('userPass').value.trim();
+            let statusText = document.getElementById('authStatus');
+
+            if (!email || !pass) {
+                alert("மின்னஞ்சல் மற்றும் கடவுச்சொல்லை உள்ளிடவும்.");
+                return;
+            }
+
+            auth.signInWithEmailAndPassword(email, pass)
+            .catch((error) => {
+                // அக்கவுண்ட் இல்லாவிட்டால் ஆட்டோமேட்டிக்காக புதிய அக்கவுண்ட் உருவாக்கும் (Sign up)
+                auth.createUserWithEmailAndPassword(email, pass)
+                .catch((err) => {
+                    statusText.innerText = "பிழை: " + err.message;
+                });
+            });
+        }
+
+        function userLogout() {
+            auth.signOut().then(() => {
+                location.reload();
+            });
+        }
 
         async function searchAndConnectBLE() {
             let statusText = document.getElementById('bleStatus');
             try {
                 statusText.innerText = "ப்ளூடூத் சாதனத்தைத் தேடுகிறது ('TES-AWLCW-1001')...";
-                
                 const device = await navigator.bluetooth.requestDevice({
                     filters: [{ name: 'TES-AWLCW-1001' }],
                     optionalServices: [SERVICE_UUID]
@@ -157,18 +222,14 @@
 
                 statusText.innerText = "சாதனத்துடன் இணைக்கப்படுகிறது...";
                 const server = await device.gatt.connect();
-                
-                statusText.innerText = "Bluetooth Service பெறப்படுகிறது...";
                 const service = await server.getPrimaryService(SERVICE_UUID);
-                
-                statusText.innerText = "Characteristic பெறப்படுகிறது...";
                 bleCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
                 statusText.innerText = "✅ புளூடூத் இணைப்பு வெற்றிகரமாக உருவாக்கப்பட்டது!";
                 document.getElementById('wifiForm').style.display = 'block';
 
             } catch (error) {
-                console.error("BLE Connection Error: ", error);
+                console.error("BLE Error: ", error);
                 statusText.innerText = "❌ இணைப்பு தோல்வியுற்றது: " + error.message;
             }
         }
@@ -179,27 +240,30 @@
             let statusText = document.getElementById('bleStatus');
 
             if (!ssid || !pass) {
-                alert("தயவுசெய்து வைஃபை பெயர் மற்றும் கடவுச்சொல்லை உள்ளிடவும்.");
-                return;
-            }
-
-            if (!bleCharacteristic) {
-                alert("புளூடூத் இணைக்கப்படவில்லை!");
+                alert("வைஃபை பெயர் மற்றும் பாஸ்வேர்டை உள்ளிடவும்.");
                 return;
             }
 
             try {
-                statusText.innerText = "வீட்டு வைஃபை விவரங்கள் ESP32-க்கு அனுப்பப்படுகிறது...";
+                statusText.innerText = "வைஃபை விவரங்கள் அனுப்பப்படுகிறது...";
                 let dataString = ssid + ":" + pass;
                 let encoder = new TextEncoder();
                 await bleCharacteristic.writeValue(encoder.encode(dataString));
 
-                statusText.innerText = "வைஃபை தகவல்கள் பெறப்பட்டது! சாதனம் ரீஸ்டார்ட் ஆகிறது...";
+                statusText.innerText = "வைஃபை பெறப்பட்டது! சாதனம் இணைக்கப்படுகிறது...";
                 
                 setTimeout(() => {
-                    document.getElementById('pairingCard').style.display = 'none';
-                    document.getElementById('dashboardContent').style.display = 'block';
-                    initFirebaseListener();
+                    let user = auth.currentUser;
+                    if (user) {
+                        // ஃபயர்பேஸில் இந்த யூசருடன் சாதனம் பிணைக்கப்பட்டுள்ளது (Bind) எனப் பதிவு செய்தல்
+                        database.ref('users/' + user.uid).set({
+                            pairedDevice: deviceId
+                        }).then(() => {
+                            document.getElementById('pairingCard').style.display = 'none';
+                            document.getElementById('dashboardContent').style.display = 'block';
+                            initFirebaseListener();
+                        });
+                    }
                 }, 4000);
 
             } catch (error) {
@@ -241,8 +305,13 @@
                     motorBtn.innerText = "மோட்டாரை நிறுத்தவும் (OFF)";
                     motorBtn.style.background = "#f44336";
                     
-                    let remSec = Math.max(0, 120 - Math.floor(data.elapsedTime / 1000));
-                    timerDiv.innerText = "ட்ரை ரன் டைமர்: " + remSec + " விநாடிகள்";
+                    // மிட் லெவலை தொட்டவுடன் (Mid Sensor == 0) டைமர் ஆஃப் ஆகி பாதுகாப்பானது என வரும்
+                    if (data.midSensor == 0) {
+                        timerDiv.innerText = "Mid தொட்டது - பாதுகாப்பானது!";
+                    } else {
+                        let remSec = Math.max(0, 60 - Math.floor(data.elapsedTime / 1000));
+                        timerDiv.innerText = "ட்ரை ரன் டைமர்: " + remSec + " விநாடிகள்";
+                    }
                 } else {
                     motorBadge.innerText = "OFF (நிறுத்தப்பட்டுள்ளது)";
                     motorBadge.className = "badge badge-offline";
@@ -292,7 +361,11 @@
         }
 
         function resetDryRun() {
-            database.ref('devices/' + deviceId).update({ resetTrigger: 1 });
+            // ட்ரை ரன் ரீசெட் பட்டனை அழுத்தும்போது ஃபயர்பேஸில் மதிப்பு உடனே அப்டேட் ஆகும்
+            database.ref('devices/' + deviceId).update({ 
+                dryRun: 0,
+                resetTrigger: 1 
+            });
         }
     </script>
 </body>
