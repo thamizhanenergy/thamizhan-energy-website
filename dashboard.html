@@ -43,7 +43,6 @@
         .btn-ble { background: var(--accent-blue) !important; color: white !important; }
         .btn-danger { background: var(--accent-red) !important; color: white !important; }
 
-        /* Popup Modal Styles */
         #popupModal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.75); justify-content: center; align-items: center; }
         .modal-content { background: var(--bg-card); padding: 30px; border-radius: 14px; border: 1px solid var(--accent-green); text-align: center; max-width: 400px; width: 90%; box-shadow: 0 10px 30px rgba(0,230,118,0.3); }
         .modal-content h3 { color: var(--accent-green); font-size: 18px; margin-bottom: 10px; text-align: center; border: none; }
@@ -593,10 +592,11 @@
                     return;
                 }
 
-                // ஆன்லைன் / ஆஃப்லைன் கண்டறிதல் (இறுதியாக டேட்டா வந்து 10 விநாடிகளுக்கு மேல் ஆகிவிட்டதா எனப் பார்த்தல்)
+                // ஆன்லைன் / ஆஃப்லைன் கண்டறிதல் (Firebase Server Timestamp அடிப்படையாகக் கொண்டது)
                 let lastTime = data.lastSeen || 0;
                 let currentTime = Date.now();
-                let isOnline = (currentTime - lastTime < 15000); // 15 விநாடிகளுக்குள் டேட்டா வந்திருந்தால் Online
+                // 25 விநாடிகளுக்குள் ESP32 சிக்னல் (lastSeen) அனுப்பியிருந்தால் Online எனக் காட்டும்
+                let isOnline = (currentTime - lastTime < 25000); 
 
                 if (isOnline) {
                     onlineBadge.innerText = t.onlineText;
@@ -668,7 +668,7 @@
                     dryRunBadge.innerText = t.dryAlert;
                     dryRunBadge.className = "badge badge-alert";
                     resetBtn.style.display = "block";
-                    timerDiv.innerText = currentLang === 'ta' ? "பாதுகாப்பிற்காக மோட்டார் நிறுத்தப்பட்டது!" : "Actuator halted for dry protection!";
+                    timerDiv.innerText = currentLang === 'ta'++ ? "பாதுகாப்பிற்காக மோட்டார் நிறுத்தப்பட்டது!" : "Actuator halted for dry protection!";
                 } else {
                     dryRunBadge.innerText = t.drySafe;
                     dryRunBadge.className = "badge badge-safe";
