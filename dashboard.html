@@ -20,20 +20,20 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-primary); color: var(--text-main); line-height: 1.5; padding: 20px; }
+        body { background-color: var(--bg-primary); color: var(--text-main); line-height: 1.5; padding: 15px; }
         .container { max-width: 1000px; margin: 0 auto; }
 
-        header { background: var(--bg-secondary); padding: 18px 24px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border: 1px solid var(--border-color); box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
-        .logo-area h1 { font-size: 18px; color: var(--accent-green); font-weight: 700; letter-spacing: 0.5px; }
-        .logo-area p { font-size: 12px; color: var(--text-muted); }
+        header { background: var(--bg-secondary); padding: 16px 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border: 1px solid var(--border-color); box-shadow: 0 4px 20px rgba(0,0,0,0.4); flex-wrap: wrap; gap: 15px; }
+        .logo-area h1 { font-size: 16px; color: var(--accent-green); font-weight: 700; letter-spacing: 0.3px; line-height: 1.2; }
+        .logo-area p { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
         
-        .header-actions { display: flex; align-items: center; gap: 12px; }
-        .lang-btn { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; transition: 0.2s; }
+        .header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .lang-btn { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; transition: 0.2s; }
         .lang-btn:hover { background: var(--border-color); }
-        .user-badge { font-size: 12px; color: var(--accent-blue); background: rgba(41,182,246,0.1); padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(41,182,246,0.2); }
+        .user-badge { font-size: 11px; color: var(--accent-blue); background: rgba(41,182,246,0.1); padding: 6px 10px; border-radius: 20px; border: 1px solid rgba(41,182,246,0.2); max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        .card { background: var(--bg-card); padding: 25px; border-radius: 14px; margin-bottom: 20px; border: 1px solid var(--border-color); box-shadow: 0 8px 24px rgba(0,0,0,0.3); text-align: center; }
-        .card h3 { font-size: 16px; margin-bottom: 12px; color: var(--accent-green); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
+        .card { background: var(--bg-card); padding: 22px; border-radius: 14px; margin-bottom: 20px; border: 1px solid var(--border-color); box-shadow: 0 8px 24px rgba(0,0,0,0.3); text-align: center; }
+        .card h3 { font-size: 15px; margin-bottom: 12px; color: var(--accent-green); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
         .card p { font-size: 13px; color: var(--text-muted); margin-bottom: 15px; text-align: left; }
 
         .input-group { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 10px; }
@@ -41,7 +41,8 @@
         .input-group button { background: var(--accent-green); color: var(--bg-primary); border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px; width: 100%; max-width: 320px; transition: 0.2s; }
         .input-group button:hover { opacity: 0.9; }
         .btn-ble { background: var(--accent-blue) !important; color: white !important; }
-        .btn-danger { background: var(--accent-red) !important; color: white !important; }
+        .btn-danger { background: rgba(255, 82, 82, 0.15) !important; color: var(--accent-red) !important; border: 1px solid rgba(255, 82, 82, 0.3) !important; }
+        .btn-danger:hover { background: var(--accent-red) !important; color: white !important; }
 
         #popupModal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.75); justify-content: center; align-items: center; }
         .modal-content { background: var(--bg-card); padding: 30px; border-radius: 14px; border: 1px solid var(--accent-green); text-align: center; max-width: 400px; width: 90%; box-shadow: 0 10px 30px rgba(0,230,118,0.3); }
@@ -66,13 +67,16 @@
         .badge-safe { background: rgba(0,230,118,0.15); color: var(--accent-green); border: 1px solid rgba(0,230,118,0.3); }
         .badge-alert { background: rgba(255,82,82,0.15); color: var(--accent-red); border: 1px solid rgba(255,82,82,0.3); }
 
-        .control-group { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .control-group { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
         .btn-control { background: var(--accent-green); color: var(--bg-primary); padding: 12px; border: none; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; text-align: center; transition: 0.2s; }
         .btn-control:hover { opacity: 0.9; }
         .btn-manual { background: var(--accent-orange); color: var(--bg-primary); }
         .btn-reset { background: var(--accent-red); color: white; display: none; }
-        .timer-text { font-size: 13px; color: var(--accent-orange); text-align: center; margin-top: 10px; font-weight: 600; }
         
+        /* தனியாகப் பிரிக்கப்பட்ட மற்றும் பாதுகாப்பான இடைவெளியில் உள்ள டேஞ்சர் ஜோன் */
+        .danger-zone { margin-top: 25px; padding-top: 15px; border-top: 1px dashed var(--border-color); display: flex; flex-direction: column; gap: 8px; }
+        
+        .timer-text { font-size: 13px; color: var(--accent-orange); text-align: center; margin-top: 10px; font-weight: 600; }
         .btn-secondary { background: var(--border-color); color: var(--text-main); border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; width: 100%; margin-top: 8px; }
         .btn-secondary:hover { background: #334a61; }
     </style>
@@ -81,8 +85,8 @@
     <div class="container">
         <header>
             <div class="logo-area">
-                <h1>Tamilan Energy Systems</h1>
-                <p>AWLCW 1.0 Enterprise Cloud</p>
+                <h1 id="tMainHeading">Tamilan Energy Systems</h1>
+                <p id="tSubHeading">AWLCW 1.0 Enterprise Cloud</p>
             </div>
             <div class="header-actions">
                 <button class="lang-btn" onclick="toggleLanguage()" id="langToggleBtn">English</button>
@@ -182,8 +186,12 @@
                         <button class="btn-control" id="modeBtn" onclick="toggleMode()">Switch to Manual Mode</button>
                         <button class="btn-control btn-manual" id="motorBtn" onclick="toggleMotor()" disabled>Actuate Motor (Manual)</button>
                         <button class="btn-control btn-reset" id="resetBtn" onclick="resetDryRun()">Reset Dry Run Trip</button>
+                    </div>
+
+                    <div class="danger-zone">
                         <button class="btn-control btn-danger" onclick="deleteCurrentDevice()" id="tDelDev">🗑️ Unbind / Delete Device</button>
                     </div>
+
                     <button class="btn-secondary" onclick="backToSelector()" id="tSwitchDev">← Switch Controller Instance</button>
                     <button class="btn-secondary" onclick="userLogout()" style="background:#b71c1c;" id="tLogout2">Sign Out</button>
                 </div>
@@ -221,6 +229,8 @@
 
         const translations = {
             ta: {
+                mainHeading: "Tamilan Energy Systems",
+                subHeading: "AWLCW 1.0 Enterprise Cloud",
                 authTitle: "Enterprise Secure Login",
                 authDesc: "உங்களது ஜிமெயில் கணக்கு மூலம் பாதுகாப்பாக உள்நுழையவும்",
                 googleBtn: "Sign in with Google",
@@ -266,6 +276,8 @@
                 successMsg: "Device Connected Successfully to your Wi-Fi!"
             },
             en: {
+                mainHeading: "Tamilan Energy Systems",
+                subHeading: "AWLCW 1.0 Enterprise Cloud",
                 authTitle: "Enterprise Secure Login",
                 authDesc: "Access your automated water management infrastructure securely via Google.",
                 googleBtn: "Sign in with Google",
@@ -321,6 +333,8 @@
 
         function updateUIStrings() {
             let t = translations[currentLang];
+            document.getElementById('tMainHeading').innerText = t.mainHeading;
+            document.getElementById('tSubHeading').innerText = t.subHeading;
             document.getElementById('tAuthTitle').innerText = t.authTitle;
             document.getElementById('tAuthDesc').innerText = t.authDesc;
             document.getElementById('tGoogleBtn').innerText = t.googleBtn;
@@ -370,7 +384,6 @@
         const CHARACTERISTIC_UUID = 0x2A19;
         let isSuccessModal = false;
 
-        // WebView மற்றும் App சூழலில் கூகுள் லாகின் தடையின்றி இயங்க signInWithRedirect பயன்படுத்தப்பட்டுள்ளது
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             auth.signInWithRedirect(provider).catch((error) => {
@@ -597,10 +610,9 @@
                     return;
                 }
 
-                // ஆன்லைன் / ஆஃப்லைன் சரிபார்ப்பு (lastSeen நேரத்தை அடிப்படையாகக் கொண்டது)
                 let lastTime = data.lastSeen || 0;
                 let currentTime = Date.now();
-                let isOnline = (currentTime - lastTime < 25000); // 25 விநாடிகளுக்குள் சிக்னல் வந்திருந்தால் Online
+                let isOnline = (currentTime - lastTime < 25000);
 
                 if (isOnline) {
                     onlineBadge.innerText = t.onlineText;
