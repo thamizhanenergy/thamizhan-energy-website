@@ -407,7 +407,8 @@
             if (!targetId) { alert(currentLang === 'ta' ? "Device ID-ஐ உள்ளிடவும்." : "Please enter Device ID."); return; }
 
             try {
-                statusText.innerText = "Scanning BLE hardware...";
+                statusText.innerText = currentLang === 'ta' ? "⏳ ப்ளூடூத் மூலம் இணைக்கிறது, வைஃபை நெட்வொர்க்குகள் ஸ்கேன் செய்யப்படுகிறது..." : "⏳ Connecting BLE & Scanning Wi-Fi networks, please wait...";
+                
                 const device = await navigator.bluetooth.requestDevice({
                     filters: [{ name: 'TES-AWLCW-' + targetId }, { name: 'TES-AWLCW-1001' }],
                     optionalServices: [SERVICE_UUID]
@@ -417,7 +418,7 @@
                 const service = await server.getPrimaryService(SERVICE_UUID);
                 bleCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
-                statusText.innerText = "✅ Connected! Requesting Wi-Fi scan...";
+                statusText.innerText = currentLang === 'ta' ? "✅ ப்ளூடூத் இணைக்கப்பட்டது! வைஃபை பட்டியல் பெறப்படுகிறது..." : "✅ BLE Connected! Fetching Wi-Fi list...";
 
                 await bleCharacteristic.startNotifications();
                 
@@ -438,7 +439,7 @@
                         }
                     });
 
-                    statusText.innerText = "✅ Wi-Fi Networks Found!";
+                    statusText.innerText = currentLang === 'ta' ? "✅ வைஃபை நெட்வொர்க்குகள் கண்டறியப்பட்டன!" : "✅ Wi-Fi Networks Found!";
                     document.getElementById('wifiForm').style.display = 'block';
                 });
 
@@ -446,7 +447,7 @@
                 await bleCharacteristic.writeValue(encoder.encode("SCAN"));
 
             } catch (error) {
-                statusText.innerText = "❌ Connection Failed: " + error.message;
+                statusText.innerText = (currentLang === 'ta' ? "❌ இணைப்பு தோல்வியுற்றது: " : "❌ Connection Failed: ") + error.message;
             }
         }
 
@@ -463,7 +464,7 @@
                 let encoder = new TextEncoder();
                 await bleCharacteristic.writeValue(encoder.encode(dataString));
 
-                statusText.innerText = "Configuring hardware & linking cloud...";
+                statusText.innerText = currentLang === 'ta' ? "⏳ வைஃபை விவரங்கள் அனுப்பப்படுகிறது..." : "⏳ Sending Wi-Fi credentials...";
                 
                 let user = auth.currentUser;
                 if (user) {
@@ -472,14 +473,20 @@
                 }
 
                 setTimeout(() => {
-                    activeDeviceId = targetId;
-                    document.getElementById('pairingCard').style.display = 'none';
-                    document.getElementById('dashboardContent').style.display = 'block';
-                    updateUIStrings();
-                    initFirebaseListener();
-                }, 4000);
+                    // வைஃபை இணைக்கப்பட்ட வெற்றிகரமான செய்தி
+                    statusText.innerHTML = `<b style="color:var(--accent-green); font-size:15px;">${currentLang === 'ta' ? '🎉 Device Connected Successfully to your Wi-Fi!' : '🎉 Device Connected Successfully to your Wi-Fi!'}</b>`;
+                    
+                    setTimeout(() => {
+                        activeDeviceId = targetId;
+                        document.getElementById('pairingCard').style.display = 'none';
+                        document.getElementById('dashboardContent').style.display = 'block';
+                        updateUIStrings();
+                        initFirebaseListener();
+                    }, 2500);
+                }, 3000);
+
             } catch (error) {
-                statusText.innerText = "❌ Transmission Error: " + error.message;
+                statusText.innerText = (currentLang === 'ta' ? "❌ அனுப்புவதில் பிழை: " : "❌ Transmission Error: ") + error.message;
             }
         }
 
