@@ -91,9 +91,11 @@
             <p id="bleStatus" style="font-size:13px; color:#ffeb3b; margin: 10px 0;"></p>
 
             <div id="wifiForm" style="display:none; margin-top: 15px; border-top: 1px solid #283c48; padding-top: 15px;">
-                <p style="color: #00ff88; margin-bottom: 10px;">வீட்டு வைஃபை விவரங்களை உள்ளிடவும்:</p>
+                <p style="color: #00ff88; margin-bottom: 10px;">வீட்டு வைஃபையைத் தேர்ந்தெடுத்து பாஸ்வேர்ட்டை உள்ளிடவும்:</p>
                 <div class="input-group">
-                    <input type="text" id="wifiSsid" placeholder="Home Wi-Fi Name (SSID)">
+                    <select id="wifiSsidSelect">
+                        <option value="">-- வைஃபை நெட்வொர்க்கைத் தேர்ந்தெடுக்கவும் --</option>
+                    </select>
                     <input type="password" id="wifiPass" placeholder="Home Wi-Fi Password">
                     <button onclick="sendWiFiToESP32()">ஹோம் வைஃபை இணைக்கவும் (Connect)</button>
                 </div>
@@ -196,7 +198,6 @@
             }
         });
 
-        // யூசருக்கு சொந்தமான சாதனங்களை டேட்டாபேஸில் இருந்து ಲೋட் செய்தல்
         function loadUserDevices(uid) {
             database.ref('users/' + uid + '/devices').on('value', (snapshot) => {
                 let select = document.getElementById('deviceSelect');
@@ -207,7 +208,7 @@
                         let devId = childSnapshot.key;
                         let opt = document.createElement('option');
                         opt.value = devId;
-                        opt.innerText = "სாதனம் (Device ID: " + devId + ")";
+                        opt.innerText = "சாதனம் (Device ID: " + devId + ")";
                         select.appendChild(opt);
                     });
                 }
@@ -218,23 +219,19 @@
         }
 
         function showPairingScreen() {
-            let devIdInput = document.getElementById('targetDeviceId').value.trim();
             document.getElementById('selectorCard').style.display = 'none';
             document.getElementById('pairingCard').style.display = 'block';
         }
 
         function backToSelector() {
-            if (dbRef) dbRef.off(); // பழைய டேட்டாபேஸ் லிசங்கரை நிறுத்துதல்
+            if (dbRef) dbRef.off();
             let user = auth.currentUser;
             if (user) loadUserDevices(user.uid);
         }
 
         function selectExistingDevice() {
             let devId = document.getElementById('deviceSelect').value;
-            if (!devId) {
-                alert("தயவுசெய்து ஒரு சாதனத்தைத் தேர்ந்தெடுக்கவும்.");
-                return;
-            }
+            if (!devId) { alert("தயவுசெய்து ஒரு சாதனத்தைத் தேர்ந்தெடுக்கவும்."); return; }
             activeDeviceId = devId;
             document.getElementById('selectorCard').style.display = 'none';
             document.getElementById('dashboardContent').style.display = 'block';
@@ -250,10 +247,7 @@
             let targetId = document.getElementById('targetDeviceId').value.trim();
             let statusText = document.getElementById('bleStatus');
 
-            if (!targetId) {
-                alert("தயவுசெய்து Device ID-ஐ உள்ளிடவும் (எ.கா: 1001).");
-                return;
-            }
+            if (!targetId) { alert("தயவுசெய்து Device ID-ஐ உள்ளிடவும்."); return; }
 
             try {
                 statusText.innerText = "ப்ளூடூத் சாதனத்தைத் தேடுகிறது...";
@@ -266,33 +260,58 @@
                 const service = await server.getPrimaryService(SERVICE_UUID);
                 bleCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
-                statusText.innerText = "✅ புளூடூத் இணைப்பு வெற்றி! வைஃபை விவரங்களை இடவும்.";
-                document.getElementById('wifiForm').style.display = 'block';
+                statusText.innerText = "✅ இணைக்கப்பட்டது! வைஃபை நெட்வொர்க்குகள் தேடப்படுகிறது...";
+
+                // ESP32-க்கு "SCAN" கட்டளையை அனுப்பி வைஃபை பட்டியலைக் கோருதல்
+                let encoder = new TextEncoder();
+                await bleCharacteristic.writeValue(encoder.encode("SCAN"));
+
+                // ESP32 அனுப்பும் வைஃபை பட்டியலைக் கேட்பது (Notifications)
+                bleCharacteristic.startNotifications();
+                bleCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
+                    let decoder = new TextDecoder('utf-8');
+                    let wifiString = decoder.decode(event.target.value);
+                    let networks = wifiString.split(',');
+
+                    let wifiSelect = document.getElementById('wifiSsidSelect');
+                    wifiSelect.innerHTML = '<option value="">-- வைஃபை நெட்வொர்க்கைத் தேர்ந்தெடுக்கவும் --</option>';
+                    
+                    networks.forEach(ssid => {
+                        if(ssid.trim() !== "") {
+                            let opt = document.createElement('option');
+                            opt.value = ssid;
+                            opt.innerText = ssid;
+                            wifiSelect.appendChild(opt);
+                        }
+                    });
+
+                    statusText.innerText = "✅ வைஃபை நெட்வொர்க்குகள் கண்டறியப்பட்டன!";
+                    document.getElementById('wifiForm').style.display = 'block';
+                });
+
             } catch (error) {
                 statusText.innerText = "❌ இணைப்பு தோல்வியுற்றது: " + error.message;
             }
         }
 
         async function sendWiFiToESP32() {
-            let ssid = document.getElementById('wifiSsid').value.trim();
+            let ssid = document.getElementById('wifiSsidSelect').value;
             let pass = document.getElementById('wifiPass').value.trim();
             let targetId = document.getElementById('targetDeviceId').value.trim();
             let statusText = document.getElementById('bleStatus');
 
-            if (!ssid || !pass) { alert("வைஃபை பெயர் மற்றும் பாஸ்வேர்டை உள்ளிடவும்."); return; }
+            if (!ssid || !pass) { alert("வைஃபை பெயரைத் தேர்ந்தெடுத்து பாஸ்வேர்டை உள்ளிடவும்."); return; }
 
             try {
                 let dataString = ssid + ":" + pass;
                 let encoder = new TextEncoder();
                 await bleCharacteristic.writeValue(encoder.encode(dataString));
 
-                statusText.innerText = "வைஃபை அனுப்பப்பட்டது! கணக்குடன் இணைக்கப்படுகிறது...";
+                statusText.innerText = "வைஃபை அனுப்பப்பட்டது! சாதனம் இணைக்கப்படுகிறது...";
                 
                 let user = auth.currentUser;
                 if (user) {
-                    // இந்த யூசரின் கீழ் சாதனத்தைப் பதிவு செய்தல்
                     await database.ref('users/' + user.uid + '/devices/' + targetId).set(true);
-                    // சாதனத்தின் boundUser-ஐ அப்டேட் செய்தல்
                     await database.ref('devices/' + targetId).update({ boundUser: user.uid });
                 }
 
@@ -308,17 +327,13 @@
             }
         }
 
-        // குறிப்பிட்ட சாதனத்தை மட்டும் யூசர் அக்கவுண்டில் இருந்து நீக்குவது (Delete/Unbind)
         function deleteCurrentDevice() {
             if (confirm("நிச்சயமாக இந்த சாதனத்தை உங்கள் கணக்கிலிருந்து நீக்க விரும்புகிறீர்களா?")) {
                 let user = auth.currentUser;
                 if (user && activeDeviceId) {
                     if (dbRef) dbRef.off();
-                    // 1. யூசர் லிஸ்ட்டில் இருந்து நீக்குதல்
                     database.ref('users/' + user.uid + '/devices/' + activeDeviceId).remove();
-                    // 2. சாதனத்தின் boundUser-ஐ காலியாக்குதல் (மற்றவர்கள் இணைக்க அனுமதிக்க)
                     database.ref('devices/' + activeDeviceId).update({ boundUser: "", motorStatus: 0, dryRun: 0 });
-                    
                     alert("சாதனம் வெற்றிகரமாக நீக்கப்பட்டது!");
                     loadUserDevices(user.uid);
                 }
