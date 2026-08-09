@@ -1,147 +1,174 @@
 <!DOCTYPE html>
-<html lang="ta">
+<html lang="ta" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AWLCW 1.0 மல்டி-டிவைஸ் டேஷ்போர்டு | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>AWLCW 1.0 Enterprise IoT Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: #0f2027; color: #fff; line-height: 1.6; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; }
-        header { background: #182832; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); position: relative; }
-        header h1 { font-size: 20px; color: #00ff88; font-weight: 700; }
-        
-        .auth-card, .pairing-card, .selector-card { background: #1a2a32; padding: 30px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #283c48; text-align: center; }
-        .auth-card h3, .pairing-card h3, .selector-card h3 { color: #00ff88; font-size: 18px; margin-bottom: 10px; }
-        .auth-card p, .pairing-card p, .selector-card p { font-size: 13px; color: #aaa; margin-bottom: 20px; }
-        
-        .btn-google { background: #fff; color: #444; border: none; padding: 12px 25px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); display: inline-flex; align-items: center; gap: 10px; }
-        .btn-google:hover { background: #f1f1f1; }
-        
-        .input-group { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 12px; }
-        .input-group select, .input-group input { padding: 10px; border-radius: 6px; border: 1px solid #444; background: #0f2027; color: #fff; width: 280px; outline: none; font-size: 13px; }
-        .input-group button { background: #00ff88; color: #0f2027; border: none; padding: 10px 25px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px; }
-        .btn-ble { background: #2196F3 !important; color: white !important; }
-        .btn-danger { background: #ff4d4d !important; color: white !important; }
+        :root {
+            --bg-primary: #0b131b;
+            --bg-secondary: #121e2b;
+            --bg-card: #182838;
+            --accent-green: #00e676;
+            --accent-blue: #29b6f6;
+            --accent-orange: #ffa726;
+            --accent-red: #ff5252;
+            --text-main: #f5f5f5;
+            --text-muted: #90a4ae;
+            --border-color: #26384a;
+        }
 
-        #dashboardContent { display: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-primary); color: var(--text-main); line-height: 1.5; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        header { background: var(--bg-secondary); padding: 18px 24px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border: 1px solid var(--border-color); box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+        .logo-area h1 { font-size: 18px; color: var(--accent-green); font-weight: 700; letter-spacing: 0.5px; }
+        .logo-area p { font-size: 12px; color: var(--text-muted); }
+        
+        .header-actions { display: flex; align-items: center; gap: 12px; }
+        .lang-btn { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; transition: 0.2s; }
+        .lang-btn:hover { background: var(--border-color); }
+        .user-badge { font-size: 12px; color: var(--accent-blue); background: rgba(41,182,246,0.1); padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(41,182,246,0.2); }
+
+        .card { background: var(--bg-card); padding: 25px; border-radius: 14px; margin-bottom: 20px; border: 1px solid var(--border-color); box-shadow: 0 8px 24px rgba(0,0,0,0.3); text-align: center; }
+        .card h3 { font-size: 16px; margin-bottom: 12px; color: var(--accent-green); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
+        .card p { font-size: 13px; color: var(--text-muted); margin-bottom: 15px; text-align: left; }
+
+        .input-group { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 10px; }
+        .input-group select, .input-group input { padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main); width: 100%; max-width: 320px; outline: none; font-size: 13px; }
+        .input-group button { background: var(--accent-green); color: var(--bg-primary); border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px; width: 100%; max-width: 320px; transition: 0.2s; }
+        .input-group button:hover { opacity: 0.9; }
+        .btn-ble { background: var(--accent-blue) !important; color: white !important; }
+        .btn-danger { background: var(--accent-red) !important; color: white !important; }
+
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         @media(max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
 
-        .card { background: #1a2a32; padding: 25px; border-radius: 12px; border: 1px solid #283c48; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
-        .card h3 { font-size: 16px; margin-bottom: 15px; color: #00ff88; border-bottom: 1px solid #283c48; padding-bottom: 8px; }
-
+        /* Tank UI */
         .tank-container { display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 15px 0; }
-        .water-tank { width: 120px; height: 180px; border: 4px solid #fff; border-radius: 10px; position: relative; overflow: hidden; background: #0f2027; box-shadow: inset 0 0 15px rgba(0,0,0,0.5); }
-        .water-fill { position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, #0072ff, #00c6ff); transition: height 0.5s ease-in-out; }
-        .tank-label { margin-top: 12px; font-size: 15px; font-weight: 700; color: #00ff88; text-align: center; }
+        .water-tank { width: 130px; height: 190px; border: 4px solid var(--border-color); border-radius: 12px; position: relative; overflow: hidden; background: var(--bg-primary); box-shadow: inset 0 0 20px rgba(0,0,0,0.6); }
+        .water-fill { position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, #0288d1, var(--accent-blue)); transition: height 0.6s ease-in-out; }
+        .tank-label { margin-top: 14px; font-size: 14px; font-weight: 700; color: var(--accent-green); }
 
-        .status-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-        .status-item { display: flex; justify-content: space-between; align-items: center; background: #0f2027; padding: 12px 15px; border-radius: 8px; font-size: 13px; border: 1px solid #22333d; }
+        .status-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .status-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg-primary); padding: 12px 16px; border-radius: 8px; font-size: 13px; border: 1px solid var(--border-color); }
         .badge { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-        .badge-online { background: #1b5e20; color: #a5d6a7; }
-        .badge-offline { background: #b71c1c; color: #ef9a9a; }
-        .badge-active { background: #006064; color: #80deea; }
-        .badge-safe { background: #0d47a1; color: #90caf9; }
-        .badge-alert { background: #b71c1c; color: #ffccbc; }
+        .badge-online { background: rgba(0,230,118,0.15); color: var(--accent-green); border: 1px solid rgba(0,230,118,0.3); }
+        .badge-offline { background: rgba(255,82,82,0.15); color: var(--accent-red); border: 1px solid rgba(255,82,82,0.3); }
+        .badge-active { background: rgba(41,182,246,0.15); color: var(--accent-blue); border: 1px solid rgba(41,182,246,0.3); }
+        .badge-safe { background: rgba(0,230,118,0.15); color: var(--accent-green); border: 1px solid rgba(0,230,118,0.3); }
+        .badge-alert { background: rgba(255,82,82,0.15); color: var(--accent-red); border: 1px solid rgba(255,82,82,0.3); }
 
-        .control-group { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
-        .btn-control { background: #00ff88; color: #0f2027; padding: 12px; border: none; border-radius: 6px; font-weight: 700; font-size: 14px; cursor: pointer; text-align: center; transition: 0.3s; }
-        .btn-control:hover { background: #00cc6a; }
-        .btn-manual { background: #ff9800; color: #fff; }
-        .btn-reset { background: #d32f2f; color: #fff; display: none; }
-        .timer-text { font-size: 13px; color: #ffeb3b; text-align: center; margin-top: 8px; font-weight: 600; }
-        .user-info { font-size: 12px; color: #00ff88; position: absolute; right: 15px; top: 15px; }
+        .control-group { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .btn-control { background: var(--accent-green); color: var(--bg-primary); padding: 12px; border: none; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; text-align: center; transition: 0.2s; }
+        .btn-control:hover { opacity: 0.9; }
+        .btn-manual { background: var(--accent-orange); color: var(--bg-primary); }
+        .btn-reset { background: var(--accent-red); color: white; display: none; }
+        .timer-text { font-size: 13px; color: var(--accent-orange); text-align: center; margin-top: 10px; font-weight: 600; }
+        
+        .btn-secondary { background: var(--border-color); color: var(--text-main); border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; width: 100%; margin-top: 8px; }
+        .btn-secondary:hover { background: #334a61; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>தமிழன் எனர்ஜி சிஸ்டம்ஸ் - AWLCW 1.0</h1>
-            <span class="user-info" id="userInfo"></span>
+            <div class="logo-area">
+                <h1>Tamilan Energy Systems</h1>
+                <p>AWLCW 1.0 Enterprise Cloud</p>
+            </div>
+            <div class="header-actions">
+                <button class="lang-btn" onclick="toggleLanguage()" id="langToggleBtn">English</button>
+                <span class="user-badge" id="userInfo">Guest</span>
+            </div>
         </header>
 
-        <div class="auth-card" id="authCard">
-            <h3>பாதுகாப்பான உள்நுழைவு (Google Login)</h3>
-            <p>உங்களது ஜிமெயில் கணக்கு மூலம் எளிதாக உள்நுழையவும்</p>
-            <button class="btn-google" onclick="loginWithGoogle()">Sign in with Google</button>
-            <p id="authStatus" style="font-size:12px; color:#ffeb3b; margin-top: 15px;"></p>
+        <div class="card" id="authCard">
+            <h3 id="tAuthTitle">Enterprise Secure Login</h3>
+            <p id="tAuthDesc">Access your automated water management infrastructure via Google Account.</p>
+            <button class="btn-google" onclick="loginWithGoogle()" style="background:#fff; color:#333; border:none; padding:12px 24px; border-radius:8px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:10px; box-shadow:0 4px 12px rgba(0,0,0,0.2);">
+                <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                <span id="tGoogleBtn">Sign in with Google</span>
+            </button>
+            <p id="authStatus" style="font-size:12px; color:var(--accent-orange); margin-top: 15px;"></p>
         </div>
 
-        <div class="selector-card" id="selectorCard" style="display:none;">
-            <h3>உங்கள் சாதனத்தைத் தேர்ந்தெடுக்கவும்</h3>
-            <p>ஏற்கனவே இணைக்கப்பட்ட சாதனத்தைத் தேர்ந்தெடுக்கவும் அல்லது புதிய சாதனத்தை இணைக்கவும்</p>
+        <div class="card" id="selectorCard" style="display:none;">
+            <h3 id="tSelTitle">Device Fleet Management</h3>
+            <p id="tSelDesc">Select an active controller instance or provision a new ESP32 unit.</p>
             <div class="input-group">
                 <select id="deviceSelect">
-                    <option value="">-- சாதனத்தைத் தேர்ந்தெடுக்கவும் --</option>
+                    <option value="" id="tSelDefault">-- Select Active Controller --</option>
                 </select>
-                <button onclick="selectExistingDevice()">சாதனத்தைத் திற (Open Dashboard)</button>
-                <button class="btn-ble" onclick="showPairingScreen()">+ புதிய சாதனத்தை இணைக்கவும் (Add New Device)</button>
+                <button onclick="selectExistingDevice()" id="tOpenDash">Open Dashboard</button>
+                <button class="btn-ble" onclick="showPairingScreen()" id="tAddDev">+ Provision New Device</button>
+                <button class="btn-secondary" onclick="userLogout()" id="tLogout1">Sign Out</button>
             </div>
         </div>
 
-        <div class="pairing-card" id="pairingCard" style="display:none;">
-            <h3>புதிய சாதனப் பிணைப்பு (Add Device)</h3>
-            <p>ESP32 சாதனத்தின் ஐடியை உள்ளிட்டு ப்ளூடூத் மூலம் இணைக்கவும்</p>
+        <div class="card" id="pairingCard" style="display:none;">
+            <h3 id="tPairTitle">BLE Provisioning & Integration</h3>
+            <p id="tPairDesc">Scan via Bluetooth Low Energy to bind your physical hardware controller.</p>
             <div class="input-group">
-                <input type="text" id="targetDeviceId" placeholder="Device ID (எ.கா: 1001)">
-                <button class="btn-ble" onclick="searchAndConnectBLE()">🔍 ESP32-ஐத் தேடி இணைக்கவும் (Scan BLE)</button>
+                <input type="text" id="targetDeviceId" placeholder="Enter Serial Number / ID (e.g., 1001)">
+                <button class="btn-ble" onclick="searchAndConnectBLE()" id="tScanBle">🔍 Scan & Connect BLE</button>
             </div>
-            <p id="bleStatus" style="font-size:13px; color:#ffeb3b; margin: 10px 0;"></p>
+            <p id="bleStatus" style="font-size:13px; color:var(--accent-orange); margin: 10px 0;"></p>
 
-            <div id="wifiForm" style="display:none; margin-top: 15px; border-top: 1px solid #283c48; padding-top: 15px;">
-                <p style="color: #00ff88; margin-bottom: 10px;">வீட்டு வைஃபையைத் தேர்ந்தெடுத்து பாஸ்வேர்ட்டை உள்ளிடவும்:</p>
+            <div id="wifiForm" style="display:none; margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                <p id="tWifiLabel" style="color: var(--accent-green); margin-bottom: 10px; font-weight: 600;">Select Local Wi-Fi Network:</p>
                 <div class="input-group">
                     <select id="wifiSsidSelect">
-                        <option value="">-- வைஃபை நெட்வொர்க்கைத் தேர்ந்தெடுக்கவும் --</option>
+                        <option value="" id="tWifiDefault">-- Scanning Available Networks --</option>
                     </select>
-                    <input type="password" id="wifiPass" placeholder="Home Wi-Fi Password">
-                    <button onclick="sendWiFiToESP32()">ஹோம் வைஃபை இணைக்கவும் (Connect)</button>
+                    <input type="password" id="wifiPass" placeholder="Wi-Fi Password">
+                    <button onclick="sendWiFiToESP32()" id="tConnectWifi">Configure & Link Network</button>
                 </div>
             </div>
             <br>
-            <button onclick="backToSelector()" style="background:#546e7a; color:#fff; border:none; padding:8px 15px; border-radius:4px; cursor:pointer;">← பின் செல்ல</button>
+            <button class="btn-secondary" onclick="backToSelector()" id="tBackBtn">← Back to Fleet List</button>
         </div>
 
         <div id="dashboardContent" style="display:none;">
             <div class="dashboard-grid">
                 <div class="card">
-                    <h3>தொட்டியின் நீர் மட்டம் (<span id="activeDeviceTitle">1001</span>)</h3>
+                    <h3 id="tTankTitle">Hydro Tank Status (<span id="activeDeviceTitle">1001</span>)</h3>
                     <div class="tank-container">
                         <div class="water-tank">
                             <div class="water-fill" id="waterFill" style="height: 15%;"></div>
                         </div>
-                        <div class="tank-label" id="tankLevelText">மட்டம்: ஆய்வு செய்கிறது...</div>
+                        <div class="tank-label" id="tankLevelText">Status: Analyzing...</div>
                         <div class="timer-text" id="timerDisplay"></div>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h3>சாதன நிலை & கட்டுப்பாடுகள்</h3>
+                    <h3 id="tCtrlTitle">Controller Operations</h3>
                     <ul class="status-list">
                         <li class="status-item">
-                            <span>இயக்க முறை (Mode):</span>
+                            <span id="tModeLabel">Operating Mode:</span>
                             <span class="badge badge-active" id="modeStatus">Auto Mode</span>
                         </li>
                         <li class="status-item">
-                            <span>மோட்டார் நிலை:</span>
+                            <span id="tMotorLabel">Motor Actuator:</span>
                             <span class="badge badge-offline" id="motorStatusBadge">OFF</span>
                         </li>
                         <li class="status-item">
-                            <span>ட்ரை ரன் பாதுகாப்பு:</span>
+                            <span id="tDryLabel">Dry Run Protection:</span>
                             <span class="badge badge-safe" id="dryRunStatus">Safe</span>
                         </li>
                     </ul>
 
                     <div class="control-group">
-                        <button class="btn-control" id="modeBtn" onclick="toggleMode()">மேனுவல் மோட்டுக்கு மாற்றுக</button>
-                        <button class="btn-control btn-manual" id="motorBtn" onclick="toggleMotor()" disabled>மோட்டாரை இயக்கவும் (Manual)</button>
-                        <button class="btn-control btn-reset" id="resetBtn" onclick="resetDryRun()">ட்ரை ரன் ரீசெட் (Reset Dry Run)</button>
-                        <button class="btn-control btn-danger" onclick="deleteCurrentDevice()">🗑️ இந்த சாதனத்தை நீக்கு (Delete Device)</button>
+                        <button class="btn-control" id="modeBtn" onclick="toggleMode()">Switch to Manual Mode</button>
+                        <button class="btn-control btn-manual" id="motorBtn" onclick="toggleMotor()" disabled>Actuate Motor (Manual)</button>
+                        <button class="btn-control btn-reset" id="resetBtn" onclick="resetDryRun()">Reset Dry Run Trip</button>
+                        <button class="btn-control btn-danger" onclick="deleteCurrentDevice()" id="tDelDev">🗑️ Unbind / Delete Device</button>
                     </div>
-                    <button onclick="backToSelector()" style="background:#455a64; color:#fff; border:none; padding:8px; border-radius:6px; cursor:pointer; margin-top:10px; width:100%; font-weight:600;">← சாதனங்கள் பட்டியல் (Switch Device)</button>
-                    <button onclick="userLogout()" style="background:#b71c1c; color:#fff; border:none; padding:8px; border-radius:6px; cursor:pointer; margin-top:10px; width:100%; font-weight:600;">வெளியேறு (Logout)</button>
+                    <button class="btn-secondary" onclick="backToSelector()" id="tSwitchDev">← Switch Controller Instance</button>
+                    <button class="btn-secondary" onclick="userLogout()" style="background:#b71c1c;" id="tLogout2">Sign Out</button>
                 </div>
             </div>
         </div>
@@ -173,6 +200,137 @@
         let currentHighSensor = 1;
         let activeDeviceId = "";
         let dbRef = null;
+        let currentLang = 'ta'; // Default Tamil
+
+        const translations = {
+            ta: {
+                authTitle: "Enterprise Secure Login",
+                authDesc: "உங்களது ஜிமெயில் கணக்கு மூலம் பாதுகாப்பாக உள்நுழையவும்",
+                googleBtn: "Sign in with Google",
+                selTitle: "Device Fleet Management",
+                selDesc: "உங்கள் சாதனத்தைத் தேர்ந்தெடுக்கவும் அல்லது புதிய சாதனத்தை இணைக்கவும்",
+                selDefault: "-- சாதனத்தைத் தேர்ந்தெடுக்கவும் --",
+                openDash: "சாதனத்தைத் திற (Open Dashboard)",
+                addDev: "+ புதிய சாதனத்தை இணைக்கவும் (Provision)",
+                logout1: "வெளியேறு (Sign Out)",
+                pairTitle: "BLE Provisioning & Integration",
+                pairDesc: "ப்ளூடூத் மூலம் உங்கள் ESP32 சாதனத்தைத் தேடி இணைக்கவும்",
+                scanBle: "🔍 ESP32-ஐத் தேடி இணைக்கவும் (Scan BLE)",
+                wifiLabel: "வீட்டு வைஃபை நெட்வொர்க்கைத் தேர்ந்தெடுக்கவும்:",
+                wifiDefault: "-- வைஃபை நெட்வொர்க்கைத் தேர்ந்தெடுக்கவும் --",
+                connectWifi: "ஹோம் வைஃபை இணைக்கவும் (Connect)",
+                backBtn: "← பின் செல்ல",
+                tankTitle: "தொட்டியின் நீர் மட்டம்",
+                tankAnalyzing: "மட்டம்: ஆய்வு செய்கிறது...",
+                ctrlTitle: "சாதன நிலை & கட்டுப்பாடுகள்",
+                modeLabel: "இயக்க முறை (Mode):",
+                motorLabel: "மோட்டார் நிலை:",
+                dryLabel: "ட்ரை ரன் பாதுகாப்பு:",
+                modeAuto: "Auto Mode",
+                modeManual: "Manual Mode",
+                modeSwitchManual: "மேனுவல் மோட்டுக்கு மாற்றுக",
+                modeSwitchAuto: "ஆட்டோ மோட்டுக்கு மாற்றுக",
+                motorOn: "ON (இயங்குகிறது)",
+                motorOff: "OFF (நிறுத்தப்பட்டுள்ளது)",
+                motorBtnOn: "மோட்டாரை இயக்கவும் (ON)",
+                motorBtnOff: "மோட்டாரை நிறுத்தவும் (OFF)",
+                drySafe: "Safe (பாதுகாப்பானது)",
+                dryAlert: "Dry Run Trip! (நீர் வரவில்லை)",
+                resetBtnText: "ட்ரை ரன் ரீசெட் (Reset Dry Run)",
+                delDev: "🗑️ இந்த சாதனத்தை நீக்கு (Delete Device)",
+                switchDev: "← சாதனங்கள் பட்டியல் (Switch Device)",
+                logout2: "வெளியேறு (Logout)"
+            },
+            en: {
+                authTitle: "Enterprise Secure Login",
+                authDesc: "Access your automated water management infrastructure securely via Google.",
+                googleBtn: "Sign in with Google",
+                selTitle: "Device Fleet Management",
+                selDesc: "Select an active controller instance or provision a new ESP32 unit.",
+                selDefault: "-- Select Active Controller --",
+                openDash: "Open Dashboard",
+                addDev: "+ Provision New Device",
+                logout1: "Sign Out",
+                pairTitle: "BLE Provisioning & Integration",
+                pairDesc: "Scan via Bluetooth Low Energy to bind your physical hardware controller.",
+                scanBle: "🔍 Scan & Connect BLE",
+                wifiLabel: "Select Local Wi-Fi Network:",
+                wifiDefault: "-- Scanning Available Networks --",
+                connectWifi: "Configure & Link Network",
+                backBtn: "← Back to Fleet List",
+                tankTitle: "Hydro Tank Status",
+                tankAnalyzing: "Status: Analyzing...",
+                ctrlTitle: "Controller Operations",
+                modeLabel: "Operating Mode:",
+                motorLabel: "Motor Actuator:",
+                dryLabel: "Dry Run Protection:",
+                modeAuto: "Auto Mode",
+                modeManual: "Manual Mode",
+                modeSwitchManual: "Switch to Manual Mode",
+                modeSwitchAuto: "Switch to Auto Mode",
+                motorOn: "ON (Running)",
+                motorOff: "OFF (Stopped)",
+                motorBtnOn: "Actuate Motor (ON)",
+                motorBtnOff: "Stop Motor (OFF)",
+                drySafe: "Safe",
+                dryAlert: "Dry Run Trip Detected!",
+                resetBtnText: "Reset Dry Run Trip",
+                delDev: "🗑️ Unbind / Delete Device",
+                switchDev: "← Switch Controller Instance",
+                logout2: "Sign Out"
+            }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ta' ? 'en' : 'ta';
+            document.getElementById('langToggleBtn').innerText = currentLang === 'ta' ? 'English' : 'தமிழ்';
+            document.getElementById('htmlRoot').setAttribute('lang', currentLang);
+            updateUIStrings();
+        }
+
+        function updateUIStrings() {
+            let t = translations[currentLang];
+            document.getElementById('tAuthTitle').innerText = t.authTitle;
+            document.getElementById('tAuthDesc').innerText = t.authDesc;
+            document.getElementById('tGoogleBtn').innerText = t.googleBtn;
+            document.getElementById('tSelTitle').innerText = t.selTitle;
+            document.getElementById('tSelDesc').innerText = t.selDesc;
+            document.getElementById('tSelDefault').innerText = t.selDefault;
+            document.getElementById('tOpenDash').innerText = t.openDash;
+            document.getElementById('tAddDev').innerText = t.addDev;
+            document.getElementById('tLogout1').innerText = t.logout1;
+            document.getElementById('tPairTitle').innerText = t.pairTitle;
+            document.getElementById('tPairDesc').innerText = t.pairDesc;
+            document.getElementById('tScanBle').innerText = t.scanBle;
+            document.getElementById('tWifiLabel').innerText = t.wifiLabel;
+            document.getElementById('tWifiDefault').innerText = t.wifiDefault;
+            document.getElementById('tConnectWifi').innerText = t.connectWifi;
+            document.getElementById('tBackBtn').innerText = t.backBtn;
+            document.getElementById('tTankTitle').innerHTML = (currentLang === 'ta' ? 'தொட்டியின் நீர் மட்டம் (' : 'Hydro Tank Status (') + `<span id="activeDeviceTitle">${activeDeviceId || '1001'}</span>)`;
+            document.getElementById('tCtrlTitle').innerText = t.ctrlTitle;
+            document.getElementById('tModeLabel').innerText = t.modeLabel;
+            document.getElementById('tMotorLabel').innerText = t.motorLabel;
+            document.getElementById('tDryLabel').innerText = t.dryLabel;
+            document.getElementById('tDelDev').innerText = t.delDev;
+            document.getElementById('tSwitchDev').innerText = t.switchDev;
+            document.getElementById('tLogout2').innerText = t.logout2;
+
+            if(currentAutoMode === 1) {
+                document.getElementById('modeStatus').innerText = t.modeAuto;
+                document.getElementById('modeBtn').innerText = t.modeSwitchManual;
+            } else {
+                document.getElementById('modeStatus').innerText = t.modeManual;
+                document.getElementById('modeBtn').innerText = t.modeSwitchAuto;
+            }
+
+            if(currentMotorState === 1) {
+                document.getElementById('motorStatusBadge').innerText = t.motorOn;
+                document.getElementById('motorBtn').innerText = t.motorBtnOff;
+            } else {
+                document.getElementById('motorStatusBadge').innerText = t.motorOff;
+                document.getElementById('motorBtn').innerText = t.motorBtnOn;
+            }
+        }
 
         const SERVICE_UUID = 0x180F;
         const CHARACTERISTIC_UUID = 0x2A19;
@@ -180,35 +338,35 @@
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             auth.signInWithPopup(provider).catch((error) => {
-                document.getElementById('authStatus').innerText = "பிழை: " + error.message;
+                document.getElementById('authStatus').innerText = "Error: " + error.message;
             });
         }
 
         auth.onAuthStateChanged((user) => {
             if (user) {
                 document.getElementById('authCard').style.display = 'none';
-                document.getElementById('userInfo').innerText = "User: " + user.email;
+                document.getElementById('userInfo').innerText = user.email;
                 loadUserDevices(user.uid);
             } else {
                 document.getElementById('authCard').style.display = 'block';
                 document.getElementById('selectorCard').style.display = 'none';
                 document.getElementById('pairingCard').style.display = 'none';
                 document.getElementById('dashboardContent').style.display = 'none';
-                document.getElementById('userInfo').innerText = "";
+                document.getElementById('userInfo').innerText = "Guest";
             }
         });
 
         function loadUserDevices(uid) {
             database.ref('users/' + uid + '/devices').on('value', (snapshot) => {
                 let select = document.getElementById('deviceSelect');
-                select.innerHTML = '<option value="">-- சாதனத்தைத் தேர்ந்தெடுக்கவும் --</option>';
+                select.innerHTML = `<option value="" id="tSelDefault">${translations[currentLang].selDefault}</option>`;
                 
                 if (snapshot.exists()) {
                     snapshot.forEach((childSnapshot) => {
                         let devId = childSnapshot.key;
                         let opt = document.createElement('option');
                         opt.value = devId;
-                        opt.innerText = "சாதனம் (Device ID: " + devId + ")";
+                        opt.innerText = "Controller Unit ID: " + devId;
                         select.appendChild(opt);
                     });
                 }
@@ -231,11 +389,11 @@
 
         function selectExistingDevice() {
             let devId = document.getElementById('deviceSelect').value;
-            if (!devId) { alert("தயவுசெய்து ஒரு சாதனத்தைத் தேர்ந்தெடுக்கவும்."); return; }
+            if (!devId) { alert(currentLang === 'ta' ? "தயவுசெய்து ஒரு சாதனத்தைத் தேர்ந்தெடுக்கவும்." : "Please select a controller instance."); return; }
             activeDeviceId = devId;
             document.getElementById('selectorCard').style.display = 'none';
             document.getElementById('dashboardContent').style.display = 'block';
-            document.getElementById('activeDeviceTitle').innerText = activeDeviceId;
+            updateUIStrings();
             initFirebaseListener();
         }
 
@@ -247,10 +405,10 @@
             let targetId = document.getElementById('targetDeviceId').value.trim();
             let statusText = document.getElementById('bleStatus');
 
-            if (!targetId) { alert("தயவுசெய்து Device ID-ஐ உள்ளிடவும்."); return; }
+            if (!targetId) { alert(currentLang === 'ta' ? "Device ID-ஐ உள்ளிடவும்." : "Please enter Device ID."); return; }
 
             try {
-                statusText.innerText = "ப்ளூடூத் சாதனத்தைத் தேடுகிறது...";
+                statusText.innerText = "Scanning BLE hardware...";
                 const device = await navigator.bluetooth.requestDevice({
                     filters: [{ name: 'TES-AWLCW-' + targetId }, { name: 'TES-AWLCW-1001' }],
                     optionalServices: [SERVICE_UUID]
@@ -260,13 +418,11 @@
                 const service = await server.getPrimaryService(SERVICE_UUID);
                 bleCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
-                statusText.innerText = "✅ இணைக்கப்பட்டது! வைஃபை நெட்வொர்க்குகள் தேடப்படுகிறது...";
+                statusText.innerText = "✅ Connected! Requesting Wi-Fi scan...";
 
-                // ESP32-க்கு "SCAN" கட்டளையை அனுப்பி வைஃபை பட்டியலைக் கோருதல்
                 let encoder = new TextEncoder();
                 await bleCharacteristic.writeValue(encoder.encode("SCAN"));
 
-                // ESP32 அனுப்பும் வைஃபை பட்டியலைக் கேட்பது (Notifications)
                 bleCharacteristic.startNotifications();
                 bleCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
                     let decoder = new TextDecoder('utf-8');
@@ -274,7 +430,7 @@
                     let networks = wifiString.split(',');
 
                     let wifiSelect = document.getElementById('wifiSsidSelect');
-                    wifiSelect.innerHTML = '<option value="">-- வைஃபை நெட்வொர்க்கைத் தேர்ந்தெடுக்கவும் --</option>';
+                    wifiSelect.innerHTML = `<option value="">${translations[currentLang].wifiDefault}</option>`;
                     
                     networks.forEach(ssid => {
                         if(ssid.trim() !== "") {
@@ -285,12 +441,12 @@
                         }
                     });
 
-                    statusText.innerText = "✅ வைஃபை நெட்வொர்க்குகள் கண்டறியப்பட்டன!";
+                    statusText.innerText = "✅ Wi-Fi Networks Found!";
                     document.getElementById('wifiForm').style.display = 'block';
                 });
 
             } catch (error) {
-                statusText.innerText = "❌ இணைப்பு தோல்வியுற்றது: " + error.message;
+                statusText.innerText = "❌ Connection Failed: " + error.message;
             }
         }
 
@@ -300,14 +456,14 @@
             let targetId = document.getElementById('targetDeviceId').value.trim();
             let statusText = document.getElementById('bleStatus');
 
-            if (!ssid || !pass) { alert("வைஃபை பெயரைத் தேர்ந்தெடுத்து பாஸ்வேர்டை உள்ளிடவும்."); return; }
+            if (!ssid || !pass) { alert(currentLang === 'ta' ? "வைஃபை மற்றும் பாஸ்வேர்ட் அவசியம்." : "Wi-Fi SSID and Password required."); return; }
 
             try {
                 let dataString = ssid + ":" + pass;
                 let encoder = new TextEncoder();
                 await bleCharacteristic.writeValue(encoder.encode(dataString));
 
-                statusText.innerText = "வைஃபை அனுப்பப்பட்டது! சாதனம் இணைக்கப்படுகிறது...";
+                statusText.innerText = "Configuring hardware & linking cloud...";
                 
                 let user = auth.currentUser;
                 if (user) {
@@ -319,129 +475,19 @@
                     activeDeviceId = targetId;
                     document.getElementById('pairingCard').style.display = 'none';
                     document.getElementById('dashboardContent').style.display = 'block';
-                    document.getElementById('activeDeviceTitle').innerText = activeDeviceId;
+                    updateUIStrings();
                     initFirebaseListener();
                 }, 4000);
             } catch (error) {
-                statusText.innerText = "❌ தரவு அனுப்புவதில் பிழை ஏற்பட்டது.";
+                statusText.innerText = "❌ Transmission Error: " + error.message;
             }
         }
 
         function deleteCurrentDevice() {
-            if (confirm("நிச்சயமாக இந்த சாதனத்தை உங்கள் கணக்கிலிருந்து நீக்க விரும்புகிறீர்களா?")) {
+            if (confirm(currentLang === 'ta' ? "நிச்சயமாக இந்த சாதனத்தை உங்கள் கணக்கிலிருந்து நீக்க விரும்புகிறீர்களா?" : "Unbind and remove this controller from your account?")) {
                 let user = auth.currentUser;
                 if (user && activeDeviceId) {
                     if (dbRef) dbRef.off();
                     database.ref('users/' + user.uid + '/devices/' + activeDeviceId).remove();
                     database.ref('devices/' + activeDeviceId).update({ boundUser: "", motorStatus: 0, dryRun: 0 });
-                    alert("சாதனம் வெற்றிகரமாக நீக்கப்பட்டது!");
-                    loadUserDevices(user.uid);
-                }
-            }
-        }
-
-        function initFirebaseListener() {
-            if (dbRef) dbRef.off();
-            dbRef = database.ref('devices/' + activeDeviceId);
-            
-            dbRef.on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (!data) return;
-
-                let fillDiv = document.getElementById('waterFill');
-                let labelDiv = document.getElementById('tankLevelText');
-                let motorBadge = document.getElementById('motorStatusBadge');
-                let modeBadge = document.getElementById('modeStatus');
-                let dryRunBadge = document.getElementById('dryRunStatus');
-                let motorBtn = document.getElementById('motorBtn');
-                let modeBtn = document.getElementById('modeBtn');
-                let resetBtn = document.getElementById('resetBtn');
-                let timerDiv = document.getElementById('timerDisplay');
-
-                currentHighSensor = data.highSensor;
-
-                if (data.highSensor == 0) {
-                    fillDiv.style.height = '100%';
-                    labelDiv.innerText = "மட்டம்: ஹை (நிறைந்துள்ளது)";
-                } else if (data.midSensor == 0) {
-                    fillDiv.style.height = '60%';
-                    labelDiv.innerText = "மட்டம்: மிட் (நடுத்தரம்)";
-                } else {
-                    fillDiv.style.height = '15%';
-                    labelDiv.innerText = "மட்டம்: லோ (காலியாகிறது)";
-                }
-
-                currentMotorState = data.motorStatus;
-                if (currentMotorState == 1) {
-                    motorBadge.innerText = "ON (இயங்குகிறது)";
-                    motorBadge.className = "badge badge-online";
-                    motorBtn.innerText = "மோட்டாரை நிறுத்தவும் (OFF)";
-                    motorBtn.style.background = "#f44336";
-                    
-                    if (data.midSensor == 0) {
-                        timerDiv.innerText = "Mid தொட்டது - பாதுகாப்பானது!";
-                    } else {
-                        let remSec = Math.max(0, 60 - Math.floor(data.elapsedTime / 1000));
-                        timerDiv.innerText = "ட்ரை ரன் டைமர்: " + remSec + " விநாடிகள்";
-                    }
-                } else {
-                    motorBadge.innerText = "OFF (நிறுத்தப்பட்டுள்ளது)";
-                    motorBadge.className = "badge badge-offline";
-                    motorBtn.innerText = "மோட்டாரை இயக்கவும் (ON)";
-                    motorBtn.style.background = "#ff9800";
-                    timerDiv.innerText = "";
-                }
-
-                currentAutoMode = data.autoMode;
-                if (currentAutoMode == 1) {
-                    modeBadge.innerText = "Auto Mode (தானியங்கி)";
-                    modeBadge.className = "badge badge-active";
-                    modeBtn.innerText = "மேனுவல் மோட்டுக்கு மாற்றுக";
-                    motorBtn.disabled = true;
-                } else {
-                    modeBadge.innerText = "Manual Mode (கைமுறை)";
-                    modeBadge.className = "badge badge-alert";
-                    modeBtn.innerText = "ஆட்டோ மோட்டுக்கு மாற்றுக";
-                    motorBtn.disabled = false;
-                }
-
-                if (data.dryRun == 1) {
-                    dryRunBadge.innerText = "Dry Run Trip! (நீர் வரவில்லை)";
-                    dryRunBadge.className = "badge badge-alert";
-                    resetBtn.style.display = "block";
-                    timerDiv.innerText = "பாதுகாப்பிற்காக மோட்டார் நிறுத்தப்பட்டது!";
-                } else {
-                    dryRunBadge.innerText = "Safe (பாதுகாப்பானது)";
-                    dryRunBadge.className = "badge badge-safe";
-                    resetBtn.style.display = "none";
-                }
-            });
-        }
-
-        function toggleMode() {
-            let newMode = currentAutoMode == 1 ? 0 : 1;
-            database.ref('devices/' + activeDeviceId).update({ autoMode: newMode });
-        }
-
-        function toggleMotor() {
-            if (currentAutoMode == 1) {
-                alert("தற்போது ஆட்டோ மோடில் உள்ளது!");
-                return;
-            }
-            if (currentHighSensor == 0 && currentMotorState == 0) {
-                alert("தொட்டி நிறைந்துள்ளது! மோட்டாரை இயக்க முடியாது.");
-                return;
-            }
-            let newMotorState = currentMotorState == 1 ? 0 : 1;
-            database.ref('devices/' + activeDeviceId).update({ manualMotor: newMotorState });
-        }
-
-        function resetDryRun() {
-            database.ref('devices/' + activeDeviceId).update({ 
-                dryRun: 0,
-                resetTrigger: 1 
-            });
-        }
-    </script>
-</body>
-</html>
+                    alert(currentLang === 'ta' ? "சாதனம் வெற்றிகரமாக நீக்கப்பட்டது!" : "Device successfully unlinked
