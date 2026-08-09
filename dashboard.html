@@ -336,6 +336,8 @@
             document.getElementById('tDelDev').innerText = t.delDev;
             document.getElementById('tSwitchDev').innerText = t.switchDev;
             document.getElementById('tLogout2').innerText = t.logout2;
+            document.getElementById('modalTitle').innerText = t.successTitle;
+            document.getElementById('modalMsg').innerText = t.successMsg;
 
             if(currentAutoMode === 1) {
                 document.getElementById('modeStatus').innerText = t.modeAuto;
@@ -411,11 +413,18 @@
         }
 
         function selectExistingDevice() {
-            let devId = document.getElementById('deviceSelect'.value);
-            if (!devId) { alert(currentLang === 'ta' ? "தயவுசெய்து ஒரு சாதனத்தைத் தேர்ந்தெடுக்கவும்." : "Please select a controller instance."); return; }
-            activeDeviceId = devId;
+            let selectElement = document.getElementById('deviceSelect');
+            let devId = selectElement.value;
+            
+            if (!devId || devId.trim() === "") { 
+                alert(currentLang === 'ta' ? "தயவுசெய்து சரியான சாதனத்தைத் தேர்ந்தெடுக்கவும்." : "Please select a valid controller instance."); 
+                return; 
+            }
+            
+            activeDeviceId = devId.trim();
             document.getElementById('selectorCard').style.display = 'none';
             document.getElementById('dashboardContent').style.display = 'block';
+            document.getElementById('activeDeviceTitle').innerText = activeDeviceId;
             updateUIStrings();
             initFirebaseListener();
         }
@@ -424,7 +433,6 @@
             auth.signOut().then(() => { location.reload(); });
         }
 
-        // 1. ப்ளூடூத் ஸ்கேன் செய்யும்போது பாப்-அப் டைமர் ஓடும் முறை
         async function searchAndConnectBLE() {
             let targetId = document.getElementById('targetDeviceId').value.trim();
             let statusText = document.getElementById('bleStatus');
@@ -435,19 +443,17 @@
                 let t = translations[currentLang];
                 let seconds = 0;
                 
-                // பாப்-அப் மோடலைத் திறத்தல் (ஸ்கேனிங் டைமர்)
                 isSuccessModal = false;
                 document.getElementById('modalTitle').innerText = t.scanningTitle;
-                document.getElementById('modalMsg').innerText = (currentLang === 'ta' ? "⏳ Wi-Fi நெட்வொர்க்குகள் ஸ்கேன் செய்யப்படுகிறது... (" : "⏳ Scanning Wi-Fi Networks... (") + seconds + "s)";
+                document.getElementById('modalMsg').innerText = (currentLang === 'ta' ? "⏳ வைஃபை நெட்வொர்க்குகள் ஸ்கேன் செய்யப்படுகிறது... (" : "⏳ Scanning Wi-Fi Networks... (") + seconds + "s)";
                 document.getElementById('modalBtn').style.display = 'none';
                 document.getElementById('popupModal').style.display = 'flex';
 
                 let scanTimer = setInterval(() => {
                     seconds++;
-                    document.getElementById('modalMsg').innerText = (currentLang === 'ta' ? "⏳ Wi-Fi நெட்வொர்க்குகள் ஸ்கேன் செய்யப்படுகிறது... (" : "⏳ Scanning Wi-Fi Networks... (") + seconds + "s)";
+                    document.getElementById('modalMsg').innerText = (currentLang === 'ta' ? "⏳ வைஃபை நெட்வொர்க்குகள் ஸ்கேன் செய்யப்படுகிறது... (" : "⏳ Scanning Wi-Fi Networks... (") + seconds + "s)";
                 }, 1000);
 
-                statusText.innerText = "Connecting to ESP32 via Bluetooth...";
                 const device = await navigator.bluetooth.requestDevice({
                     filters: [{ name: 'TES-AWLCW-' + targetId }, { name: 'TES-AWLCW-1001' }],
                     optionalServices: [SERVICE_UUID]
@@ -460,8 +466,8 @@
                 await bleCharacteristic.startNotifications();
                 
                 bleCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
-                    clearInterval(scanTimer); // டைமர் நிறுத்துதல்
-                    document.getElementById('popupModal').style.display = 'none'; // பாப்-அப் மூடுதல்
+                    clearInterval(scanTimer);
+                    document.getElementById('popupModal').style.display = 'none';
 
                     let decoder = new TextDecoder('utf-8');
                     let wifiString = decoder.decode(event.target.value);
@@ -492,7 +498,6 @@
             }
         }
 
-        // 2. பாஸ்வேர்ட் கொடுத்தவுடன் மீண்டும் டைமர் ஓடி, கனெக்ட் ஆனதும் சக்சஸ் பாப்-அப் வருவது
         async function sendWiFiToESP32() {
             let ssid = document.getElementById('wifiSsidSelect').value;
             let pass = document.getElementById('wifiPass').value.trim();
@@ -509,7 +514,6 @@
                 let t = translations[currentLang];
                 let connSec = 0;
                 
-                // இரண்டாவது டைமர் பாப்-அப் தொடங்குதல்
                 isSuccessModal = true;
                 document.getElementById('modalTitle').innerText = t.connectingTitle;
                 document.getElementById('modalMsg').innerText = (currentLang === 'ta' ? "⏳ வைஃபையுடன் இணைக்கப்படுகிறது... (" : "⏳ Connecting to Wi-Fi... (") + connSec + "s)";
@@ -527,13 +531,11 @@
                     await database.ref('devices/' + targetId).update({ boundUser: user.uid });
                 }
 
-                // 8 விநாடிகளுக்குப் பின் வைஃபை இணைப்பு வெற்றிகரமாக முடிவதாகக் கருதி பாப்-அப் மாற்றுதல்
                 setTimeout(() => {
                     clearInterval(connTimer);
-                    
                     document.getElementById('modalTitle').innerText = t.successTitle;
                     document.getElementById('modalMsg').innerHTML = `<b style="color:var(--accent-green); font-size:15px;">${t.successMsg}</b>`;
-                    document.getElementById('modalBtn').style.display = 'inline-block'; // OK பட்டன் காட்டுதல்
+                    document.getElementById('modalBtn').style.display = 'inline-block';
                 }, 8000);
 
             } catch (error) {
@@ -547,7 +549,7 @@
             if (isSuccessModal) {
                 document.getElementById('pairingCard').style.display = 'none';
                 let user = auth.currentUser;
-                if (user) loadUserDevices(user.uid); // நேராக டிவைஸ் செலக்டர் பக்கத்திற்குச் செல்லுதல்
+                if (user) loadUserDevices(user.uid);
             }
         }
 
@@ -565,6 +567,7 @@
         }
 
         function initFirebaseListener() {
+            if (!activeDeviceId) return;
             if (dbRef) dbRef.off();
             dbRef = database.ref('devices/' + activeDeviceId);
             
