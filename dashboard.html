@@ -141,7 +141,10 @@
         let currentMotorState = 0;
         let deviceId = "1001";
 
-        // மிகவும் நிலையான Web Bluetooth Connection ஃபங்ஷன்
+        // UUID-கள் அனைத்தும் பெரிய எழுத்துக்களில் (Uppercase) திருத்தப்பட்டுள்ளன
+        const SERVICE_UUID = "4FAFC201-1FB5-459E-8FCC-C5C9C331914B";
+        const CHARACTERISTIC_UUID = "BEB5483E-36E1-4688-B7F5-EA07361B26AC";
+
         async function searchAndConnectBLE() {
             let statusText = document.getElementById('bleStatus');
             try {
@@ -149,28 +152,27 @@
                 
                 const device = await navigator.bluetooth.requestDevice({
                     filters: [{ name: 'TES-AWLCW-1001' }],
-                    optionalServices: ['4fafc201-1fb5-459e-8fcc-c5c9c331914b']
+                    optionalServices: [SERVICE_UUID.toLowerCase()]
                 });
 
                 statusText.innerText = "சாதனத்துடன் இணைக்கப்படுகிறது...";
                 const server = await device.gatt.connect();
                 
                 statusText.innerText = "Bluetooth Service பெறப்படுகிறது...";
-                const service = await server.getPrimaryService('4fafc201-1fb5-459e-8fcc-c5c9c331914b');
+                const service = await server.getPrimaryService(SERVICE_UUID.toLowerCase());
                 
                 statusText.innerText = "Characteristic பெறப்படுகிறது...";
-                bleCharacteristic = await service.getCharacteristic('beb5483e-36e1-4688-b7f5-ea07361b26ace');
+                bleCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID.toLowerCase());
 
                 statusText.innerText = "✅ புளூடூத் இணைப்பு வெற்றிகரமாக உருவாக்கப்பட்டது!";
                 document.getElementById('wifiForm').style.display = 'block';
 
             } catch (error) {
                 console.error("BLE Connection Error: ", error);
-                statusText.innerText = "❌ இணைப்பு தோல்வியுற்றது: " + error.message + " (ESP32-ஐ Reset செய்து மீண்டும் முயற்சிக்கவும்)";
+                statusText.innerText = "❌ இணைப்பு தோல்வியுற்றது: " + error.message;
             }
         }
 
-        // வைஃபை பெயர் மற்றும் பாஸ்வேர்டை ESP32-க்கு அனுப்புதல்
         async function sendWiFiToESP32() {
             let ssid = document.getElementById('wifiSsid').value.trim();
             let pass = document.getElementById('wifiPass').value.trim();
@@ -206,7 +208,6 @@
             }
         }
 
-        // ஃபயர்பேஸ் டேட்டாவைக் கண்காணித்து டேஷ்போர்டை இயக்குவது
         function initFirebaseListener() {
             database.ref('devices/' + deviceId).on('value', (snapshot) => {
                 const data = snapshot.val();
@@ -222,7 +223,6 @@
                 let resetBtn = document.getElementById('resetBtn');
                 let timerDiv = document.getElementById('timerDisplay');
 
-                // 3 சென்சார் லாஜிக் கிராபிக்ஸ் அப்டேட் (Low, Mid, High)
                 if (data.highSensor == 0) {
                     fillDiv.style.height = '100%';
                     labelDiv.innerText = "மட்டம்: ஹை (நிறைந்துள்ளது)";
