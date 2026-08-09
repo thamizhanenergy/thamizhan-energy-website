@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IoT டேஷ்போர்டு | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
+    <title>AWLCW 1.0 IoT டேஷ்போர்டு | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
@@ -57,7 +57,7 @@
 
         <div class="pairing-card" id="pairingCard">
             <h3>ESP32 ப்ளூடூத் வைஃபை இணைப்பு</h3>
-            <p>முதலில் ப்ளூடூத் மூலம் உங்கள் சாதனத்தைத் தேடி இணைக்கவும்</p>
+            <p>ப்ளூடூத் மூலம் உங்கள் சாதனத்தைத் தேடி இணைத்து வீட்டு வைஃபையை உள்ளிடவும்</p>
             
             <div class="pairing-input-group">
                 <button class="btn-ble" onclick="searchAndConnectBLE()">🔍 ESP32-ஐத் தேடி இணைக்கவும் (Scan BLE)</button>
@@ -141,7 +141,7 @@
         let currentMotorState = 0;
         let deviceId = "1001";
 
-        // 1. ப்ளூடூத் மூலம் ESP32-ஐத் தேடி இணைக்கும் ஃபங்ஷன்
+        // மிகவும் நிலையான Web Bluetooth Connection ஃபங்ஷன்
         async function searchAndConnectBLE() {
             let statusText = document.getElementById('bleStatus');
             try {
@@ -152,21 +152,25 @@
                     optionalServices: ['4fafc201-1fb5-459e-8fcc-c5c9c331914b']
                 });
 
-                statusText.innerText = "ப்ளூடூத் இணைக்கப்படுகிறது (Connecting)...";
+                statusText.innerText = "சாதனத்துடன் இணைக்கப்படுகிறது...";
                 const server = await device.gatt.connect();
+                
+                statusText.innerText = "Bluetooth Service பெறப்படுகிறது...";
                 const service = await server.getPrimaryService('4fafc201-1fb5-459e-8fcc-c5c9c331914b');
+                
+                statusText.innerText = "Characteristic பெறப்படுகிறது...";
                 bleCharacteristic = await service.getCharacteristic('beb5483e-36e1-4688-b7f5-ea07361b26ace');
 
-                statusText.innerText = "இணைப்பு வெற்றிகரமாக உருவாக்கப்பட்டது!";
+                statusText.innerText = "✅ புளூடூத் இணைப்பு வெற்றிகரமாக உருவாக்கப்பட்டது!";
                 document.getElementById('wifiForm').style.display = 'block';
 
             } catch (error) {
-                console.error(error);
-                statusText.innerText = "ப்ளூடூத் இணைப்பு தோல்வியுற்றது அல்லது ரத்து செய்யப்பட்டது.";
+                console.error("BLE Connection Error: ", error);
+                statusText.innerText = "❌ இணைப்பு தோல்வியுற்றது: " + error.message + " (ESP32-ஐ Reset செய்து மீண்டும் முயற்சிக்கவும்)";
             }
         }
 
-        // 2. வைஃபை பெயர் மற்றும் பாஸ்வேர்டை ESP32-க்கு அனுப்புதல்
+        // வைஃபை பெயர் மற்றும் பாஸ்வேர்டை ESP32-க்கு அனுப்புதல்
         async function sendWiFiToESP32() {
             let ssid = document.getElementById('wifiSsid').value.trim();
             let pass = document.getElementById('wifiPass').value.trim();
@@ -174,6 +178,11 @@
 
             if (!ssid || !pass) {
                 alert("தயவுசெய்து வைஃபை பெயர் மற்றும் கடவுச்சொல்லை உள்ளிடவும்.");
+                return;
+            }
+
+            if (!bleCharacteristic) {
+                alert("புளூடூத் இணைக்கப்படவில்லை!");
                 return;
             }
 
@@ -192,12 +201,12 @@
                 }, 4000);
 
             } catch (error) {
-                console.error(error);
-                statusText.innerText = "தரவு அனுப்புவதில் பிழை ஏற்பட்டது.";
+                console.error("Write Error: ", error);
+                statusText.innerText = "❌ தரவு அனுப்புவதில் பிழை ஏற்பட்டது.";
             }
         }
 
-        // 3. ஃபயர்பேஸ் டேட்டாவைக் கண்காணித்து டேஷ்போர்டை இயக்குவது
+        // ஃபயர்பேஸ் டேட்டாவைக் கண்காணித்து டேஷ்போர்டை இயக்குவது
         function initFirebaseListener() {
             database.ref('devices/' + deviceId).on('value', (snapshot) => {
                 const data = snapshot.val();
@@ -213,6 +222,7 @@
                 let resetBtn = document.getElementById('resetBtn');
                 let timerDiv = document.getElementById('timerDisplay');
 
+                // 3 சென்சார் லாஜிக் கிராபிக்ஸ் அப்டேட் (Low, Mid, High)
                 if (data.highSensor == 0) {
                     fillDiv.style.height = '100%';
                     labelDiv.innerText = "மட்டம்: ஹை (நிறைந்துள்ளது)";
@@ -231,7 +241,7 @@
                     motorBtn.innerText = "மோட்டாரை நிறுத்தவும் (OFF)";
                     motorBtn.style.background = "#f44336";
                     
-                    let remSec = Math.max(0, 60 - Math.floor(data.elapsedTime / 1000));
+                    let remSec = Math.max(0, 120 - Math.floor(data.elapsedTime / 1000));
                     timerDiv.innerText = "ட்ரை ரன் டைமர்: " + remSec + " விநாடிகள்";
                 } else {
                     motorBadge.innerText = "OFF (நிறுத்தப்பட்டுள்ளது)";
