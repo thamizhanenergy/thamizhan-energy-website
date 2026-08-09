@@ -46,7 +46,6 @@
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         @media(max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
 
-        /* Tank UI */
         .tank-container { display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 15px 0; }
         .water-tank { width: 130px; height: 190px; border: 4px solid var(--border-color); border-radius: 12px; position: relative; overflow: hidden; background: var(--bg-primary); box-shadow: inset 0 0 20px rgba(0,0,0,0.6); }
         .water-fill { position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, #0288d1, var(--accent-blue)); transition: height 0.6s ease-in-out; }
@@ -200,7 +199,7 @@
         let currentHighSensor = 1;
         let activeDeviceId = "";
         let dbRef = null;
-        let currentLang = 'ta'; // Default Tamil
+        let currentLang = 'ta';
 
         const translations = {
             ta: {
@@ -420,10 +419,9 @@
 
                 statusText.innerText = "✅ Connected! Requesting Wi-Fi scan...";
 
-                let encoder = new TextEncoder();
-                await bleCharacteristic.writeValue(encoder.encode("SCAN"));
-
-                bleCharacteristic.startNotifications();
+                // பிழையின்றி நோட்டிபிகேஷனை ஆன் செய்தல்
+                await bleCharacteristic.startNotifications();
+                
                 bleCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
                     let decoder = new TextDecoder('utf-8');
                     let wifiString = decoder.decode(event.target.value);
@@ -444,6 +442,10 @@
                     statusText.innerText = "✅ Wi-Fi Networks Found!";
                     document.getElementById('wifiForm').style.display = 'block';
                 });
+
+                // ESP32-க்கு ஸ்கேன் கட்டளையை அனுப்புதல்
+                let encoder = new TextEncoder();
+                await bleCharacteristic.writeValue(encoder.encode("SCAN"));
 
             } catch (error) {
                 statusText.innerText = "❌ Connection Failed: " + error.message;
@@ -543,7 +545,7 @@
                     }
                 } else {
                     motorBadge.innerText = t.motorOff;
-                    motorBadge.className = "badge badge-offline";
+                    motorBadge.className, badge = "badge badge-offline";
                     motorBtn.innerText = t.motorBtnOn;
                     motorBtn.style.background = "var(--accent-orange)";
                     timerDiv.innerText = "";
@@ -590,7 +592,7 @@
                 return;
             }
             let newMotorState = currentMotorState == 1 ? 0 : 1;
-            database.ref('devices/' + activeDeviceId).update({ manualMotor: newMotorState });
+            database.ref('devices/' + dataBaseRefPath(activeDeviceId)).update({ manualMotor: newMotorState }); // fixed safety
         }
 
         function resetDryRun() {
