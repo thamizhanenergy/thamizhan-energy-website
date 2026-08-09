@@ -490,4 +490,115 @@
                     if (dbRef) dbRef.off();
                     database.ref('users/' + user.uid + '/devices/' + activeDeviceId).remove();
                     database.ref('devices/' + activeDeviceId).update({ boundUser: "", motorStatus: 0, dryRun: 0 });
-                    alert(currentLang === 'ta' ? "சாதனம் வெற்றிகரமாக நீக்கப்பட்டது!" : "Device successfully unlinked
+                    alert(currentLang === 'ta' ? "சாதனம் வெற்றிகரமாக நீக்கப்பட்டது!" : "Device successfully unlinked.");
+                    loadUserDevices(user.uid);
+                }
+            }
+        }
+
+        function initFirebaseListener() {
+            if (dbRef) dbRef.off();
+            dbRef = database.ref('devices/' + activeDeviceId);
+            
+            dbRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (!data) return;
+
+                let fillDiv = document.getElementById('waterFill');
+                let labelDiv = document.getElementById('tankLevelText');
+                let motorBadge = document.getElementById('motorStatusBadge');
+                let modeBadge = document.getElementById('modeStatus');
+                let dryRunBadge = document.getElementById('dryRunStatus');
+                let motorBtn = document.getElementById('motorBtn');
+                let modeBtn = document.getElementById('modeBtn');
+                let resetBtn = document.getElementById('resetBtn');
+                let timerDiv = document.getElementById('timerDisplay');
+                let t = translations[currentLang];
+
+                currentHighSensor = data.highSensor;
+
+                if (data.highSensor == 0) {
+                    fillDiv.style.height = '100%';
+                    labelDiv.innerText = currentLang === 'ta' ? "மட்டம்: ஹை (நிறைந்துள்ளது)" : "Level: High (Full)";
+                } else if (data.midSensor == 0) {
+                    fillDiv.style.height = '60%';
+                    labelDiv.innerText = currentLang === 'ta' ? "மட்டம்: மிட் (நடுத்தரம்)" : "Level: Mid (Medium)";
+                } else {
+                    fillDiv.style.height = '15%';
+                    labelDiv.innerText = currentLang === 'ta' ? "மட்டம்: லோ (காலியாகிறது)" : "Level: Low (Empty)";
+                }
+
+                currentMotorState = data.motorStatus;
+                if (currentMotorState == 1) {
+                    motorBadge.innerText = t.motorOn;
+                    motorBadge.className = "badge badge-online";
+                    motorBtn.innerText = t.motorBtnOff;
+                    motorBtn.style.background = "var(--accent-red)";
+                    
+                    if (data.midSensor == 0) {
+                        timerDiv.innerText = currentLang === 'ta' ? "Mid தொட்டது - பாதுகாப்பானது!" : "Mid Reached - Safe & Stable!";
+                    } else {
+                        let remSec = Math.max(0, 60 - Math.floor(data.elapsedTime / 1000));
+                        timerDiv.innerText = (currentLang === 'ta' ? "ட்ரை ரன் டைமர்: " : "Dry Run Timer: ") + remSec + (currentLang === 'ta' ? " விநாடிகள்" : " Secs");
+                    }
+                } else {
+                    motorBadge.innerText = t.motorOff;
+                    motorBadge.className = "badge badge-offline";
+                    motorBtn.innerText = t.motorBtnOn;
+                    motorBtn.style.background = "var(--accent-orange)";
+                    timerDiv.innerText = "";
+                }
+
+                currentAutoMode = data.autoMode;
+                if (currentAutoMode == 1) {
+                    modeBadge.innerText = t.modeAuto;
+                    modeBadge.className = "badge badge-active";
+                    modeBtn.innerText = t.modeSwitchManual;
+                    motorBtn.disabled = true;
+                } else {
+                    modeBadge.innerText = t.modeManual;
+                    modeBadge.className = "badge badge-alert";
+                    modeBtn.innerText = t.modeSwitchAuto;
+                    motorBtn.disabled = false;
+                }
+
+                if (data.dryRun == 1) {
+                    dryRunBadge.innerText = t.dryAlert;
+                    dryRunBadge.className = "badge badge-alert";
+                    resetBtn.style.display = "block";
+                    timerDiv.innerText = currentLang === 'ta' ? "பாதுகாப்பிற்காக மோட்டார் நிறுத்தப்பட்டது!" : "Actuator halted for dry protection!";
+                } else {
+                    dryRunBadge.innerText = t.drySafe;
+                    dryRunBadge.className = "badge badge-safe";
+                    resetBtn.style.display = "none";
+                }
+            });
+        }
+
+        function toggleMode() {
+            let newMode = currentAutoMode == 1 ? 0 : 1;
+            database.ref('devices/' + activeDeviceId).update({ autoMode: newMode });
+        }
+
+        function toggleMotor() {
+            if (currentAutoMode == 1) {
+                alert(currentLang === 'ta' ? "தற்போது ஆட்டோ மோடில் உள்ளது!" : "Controller is currently in Auto Mode!");
+                return;
+            }
+            if (currentHighSensor == 0 && currentMotorState == 0) {
+                alert(currentLang === 'ta' ? "தொட்டி நிறைந்துள்ளது! மோட்டாரை இயக்க முடியாது." : "Tank is fully saturated! Operation denied.");
+                return;
+            }
+            let newMotorState = currentMotorState == 1 ? 0 : 1;
+            database.ref('devices/' + activeDeviceId).update({ manualMotor: newMotorState });
+        }
+
+        function resetDryRun() {
+            database.ref('devices/' + activeDeviceId).update({ 
+                dryRun: 0,
+                resetTrigger: 1 
+            });
+        }
+    </script>
+</body>
+</html>
