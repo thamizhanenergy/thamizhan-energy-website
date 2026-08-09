@@ -370,12 +370,17 @@
         const CHARACTERISTIC_UUID = 0x2A19;
         let isSuccessModal = false;
 
+        // WebView மற்றும் App சூழலில் கூகுள் லாகின் தடையின்றி இயங்க signInWithRedirect பயன்படுத்தப்பட்டுள்ளது
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider).catch((error) => {
+            auth.signInWithRedirect(provider).catch((error) => {
                 document.getElementById('authStatus').innerText = "Error: " + error.message;
             });
         }
+
+        auth.getRedirectResult().catch((error) => {
+            console.error("Redirect login error:", error.message);
+        });
 
         auth.onAuthStateChanged((user) => {
             if (user) {
@@ -592,11 +597,10 @@
                     return;
                 }
 
-                // ஆன்லைன் / ஆஃப்லைன் கண்டறிதல் (Firebase Server Timestamp அடிப்படையாகக் கொண்டது)
+                // ஆன்லைன் / ஆஃப்லைன் சரிபார்ப்பு (lastSeen நேரத்தை அடிப்படையாகக் கொண்டது)
                 let lastTime = data.lastSeen || 0;
                 let currentTime = Date.now();
-                // 25 விநாடிகளுக்குள் ESP32 சிக்னல் (lastSeen) அனுப்பியிருந்தால் Online எனக் காட்டும்
-                let isOnline = (currentTime - lastTime < 25000); 
+                let isOnline = (currentTime - lastTime < 25000); // 25 விநாடிகளுக்குள் சிக்னல் வந்திருந்தால் Online
 
                 if (isOnline) {
                     onlineBadge.innerText = t.onlineText;
@@ -668,7 +672,7 @@
                     dryRunBadge.innerText = t.dryAlert;
                     dryRunBadge.className = "badge badge-alert";
                     resetBtn.style.display = "block";
-                    timerDiv.innerText = currentLang === 'ta'++ ? "பாதுகாப்பிற்காக மோட்டார் நிறுத்தப்பட்டது!" : "Actuator halted for dry protection!";
+                    timerDiv.innerText = currentLang === 'ta' ? "பாதுகாப்பிற்காக மோட்டார் நிறுத்தப்பட்டது!" : "Actuator halted for dry protection!";
                 } else {
                     dryRunBadge.innerText = t.drySafe;
                     dryRunBadge.className = "badge badge-safe";
