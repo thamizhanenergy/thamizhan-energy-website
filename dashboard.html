@@ -141,9 +141,9 @@
         let currentMotorState = 0;
         let deviceId = "1001";
 
-        // பிரவுசர் பிழையைத் தவிர்க்கும் வகையில் UUID-கள் துல்லியமாக வரையறுக்கப்பட்டுள்ளன
-        const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
-        const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26ace";
+        // Short UUID முறை (பிரவுசர் எரர் வராமல் தடுக்கப் பயன்படுவது)
+        const SERVICE_UUID = 0x180F;
+        const CHARACTERISTIC_UUID = 0x2A19;
 
         async function searchAndConnectBLE() {
             let statusText = document.getElementById('bleStatus');
