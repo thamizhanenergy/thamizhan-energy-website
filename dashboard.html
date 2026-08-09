@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AWLCW 1.0 பாதுகாப்பான டேஷ்போர்டு | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
+    <title>AWLCW 1.0 மல்டி-டிவைஸ் டேஷ்போர்டு | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
@@ -12,16 +12,18 @@
         header { background: #182832; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); position: relative; }
         header h1 { font-size: 20px; color: #00ff88; font-weight: 700; }
         
-        .auth-card, .pairing-card { background: #1a2a32; padding: 30px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #283c48; text-align: center; }
-        .auth-card h3, .pairing-card h3 { color: #00ff88; font-size: 18px; margin-bottom: 10px; }
-        .auth-card p, .pairing-card p { font-size: 13px; color: #aaa; margin-bottom: 20px; }
+        .auth-card, .pairing-card, .selector-card { background: #1a2a32; padding: 30px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #283c48; text-align: center; }
+        .auth-card h3, .pairing-card h3, .selector-card h3 { color: #00ff88; font-size: 18px; margin-bottom: 10px; }
+        .auth-card p, .pairing-card p, .selector-card p { font-size: 13px; color: #aaa; margin-bottom: 20px; }
         
         .btn-google { background: #fff; color: #444; border: none; padding: 12px 25px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); display: inline-flex; align-items: center; gap: 10px; }
         .btn-google:hover { background: #f1f1f1; }
         
         .input-group { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .input-group select, .input-group input { padding: 10px; border-radius: 6px; border: 1px solid #444; background: #0f2027; color: #fff; width: 280px; outline: none; font-size: 13px; }
         .input-group button { background: #00ff88; color: #0f2027; border: none; padding: 10px 25px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px; }
         .btn-ble { background: #2196F3 !important; color: white !important; }
+        .btn-danger { background: #ff4d4d !important; color: white !important; }
 
         #dashboardContent { display: none; }
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -62,15 +64,28 @@
 
         <div class="auth-card" id="authCard">
             <h3>பாதுகாப்பான உள்நுழைவு (Google Login)</h3>
-            <p>உங்களது மொபைல்/ஜிமெயில் கணக்கு மூலம் எளிதாக உள்நுழையவும்</p>
+            <p>உங்களது ஜிமெயில் கணக்கு மூலம் எளிதாக உள்நுழையவும்</p>
             <button class="btn-google" onclick="loginWithGoogle()">Sign in with Google</button>
             <p id="authStatus" style="font-size:12px; color:#ffeb3b; margin-top: 15px;"></p>
         </div>
 
-        <div class="pairing-card" id="pairingCard" style="display:none;">
-            <h3>சாதனப் பிணைப்பு (Device Pairing - 1001)</h3>
-            <p>ப்ளூடூத் மூலம் உங்கள் ESP32 சாதனத்தைத் தேடி இணைத்து வீட்டு வைஃபையை உள்ளிடவும்</p>
+        <div class="selector-card" id="selectorCard" style="display:none;">
+            <h3>உங்கள் சாதனத்தைத் தேர்ந்தெடுக்கவும்</h3>
+            <p>ஏற்கனவே இணைக்கப்பட்ட சாதனத்தைத் தேர்ந்தெடுக்கவும் அல்லது புதிய சாதனத்தை இணைக்கவும்</p>
             <div class="input-group">
+                <select id="deviceSelect">
+                    <option value="">-- சாதனத்தைத் தேர்ந்தெடுக்கவும் --</option>
+                </select>
+                <button onclick="selectExistingDevice()">சாதனத்தைத் திற (Open Dashboard)</button>
+                <button class="btn-ble" onclick="showPairingScreen()">+ புதிய சாதனத்தை இணைக்கவும் (Add New Device)</button>
+            </div>
+        </div>
+
+        <div class="pairing-card" id="pairingCard" style="display:none;">
+            <h3>புதிய சாதனப் பிணைப்பு (Add Device)</h3>
+            <p>ESP32 சாதனத்தின் ஐடியை உள்ளிட்டு ப்ளூடூத் மூலம் இணைக்கவும்</p>
+            <div class="input-group">
+                <input type="text" id="targetDeviceId" placeholder="Device ID (எ.கா: 1001)">
                 <button class="btn-ble" onclick="searchAndConnectBLE()">🔍 ESP32-ஐத் தேடி இணைக்கவும் (Scan BLE)</button>
             </div>
             <p id="bleStatus" style="font-size:13px; color:#ffeb3b; margin: 10px 0;"></p>
@@ -78,17 +93,19 @@
             <div id="wifiForm" style="display:none; margin-top: 15px; border-top: 1px solid #283c48; padding-top: 15px;">
                 <p style="color: #00ff88; margin-bottom: 10px;">வீட்டு வைஃபை விவரங்களை உள்ளிடவும்:</p>
                 <div class="input-group">
-                    <input type="text" id="wifiSsid" placeholder="Home Wi-Fi Name (SSID)" style="padding:10px; border-radius:6px; border:1px solid #444; background:#0f2027; color:#fff; width:280px; margin-bottom:8px;"><br>
-                    <input type="password" id="wifiPass" placeholder="Home Wi-Fi Password" style="padding:10px; border-radius:6px; border:1px solid #444; background:#0f2027; color:#fff; width:280px; margin-bottom:12px;"><br>
+                    <input type="text" id="wifiSsid" placeholder="Home Wi-Fi Name (SSID)">
+                    <input type="password" id="wifiPass" placeholder="Home Wi-Fi Password">
                     <button onclick="sendWiFiToESP32()">ஹோம் வைஃபை இணைக்கவும் (Connect)</button>
                 </div>
             </div>
+            <br>
+            <button onclick="backToSelector()" style="background:#546e7a; color:#fff; border:none; padding:8px 15px; border-radius:4px; cursor:pointer;">← பின் செல்ல</button>
         </div>
 
         <div id="dashboardContent" style="display:none;">
             <div class="dashboard-grid">
                 <div class="card">
-                    <h3>தொட்டியின் நீர் மட்டம் (Water Tank Level)</h3>
+                    <h3>தொட்டியின் நீர் மட்டம் (<span id="activeDeviceTitle">1001</span>)</h3>
                     <div class="tank-container">
                         <div class="water-tank">
                             <div class="water-fill" id="waterFill" style="height: 15%;"></div>
@@ -99,7 +116,7 @@
                 </div>
 
                 <div class="card">
-                    <h3>சாதன நிலை & கட்டுப்பாடுகள் (1001)</h3>
+                    <h3>சாதன நிலை & கட்டுப்பாடுகள்</h3>
                     <ul class="status-list">
                         <li class="status-item">
                             <span>இயக்க முறை (Mode):</span>
@@ -119,8 +136,10 @@
                         <button class="btn-control" id="modeBtn" onclick="toggleMode()">மேனுவல் மோட்டுக்கு மாற்றுக</button>
                         <button class="btn-control btn-manual" id="motorBtn" onclick="toggleMotor()" disabled>மோட்டாரை இயக்கவும் (Manual)</button>
                         <button class="btn-control btn-reset" id="resetBtn" onclick="resetDryRun()">ட்ரை ரன் ரீசெட் (Reset Dry Run)</button>
+                        <button class="btn-control btn-danger" onclick="deleteCurrentDevice()">🗑️ இந்த சாதனத்தை நீக்கு (Delete Device)</button>
                     </div>
-                    <button onclick="userLogout()" style="background:#b71c1c; color:#fff; border:none; padding:8px; border-radius:6px; cursor:pointer; margin-top:15px; width:100%; font-weight:600;">வெளியேறு (Logout)</button>
+                    <button onclick="backToSelector()" style="background:#455a64; color:#fff; border:none; padding:8px; border-radius:6px; cursor:pointer; margin-top:10px; width:100%; font-weight:600;">← சாதனங்கள் பட்டியல் (Switch Device)</button>
+                    <button onclick="userLogout()" style="background:#b71c1c; color:#fff; border:none; padding:8px; border-radius:6px; cursor:pointer; margin-top:10px; width:100%; font-weight:600;">வெளியேறு (Logout)</button>
                 </div>
             </div>
         </div>
@@ -150,7 +169,8 @@
         let currentAutoMode = 1;
         let currentMotorState = 0;
         let currentHighSensor = 1;
-        let deviceId = "1001";
+        let activeDeviceId = "";
+        let dbRef = null;
 
         const SERVICE_UUID = 0x180F;
         const CHARACTERISTIC_UUID = 0x2A19;
@@ -166,39 +186,79 @@
             if (user) {
                 document.getElementById('authCard').style.display = 'none';
                 document.getElementById('userInfo').innerText = "User: " + user.email;
-                
-                database.ref('devices/' + deviceId + '/boundUser').once('value').then((snapshot) => {
-                    let boundUser = snapshot.val();
-                    if (!boundUser) {
-                        database.ref('devices/' + deviceId).update({ boundUser: user.uid });
-                        document.getElementById('pairingCard').style.display = 'block';
-                    } else if (boundUser === user.uid) {
-                        document.getElementById('pairingCard').style.display = 'none';
-                        document.getElementById('dashboardContent').style.display = 'block';
-                        initFirebaseListener();
-                    } else {
-                        alert("⚠️ எச்சரிக்கை: இந்த சாதனம் ஏற்கனவே வேறு ஒரு பயனர் கணக்குடன் இணைக்கப்பட்டுள்ளது!");
-                        auth.signOut();
-                    }
-                });
+                loadUserDevices(user.uid);
             } else {
                 document.getElementById('authCard').style.display = 'block';
+                document.getElementById('selectorCard').style.display = 'none';
                 document.getElementById('pairingCard').style.display = 'none';
                 document.getElementById('dashboardContent').style.display = 'none';
                 document.getElementById('userInfo').innerText = "";
             }
         });
 
+        // யூசருக்கு சொந்தமான சாதனங்களை டேட்டாபேஸில் இருந்து ಲೋட் செய்தல்
+        function loadUserDevices(uid) {
+            database.ref('users/' + uid + '/devices').on('value', (snapshot) => {
+                let select = document.getElementById('deviceSelect');
+                select.innerHTML = '<option value="">-- சாதனத்தைத் தேர்ந்தெடுக்கவும் --</option>';
+                
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        let devId = childSnapshot.key;
+                        let opt = document.createElement('option');
+                        opt.value = devId;
+                        opt.innerText = "სாதனம் (Device ID: " + devId + ")";
+                        select.appendChild(opt);
+                    });
+                }
+                document.getElementById('selectorCard').style.display = 'block';
+                document.getElementById('pairingCard').style.display = 'none';
+                document.getElementById('dashboardContent').style.display = 'none';
+            });
+        }
+
+        function showPairingScreen() {
+            let devIdInput = document.getElementById('targetDeviceId').value.trim();
+            document.getElementById('selectorCard').style.display = 'none';
+            document.getElementById('pairingCard').style.display = 'block';
+        }
+
+        function backToSelector() {
+            if (dbRef) dbRef.off(); // பழைய டேட்டாபேஸ் லிசங்கரை நிறுத்துதல்
+            let user = auth.currentUser;
+            if (user) loadUserDevices(user.uid);
+        }
+
+        function selectExistingDevice() {
+            let devId = document.getElementById('deviceSelect').value;
+            if (!devId) {
+                alert("தயவுசெய்து ஒரு சாதனத்தைத் தேர்ந்தெடுக்கவும்.");
+                return;
+            }
+            activeDeviceId = devId;
+            document.getElementById('selectorCard').style.display = 'none';
+            document.getElementById('dashboardContent').style.display = 'block';
+            document.getElementById('activeDeviceTitle').innerText = activeDeviceId;
+            initFirebaseListener();
+        }
+
         function userLogout() {
             auth.signOut().then(() => { location.reload(); });
         }
 
         async function searchAndConnectBLE() {
+            let targetId = document.getElementById('targetDeviceId').value.trim();
             let statusText = document.getElementById('bleStatus');
+
+            if (!targetId) {
+                alert("தயவுசெய்து Device ID-ஐ உள்ளிடவும் (எ.கா: 1001).");
+                return;
+            }
+
             try {
                 statusText.innerText = "ப்ளூடூத் சாதனத்தைத் தேடுகிறது...";
                 const device = await navigator.bluetooth.requestDevice({
-                    filters: [{ name: 'TES-AWLCW-1001' }],
+                    filters: [{ name: 'TES-AWLCW-' + targetId }, { name: 'TES-AWLCW-1001' }],
                     optionalServices: [SERVICE_UUID]
                 });
 
@@ -206,7 +266,7 @@
                 const service = await server.getPrimaryService(SERVICE_UUID);
                 bleCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
-                statusText.innerText = "✅ புளூடூத் இணைப்பு வெற்றிகரமாக உருவாக்கப்பட்டது!";
+                statusText.innerText = "✅ புளூடூத் இணைப்பு வெற்றி! வைஃபை விவரங்களை இடவும்.";
                 document.getElementById('wifiForm').style.display = 'block';
             } catch (error) {
                 statusText.innerText = "❌ இணைப்பு தோல்வியுற்றது: " + error.message;
@@ -216,6 +276,7 @@
         async function sendWiFiToESP32() {
             let ssid = document.getElementById('wifiSsid').value.trim();
             let pass = document.getElementById('wifiPass').value.trim();
+            let targetId = document.getElementById('targetDeviceId').value.trim();
             let statusText = document.getElementById('bleStatus');
 
             if (!ssid || !pass) { alert("வைஃபை பெயர் மற்றும் பாஸ்வேர்டை உள்ளிடவும்."); return; }
@@ -225,10 +286,21 @@
                 let encoder = new TextEncoder();
                 await bleCharacteristic.writeValue(encoder.encode(dataString));
 
-                statusText.innerText = "வைஃபை பெறப்பட்டது! சாதனம் இணைக்கப்படுகிறது...";
+                statusText.innerText = "வைஃபை அனுப்பப்பட்டது! கணக்குடன் இணைக்கப்படுகிறது...";
+                
+                let user = auth.currentUser;
+                if (user) {
+                    // இந்த யூசரின் கீழ் சாதனத்தைப் பதிவு செய்தல்
+                    await database.ref('users/' + user.uid + '/devices/' + targetId).set(true);
+                    // சாதனத்தின் boundUser-ஐ அப்டேட் செய்தல்
+                    await database.ref('devices/' + targetId).update({ boundUser: user.uid });
+                }
+
                 setTimeout(() => {
+                    activeDeviceId = targetId;
                     document.getElementById('pairingCard').style.display = 'none';
                     document.getElementById('dashboardContent').style.display = 'block';
+                    document.getElementById('activeDeviceTitle').innerText = activeDeviceId;
                     initFirebaseListener();
                 }, 4000);
             } catch (error) {
@@ -236,8 +308,28 @@
             }
         }
 
+        // குறிப்பிட்ட சாதனத்தை மட்டும் யூசர் அக்கவுண்டில் இருந்து நீக்குவது (Delete/Unbind)
+        function deleteCurrentDevice() {
+            if (confirm("நிச்சயமாக இந்த சாதனத்தை உங்கள் கணக்கிலிருந்து நீக்க விரும்புகிறீர்களா?")) {
+                let user = auth.currentUser;
+                if (user && activeDeviceId) {
+                    if (dbRef) dbRef.off();
+                    // 1. யூசர் லிஸ்ட்டில் இருந்து நீக்குதல்
+                    database.ref('users/' + user.uid + '/devices/' + activeDeviceId).remove();
+                    // 2. சாதனத்தின் boundUser-ஐ காலியாக்குதல் (மற்றவர்கள் இணைக்க அனுமதிக்க)
+                    database.ref('devices/' + activeDeviceId).update({ boundUser: "", motorStatus: 0, dryRun: 0 });
+                    
+                    alert("சாதனம் வெற்றிகரமாக நீக்கப்பட்டது!");
+                    loadUserDevices(user.uid);
+                }
+            }
+        }
+
         function initFirebaseListener() {
-            database.ref('devices/' + deviceId).on('value', (snapshot) => {
+            if (dbRef) dbRef.off();
+            dbRef = database.ref('devices/' + activeDeviceId);
+            
+            dbRef.on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (!data) return;
 
@@ -313,7 +405,7 @@
 
         function toggleMode() {
             let newMode = currentAutoMode == 1 ? 0 : 1;
-            database.ref('devices/' + deviceId).update({ autoMode: newMode });
+            database.ref('devices/' + activeDeviceId).update({ autoMode: newMode });
         }
 
         function toggleMotor() {
@@ -321,17 +413,16 @@
                 alert("தற்போது ஆட்டோ மோடில் உள்ளது!");
                 return;
             }
-            // மேனுவல் மோடில் தொட்டி முழுமையாக நிறைந்திருந்தால் ஆன் செய்யவிடாமல் தடுத்தல்
             if (currentHighSensor == 0 && currentMotorState == 0) {
                 alert("தொட்டி நிறைந்துள்ளது! மோட்டாரை இயக்க முடியாது.");
                 return;
             }
             let newMotorState = currentMotorState == 1 ? 0 : 1;
-            database.ref('devices/' + deviceId).update({ manualMotor: newMotorState });
+            database.ref('devices/' + activeDeviceId).update({ manualMotor: newMotorState });
         }
 
         function resetDryRun() {
-            database.ref('devices/' + deviceId).update({ 
+            database.ref('devices/' + activeDeviceId).update({ 
                 dryRun: 0,
                 resetTrigger: 1 
             });
