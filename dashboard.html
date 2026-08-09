@@ -1,48 +1,208 @@
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT டேஷ்போர்டு | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #0f2027; color: #fff; line-height: 1.6; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        header { background: #182832; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        header h1 { font-size: 20px; color: #00ff88; font-weight: 700; }
+        
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media(max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
 
-<script>
-  // உங்கள் Firebase கான்ஃபிகரேஷன் விவரங்கள்
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "your-project.firebaseapp.com",
-    databaseURL: "https://your-project-default-rtdb.firebaseio.com",
-    projectId: "your-project",
-    storageBucket: "your-project.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123:web:abc"
-  };
+        .card { background: #1a2a32; padding: 25px; border-radius: 12px; border: 1px solid #283c48; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+        .card h3 { font-size: 16px; margin-bottom: 15px; color: #00ff88; border-bottom: 1px solid #283c48; padding-bottom: 8px; }
 
-  firebase.initializeApp(firebaseConfig);
-  const database = firebase.database();
+        .tank-container { display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 15px 0; }
+        .water-tank { width: 120px; height: 180px; border: 4px solid #fff; border-radius: 10px; position: relative; overflow: hidden; background: #0f2027; box-shadow: inset 0 0 15px rgba(0,0,0,0.5); }
+        .water-fill { position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, #0072ff, #00c6ff); transition: height 0.5s ease-in-out; }
+        .tank-label { margin-top: 12px; font-size: 15px; font-weight: 700; color: #00ff88; text-align: center; }
 
-  // டேட்டாவை நிகழ்நேரமாகக் கண்காணித்தல் (Real-time listener)
-  database.ref('devices/1001').on('snapshot', (snapshot) => {
-    const data = snapshot.val();
-    if (data) {
-      // மோட்டார் நிலை
-      document.getElementById('motorStatusBadge').innerText = data.motorStatus == 1 ? "ON" : "OFF";
-      
-      // ட்ரை ரன் அலர்ட்
-      if (data.dryRun == 1) {
-        document.getElementById('dryRunStatus').innerText = "Dry Run Trip!";
-      } else {
-        document.getElementById('dryRunStatus').innerText = "Safe";
-      }
-    }
-  });
+        .status-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+        .status-item { display: flex; justify-content: space-between; align-items: center; background: #0f2027; padding: 12px 15px; border-radius: 8px; font-size: 13px; border: 1px solid #22333d; }
+        .badge { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+        .badge-online { background: #1b5e20; color: #a5d6a7; }
+        .badge-offline { background: #b71c1c; color: #ef9a9a; }
+        .badge-active { background: #006064; color: #80deea; }
+        .badge-safe { background: #0d47a1; color: #90caf9; }
+        .badge-alert { background: #b71c1c; color: #ffccbc; }
 
-  // மோட்டாரை மேனுவலாக ஆன்/ஆஃப் செய்ய
-  function toggleMotor(state) {
-    database.ref('devices/1001').update({
-      manualMotor: state ? 1 : 0
-    });
-  }
+        .control-group { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+        .btn-control { background: #00ff88; color: #0f2027; padding: 12px; border: none; border-radius: 6px; font-weight: 700; font-size: 14px; cursor: pointer; text-align: center; transition: 0.3s; }
+        .btn-control:hover { background: #00cc6a; }
+        .btn-manual { background: #ff9800; color: #fff; }
+        .btn-reset { background: #d32f2f; color: #fff; display: none; }
+        .timer-text { font-size: 13px; color: #ffeb3b; text-align: center; margin-top: 8px; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>தமிழன் எனர்ஜி சிஸ்டம்ஸ் - IoT டேஷ்போர்டு</h1>
+        </header>
 
-  // ஆட்டோ / மேனுவல் மோட் மாற்ற
-  function toggleMode(modeVal) {
-    database.ref('devices/1001').update({
-      autoMode: modeVal === 'auto' ? 1 : 0
-    });
-  }
-</script>
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3>தொட்டியின் நீர் மட்டம் (Water Tank Level)</h3>
+                <div class="tank-container">
+                    <div class="water-tank">
+                        <div class="water-fill" id="waterFill" style="height: 15%;"></div>
+                    </div>
+                    <div class="tank-label" id="tankLevelText">மட்டம்: காலியாகிறது...</div>
+                    <div class="timer-text" id="timerDisplay"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>சாதன நிலை & கட்டுப்பாடுகள்</h3>
+                <ul class="status-list">
+                    <li class="status-item">
+                        <span>இயக்க முறை (Mode):</span>
+                        <span class="badge badge-active" id="modeStatus">Auto Mode</span>
+                    </li>
+                    <li class="status-item">
+                        <span>மோட்டார் நிலை:</span>
+                        <span class="badge badge-offline" id="motorStatusBadge">OFF</span>
+                    </li>
+                    <li class="status-item">
+                        <span>ட்ரை ரன் பாதுகாப்பு:</span>
+                        <span class="badge badge-safe" id="dryRunStatus">Safe</span>
+                    </li>
+                </ul>
+
+                <div class="control-group">
+                    <button class="btn-control" id="modeBtn" onclick="toggleMode()">மேனுவல் மோட்டுக்கு மாற்றுக</button>
+                    <button class="btn-control btn-manual" id="motorBtn" onclick="toggleMotor()" disabled>மோட்டாரை இயக்கவும் (Manual)</button>
+                    <button class="btn-control btn-reset" id="resetBtn" onclick="resetDryRun()">ட்ரை ரன் ரீசெட் (Reset Dry Run)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+        // உங்கள் Firebase கான்ஃபிகரேஷன் விவரங்களை இங்கே உள்ளிடவும்
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "your-project.firebaseapp.com",
+            databaseURL: "https://your-project-default-rtdb.firebaseio.com",
+            projectId: "your-project",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123:web:abc"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        let currentAutoMode = 1;
+        let currentMotorState = 0;
+
+        // Firebase-ல் இருந்து டேட்டாவை நிகழ்நேரமாக (Real-time) பெற்று டேஷ்போர்டை மாற்றுதல்
+        database.ref('devices/1001').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (!data) return;
+
+            let fillDiv = document.getElementById('waterFill');
+            let labelDiv = document.getElementById('tankLevelText');
+            let motorBadge = document.getElementById('motorStatusBadge');
+            let modeBadge = document.getElementById('modeStatus');
+            let dryRunBadge = document.getElementById('dryRunStatus');
+            let motorBtn = document.getElementById('motorBtn');
+            let modeBtn = document.getElementById('modeBtn');
+            let resetBtn = document.getElementById('resetBtn');
+            let timerDiv = document.getElementById('timerDisplay');
+
+            // 3 சென்சார் லாஜிக் கிராபிக்ஸ் அப்டேட்
+            if (data.highSensor == 0) {
+                fillDiv.style.height = '100%';
+                labelDiv.innerText = "மட்டம்: ஹை (நிறைந்துள்ளது)";
+            } else if (data.midSensor == 0) {
+                fillDiv.style.height = '60%';
+                labelDiv.innerText = "மட்டம்: மிட் (நடுத்தரம்)";
+            } else {
+                fillDiv.style.height = '15%';
+                labelDiv.innerText = "மட்டம்: லோ (காலியாகிறது)";
+            }
+
+            // மோட்டார் நிலை
+            currentMotorState = data.motorStatus;
+            if (currentMotorState == 1) {
+                motorBadge.innerText = "ON (இயங்குகிறது)";
+                motorBadge.className = "badge badge-online";
+                motorBtn.innerText = "மோட்டாரை நிறுத்தவும் (OFF)";
+                motorBtn.style.background = "#f44336";
+                
+                let remSec = Math.max(0, 60 - Math.floor(data.elapsedTime / 1000));
+                timerDiv.innerText = "ட்ரை ரன் டைமர்: " + remSec + " விநாடிகள்";
+            } else {
+                motorBadge.innerText = "OFF (நிறுத்தப்பட்டுள்ளது)";
+                motorBadge.className = "badge badge-offline";
+                motorBtn.innerText = "மோட்டாரை இயக்கவும் (ON)";
+                motorBtn.style.background = "#ff9800";
+                timerDiv.innerText = "";
+            }
+
+            // ஆட்டோ / மேனுவல் மோட்
+            currentAutoMode = data.autoMode;
+            if (currentAutoMode == 1) {
+                modeBadge.innerText = "Auto Mode (தானியங்கி)";
+                modeBadge.className = "badge badge-active";
+                modeBtn.innerText = "மேனுவல் மோட்டுக்கு மாற்றுக";
+                motorBtn.disabled = true; // ஆட்டோ மோடில் மேனுவல் பட்டன் வேலை செய்யாது
+            } else {
+                modeBadge.innerText = "Manual Mode (கைமுறை)";
+                modeBadge.className = "badge badge-alert";
+                modeBtn.innerText = "ஆட்டோ மோட்டுக்கு மாற்றுக";
+                motorBtn.disabled = false;
+            }
+
+            // ட்ரை ரன் பாதுகாப்பு அலர்ட்
+            if (data.dryRun == 1) {
+                dryRunBadge.innerText = "Dry Run Trip! (நீர் வரவில்லை)";
+                dryRunBadge.className = "badge badge-alert";
+                resetBtn.style.display = "block";
+                timerDiv.innerText = "பாதுகாப்பிற்காக மோட்டார் நிறுத்தப்பட்டது!";
+            } else {
+                dryRunBadge.innerText = "Safe (பாதுகாப்பானது)";
+                dryRunBadge.className = "badge badge-safe";
+                resetBtn.style.display = "none";
+            }
+        });
+
+        // மோட் மாற்றும் பட்டன் செயல்பாடு
+        function toggleMode() {
+            let newMode = currentAutoMode == 1 ? 0 : 1;
+            database.ref('devices/1001').update({
+                autoMode: newMode
+            });
+        }
+
+        // மேனுவல் மோட்டார் ஆன்/ஆஃப் செயல்பாடு
+        function toggleMotor() {
+            if (currentAutoMode == 1) {
+                alert("தற்போது ஆட்டோ மோடில் உள்ளது!");
+                return;
+            }
+            let newMotorState = currentMotorState == 1 ? 0 : 1;
+            database.ref('devices/1001').update({
+                manualMotor: newMotorState
+            });
+        }
+
+        // ட்ரை ரன் ரீசெட் பட்டன் செயல்பாடு
+        function resetDryRun() {
+            database.ref('devices/1001').update({
+                resetTrigger: 1
+            });
+        }
+    </script>
+</body>
+</html>
