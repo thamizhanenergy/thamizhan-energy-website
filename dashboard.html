@@ -1,221 +1,48 @@
-<!DOCTYPE html>
-<html lang="ta">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IoT டேஷ்போர்டு | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: #0f2027; color: #fff; line-height: 1.6; padding: 15px; }
-        .container { max-width: 900px; margin: 0 auto; }
-        header { background: #182832; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        header h1 { font-size: 18px; color: #00ff88; }
-        
-        .pairing-card, .card { background: #1a2a32; padding: 20px; border-radius: 12px; border: 1px solid #283c48; box-shadow: 0 8px 25px rgba(0,0,0,0.3); margin-bottom: 20px; }
-        .pairing-card h3 { color: #00ff88; font-size: 18px; margin-bottom: 10px; text-align: center; }
-        .pairing-input-group { display: flex; gap: 10px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
-        .pairing-input-group input { padding: 10px; border-radius: 6px; border: 1px solid #444; background: #0f2027; color: #fff; width: 250px; outline: none; }
-        .pairing-input-group button { background: #00ff88; color: #0f2027; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; }
-        
-        #reader { width: 100%; max-width: 300px; margin: 0 auto 10px auto; display: none; }
-        #dashboardContent { display: none; }
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
-        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        @media(max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
-        .card h3 { font-size: 16px; margin-bottom: 15px; color: #00ff88; border-bottom: 1px solid #283c48; padding-bottom: 8px; }
+<script>
+  // உங்கள் Firebase கான்ஃபிகரேஷன் விவரங்கள்
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "your-project.firebaseapp.com",
+    databaseURL: "https://your-project-default-rtdb.firebaseio.com",
+    projectId: "your-project",
+    storageBucket: "your-project.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123:web:abc"
+  };
 
-        .tank-container { display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 10px 0; }
-        .water-tank { width: 110px; height: 160px; border: 4px solid #fff; border-radius: 10px; position: relative; overflow: hidden; background: #0f2027; }
-        .water-fill { position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, #0072ff, #00c6ff); transition: height 0.5s ease-in-out; }
-        .tank-label { margin-top: 10px; font-size: 14px; font-weight: 700; color: #00ff88; }
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
 
-        .status-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-        .status-item { display: flex; justify-content: space-between; align-items: center; background: #0f2027; padding: 10px 12px; border-radius: 8px; font-size: 13px; border: 1px solid #22333d; }
-        .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-        .badge-online { background: #1b5e20; color: #a5d6a7; }
-        .badge-offline { background: #b71c1c; color: #ef9a9a; }
-        .badge-active { background: #006064; color: #80deea; }
-        .badge-safe { background: #0d47a1; color: #90caf9; }
-        .badge-alert { background: #b71c1c; color: #ffccbc; }
+  // டேட்டாவை நிகழ்நேரமாகக் கண்காணித்தல் (Real-time listener)
+  database.ref('devices/1001').on('snapshot', (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      // மோட்டார் நிலை
+      document.getElementById('motorStatusBadge').innerText = data.motorStatus == 1 ? "ON" : "OFF";
+      
+      // ட்ரை ரன் அலர்ட்
+      if (data.dryRun == 1) {
+        document.getElementById('dryRunStatus').innerText = "Dry Run Trip!";
+      } else {
+        document.getElementById('dryRunStatus').innerText = "Safe";
+      }
+    }
+  });
 
-        .control-group { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
-        .btn-control { background: #00ff88; color: #0f2027; padding: 10px; border: none; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer; text-align: center; }
-        .btn-manual { background: #ff9800; color: #fff; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>தமிழன் எனர்ஜி சிஸ்டம்ஸ் - IoT கிளவுட் டேஷ்போர்டு</h1>
-        </header>
+  // மோட்டாரை மேனுவலாக ஆன்/ஆஃப் செய்ய
+  function toggleMotor(state) {
+    database.ref('devices/1001').update({
+      manualMotor: state ? 1 : 0
+    });
+  }
 
-        <div class="pairing-card" id="pairingCard">
-            <h3>QR கோடு ஸ்கேன் & சாதனம் இணைப்பு (Device Pairing)</h3>
-            <p style="font-size: 12px; color: #aaa; text-align: center; margin-bottom: 10px;">உங்கள் சாதனத்தின் சீரியல் எண் அல்லது ESP32 ஐபி முகவரியை உள்ளிடவும்:</p>
-            <div id="reader"></div>
-            <div class="pairing-input-group" style="margin-bottom: 10px;">
-                <button class="btn-control" style="background:#2196F3; color:#fff;" onclick="startScanner()">📷 கேமரா ஸ்கேன்</button>
-            </div>
-            <div class="pairing-input-group">
-                <input type="text" id="serialInput" placeholder="எ.கா: 192.168.1.15 (বা) TES-AWLCW-1001">
-                <button onclick="pairDevice()">இணைக்கவும்</button>
-            </div>
-        </div>
-
-        <div id="dashboardContent">
-            <div class="dashboard-grid">
-                <div class="card">
-                    <h3>தொட்டியின் நீர் மட்டம் (Water Tank Status)</h3>
-                    <div class="tank-container">
-                        <div class="water-tank">
-                            <div class="water-fill" id="waterFill" style="height: 20%;"></div>
-                        </div>
-                        <div class="tank-label" id="tankLevelText">மட்டம்: ஆய்வு செய்கிறது...</div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3>சாதன நிலை & கட்டுப்பாடுகள்</h3>
-                    <ul class="status-list">
-                        <li class="status-item">
-                            <span>இயக்க முறை:</span>
-                            <span class="badge badge-active" id="modeStatus">Auto Mode</span>
-                        </li>
-                        <li class="status-item">
-                            <span>மோட்டார் நிலை:</span>
-                            <span class="badge badge-offline" id="motorStatusBadge">OFF</span>
-                        </li>
-                        <li class="status-item">
-                            <span>ட்ரை ரன் பாதுகாப்பு:</span>
-                            <span class="badge badge-safe" id="dryRunStatus">Safe (பாதுகாப்பானது)</span>
-                        </li>
-                    </ul>
-
-                    <div class="control-group">
-                        <button class="btn-control" id="modeBtn" onclick="toggleMode()">மேனுவல் மோட்டுக்கு மாற்றுக</button>
-                        <button class="btn-control btn-manual" id="motorBtn" onclick="toggleMotor()" disabled>மோட்டாரை இயக்கவும் (Manual ON)</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let espIP = "192.168.1.7"; // டைனமிக்காக இணைக்கப்படும் IP முகவரி
-        let isAuto = true;
-        let isMotorOn = false;
-
-        function startScanner() {
-            document.getElementById('reader').style.display = 'block';
-            const scanner = new Html5Qrcode("reader");
-            scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: 200 },
-                (text) => {
-                    document.getElementById('serialInput').value = text;
-                    scanner.stop().then(() => {
-                        document.getElementById('reader').style.display = 'none';
-                        pairDevice();
-                    });
-                }, err => {}
-            );
-        }
-
-        function pairDevice() {
-            let inputVal = document.getElementById('serialInput').value.trim();
-            if (inputVal !== "") {
-                // யூசர் சீரியல் எண் கொடுத்தால் லோக்கல் ஐபி-யாக மாற்றிக்கொள்ளலாம் அல்லது நேரடியாக ஐபியை உள்ளிடச் சொல்லலாம்
-                espIP = inputVal.includes(".") ? inputVal : "192.168.4.1"; 
-                document.getElementById('pairingCard').style.display = 'none';
-                document.getElementById('dashboardContent').style.display = 'block';
-                setInterval(fetchStatus, 2000);
-            } else {
-                alert("தயவுசெய்து ஐபி முகவரி அல்லது சீரியல் எண்ணை உள்ளிடவும்.");
-            }
-        }
-
-        function fetchStatus() {
-            fetch(`http://${espIP}/status`)
-            .then(res => res.json())
-            .then(data => {
-                let fillDiv = document.getElementById('waterFill');
-                let labelDiv = document.getElementById('tankLevelText');
-                let motorBadge = document.getElementById('motorStatusBadge');
-                let modeBadge = document.getElementById('modeStatus');
-                let dryRunBadge = document.getElementById('dryRunStatus');
-                let motorBtn = document.getElementById('motorBtn');
-                let modeBtn = document.getElementById('modeBtn');
-
-                // நீர் மட்ட லோ / மிட் / ஹை ஸ்டேட்டஸ்
-                if (data.high == 0) {
-                    fillDiv.style.height = '100%';
-                    labelDiv.innerText = "மட்டம்: ஹை (High - நிறைந்துள்ளது)";
-                } else if (data.mid == 0) {
-                    fillDiv.style.height = '60%';
-                    labelDiv.innerText = "மட்டம்: மிட் (Mid - நடுத்தரம்)";
-                } else if (data.low == 0) {
-                    fillDiv.style.height = '25%';
-                    labelDiv.innerText = "மட்டம்: லோ (Low - குறைவு)";
-                } else {
-                    fillDiv.style.height = '10%';
-                    labelDiv.innerText = "மட்டம்: காலியாக உள்ளது";
-                }
-
-                // மோட்டார் நிலை
-                isMotorOn = data.motor == 1;
-                if (isMotorOn) {
-                    motorBadge.innerText = "ON (இயங்குகிறது)";
-                    motorBadge.className = "badge badge-online";
-                    motorBtn.innerText = "மோட்டாரை நிறுத்தவும் (OFF)";
-                    motorBtn.style.background = "#f44336";
-                } else {
-                    motorBadge.innerText = "OFF (நிறுத்தப்பட்டுள்ளது)";
-                    motorBadge.className = "badge badge-offline";
-                    motorBtn.innerText = "மோட்டாரை இயக்கவும் (ON)";
-                    motorBtn.style.background = "#ff9800";
-                }
-
-                // மோட் (Auto / Manual)
-                isAuto = data.auto == 1;
-                if (isAuto) {
-                    modeBadge.innerText = "Auto Mode";
-                    modeBadge.className = "badge badge-active";
-                    modeBtn.innerText = "மேனுவல் மோட்டுக்கு மாற்றுக";
-                    motorBtn.disabled = true; // ஆட்டோ மோடில் மேனுவல் பட்டன் லாக் செய்யப்படும்
-                } else {
-                    modeBadge.innerText = "Manual Mode";
-                    modeBadge.className = "badge badge-alert";
-                    modeBtn.innerText = "ஆட்டோ மோட்டுக்கு மாற்றுக";
-                    motorBtn.disabled = false; // மேனுவல் மோடில் ஆன்/ஆஃப் செய்யலாம்
-                }
-
-                // ட்ரை ரன் டைமர் அலர்ட்
-                if (data.dryRun == 1) {
-                    dryRunBadge.innerText = "Dry Run Alert! (நீர் வரவில்லை)";
-                    dryRunBadge.className = "badge badge-alert";
-                } else {
-                    dryRunBadge.innerText = "Safe (பாதுகாப்பானது)";
-                    dryRunBadge.className = "badge badge-safe";
-                }
-            })
-            .catch(err => console.log("ESP32 Connection Error"));
-        }
-
-        function toggleMode() {
-            let targetMode = isAuto ? "manual" : "auto";
-            fetch(`http://${espIP}/mode?mode=${targetMode}`)
-            .then(() => fetchStatus());
-        }
-
-        function toggleMotor() {
-            if (isAuto) {
-                alert("தற்போது ஆட்டோ மோடில் உள்ளது!");
-                return;
-            }
-            let targetState = isMotorOn ? "off" : "on";
-            fetch(`http://${espIP}/motor?state=${targetState}`)
-            .then(() => fetchStatus());
-        }
-    </script>
-</body>
-</html>
+  // ஆட்டோ / மேனுவல் மோட் மாற்ற
+  function toggleMode(modeVal) {
+    database.ref('devices/1001').update({
+      autoMode: modeVal === 'auto' ? 1 : 0
+    });
+  }
+</script>
