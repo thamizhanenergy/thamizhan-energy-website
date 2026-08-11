@@ -30,7 +30,7 @@
         body { background-color: #f0f4f8; color: #333; line-height: 1.6; }
         header { background: #0f2027; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
         .brand-title h1 { font-size: 18px; color: #00ff88; }
-        .nav-link { background: rgba(255,255,255,0.1); padding: 6px 15px; border-radius: 20px; font-size: 13px; color: white; text-decoration: none; }
+        .nav-link { background: rgba(255,255,255,0.1); padding: 6px 15px; border-radius: 20px; font-size: 13px; color: white; text-decoration: none; margin-left: 10px; }
         .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
         
         #auth-lock-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; text-align: center; }
@@ -54,27 +54,20 @@
         
         .btn { background: #00ff88; color: #0f2027; border: none; padding: 7px 14px; border-radius: 5px; font-weight: 700; cursor: pointer; font-size: 12px; }
         .btn:hover { background: #00cc6a; }
-        .print-btn { background: #2196F3; color: white; padding: 6px 12px; border: none; border-radius: 5px; font-weight: 700; cursor: pointer; font-size: 12px; }
-        .print-btn:hover { background: #0b7dda; }
-        .close-ticket-btn { background: #ff9800; color: white; padding: 6px 12px; border: none; border-radius: 5px; font-weight: 700; cursor: pointer; font-size: 12px; }
-        .close-ticket-btn:hover { background: #e68900; }
         .delete-btn { background: #ff5252; color: white; padding: 6px 12px; border: none; border-radius: 5px; font-weight: 700; cursor: pointer; font-size: 12px; }
         .delete-btn:hover { background: #d32f2f; }
 
         footer { background: #0c1a1f; color: #aaa; padding: 20px; text-align: center; font-size: 12px; margin-top: 40px; }
-
-        @media print {
-            body * { visibility: hidden; }
-            #printSection, #printSection * { visibility: visible; }
-            #printSection { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; background: white; }
-        }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="brand-title"><h1>அட்மின் ப்ராடக்ட் & ஆர்டர் மேனேஜ்மென்ட்</h1></div>
-        <div><a href="shop.html" class="nav-link">🛒 ஆன்லைன் ஸ்டோர் செல்ல</a></div>
+        <div class="brand-title"><h1>அட்மின் & ஆர்டர் மேனேஜ்மென்ட்</h1></div>
+        <div>
+            <a href="shop.html" class="nav-link">🛒 ஸ்டோர் செல்ல</a>
+            <a href="career.html" class="nav-link" target="_blank">📄 காந்திய வேலைவாய்ப்பு பக்கம்</a>
+        </div>
     </header>
 
     <div id="auth-lock-screen">
@@ -89,44 +82,44 @@
         
         <div class="stats-grid">
             <div class="stat-card">
-                <h3>கம்பெனி டர்ன்ஓவர் (2026 ஏப் - 2027 மார்ச்)</h3>
+                <h3>கம்பெனி டர்ன்ஓவர்</h3>
                 <div class="value" style="color: #2e7d32;" id="totalTurnover">₹0</div>
             </div>
-            <div class="stat-card" onclick="scrollToSection('iotDevicesSection')">
-                <h3>இணைக்கப்பட்ட ஐஓடி டிவைஸ்கள்</h3>
-                <div class="value" style="color: #2980b9;" id="iotDeviceCount">3 Devices</div>
-                <small style="color: #888; font-size: 11px;">விவரங்களைக் காண கிளிக் செய்க 👇</small>
-            </div>
             <div class="stat-card">
-                <h3>இந்த மாத சேல்ஸ் (Current Month)</h3>
+                <h3>இந்த மாத சேல்ஸ்</h3>
                 <div class="value" id="currentMonthSales">₹0</div>
             </div>
         </div>
 
         <div class="panel-box">
-            <h3>📊 மாதாந்திர விற்பனை அறிக்கை (Monthly Sales Report: 2026-2027)</h3>
+            <h3>📄 வேலைவாய்ப்பு விண்ணப்பங்கள் & ரெஸ்யூம்கள் (Job Applications & Resumes)</h3>
             <table>
                 <thead>
                     <tr>
-                        <th>மாதம் (Month)</th>
-                        <th>விற்பனை செய்யப்பட்ட ப்ராடக்ட்கள் (Units Sold)</th>
-                        <th>மாத வருமானம் (Monthly Revenue)</th>
+                        <th>விண்ணப்பித்த வேலை</th>
+                        <th>பெயர் & DOB</th>
+                        <th>தொடர்பு & முகவரி</th>
+                        <th>தகுதி & விவரம்</th>
+                        <th>ரெஸ்யூம் ஃபைல்</th>
+                        <th>செயல்</th>
                     </tr>
                 </thead>
-                <tbody id="monthlySalesTableBody"></tbody>
+                <tbody id="adminJobApplicationsTable">
+                    <tr><td colspan="6" style="text-align:center; color:#888;">விண்ணப்பங்கள் எதுவும் இல்லை.</td></tr>
+                </tbody>
             </table>
         </div>
 
         <div class="panel-box">
-            <h3>📦 கஸ்டமர் ஆர்டர்கள் & மேனுவல் டிராக்கிங் மேனேஜ்மென்ட்</h3>
+            <h3>📦 கஸ்டமர் ஆர்டர்கள் & டிராக்கிங் மேனேஜ்மென்ட்</h3>
             <table>
                 <thead>
                     <tr>
                         <th>ஆர்டர் ஐடி & விவரம்</th>
                         <th>வாடிக்கையாளர் ஈமெயில்</th>
                         <th>முகவரி & தொகை</th>
-                        <th>நிலை (Status) & டிராக்கிங்</th>
-                        <th>செயல் (Action)</th>
+                        <th>நிலை & டிராக்கிங்</th>
+                        <th>செயல்</th>
                     </tr>
                 </thead>
                 <tbody id="adminOrdersTableBody">
@@ -135,64 +128,7 @@
             </table>
         </div>
 
-        <div class="panel-box">
-            <h3>🎫 கஸ்டமர் புகார் & சேவை டிக்கெட்டுகள் (Support / Service Tickets)</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>டிக்கெட் ஐடி</th>
-                        <th>கஸ்டமர் பெயர் & ஈமெயில்</th>
-                        <th>சேவை வகை (Service Type)</th>
-                        <th>செய்தி / புகார் விவரம்</th>
-                        <th>நிலை (Status)</th>
-                        <th>செயல் (Action)</th>
-                    </tr>
-                </thead>
-                <tbody id="adminTicketsTableBody">
-                    <tr><td colspan="6" style="text-align:center; color:#888;">புகார் டிக்கெட்டுகள் எதுவும் இல்லை.</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="panel-box" id="iotDevicesSection">
-            <h3>🌐 இணைக்கப்பட்ட ஐஓடி டிவைஸ்கள் & மேலாண்மை (IoT Device Registry)</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>டிவைஸ் ஐடி (Device ID)</th>
-                        <th>ப்ராடக்ட் மாடல் (Model)</th>
-                        <th>உரிமையாளர் பெயர் (Owner Name)</th>
-                        <th>உரிமையாளர் ஈமெயில் (Owner ID / Email)</th>
-                        <th>நிலை (Status)</th>
-                    </tr>
-                </thead>
-                <tbody id="iotDevicesTableBody"></tbody>
-            </table>
-        </div>
-
-        <div class="panel-box">
-            <h3>📦 தயாரிப்புகள் & இன்வென்டரி மேனேஜ்மென்ட் (Shop Products Inventory)</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>பெயர்</th>
-                        <th>விலை (₹)</th>
-                        <th>டிஸ்கவுண்ட் (₹)</th>
-                        <th>ஸ்டாக்</th>
-                        <th>ஆஃபர் டேக்</th>
-                        <th>ஸ்பெசிஃபிகேஷன்ஸ் (கமா மூலம்)</th>
-                        <th>செயல்</th>
-                    </tr>
-                </thead>
-                <tbody id="adminProductsTableBody">
-                    <tr><td colspan="7" style="text-align:center; color:#888;">தயாரிப்புகள் லோட் ஆகிறது...</td></tr>
-                </tbody>
-            </table>
-        </div>
-
     </div>
-
-    <div id="printSection" style="display:none;"></div>
 
     <footer><p>&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ் - அட்மின் பேனல்.</p></footer>
 
@@ -219,54 +155,47 @@
             });
         }
 
-        function scrollToSection(id) {
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-        }
-
         function loadAdminData() {
-            loadAdminProductsTable();
-            loadTurnoverAndMonthlySales();
-            loadIoTDevicesList();
+            loadJobApplications();
             loadAdminOrdersTable();
-            loadAdminTicketsTable();
+            loadTurnoverAndMonthlySales();
         }
 
-        function loadTurnoverAndMonthlySales() {
-            let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
-            let months = [
-                "ஏப்ரல் 2026", "மே 2026", "ஜூன் 2026", "ஜூலை 2026", "ஆகஸ்ட் 2026", "செப்டம்பர் 2026",
-                "அக்டோபர் 2026", "நவம்பர் 2026", "டிசம்பர் 2026", "ஜனவரி 2027", "பிப்ரவரி 2027", "மார்ச் 2027"
-            ];
+        // வேலைவாய்ப்பு விண்ணப்பங்களை டேபிளில் ஏற்றுதல்
+        function loadJobApplications() {
+            let applications = JSON.parse(localStorage.getItem('jobApplications')) || [];
+            let tableBody = document.getElementById('adminJobApplicationsTable');
 
-            let monthlyData = {};
-            months.forEach(m => monthlyData[m] = { units: 0, revenue: 0 });
+            if (applications.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#888;">விண்ணப்பங்கள் எதுவும் இல்லை.</td></tr>`;
+                return;
+            }
 
-            let totalTurnover = 0;
-            let currentMonthRev = 0;
-
-            allOrders.forEach(ord => {
-                let amt = parseInt(ord.amount.replace('₹','').replace(',','')) || 0;
-                totalTurnover += amt;
-                let targetMonth = "ஜூலை 2026"; 
-                monthlyData[targetMonth].revenue += amt;
-                monthlyData[targetMonth].units += 1;
-                currentMonthRev = monthlyData[targetMonth].revenue;
-            });
-
-            document.getElementById('totalTurnover').innerText = '₹' + totalTurnover;
-            document.getElementById('currentMonthSales').innerText = '₹' + currentMonthRev;
-
-            let tableHTML = '';
-            months.forEach(m => {
-                tableHTML += `
+            let html = '';
+            applications.forEach((app, index) => {
+                html += `
                     <tr>
-                        <td><b>${m}</b></td>
-                        <td>${monthlyData[m].units} Units</td>
-                        <td><b>₹${monthlyData[m].revenue}</b></td>
+                        <td><b>${app.role}</b><br><small style="color:#666;">${app.date}</small></td>
+                        <td><b>${app.name}</b><br><small>DOB: ${app.dob}</small></td>
+                        <td>${app.contact}<br><small>${app.address}</small></td>
+                        <td>${app.desc}</td>
+                        <td>📄 <b>${app.resume}</b></td>
+                        <td>
+                            <button class="delete-btn" onclick="deleteApplication(${index})">🗑️ நீக்கு</button>
+                        </td>
                     </tr>
                 `;
             });
-            document.getElementById('monthlySalesTableBody').innerHTML = tableHTML;
+            tableBody.innerHTML = html;
+        }
+
+        function deleteApplication(index) {
+            if(confirm("இந்த விண்ணப்பத்தை நீக்க விரும்புகிறீர்களா?")) {
+                let applications = JSON.parse(localStorage.getItem('jobApplications')) || [];
+                applications.splice(index, 1);
+                localStorage.setItem('jobApplications', JSON.stringify(applications));
+                loadJobApplications();
+            }
         }
 
         function loadAdminOrdersTable() {
@@ -295,7 +224,6 @@
                         </td>
                         <td>
                             <button class="btn" style="padding:5px 10px; margin-bottom:4px;" onclick="saveTracking(${index})">சேமி</button><br>
-                            <button class="print-btn" style="padding:5px 10px; margin-bottom:4px;" onclick="printShippingLabel(${index})">🖨️ லேபிள் பிரிண்ட்</button><br>
                             <button class="delete-btn" onclick="deleteOrder(${index})">🗑️ நீக்கு</button>
                         </td>
                     </tr>
@@ -325,164 +253,19 @@
                 let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
                 allOrders.splice(index, 1);
                 localStorage.setItem('allOrders', JSON.stringify(allOrders));
-                alert("ஆர்டர் வெற்றிகரமாக நீக்கப்பட்டது!");
                 loadAdminOrdersTable();
-                loadTurnoverAndMonthlySales();
             }
         }
 
-        function loadAdminTicketsTable() {
-            let allTickets = JSON.parse(localStorage.getItem('supportTickets')) || [];
-            let tableBody = document.getElementById('adminTicketsTableBody');
-            
-            if(!allTickets || allTickets.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#888;">புகார் டிக்கெட்டுகள் எதுவும் இல்லை.</td></tr>`;
-                return;
-            }
-
-            let html = '';
-            allTickets.forEach((t, index) => {
-                let isClosed = t.status && t.status.includes('Closed');
-                let statusColor = isClosed ? 'color:gray; font-weight:bold;' : 'color:#d32f2f; font-weight:bold;';
-                
-                let actionBtn = isClosed ? 
-                    '<span style="color:gray; font-size:12px; font-weight:600;">மூடப்பட்டது (Closed)</span>' : 
-                    `<button class="close-ticket-btn" onclick="closeTicket(${index})">Close Ticket</button>`;
-
-                html += `
-                    <tr>
-                        <td><code>${t.ticketId}</code></td>
-                        <td><b>${t.name}</b><br><small>${t.email}</small></td>
-                        <td><span style="background:#e0f7fa; color:#006064; padding:2px 6px; border-radius:4px; font-weight:600;">${t.serviceType}</span></td>
-                        <td>${t.message}</td>
-                        <td><span style="${statusColor}">${t.status || 'Open (செயலில் உள்ளது)'}</span></td>
-                        <td>${actionBtn}</td>
-                    </tr>
-                `;
-            });
-            tableBody.innerHTML = html;
-        }
-
-        function closeTicket(index) {
-            let allTickets = JSON.parse(localStorage.getItem('supportTickets')) || [];
-            if(allTickets[index]) {
-                allTickets[index].status = 'Closed (மூடப்பட்டது)';
-                localStorage.setItem('supportTickets', JSON.stringify(allTickets));
-                alert("இந்த புகார் டிக்கெட் வெற்றிகரமாக மூடப்பட்டது (Closed)!");
-                loadAdminTicketsTable();
-            }
-        }
-
-        function printShippingLabel(index) {
+        function loadTurnoverAndMonthlySales() {
             let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
-            let ord = allOrders[index];
-            if (!ord) return;
-
-            let labelHTML = `
-                <div style="border: 3px solid #000; padding: 25px; width: 450px; margin: 0 auto; font-family: 'Poppins', sans-serif;">
-                    <h2 style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 15px; font-size: 18px;">தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h2>
-                    
-                    <div style="margin-bottom: 15px; font-size: 13px;">
-                        <b style="color: #555; text-transform: uppercase; font-size: 11px;">FROM (அனுப்புநர்):</b><br>
-                        <b>தமிழன் எனர்ஜி சிஸ்டம்ஸ்</b><br>
-                        எலக்ட்ரானிக்ஸ் & ஐஓடி ஆட்டோமேஷன் தயாரிப்பாளர்<br>
-                        தமிழ்நாடு, இந்தியா.<br>
-                        <b>தொடர்புக்கு:</b> 8903008906
-                    </div>
-
-                    <hr style="border: 1px dashed #000; margin: 12px 0;">
-
-                    <div style="margin-bottom: 15px; font-size: 14px;">
-                        <b style="color: #555; text-transform: uppercase; font-size: 11px;">TO (பெறுநர் / கஸ்டமர்):</b><br>
-                        <b>கஸ்டமர் பெயர் (Email):</b> ${ord.email}<br>
-                        <b>ஆர்டர் ஐடி:</b> <span style="font-size: 15px; font-weight: bold;">${ord.orderId}</span><br>
-                        <b>போன் நம்பர்:</b> <span style="font-size: 14px; font-weight: bold;">${ord.phone || 'N/A'}</span><br>
-                        <b>டெலிவரி முகவரி:</b><br>
-                        <div style="background: #f9f9f9; padding: 8px; border: 1px solid #ccc; margin-top: 4px; font-weight: bold; font-size: 14px;">
-                            ${ord.address}
-                        </div>
-                    </div>
-
-                    <div style="text-align: center; margin-top: 20px; font-size: 11px; color: #666;">
-                        *** Safe Delivery Partner - Thamizhan Energy Systems ***
-                    </div>
-                </div>
-            `;
-
-            let printSec = document.getElementById('printSection');
-            printSec.innerHTML = labelHTML;
-            printSec.style.display = 'block';
-            window.print();
-            printSec.style.display = 'none';
-        }
-
-        // Shop தயாரிப்புகளை காமன் ஸ்டோரேஜ் (LocalStorage) மூலம் நிர்வகித்தல்
-        function loadAdminProductsTable() {
-            let products = JSON.parse(localStorage.getItem('shopProducts')) || [
-                {id: "p1", name: "AWLCP 1.0", price: 3999, discount: 3499, stock: 15, offerTag: "Save ₹500", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]},
-                {id: "p2", name: "AWLCW 1.0", price: 5499, discount: 4999, stock: 10, offerTag: "WiFi Model", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]},
-                {id: "p3", name: "AWLCWS 1.0", price: 7499, discount: 6999, stock: 8, offerTag: "Solar + WiFi", specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]}
-            ];
-
-            let html = '';
-            products.forEach((p, index) => {
-                let specsStr = p.specs ? p.specs.join(', ') : '';
-                html += `
-                    <tr>
-                        <td><input type="text" id="name_${index}" value="${p.name}"></td>
-                        <td><input type="number" id="price_${index}" value="${p.price}" style="width:70px;"></td>
-                        <td><input type="number" id="discount_${index}" value="${p.discount || p.price}" style="width:70px;"></td>
-                        <td><input type="number" id="stock_${index}" value="${p.stock}" style="width:60px;"></td>
-                        <td><input type="text" id="offerTag_${index}" value="${p.offerTag || ''}" placeholder="Offer"></td>
-                        <td><textarea id="specs_${index}" rows="2">${specsStr}</textarea></td>
-                        <td>
-                            <button class="btn" style="padding:5px 8px;" onclick="updateProduct(${index})">புதுப்பி</button>
-                        </td>
-                    </tr>
-                `;
+            let totalTurnover = 0;
+            allOrders.forEach(ord => {
+                let amt = parseInt(ord.amount.replace('₹','').replace(',','')) || 0;
+                totalTurnover += amt;
             });
-            document.getElementById('adminProductsTableBody').innerHTML = html;
-        }
-
-        function updateProduct(index) {
-            let products = JSON.parse(localStorage.getItem('shopProducts')) || [];
-            if(products[index]) {
-                products[index].name = document.getElementById(`name_${index}`).value.trim();
-                products[index].price = Number(document.getElementById(`price_${index}`).value);
-                products[index].discount = Number(document.getElementById(`discount_${index}`).value);
-                products[index].stock = Number(document.getElementById(`stock_${index}`).value);
-                products[index].offerTag = document.getElementById(`offerTag_${index}`).value.trim();
-                
-                let specsText = document.getElementById(`specs_${index}`).value.trim();
-                products[index].specs = specsText ? specsText.split(',').map(s => s.trim()) : [];
-
-                localStorage.setItem('shopProducts', JSON.stringify(products));
-                alert("தயாரிப்பு ஸ்டாக் மற்றும் விவரங்கள் வெற்றிகரமாகப் புதுப்பிக்கப்பட்டன!");
-                loadAdminProductsTable();
-            }
-        }
-
-        function loadIoTDevicesList() {
-            let iotDevices = [
-                { deviceId: "TES-IoT-9011", model: "AWLCW 1.0 (WiFi)", ownerName: "ரமேஷ் குமார்", ownerEmail: "ramesh@gmail.com", status: "Online (Active)" },
-                { deviceId: "TES-IoT-9012", model: "AWLCWS 1.0 (Solar)", ownerName: "புவனேேஷ்", ownerEmail: "bhuvan@gmail.com", status: "Online (Active)" },
-                { deviceId: "TES-IoT-9013", model: "AWLCP 1.0 (Basic)", ownerName: "கார்த்திக்", ownerEmail: "karthik@gmail.com", status: "Offline" }
-            ];
-            document.getElementById('iotDeviceCount').innerText = iotDevices.length + " Devices";
-            let html = '';
-            iotDevices.forEach(d => {
-                let statusColor = d.status.includes('Online') ? 'color:green; font-weight:bold;' : 'color:red; font-weight:bold;';
-                html += `
-                    <tr>
-                        <td><code>${d.deviceId}</code></td>
-                        <td>${d.model}</td>
-                        <td><b>${d.ownerName}</b></td>
-                        <td>${d.ownerEmail}</td>
-                        <td><span style="${statusColor}">${d.status}</span></td>
-                    </tr>
-                `;
-            });
-            document.getElementById('iotDevicesTableBody').innerHTML = html;
+            document.getElementById('totalTurnover').innerText = '₹' + totalTurnover;
+            document.getElementById('currentMonthSales').innerText = '₹' + totalTurnover;
         }
     </script>
 </body>
