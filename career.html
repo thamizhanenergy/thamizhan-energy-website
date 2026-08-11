@@ -1,233 +1,202 @@
 <!DOCTYPE html>
-<html lang="ta">
+<html lang="ta" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Career - பணிவாய்ப்புகள்</title>
+    <title>வேலைவாய்ப்பு (Career) | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #f9f9f9;
-            color: #333;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f4f7f6; color: #333; line-height: 1.6; }
+        
         /* Header & Navigation */
-        header {
-            background-color: #ffffff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 30px;
-        }
+        header { background: #0f2027; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .brand-section { display: flex; align-items: center; gap: 12px; }
+        .logo-img { height: 38px; width: auto; object-fit: contain; }
+        .brand-title h1 { font-size: 18px; color: #00ff88; }
+        
+        .nav-right { display: flex; align-items: center; gap: 12px; }
+        .btn-custom { background: rgba(255,255,255,0.1); color: white; border: none; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; transition: 0.3s; }
+        .btn-custom:hover { background: rgba(255,255,255,0.2); }
 
-        .logo {
-            font-size: 22px;
-            font-weight: bold;
-            color: #2c3e50;
-            text-decoration: none;
-        }
+        /* Sidebar / Drawer Menu (Three Dash Menu) */
+        .sidebar-menu { position: fixed; top: 0; left: -320px; width: 300px; height: 100%; background: #fff; box-shadow: 5px 0 15px rgba(0,0,0,0.2); z-index: 3000; transition: 0.3s ease-in-out; padding: 20px; overflow-y: auto; color: #333; }
+        .sidebar-menu.active { left: 0; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .sidebar-header h3 { font-size: 16px; color: #0f2027; }
+        .sidebar-close { font-size: 24px; cursor: pointer; color: #666; }
+        .sidebar-links { list-style: none; }
+        .sidebar-links li { margin-bottom: 12px; }
+        .sidebar-links a { display: block; width: 100%; text-align: left; background: none; border: none; font-size: 14px; font-weight: 600; color: #333; text-decoration: none; padding: 10px; border-radius: 6px; transition: 0.2s; }
+        .sidebar-links a:hover { background: #f0f2f5; color: #00ff88; }
 
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+        .job-card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 25px; border-left: 5px solid #00ff88; }
+        .job-card h3 { color: #0f2027; font-size: 20px; margin-bottom: 8px; }
+        .job-card p { font-size: 13px; color: #666; margin-bottom: 12px; }
 
-        /* Home & Lang Buttons */
-        .btn-custom {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: background 0.3s;
-        }
+        .apply-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .apply-box h3 { color: #0f2027; margin-bottom: 20px; font-size: 18px; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; color: #444; margin-bottom: 5px; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; outline: none; }
+        
+        .btn { background: #00ff88; color: #0f2027; border: none; padding: 12px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 14px; width: 100%; }
+        .btn:hover { background: #00cc6a; }
+        footer { background: #0c1a1f; color: #aaa; padding: 20px; text-align: center; font-size: 12px; margin-top: 40px; }
 
-        .btn-custom:hover {
-            background-color: #2980b9;
-        }
-
-        /* Three Dash Menu Button */
-        .menu-toggle {
-            font-size: 24px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: #2c3e50;
-        }
-
-        /* Sidebar / Drawer Menu */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            right: -280px;
-            width: 280px;
-            height: 100%;
-            background-color: #ffffff;
-            box-shadow: -2px 0 5px rgba(0,0,0,0.2);
-            transition: right 0.3s ease;
-            z-index: 1100;
-            padding-top: 60px;
-        }
-
-        .sidebar.active {
-            right: 0;
-        }
-
-        .sidebar .close-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 22px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: #333;
-        }
-
-        .sidebar ul {
-            list-style: none;
-            padding: 20px;
-        }
-
-        .sidebar ul li {
-            margin-bottom: 15px;
-        }
-
-        .sidebar ul li a {
-            text-decoration: none;
-            color: #333;
-            font-size: 16px;
-            display: block;
-            padding: 8px 12px;
-            border-radius: 4px;
-            transition: background 0.2s;
-        }
-
-        .sidebar ul li a:hover {
-            background-color: #f1f1f1;
-            color: #3498db;
-        }
-
-        /* Main Content */
-        .container {
-            max-width: 900px;
-            margin: 100px auto 40px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
-        }
-
-        h1 {
-            margin-bottom: 20px;
-            color: #2c3e50;
-        }
-
-        p {
-            line-height: 1.6;
-            color: #555;
-            margin-bottom: 15px;
-        }
-
-        /* Overlay for sidebar */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.4);
-            display: none;
-            z-index: 1050;
-        }
-
-        .overlay.active {
-            display: block;
-        }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 2500; }
+        .overlay.active { display: block; }
     </style>
 </head>
 <body>
 
     <header>
-        <a href="index.html" class="logo">என் தளம்</a>
+        <div class="brand-section">
+            <button type="button" class="btn-custom" onclick="toggleSidebar()" style="background: transparent; padding: 5px;"><i class="fas fa-bars" style="font-size: 20px;"></i></button>
+            <img src="1.png" alt="Logo" class="logo-img">
+            <div class="brand-title"><h1 data-ta="தமிழன் எனர்ஜி சிஸ்டம்ஸ் - வேலைவாய்ப்பு" data-en="Thamizhan Energy Systems - Career">தமிழன் எனர்ஜி சிஸ்டம்ஸ் - வேலைவாய்ப்பு</h1></div>
+        </div>
         <div class="nav-right">
-            <a href="index.html" class="btn-custom"><i class="fas fa-home"></i> முகப்பு</a>
+            <a href="shop.html" class="btn-custom"><i class="fas fa-home"></i> <span data-ta="முகப்பு" data-en="Home">முகப்பு</span></a>
             <button class="btn-custom" onclick="toggleLanguage()"><i class="fas fa-language"></i> <span id="langText">English</span></button>
-            <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
         </div>
     </header>
 
-    <div class="sidebar" id="sidebar">
-        <button class="close-btn" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
-        <ul>
-            <li><a href="index.html"><i class="fas fa-home"></i> முகப்பு (Home)</a></li>
-            <li><a href="shop.html"><i class="fas fa-store"></i> அங்காடி (Shop)</a></li>
-            <li><a href="career.html"><i class="fas fa-briefcase"></i> வேலைவாய்ப்பு (Career)</a></li>
-            <li><a href="#about"><i class="fas fa-info-circle"></i> எங்களைப் பற்றி (About Us)</a></li>
-            <li><a href="#contact"><i class="fas fa-envelope"></i> தொடர்புக்கு (Contact)</a></li>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div class="sidebar-header">
+            <h3 data-ta="மெனு பார்" data-en="Menu Bar">மெனு பார்</h3>
+            <span class="sidebar-close" onclick="toggleSidebar()">&times;</span>
+        </div>
+        <ul class="sidebar-links">
+            <li><a href="shop.html"><i class="fas fa-store"></i> <span data-ta="ஆன்லைன் ஸ்டோர் (Shop)" data-en="Online Store (Shop)">ஆன்லைன் ஸ்டோர் (Shop)</span></a></li>
+            <li><a href="career.html"><i class="fas fa-briefcase"></i> <span data-ta="வேலைவாய்ப்பு (Career)" data-en="Career">வேலைவாய்ப்பு (Career)</span></a></li>
+            <li><a href="admin.html"><i class="fas fa-user-shield"></i> <span data-ta="அட்மின் டேஷ்போர்டு" data-en="Admin Dashboard">அட்மின் டேஷ்போர்டு</span></a></li>
         </ul>
     </div>
-
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
     <div class="container">
-        <h1 id="pageTitle">வேலைவாய்ப்புகள் (Career Opportunities)</h1>
-        <p id="pageDesc">எங்கள் நிறுவனத்தில் இணைய விரும்புகிறீர்களா? காலியாக உள்ள பணியிடங்கள் மற்றும் அதற்கான தகுதிகள் கீழே கொடுக்கப்பட்டுள்ளன. உங்கள் விண்ணப்பங்களை எங்களுக்கு அனுப்பலாம்.</p>
-        
-        <section id="jobOpenings" style="margin-top: 30px;">
-            <h2>தற்போதைய பணியிடங்கள்</h2>
-            <p>1. Web Developer - HTML, CSS, JavaScript (Experience: 1-2 Years)</p>
-            <p>2. Customer Support Executive - Tamil & English fluent</p>
-        </section>
+        <h2 style="margin-bottom: 20px; color: #0f2027; text-align: center;" data-ta="🔥 காலிப்பணியிடங்கள் (Current Openings)" data-en="🔥 Current Openings">🔥 காலிப்பணியிடங்கள் (Current Openings)</h2>
+
+        <div class="job-card">
+            <h3>1. PCB டிசைன் இன்ஜினியர் (PCB Design Engineer)</h3>
+            <p><b data-ta="தகுதி:" data-en="Qualification:">தகுதி:</b> B.E / B.Tech (ECE/EEE) அல்லது சம்மந்தப்பட்ட துறையில் முன்அனுபவம்.</p>
+            <p><b data-ta="விவரம்:" data-en="Description:">விவரம்:</b> எலக்ட்ரானிக்ஸ் சர்க்யூட் போர்டு டிசைனிங் மற்றும் புரோட்டோடைப்பிங் வேலைகள்.</p>
+        </div>
+
+        <div class="job-card" style="border-left-color: #2196F3;">
+            <h3>2. கணக்காளர் (Accountant)</h3>
+            <p><b data-ta="தகுதி:" data-en="Qualification:">தகுதி:</b> B.Com / M.Com அல்லது கணக்கியல் துறையில் அனுபவம்.</p>
+            <p><b data-ta="விவரம்:" data-en="Description:">விவரம்:</b> GST, டேலி (Tally) மற்றும் நிறுவனத்தின் வரவு-செலவு கணக்குகளைப் பராமரித்தல்.</p>
+        </div>
+
+        <div class="apply-box">
+            <h3 data-ta="📝 வேலைக்கு விண்ணப்பிக்க (Job Application Form)" data-en="📝 Job Application Form">📝 வேலைக்கு விண்ணப்பிக்க (Job Application Form)</h3>
+            <form id="jobApplicationForm" onsubmit="submitApplication(event)">
+                <div class="form-group">
+                    <label data-ta="விருக்கும் வேலை (Job Role)" data-en="Job Role">விருக்கும் வேலை (Job Role)</label>
+                    <select id="jobRole" required>
+                        <option value="PCB Design Engineer">PCB டிசைன் இன்ஜினியர்</option>
+                        <option value="Accountant">கணக்காளர் (Accountant)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label data-ta="முழுப் பெயர் (Full Name)" data-en="Full Name">முழுப் பெயர் (Full Name)</label>
+                    <input type="text" id="applicantName" placeholder="உங்களது பெயரை உள்ளிடவும்" required>
+                </div>
+                <div class="form-group">
+                    <label data-ta="பிறந்த தேதி (Date of Birth)" data-en="Date of Birth">பிறந்த தேதி (Date of Birth)</label>
+                    <input type="date" id="applicantDOB" required>
+                </div>
+                <div class="form-group">
+                    <label data-ta="மொபைல் எண் & ஈமெயில் (Phone & Email)" data-en="Phone & Email">மொபைல் எண் & ஈமெயில் (Phone & Email)</label>
+                    <input type="text" id="applicantContact" placeholder="Phone / Email" required>
+                </div>
+                <div class="form-group">
+                    <label data-ta="முகவரி (Address)" data-en="Address">முகவரி (Address)</label>
+                    <textarea id="applicantAddress" rows="2" placeholder="உங்கள் முகவரியை உள்ளிடவும்" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label data-ta="கல்வித் தகுதி & அனுபவம் (Qualification & Description)" data-en="Qualification & Description">கல்வித் தகுதி & அனுபவம் (Qualification & Description)</label>
+                    <textarea id="applicantDesc" rows="3" placeholder="உங்கள் கல்வி மற்றும் முந்தைய அனுபவத்தைப் பற்றி எழுதவும்" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label data-ta="ரெஸ்யூம் அப்லோட் (Upload Resume - PDF/Doc)" data-en="Upload Resume (PDF/Doc)">ரெஸ்யூம் அப்லோட் (Upload Resume - PDF/Doc)</label>
+                    <input type="file" id="applicantResume" accept=".pdf,.doc,.docx" required>
+                </div>
+                <button type="submit" class="btn" data-ta="விண்ணப்பத்தைச் சமர்ப்பிக்கவும்" data-en="Submit Application">விண்ணப்பத்தைச் சமர்ப்பிக்கவும்</button>
+            </form>
+        </div>
     </div>
 
+    <footer><p data-ta="&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ்." data-en="&copy; 2026 Thamizhan Energy Systems.">&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ்.</p></footer>
+
     <script>
-        // Sidebar Toggle
         function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
+            document.getElementById('sidebarMenu').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
         }
 
-        // Simple Language Switcher Example (Tamil <-> English)
-        let currentLang = 'ta';
+        let currentLang = localStorage.getItem('siteLang') || 'ta';
         function toggleLanguage() {
-            const title = document.getElementById('pageTitle');
-            const desc = document.getElementById('pageDesc');
-            const langText = document.getElementById('langText');
+            currentLang = (currentLang === 'ta') ? 'en' : 'ta';
+            localStorage.setItem('siteLang', currentLang);
+            document.getElementById('langText').innerText = (currentLang === 'en') ? 'தமிழ்' : 'English';
+            document.getElementById('htmlRoot').setAttribute('lang', currentLang);
 
-            if (currentLang === 'ta') {
-                title.innerText = "Career Opportunities";
-                desc.innerText = "Want to join our team? Check out the open positions and qualifications below. You can send us your resumes.";
-                langText.innerText = "தமிழ்";
-                currentLang = 'en';
-            } else {
-                title.innerText = "வேலைவாய்ப்புகள் (Career Opportunities)";
-                desc.innerText = "எங்கள் நிறுவனத்தில் இணைய விரும்புகிறீர்களா? காலியாக உள்ள பணியிடங்கள் மற்றும் அதற்கான தகுதிகள் கீழே கொடுக்கப்பட்டுள்ளன. உங்கள் விண்ணப்பங்களை எங்களுக்கு அனுப்பலாம்.";
-                langText.innerText = "English";
-                currentLang = 'ta';
+            const elements = document.querySelectorAll('[data-ta]');
+            elements.forEach(el => {
+                if (currentLang === 'en') {
+                    if(el.getAttribute('data-en')) el.innerText = el.getAttribute('data-en');
+                } else {
+                    if(el.getAttribute('data-ta')) el.innerText = el.getAttribute('data-ta');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (currentLang === 'en') {
+                document.getElementById('langText').innerText = 'தமிழ்';
+                document.getElementById('htmlRoot').setAttribute('lang', 'en');
+                const elements = document.querySelectorAll('[data-ta]');
+                elements.forEach(el => { if(el.getAttribute('data-en')) el.innerText = el.getAttribute('data-en'); });
             }
+        });
+
+        function submitApplication(event) {
+            event.preventDefault();
+
+            let role = document.getElementById('jobRole').value;
+            let name = document.getElementById('applicantName').value.trim();
+            let dob = document.getElementById('applicantDOB').value;
+            let contact = document.getElementById('applicantContact').value.trim();
+            let address = document.getElementById('applicantAddress').value.trim();
+            let desc = document.getElementById('applicantDesc').value.trim();
+            let resumeInput = document.getElementById('applicantResume');
+
+            let resumeName = resumeInput.files.length > 0 ? resumeInput.files[0].name : "No file uploaded";
+
+            let newApp = {
+                id: 'JOB-' + Math.floor(1000 + Math.random() * 9000),
+                role: role,
+                name: name,
+                dob: dob,
+                contact: contact,
+                address: address,
+                desc: desc,
+                resume: resumeName,
+                date: new Date().toLocaleDateString()
+            };
+
+            let allApps = JSON.parse(localStorage.getItem('jobApplications')) || [];
+            allApps.push(newApp);
+            localStorage.setItem('jobApplications', JSON.stringify(allApps));
+
+            alert(currentLang === 'ta' ? "உங்களது விண்ணப்பம் வெற்றிகரமாகச் சமர்ப்பிக்கப்பட்டது!" : "Your application has been submitted successfully!");
+            document.getElementById('jobApplicationForm').reset();
         }
     </script>
 </body>
