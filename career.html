@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>வேலைவாய்ப்பு (Career) | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f4f7f6; color: #333; line-height: 1.6; }
+        header { background: #0f2027; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .brand-title h1 { font-size: 18px; color: #00ff88; }
+        .nav-link { background: rgba(255,255,255,0.1); padding: 6px 15px; border-radius: 20px; font-size: 13px; color: white; text-decoration: none; }
+        
+        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+        .job-card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 25px; border-left: 5px solid #00ff88; }
+        .job-card h3 { color: #0f2027; font-size: 20px; margin-bottom: 8px; }
+        .job-card p { font-size: 13px; color: #666; margin-bottom: 12px; }
+
+        .apply-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .apply-box h3 { color: #0f2027; margin-bottom: 20px; font-size: 18px; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; color: #444; margin-bottom: 5px; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; outline: none; }
+        
+        .btn { background: #00ff88; color: #0f2027; border: none; padding: 12px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 14px; width: 100%; }
+        .btn:hover { background: #00cc6a; }
+        footer { background: #0c1a1f; color: #aaa; padding: 20px; text-align: center; font-size: 12px; margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-title"><h1>தமிழன் எனர்ஜி சிஸ்டம்ஸ் - வேலைவாய்ப்பு</h1></div>
+        <div><a href="shop.html" class="nav-link">🛒 ஸ்டோர் செல்ல</a></div>
+    </header>
+
+    <div class="container">
+        <h2 style="margin-bottom: 20px; color: #0f2027; text-align: center;">🔥 காலிப்பணியிடங்கள் (Current Openings)</h2>
+
+        <div class="job-card">
+            <h3>1. PCB டிசைன் இன்ஜினியர் (PCB Design Engineer)</h3>
+            <p><b>தகுதி:</b> B.E / B.Tech (ECE/EEE) அல்லது சம்மந்தப்பட்ட துறையில் முன்அனுபவம்.</p>
+            <p><b>விவரம்:</b> எலக்ட்ரானிக்ஸ் சர்க்யூட் போர்டு டிசைனிங் மற்றும் புரோட்டோடைப்பிங் வேலைகள்.</p>
+        </div>
+
+        <div class="job-card" style="border-left-color: #2196F3;">
+            <h3>2. கணக்காளர் (Accountant)</h3>
+            <p><b>தகுதி:</b> B.Com / M.Com அல்லது கணக்கியல் துறையில் அனுபவம்.</p>
+            <p><b>விவரம்:</b> GST, டேலி (Tally) மற்றும் நிறுவனத்தின் வரவு-செலவு கணக்குகளைப் பராமரித்தல்.</p>
+        </div>
+
+        <div class="apply-box">
+            <h3>📝 வேலைக்கு விண்ணப்பிக்க (Job Application Form)</h3>
+            <form id="jobApplicationForm" onsubmit="submitApplication(event)">
+                <div class="form-group">
+                    <label>விருக்கும் வேலை (Job Role)</label>
+                    <select id="jobRole" required>
+                        <option value="PCB Design Engineer">PCB டிசைன் இன்ஜினியர்</option>
+                        <option value="Accountant">கணக்காளர் (Accountant)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>முழுப் பெயர் (Full Name)</label>
+                    <input type="text" id=" applicantName" placeholder="உங்களது பெயரை உள்ளிடவும்" required>
+                </div>
+                <div class="form-group">
+                    <label>பிறந்த தேதி (Date of Birth)</label>
+                    <input type="date" id="applicantDOB" required>
+                </div>
+                <div class="form-group">
+                    <label>மொபைல் எண் & ஈமெயில் (Phone & Email)</label>
+                    <input type="text" id="applicantContact" placeholder="Phone / Email" required>
+                </div>
+                <div class="form-group">
+                    <label>முகவரி (Address)</label>
+                    <textarea id="applicantAddress" rows="2" placeholder="உங்கள் முகவரியை உள்ளிடவும்" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>கல்வித் தகுதி & அனுபவம் (Qualification & Description)</label>
+                    <textarea id="applicantDesc" rows="3" placeholder="உங்கள் கல்வி மற்றும் முந்தைய அனுபவத்தைப் பற்றி எழுதவும்" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>ரெஸ்யூம் அப்லோட் (Upload Resume - PDF/Doc)</label>
+                    <input type="file" id="applicantResume" accept=".pdf,.doc,.docx" required>
+                </div>
+                <button type="submit" class="btn">விண்ணப்பத்தைச் சமர்ப்பிக்கவும்</button>
+            </form>
+        </div>
+    </div>
+
+    <footer><p>&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ்.</p></footer>
+
+    <script>
+        function submitApplication(event) {
+            event.preventDefault();
+
+            let role = document.getElementById('jobRole').value;
+            let name = document.getElementById(' applicantName').value.trim();
+            let dob = document.getElementById('applicantDOB').value;
+            let contact = document.getElementById('applicantContact').value.trim();
+            let address = document.getElementById('applicantAddress').value.trim();
+            let desc = document.getElementById('applicantDesc').value.trim();
+            let resumeInput = document.getElementById('applicantResume');
+
+            let resumeName = resumeInput.files.length > 0 ? resumeInput.files[0].name : "No file uploaded";
+
+            let newApp = {
+                id: 'JOB-' + Math.floor(1000 + Math.random() * 9000),
+                role: role,
+                name: name,
+                dob: dob,
+                contact: contact,
+                address: address,
+                desc: desc,
+                resume: resumeName,
+                date: new Date().toLocaleDateString()
+            };
+
+            let allApps = JSON.parse(localStorage.getItem('jobApplications')) || [];
+            allApps.push(newApp);
+            localStorage.setItem('jobApplications', JSON.stringify(allApps));
+
+            alert("உங்களது விண்ணப்பம் வெற்றிகரமாகச் சமர்ப்பிக்கப்பட்டது!");
+            document.getElementById('jobApplicationForm').reset();
+        }
+    </script>
+</body>
+</html>
