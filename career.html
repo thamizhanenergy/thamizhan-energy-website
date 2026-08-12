@@ -4,60 +4,119 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>வேலைவாய்ப்பு (Career) | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: #f4f7f6; color: #333; line-height: 1.6; }
         
-        /* Header & Navigation */
-        header { background: #0f2027; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .brand-section { display: flex; align-items: center; gap: 12px; }
-        .logo-img { height: 38px; width: auto; object-fit: contain; }
-        .brand-title h1 { font-size: 18px; color: #00ff88; }
+        body { 
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); 
+            color: #333; 
+            line-height: 1.6; 
+            min-height: 100vh;
+        }
         
-        .nav-right { display: flex; align-items: center; gap: 12px; }
-        .btn-custom { background: rgba(255,255,255,0.1); color: white; border: none; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; transition: 0.3s; }
-        .btn-custom:hover { background: rgba(255,255,255,0.2); }
+        /* MNC Style Header */
+        header { 
+            background: rgba(15, 32, 39, 0.95); 
+            backdrop-filter: blur(10px);
+            color: white; 
+            padding: 12px 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .brand-section { display: flex; align-items: center; gap: 10px; }
+        .logo-img { height: 35px; width: auto; object-fit: contain; }
+        .brand-title h1 { font-size: 14px; color: #00ff88; font-weight: 600; }
+        
+        .nav-right { display: flex; align-items: center; gap: 8px; }
+        .btn-custom { 
+            background: rgba(255,255,255,0.08); 
+            padding: 6px 12px; 
+            border-radius: 20px; 
+            font-size: 11px; 
+            color: white; 
+            text-decoration: none; 
+            display: flex; 
+            align-items: center; 
+            gap: 5px; 
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-custom:hover { background: rgba(0,255,136,0.2); color: #00ff88; }
 
-        /* Sidebar / Drawer Menu (Three Dash Menu) */
-        .sidebar-menu { position: fixed; top: 0; left: -320px; width: 300px; height: 100%; background: #fff; box-shadow: 5px 0 15px rgba(0,0,0,0.2); z-index: 3000; transition: 0.3s ease-in-out; padding: 20px; overflow-y: auto; color: #333; }
+        /* Sidebar Menu (Three Dash Drawer) */
+        .sidebar-menu { 
+            position: fixed; top: 0; left: -300px; width: 280px; height: 100%; 
+            background: #ffffff; box-shadow: 5px 0 25px rgba(0,0,0,0.3); 
+            z-index: 3000; transition: 0.3s ease-in-out; padding: 20px; overflow-y: auto; color: #333; 
+        }
         .sidebar-menu.active { left: 0; }
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
         .sidebar-header h3 { font-size: 16px; color: #0f2027; }
-        .sidebar-close { font-size: 24px; cursor: pointer; color: #666; }
+        .sidebar-close { font-size: 22px; cursor: pointer; color: #666; }
         .sidebar-links { list-style: none; }
         .sidebar-links li { margin-bottom: 12px; }
-        .sidebar-links a { display: block; width: 100%; text-align: left; background: none; border: none; font-size: 14px; font-weight: 600; color: #333; text-decoration: none; padding: 10px; border-radius: 6px; transition: 0.2s; }
+        .sidebar-links a { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: none; border: none; font-size: 13px; font-weight: 600; color: #333; text-decoration: none; padding: 10px; border-radius: 6px; transition: 0.2s; }
         .sidebar-links a:hover { background: #f0f2f5; color: #00ff88; }
 
-        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
-        .job-card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 25px; border-left: 5px solid #00ff88; }
-        .job-card h3 { color: #0f2027; font-size: 20px; margin-bottom: 8px; }
-        .job-card p { font-size: 13px; color: #666; margin-bottom: 12px; }
+        .container { max-width: 850px; margin: 30px auto; padding: 0 15px; }
+        
+        .job-card { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px); 
+            padding: 20px; 
+            border-radius: 12px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15); 
+            margin-bottom: 20px; 
+            border-left: 5px solid #00ff88; 
+        }
+        .job-card h3 { color: #0f2027; font-size: 16px; margin-bottom: 8px; }
+        .job-card p { font-size: 12px; color: #555; margin-bottom: 6px; }
 
-        .apply-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .apply-box h3 { color: #0f2027; margin-bottom: 20px; font-size: 18px; }
+        .apply-box { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px); 
+            padding: 25px; 
+            border-radius: 12px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15); 
+        }
+        .apply-box h3 { color: #0f2027; margin-bottom: 15px; font-size: 16px; display: flex; align-items: center; gap: 8px; }
         
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 12px; font-weight: 600; color: #444; margin-bottom: 5px; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; outline: none; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 11px; font-weight: 600; color: #444; margin-bottom: 4px; }
+        input, select, textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; font-size: 12px; outline: none; background: #fafafa; }
+        input:focus, select:focus, textarea:focus { border-color: #00ff88; background: #fff; }
         
-        .btn { background: #00ff88; color: #0f2027; border: none; padding: 12px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 14px; width: 100%; }
+        .btn { background: #00ff88; color: #0f2027; border: none; padding: 10px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px; width: 100%; transition: 0.2s; }
         .btn:hover { background: #00cc6a; }
-        footer { background: #0c1a1f; color: #aaa; padding: 20px; text-align: center; font-size: 12px; margin-top: 40px; }
-
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 2500; }
+        
+        footer { background: rgba(12, 26, 31, 0.95); color: #aaa; padding: 20px; text-align: center; font-size: 12px; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.05); }
+        
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); display: none; z-index: 2500; }
         .overlay.active { display: block; }
+
+        @media(max-width: 480px) {
+            .brand-title h1 { font-size: 12px; }
+            .btn-custom span { display: none; } /* Hide text, show only icon on very small screens */
+            .btn-custom { padding: 6px 8px; }
+        }
     </style>
 </head>
 <body>
 
     <header>
         <div class="brand-section">
-            <button type="button" class="btn-custom" onclick="toggleSidebar()" style="background: transparent; padding: 5px;"><i class="fas fa-bars" style="font-size: 20px;"></i></button>
+            <button type="button" class="btn-custom" onclick="toggleSidebar()" style="background: transparent; border: none; cursor: pointer;"><i class="fas fa-bars" style="font-size: 18px;"></i></button>
             <img src="1.png" alt="Logo" class="logo-img">
-            <div class="brand-title"><h1 data-ta="தமிழன் எனர்ஜி சிஸ்டம்ஸ் - வேலைவாய்ப்பு" data-en="Thamizhan Energy Systems - Career">தமிழன் எனர்ஜி சிஸ்டம்ஸ் - வேலைவாய்ப்பு</h1></div>
+            <div class="brand-title"><h1 data-ta="வேலைவாய்ப்பு பக்கம்" data-en="Career Page">வேலைவாய்ப்பு பக்கம்</h1></div>
         </div>
         <div class="nav-right">
             <a href="shop.html" class="btn-custom"><i class="fas fa-home"></i> <span data-ta="முகப்பு" data-en="Home">முகப்பு</span></a>
@@ -67,7 +126,7 @@
 
     <div class="sidebar-menu" id="sidebarMenu">
         <div class="sidebar-header">
-            <h3 data-ta="மெனு பார்" data-en="Menu Bar">மெனு பார்</h3>
+            <h3>மெனு பார்</h3>
             <span class="sidebar-close" onclick="toggleSidebar()">&times;</span>
         </div>
         <ul class="sidebar-links">
@@ -79,7 +138,7 @@
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
     <div class="container">
-        <h2 style="margin-bottom: 20px; color: #0f2027; text-align: center;" data-ta="🔥 காலிப்பணியிடங்கள் (Current Openings)" data-en="🔥 Current Openings">🔥 காலிப்பணியிடங்கள் (Current Openings)</h2>
+        <h2 style="margin-bottom: 20px; color: #fff; text-align: center; font-size: 20px;" data-ta="🔥 காலிப்பணியிடங்கள் (Current Openings)" data-en="🔥 Current Openings">🔥 காலிப்பணியிடங்கள் (Current Openings)</h2>
 
         <div class="job-card">
             <h3>1. PCB டிசைன் இன்ஜினியர் (PCB Design Engineer)</h3>
@@ -94,7 +153,7 @@
         </div>
 
         <div class="apply-box">
-            <h3 data-ta="📝 வேலைக்கு விண்ணப்பிக்க (Job Application Form)" data-en="📝 Job Application Form">📝 வேலைக்கு விண்ணப்பிக்க (Job Application Form)</h3>
+            <h3 data-ta="📝 வேலைக்கு விண்ணப்பிக்க" data-en="📝 Job Application Form"><i class="fas fa-file-signature" style="color:#00ff88;"></i> வேலைக்கு விண்ணப்பிக்க</h3>
             <form id="jobApplicationForm" onsubmit="submitApplication(event)">
                 <div class="form-group">
                     <label data-ta="விருக்கும் வேலை (Job Role)" data-en="Job Role">விருக்கும் வேலை (Job Role)</label>
