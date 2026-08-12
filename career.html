@@ -17,7 +17,7 @@
             min-height: 100vh;
         }
         
-        /* MNC Style Header */
+        /* MNC Style Header with Chrome Finish Tagline */
         header { 
             background: rgba(15, 32, 39, 0.95); 
             backdrop-filter: blur(10px);
@@ -32,8 +32,26 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         .brand-section { display: flex; align-items: center; gap: 10px; }
-        .logo-img { height: 35px; width: auto; object-fit: contain; }
-        .brand-title h1 { font-size: 14px; color: #00ff88; font-weight: 600; }
+        .logo-img { height: 38px; width: auto; object-fit: contain; }
+        
+        /* Chrome Finish Tagline Styling */
+        .brand-title h1 { 
+            font-size: 15px; 
+            color: #ffffff; 
+            font-weight: 700; 
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+        .brand-tagline { 
+            font-size: 10px; 
+            font-weight: 500; 
+            background: linear-gradient(90deg, #dfdfdf, #ffffff, #859398, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
         
         .nav-right { display: flex; align-items: center; gap: 8px; }
         .btn-custom { 
@@ -104,8 +122,9 @@
         .overlay.active { display: block; }
 
         @media(max-width: 480px) {
-            .brand-title h1 { font-size: 12px; }
-            .btn-custom span { display: none; } /* Hide text, show only icon on very small screens */
+            .brand-tagline { font-size: 8px; letter-spacing: 0.5px; }
+            .brand-title h1 { font-size: 13px; }
+            .btn-custom span { display: none; }
             .btn-custom { padding: 6px 8px; }
         }
     </style>
@@ -116,7 +135,10 @@
         <div class="brand-section">
             <button type="button" class="btn-custom" onclick="toggleSidebar()" style="background: transparent; border: none; cursor: pointer;"><i class="fas fa-bars" style="font-size: 18px;"></i></button>
             <img src="1.png" alt="Logo" class="logo-img">
-            <div class="brand-title"><h1 data-ta="வேலைவாய்ப்பு பக்கம்" data-en="Career Page">வேலைவாய்ப்பு பக்கம்</h1></div>
+            <div class="brand-title">
+                <h1 data-ta="தமிழன் எனர்ஜி சிஸ்டம்ஸ்" data-en="Thamizhan Energy Systems">Thamizhan Energy Systems</h1>
+                <div class="brand-tagline">The name of quality, The pride of Automation</div>
+            </div>
         </div>
         <div class="nav-right">
             <a href="shop.html" class="btn-custom"><i class="fas fa-home"></i> <span data-ta="முகப்பு" data-en="Home">முகப்பு</span></a>
