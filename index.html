@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>தமிழன் எனர்ஜி சிஸ்டம்ஸ் | Thamizhan Energy Systems</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="manifest.json">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
@@ -64,7 +65,7 @@
         }
         .lang-btn:hover { background: #00ff88; color: #0f2027; }
 
-        /* Hamburger Menu Icon (Hidden on Desktop) */
+        /* Hamburger Menu Icon (Three Dash) */
         .menu-toggle {
             display: none;
             flex-direction: column;
@@ -83,6 +84,19 @@
             transition: 0.3s;
         }
 
+        /* Sidebar Drawer Menu */
+        .sidebar-menu { position: fixed; top: 0; left: -320px; width: 300px; height: 100%; background: #fff; box-shadow: 5px 0 15px rgba(0,0,0,0.2); z-index: 3000; transition: 0.3s ease-in-out; padding: 20px; overflow-y: auto; color: #333; }
+        .sidebar-menu.active { left: 0; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .sidebar-header h3 { font-size: 16px; color: #0f2027; }
+        .sidebar-close { font-size: 24px; cursor: pointer; color: #666; }
+        .sidebar-links { list-style: none; }
+        .sidebar-links li { margin-bottom: 12px; }
+        .sidebar-links a { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: none; border: none; font-size: 14px; font-weight: 600; color: #333; text-decoration: none; padding: 10px; border-radius: 6px; transition: 0.2s; }
+        .sidebar-links a:hover { background: #f0f2f5; color: #00ff88; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 2500; }
+        .overlay.active { display: block; }
+
         /* Hero Section */
         .hero {
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('4.png') no-repeat center center/cover;
@@ -100,25 +114,10 @@
         .btn { background: #00ff88; color: #0f2027; padding: 12px 30px; border-radius: 30px; font-weight: 700; font-size: 15px; text-transform: uppercase; }
         .btn:hover { background: #00cc6a; }
 
-        /* Products Section */
+        /* Products Section (Only Specs Overview now) */
         .products-section { padding: 60px 20px; max-width: 1200px; margin: 0 auto; text-align: center; }
         .section-title { font-size: 28px; color: #0f2027; margin-bottom: 15px; }
         .section-desc { color: #666; margin-bottom: 40px; font-size: 14px; }
-        
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; text-align: left; margin-bottom: 50px; }
-        .product-card {
-            background: #fff;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            border-top: 5px solid #00ff88;
-        }
-        .product-card h3 { font-size: 20px; color: #0f2027; margin-bottom: 10px; }
-        .model-badge { display: inline-block; background: #e0f7fa; color: #006064; padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 600; margin-bottom: 15px; }
-        .spec-list { list-style: none; font-size: 13px; color: #555; margin-top: 15px; }
-        .spec-list li { margin-bottom: 8px; display: flex; align-items: flex-start; }
-        .spec-list li::before { content: '✔️'; color: #00b359; margin-right: 8px; font-size: 11px; }
-        .price-tag { font-size: 22px; font-weight: 700; color: #2c3e50; margin-top: 20px; }
 
         .specs-image-box { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-top: 20px; }
         .specs-img { width: 100%; height: auto; border-radius: 8px; display: block; }
@@ -140,51 +139,7 @@
             .menu-toggle { display: flex; }
             
             .nav-container {
-                position: absolute;
-                top: 65px;
-                left: 0;
-                width: 100%;
-                background: #fff;
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 0 25px;
-                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-                max-height: 0;
-                overflow: hidden;
-                visibility: hidden;
-                transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out, visibility 0.3s;
-            }
-            .nav-container.active {
-                max-height: 420px;
-                visibility: visible;
-                padding: 15px 25px;
-            }
-            nav {
-                width: 100%;
-            }
-            nav ul {
-                flex-direction: column;
-                width: 100%;
-                gap: 10px;
-            }
-            nav ul li {
-                width: 100%;
-                border-bottom: 1px solid #eee;
-                padding-bottom: 6px;
-            }
-            nav ul li a {
-                display: block;
-                background: transparent;
-                padding: 5px 0;
-            }
-            nav ul li a:hover {
-                color: #00b359;
-                background: transparent;
-            }
-            .lang-btn {
-                margin-top: 10px;
-                width: 100%;
-                text-align: center;
+                display: none;
             }
             .hero h2 { font-size: 24px; }
             .hero p { font-size: 13px; }
@@ -195,25 +150,25 @@
 
     <header>
         <div class="brand-section">
+            <button class="menu-toggle" id="mobileMenuBtn" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <img src="1.png" alt="Thamizhi Logo" class="logo-img">
             <div class="company-title">
                 <h1 data-ta="தமிழன் எனர்ஜி சிஸ்டம்ஸ்" data-en="Thamizhan Energy Systems">தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1>
                 <p>The Name of Quality, The Pride of Automation</p>
             </div>
         </div>
-        
-        <button class="menu-toggle" id="mobileMenuBtn" onclick="toggleMobileMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
 
-        <div class="nav-container" id="navContainer">
+        <div class="nav-container">
             <nav>
                 <ul>
                     <li><a href="index.html" data-ta="🏠 முகப்பு" data-en="🏠 Home">🏠 முகப்பு</a></li>
                     <li><a href="shop.html" data-ta="🛒 ஸ்டோர்" data-en="🛒 Store">🛒 ஸ்டோர்</a></li>
                     <li><a href="dashboard.html" data-ta="🌐 IoT டேஷ்போர்டு" data-en="🌐 IoT Dashboard">🌐 IoT டேஷ்போர்டு</a></li>
+                    <li><a href="career.html" data-ta="📄 வேலைவாய்ப்பு" data-en="📄 Career">📄 வேலைவாய்ப்பு</a></li>
                     <li><a href="contact.html" data-ta="📞 தொடர்புக்கு" data-en="📞 Contact">📞 தொடர்புக்கு</a></li>
                     <li><a href="aboutus.html" data-ta="ℹ️ எங்களைப் பற்றி" data-en="ℹ️ About Us">ℹ️ எங்களைப் பற்றி</a></li>
                 </ul>
@@ -222,6 +177,23 @@
         </div>
     </header>
 
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div class="sidebar-header">
+            <h3 data-ta="மெனு பார்" data-en="Menu Bar">மெனு பார்</h3>
+            <span class="sidebar-close" onclick="toggleSidebar()">&times;</span>
+        </div>
+        <ul class="sidebar-links">
+            <li><a href="index.html"><i class="fas fa-home"></i> <span data-ta="🏠 முகப்பு" data-en="🏠 Home">🏠 முகப்பு</span></a></li>
+            <li><a href="shop.html"><i class="fas fa-store"></i> <span data-ta="🛒 ஸ்டோர்" data-en="🛒 Store">🛒 ஸ்டோர்</span></a></li>
+            <li><a href="dashboard.html"><i class="fas fa-network-wired"></i> <span data-ta="🌐 IoT டேஷ்போர்டு" data-en="🌐 IoT Dashboard">🌐 IoT டேஷ்போர்டு</span></a></li>
+            <li><a href="career.html"><i class="fas fa-briefcase"></i> <span data-ta="📄 வேலைவாய்ப்பு (Career)" data-en="📄 Career">📄 வேலைவாய்ப்பு (Career)</span></a></li>
+            <li><a href="contact.html"><i class="fas fa-envelope"></i> <span data-ta="📞 தொடர்புக்கு" data-en="📞 Contact">📞 தொடர்புக்கு</span></a></li>
+            <li><a href="aboutus.html"><i class="fas fa-info-circle"></i> <span data-ta="ℹ️ எங்களைப் பற்றி" data-en="ℹ️ About Us">ℹ️ எங்களைப் பற்றி</span></a></li>
+            <li><button class="lang-btn" id="sidebarLangBtn" onclick="toggleLanguage()" style="width: 100%; margin-top: 10px;">English</button></li>
+        </ul>
+    </div>
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
     <section class="hero" id="home">
         <h2 data-ta="புரட்சிகரமான நீர் மேலாண்மை" data-en="Revolutionary Water Management">புரட்சிகரமான நீர் மேலாண்மை</h2>
         <p data-ta="இந்தியாவின் நம்பகமான ஆட்டோமேஷன் மற்றும் ஐஓடி தீர்வுகள். உங்கள் நீரை எளிதாகக் கண்காணிக்கவும் கட்டுப்படுத்தவும்." data-en="India's trusted automation and IoT solutions. Easily monitor and control your water.">இந்தியாவின் நம்பகமான ஆட்டோமேஷன் மற்றும் ஐஓடி தீர்வுகள். உங்கள் நீரை எளிதாகக் கண்காணிக்கவும் கட்டுப்படுத்தவும்.</p>
@@ -229,53 +201,9 @@
     </section>
 
     <section class="products-section" id="products">
-        <h2 class="section-title" data-ta="எங்களது மூன்று ஸ்மார்ட் மாடல்கள்" data-en="Our Three Smart Models">எங்களது மூன்று ஸ்மார்ட் மாடல்கள்</h2>
-        <p class="section-desc" data-ta="உங்கள் தேவைகளுக்குப் பொருத்தமான வாட்டர் லெவல் கண்ட்ரோலர் மாடலைத் தேர்ந்தெடுக்கவும்." data-en="Choose the water level controller model that suits your needs.">உங்கள் தேவைகளுக்குப் பொருத்தமான வாட்டர் லெவல் கண்ட்ரோலர் மாடலைத் தேர்ந்தெடுக்கவும்.</p>
+        <h2 class="section-title" data-ta="தொழில்நுட்ப விவரங்கள் (Specifications Overview)" data-en="Specifications Overview">தொழில்நுட்ப விவரங்கள் (Specifications Overview)</h2>
+        <p class="section-desc" data-ta="எங்கள் வாட்டர் லெவல் கண்ட்ரோலர் சாதனத்தின் முழுமையான தொழில்நுட்ப விவரங்கள்." data-en="Complete technical specifications of our water level controller device.">எங்கள் வாட்டர் லெவல் கண்ட்ரோலர் சாதனத்தின் முழுமையான தொழில்நுட்ப விவரங்கள்.</p>
         
-        <div class="product-grid">
-            
-            <div class="product-card">
-                <span class="model-badge">Basic Version</span>
-                <h3>AWLCP 1.0 (Basic)</h3>
-                <p data-ta="நம்பகமான மற்றும் எளிமையான ஆட்டோமேஷன்." data-en="Reliable and simple automation.">நம்பகமான மற்றும் எளிமையான ஆட்டோமேஷன்.</p>
-                <ul class="spec-list">
-                    <li data-ta="ஆட்டோ மோட்டார் ஆன்/ஆஃப் (மேல் & கீழ் டேங்க்)" data-en="Auto Motor ON/OFF (Upper & Lower Tank)">ஆட்டோ மோட்டார் ஆன்/ஆஃப் (மேல் & கீழ் டேங்க்)</li>
-                    <li><strong data-ta="ட்ரைடன் பாதுகாப்பு (Dry Run Control)" data-en="Dry Run Protection">ட்ரைடன் பாதுகாப்பு (Dry Run Control)</strong></li>
-                    <li data-ta="உயர் மின்னழுத்த பாதுகாப்பு" data-en="High Voltage Protection">உயர் மின்னழுத்த பாதுகாப்பு</li>
-                    <li data-ta="LED நிலை காட்டி & எளிய நிறுவல்" data-en="LED Indicator & Easy Installation">LED நிலை காட்டி & எளிய நிறுவல்</li>
-                </ul>
-                <div class="price-tag">₹3,499/-</div>
-            </div>
-
-            <div class="product-card">
-                <span class="model-badge" style="background: #e8f5e9; color: #2e7d32;">WiFi Model</span>
-                <h3>AWLCW 1.0 (WiFi)</h3>
-                <p data-ta="மொபைல் செயலி மூலம் முழுமையான கட்டுப்பாடு." data-en="Complete control through mobile app.">மொபைல் செயலி மூலம் முழுமையான கட்டுப்பாடு.</p>
-                <ul class="spec-list">
-                    <li><strong data-ta="WiFi இணைப்பு" data-en="WiFi Connectivity">WiFi இணைப்பு</strong> (Android / iOS App)</li>
-                    <li data-ta="எங்கிருந்தும் மோட்டாரை இயக்கலாம்/நிறுத்தலாம்" data-en="Control motor from anywhere">எங்கிருந்தும் மோட்டாரை இயக்கலாம்/நிறுத்தலாம்</li>
-                    <li data-ta="நேரடி நீர் மட்ட நிலை அறிக்கை" data-en="Live water level status">நேரடி நீர் மட்ட நிலை அறிக்கை</li>
-                    <li data-ta="ட்ரைடன் டிடெக்ஷன் & அலார்ட்" data-en="Dry run detection & alert">ட்ரைடன் டிடெக்ஷன் & அலார்ட்</li>
-                </ul>
-                <div class="price-tag">₹4,999/-</div>
-            </div>
-
-            <div class="product-card">
-                <span class="model-badge" style="background: #fff3e0; color: #ef6c00;">Wireless + Solar</span>
-                <h3>AWLCWS 1.0 (Pro)</h3>
-                <p data-ta="வயர்லெஸ் மற்றும் சூரிய ஆற்றல் கொண்ட அதிநவீன மாடல்." data-en="Advanced model with wireless & solar power.">வயர்லெஸ் மற்றும் சூரிய ஆற்றல் கொண்ட அதிநவீன மாடல்.</p>
-                <ul class="spec-list">
-                    <li><strong data-ta="மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு" data-en="Wireless upper & lower tank connection">மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு</strong></li>
-                    <li><strong data-ta="சோலார் பேனல் சப்போர்ட்" data-en="Solar Panel Support">சோலார் பேனல் சப்போர்ட்</strong></li>
-                    <li data-ta="Wi-Fi மற்றும் மொபைல் கண்ட்ரோல்" data-en="Wi-Fi & Mobile Control">Wi-Fi மற்றும் மொபைல் கண்ட்ரோல்</li>
-                    <li data-ta="மேம்பட்ட ட்ரைடன் கண்ட்ரோல்" data-en="Advanced Dry Run Control">மேம்பட்ட ட்ரைடன் கண்ட்ரோல்</li>
-                </ul>
-                <div class="price-tag">₹6,999/-</div>
-            </div>
-
-        </div>
-
-        <h3 style="margin-top: 40px; margin-bottom: 15px; color: #0f2027;" data-ta="தொழில்நுட்ப விவரங்கள் (Specifications Overview)" data-en="Specifications Overview">தொழில்நுட்ப விவரங்கள் (Specifications Overview)</h3>
         <div class="specs-image-box">
             <img src="3.png" alt="Water Level Controller Specifications" class="specs-img">
         </div>
@@ -295,9 +223,9 @@
     </footer>
 
     <script>
-        function toggleMobileMenu() {
-            const navContainer = document.getElementById('navContainer');
-            navContainer.classList.toggle('active');
+        function toggleSidebar() {
+            document.getElementById('sidebarMenu').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
         }
 
         let currentLang = localStorage.getItem('siteLang') || 'ta';
@@ -315,9 +243,11 @@
         function applyLanguage() {
             if (currentLang === 'en') {
                 document.getElementById('langToggleBtn').innerText = 'தமிழ்';
+                document.getElementById('sidebarLangBtn').innerText = 'தமிழ்';
                 document.getElementById('htmlRoot').setAttribute('lang', 'en');
             } else {
                 document.getElementById('langToggleBtn').innerText = 'English';
+                document.getElementById('sidebarLangBtn').innerText = 'English';
                 document.getElementById('htmlRoot').setAttribute('lang', 'ta');
             }
 
