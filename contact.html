@@ -4,75 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>தொடர்புக்கு & ஆதரவு | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: #f4f7f6; color: #333; line-height: 1.6; overflow-x: hidden; }
+        body { background-color: #f4f7f6; color: #333; line-height: 1.6; overflow-x: hidden; min-height: 100vh; }
         a { text-decoration: none; color: inherit; }
 
-        header {
-            background: #fff;
-            padding: 10px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+        /* MNC Style Header */
+        header { 
+            background: rgba(15, 32, 39, 0.95); 
+            backdrop-filter: blur(10px);
+            color: white; 
+            padding: 12px 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .brand-section { display: flex; align-items: center; gap: 12px; }
-        .logo-img { height: 45px; width: auto; display: block; }
-        .company-title h1 { font-size: 16px; color: #0f2027; font-weight: 700; line-height: 1.2; }
+        .brand-section { display: flex; align-items: center; gap: 10px; }
+        .logo-img { height: 38px; width: auto; object-fit: contain; }
         
-        .nav-container { display: flex; align-items: center; gap: 20px; }
-        nav ul { list-style: none; display: flex; gap: 15px; align-items: center; }
-        
-        nav ul li a {
-            background: #f0f2f5;
-            color: #333;
-            padding: 7px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 12px;
-            display: inline-block;
-            transition: 0.3s;
+        /* Chrome Finish Tagline Styling */
+        .brand-title h1 { 
+            font-size: 15px; 
+            color: #ffffff; 
+            font-weight: 700; 
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
         }
-        nav ul li a:hover {
-            background: #0f2027;
-            color: #00ff88;
+        .brand-tagline { 
+            font-size: 10px; 
+            font-weight: 500; 
+            background: linear-gradient(90deg, #dfdfdf, #ffffff, #859398, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
         }
 
-        .lang-btn {
+        .menu-btn { 
+            background: transparent; 
+            border: none; 
+            color: white; 
+            cursor: pointer; 
+            font-size: 20px;
+            padding: 5px;
+        }
+
+        /* Sidebar Menu (Three Dash Drawer) */
+        .sidebar-menu { 
+            position: fixed; top: 0; left: -300px; width: 280px; height: 100%; 
+            background: #ffffff; box-shadow: 5px 0 25px rgba(0,0,0,0.3); 
+            z-index: 3000; transition: 0.3s ease-in-out; padding: 20px; overflow-y: auto; color: #333; 
+        }
+        .sidebar-menu.active { left: 0; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .sidebar-header h3 { font-size: 16px; color: #0f2027; }
+        .sidebar-close { font-size: 24px; cursor: pointer; color: #666; background: none; border: none; }
+        .sidebar-links { list-style: none; }
+        .sidebar-links li { margin-bottom: 12px; }
+        .sidebar-links a { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: none; border: none; font-size: 14px; font-weight: 600; color: #333; text-decoration: none; padding: 10px; border-radius: 6px; transition: 0.2s; }
+        .sidebar-links a:hover { background: #f0f2f5; color: #00ff88; }
+        
+        .lang-sidebar-btn {
             background: #0f2027;
             color: #00ff88;
             border: 2px solid #00ff88;
-            padding: 6px 14px;
-            border-radius: 20px;
+            padding: 10px;
+            border-radius: 6px;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 14px;
             cursor: pointer;
-            transition: 0.3s;
-        }
-        .lang-btn:hover { background: #00ff88; color: #0f2027; }
-
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 28px;
-            height: 20px;
-            cursor: pointer;
-            background: transparent;
-            border: none;
-        }
-        .menu-toggle span {
             width: 100%;
-            height: 3px;
-            background-color: #0f2027;
-            border-radius: 3px;
+            margin-top: 15px;
             transition: 0.3s;
         }
+        .lang-sidebar-btn:hover { background: #00ff88; color: #0f2027; }
 
         .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
         .page-title { text-align: center; color: #0f2027; font-size: 26px; margin-bottom: 30px; }
@@ -141,37 +154,12 @@
         .chatbot-btn:hover { background: #1a2a32; }
 
         footer { background: #0c1a1f; color: #aaa; padding: 25px; text-align: center; font-size: 12px; margin-top: 50px; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); display: none; z-index: 2500; }
+        .overlay.active { display: block; }
 
-        @media (max-width: 768px) {
-            header { padding: 10px 15px; }
-            .menu-toggle { display: flex; }
-            
-            .nav-container {
-                position: absolute;
-                top: 65px;
-                left: 0;
-                width: 100%;
-                background: #fff;
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 0 20px;
-                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-                max-height: 0;
-                overflow: hidden;
-                visibility: hidden;
-                transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out, visibility 0.3s;
-            }
-            .nav-container.active {
-                max-height: 350px;
-                visibility: visible;
-                padding: 15px 20px;
-            }
-            nav { width: 100%; }
-            nav ul { flex-direction: column; width: 100%; gap: 10px; }
-            nav ul li { width: 100%; border-bottom: 1px solid #eee; padding-bottom: 6px; }
-            nav ul li a { display: block; background: transparent; padding: 5px 0; }
-            nav ul li a:hover { color: #00b359; background: transparent; }
-            .lang-btn { width: 100%; text-align: center; margin-top: 5px; }
+        @media(max-width: 480px) {
+            .brand-tagline { font-size: 7px; letter-spacing: 0.5px; }
+            .brand-title h1 { font-size: 12px; }
         }
     </style>
 </head>
@@ -179,31 +167,31 @@
 
     <header>
         <div class="brand-section">
+            <button type="button" class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
             <img src="1.png" alt="Logo" class="logo-img">
-            <div class="company-title">
-                <h1 data-ta="தமிழன் எனர்ஜி சிஸ்டம்ஸ்" data-en="Thamizhan Energy Systems">தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1>
+            <div class="brand-title">
+                <h1 data-ta="தமிழன் எனர்ஜி சிஸ்டம்ஸ்" data-en="Thamizhan Energy Systems">Thamizhan Energy Systems</h1>
+                <div class="brand-tagline">The name of quality, The pride of Automation</div>
             </div>
         </div>
-
-        <button class="menu-toggle" id="mobileMenuBtn" onclick="toggleMobileMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-
-        <div class="nav-container" id="navContainer">
-            <nav>
-                <ul>
-                    <li><a href="index.html" data-ta="🏠 முகப்பு" data-en="🏠 Home">🏠 முகப்பு</a></li>
-                    <li><a href="shop.html" data-ta="🛒 ஸ்டோர்" data-en="🛒 Store">🛒 ஸ்டோர்</a></li>
-                    <li><a href="dashboard.html" data-ta="🌐 IoT டேஷ்போர்டு" data-en="🌐 IoT Dashboard">🌐 IoT டேஷ்போர்டு</a></li>
-                    <li><a href="contact.html" style="color: #00ff88; background: #0f2027;" data-ta="📞 தொடர்புக்கு" data-en="📞 Contact">📞 தொடர்புக்கு</a></li>
-                    <li><a href="aboutus.html" data-ta="ℹ️ எங்களைப் பற்றி" data-en="ℹ️ About Us">ℹ️ எங்களைப் பற்றி</a></li>
-                </ul>
-            </nav>
-            <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">English</button>
-        </div>
     </header>
+
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div class="sidebar-header">
+            <h3 data-ta="மெனு பார்" data-en="Menu Bar">மெனு பார்</h3>
+            <button class="sidebar-close" onclick="toggleSidebar()">&times;</button>
+        </div>
+        <ul class="sidebar-links">
+            <li><a href="index.html"><i class="fas fa-home"></i> <span data-ta="🏠 முகப்பு" data-en="🏠 Home">🏠 முகப்பு</span></a></li>
+            <li><a href="shop.html"><i class="fas fa-store"></i> <span data-ta="🛒 ஆன்லைன் ஸ்டோர் (Shop)" data-en="🛒 Online Store (Shop)">ஆன்லைன் ஸ்டோர் (Shop)</span></a></li>
+            <li><a href="dashboard.html"><i class="fas fa-network-wired"></i> <span data-ta="🌐 IoT டேஷ்போர்டு" data-en="🌐 IoT Dashboard">🌐 IoT டேஷ்போர்டு</span></a></li>
+            <li><a href="career.html"><i class="fas fa-briefcase"></i> <span data-ta="📄 வேலைவாய்ப்பு (Career)" data-en="📄 Career">வேலைவாய்ப்பு (Career)</span></a></li>
+            <li><a href="contact.html"><i class="fas fa-envelope"></i> <span data-ta="📞 தொடர்புக்கு" data-en="📞 Contact">📞 தொடர்புக்கு</span></a></li>
+            <li><a href="aboutus.html"><i class="fas fa-info-circle"></i> <span data-ta="ℹ️ எங்களைப் பற்றி" data-en="ℹ️ About Us">ℹ️ எங்களைப் பற்றி</span></a></li>
+            <li><button class="lang-sidebar-btn" id="langSidebarBtn" onclick="toggleLanguage()">English</button></li>
+        </ul>
+    </div>
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
     <div class="container">
         <h2 class="page-title" data-ta="உதவி & வாடிக்கையாளர் ஆதரவு (Support Center)" data-en="Support Center">உதவி & வாடிக்கையாளர் ஆதரவு (Support Center)</h2>
@@ -271,16 +259,12 @@
     </footer>
 
     <script>
-        function toggleMobileMenu() {
-            const navContainer = document.getElementById('navContainer');
-            navContainer.classList.toggle('active');
+        function toggleSidebar() {
+            document.getElementById('sidebarMenu').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
         }
 
         let currentLang = localStorage.getItem('siteLang') || 'ta';
-
-        document.addEventListener("DOMContentLoaded", function() {
-            applyLanguage();
-        });
 
         function toggleLanguage() {
             currentLang = (currentLang === 'ta') ? 'en' : 'ta';
@@ -290,10 +274,10 @@
 
         function applyLanguage() {
             if (currentLang === 'en') {
-                document.getElementById('langToggleBtn').innerText = 'தமிழ்';
+                document.getElementById('langSidebarBtn').innerText = 'தமிழ்';
                 document.getElementById('htmlRoot').setAttribute('lang', 'en');
             } else {
-                document.getElementById('langToggleBtn').innerText = 'English';
+                document.getElementById('langSidebarBtn').innerText = 'English';
                 document.getElementById('htmlRoot').setAttribute('lang', 'ta');
             }
 
@@ -306,6 +290,10 @@
                 }
             });
         }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            applyLanguage();
+        });
 
         function submitTicket(event) {
             event.preventDefault();
