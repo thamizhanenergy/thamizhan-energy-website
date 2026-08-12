@@ -3,21 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>வேலைவாய்ப்பு (Career) | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
+    <title>எங்களைப் பற்றி (About Us) | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
+    <link rel="manifest" href="manifest.json">
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        
-        body { 
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); 
-            color: #333; 
-            line-height: 1.6; 
-            min-height: 100vh;
-        }
-        
-        /* MNC Style Header */
+        body { background-color: #f4f7f6; color: #333; line-height: 1.7; overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+
         header { 
             background: rgba(15, 32, 39, 0.95); 
             backdrop-filter: blur(10px);
@@ -34,7 +30,6 @@
         .brand-section { display: flex; align-items: center; gap: 10px; }
         .logo-img { height: 38px; width: auto; object-fit: contain; }
         
-        /* Chrome Finish Tagline Styling */
         .brand-title h1 { 
             font-size: 15px; 
             color: #ffffff; 
@@ -52,7 +47,7 @@
             letter-spacing: 1px;
             white-space: nowrap;
         }
-        
+
         .menu-btn { 
             background: transparent; 
             border: none; 
@@ -92,45 +87,35 @@
         }
         .lang-sidebar-btn:hover { background: #00ff88; color: #0f2027; }
 
-        .container { max-width: 850px; margin: 30px auto; padding: 0 15px; }
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
         
-        .job-card { 
-            background: rgba(255, 255, 255, 0.95); 
-            backdrop-filter: blur(10px); 
-            padding: 20px; 
-            border-radius: 12px; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15); 
-            margin-bottom: 20px; 
-            border-left: 5px solid #00ff88; 
-        }
-        .job-card h3 { color: #0f2027; font-size: 16px; margin-bottom: 8px; }
-        .job-card p { font-size: 12px; color: #555; margin-bottom: 6px; }
+        .about-hero { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: white; padding: 50px 30px; border-radius: 15px; text-align: center; margin-bottom: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .about-hero h2 { font-size: 28px; margin-bottom: 10px; color: #00ff88; }
+        .about-hero p { font-size: 15px; color: #ddd; max-width: 700px; margin: 0 auto; }
 
-        .apply-box { 
-            background: rgba(255, 255, 255, 0.95); 
-            backdrop-filter: blur(10px); 
-            padding: 25px; 
-            border-radius: 12px; 
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15); 
-        }
-        .apply-box h3 { color: #0f2027; margin-bottom: 15px; font-size: 16px; display: flex; align-items: center; gap: 8px; }
-        
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 11px; font-weight: 600; color: #444; margin-bottom: 4px; }
-        input, select, textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; font-size: 12px; outline: none; background: #fafafa; }
-        input:focus, select:focus, textarea:focus { border-color: #00ff88; background: #fff; }
-        
-        .btn { background: #00ff88; color: #0f2027; border: none; padding: 10px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 13px; width: 100%; transition: 0.2s; }
-        .btn:hover { background: #00cc6a; }
-        
-        footer { background: rgba(12, 26, 31, 0.95); color: #aaa; padding: 20px; text-align: center; font-size: 12px; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.05); }
-        
+        .content-card { background: white; padding: 35px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); margin-bottom: 30px; border-left: 6px solid #00ff88; }
+        .content-card h3 { font-size: 20px; color: #0f2027; margin-bottom: 15px; }
+        .content-card p { font-size: 15px; color: #555; margin-bottom: 15px; text-align: justify; }
+
+        .vision-mission-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .vm-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-top: 4px solid #528FF0; }
+        .vm-card h4 { font-size: 18px; color: #0f2027; margin-bottom: 10px; }
+        .vm-card p { font-size: 14px; color: #666; text-align: justify; }
+
+        .founder-section { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); text-align: center; border-top: 4px solid #ff5252; max-width: 500px; margin: 0 auto 30px auto; }
+        .founder-section h3 { font-size: 18px; color: #0f2027; margin-bottom: 5px; }
+        .founder-section .title { font-size: 14px; color: #ff5252; font-weight: 700; margin-bottom: 10px; }
+        .founder-section p { font-size: 14px; color: #666; }
+
+        footer { background: #0c1a1f; color: #aaa; padding: 25px; text-align: center; font-size: 12px; margin-top: 50px; }
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); display: none; z-index: 2500; }
         .overlay.active { display: block; }
 
-        @media(max-width: 480px) {
+        @media (max-width: 480px) {
             .brand-tagline { font-size: 7px; letter-spacing: 0.5px; }
             .brand-title h1 { font-size: 12px; }
+            .about-hero h2 { font-size: 22px; }
+            .content-card { padding: 20px; }
         }
     </style>
 </head>
@@ -156,7 +141,7 @@
             <li><a href="index.html"><i class="fas fa-home"></i> <span data-ta="🏠 முகப்பு" data-en="🏠 Home">🏠 முகப்பு</span></a></li>
             <li><a href="shop.html"><i class="fas fa-store"></i> <span data-ta="🛒 ஆன்லைன் ஸ்டோர் (Shop)" data-en="🛒 Online Store (Shop)">ஆன்லைன் ஸ்டோர் (Shop)</span></a></li>
             <li><a href="dashboard.html"><i class="fas fa-network-wired"></i> <span data-ta="🌐 IoT டேஷ்போர்டு" data-en="🌐 IoT Dashboard">🌐 IoT டேஷ்போர்டு</span></a></li>
-            <li><a href="career.html"><i class="fas fa-briefcase"></i> <span data-ta="📄 வேலைவாய்ப்பு (Career)" data-en="📄 Career">வேலைவாய்ப்பு (Career)</span></a></li>
+            <li><a href="career.html"><i class="fas fa-briefcase"></i> <span data-ta="📄 வேலைவாய்ப்பு (Career)" data-en="📄 Career">📄 வேலைவாய்ப்பு (Career)</span></a></li>
             <li><a href="contact.html"><i class="fas fa-envelope"></i> <span data-ta="📞 தொடர்புக்கு" data-en="📞 Contact">📞 தொடர்புக்கு</span></a></li>
             <li><a href="aboutus.html"><i class="fas fa-info-circle"></i> <span data-ta="ℹ️ எங்களைப் பற்றி" data-en="ℹ️ About Us">ℹ️ எங்களைப் பற்றி</span></a></li>
             <li><button class="lang-sidebar-btn" id="langSidebarBtn" onclick="toggleLanguage()">English</button></li>
@@ -165,60 +150,40 @@
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
     <div class="container">
-        <h2 style="margin-bottom: 20px; color: #fff; text-align: center; font-size: 20px;" data-ta="🔥 காலிப்பணியிடங்கள் (Current Openings)" data-en="🔥 Current Openings">🔥 காலிப்பணியிடங்கள் (Current Openings)</h2>
-
-        <div class="job-card">
-            <h3>1. PCB டிசைன் இன்ஜினியர் (PCB Design Engineer)</h3>
-            <p><b data-ta="தகுதி:" data-en="Qualification:">தகுதி:</b> B.E / B.Tech (ECE/EEE) அல்லது சம்மந்தப்பட்ட துறையில் முன்அனுபவம்.</p>
-            <p><b data-ta="விவரம்:" data-en="Description:">விவரம்:</b> எலக்ட்ரானிக்ஸ் சர்க்யூட் போர்டு டிசைனிங் மற்றும் புரோட்டோடைப்பிங் வேலைகள்.</p>
+        
+        <div class="about-hero">
+            <h2 data-ta="எங்களைப் பற்றி (About Us)" data-en="About Us">எங்களைப் பற்றி (About Us)</h2>
+            <p data-ta="நவீன தொழில்நுட்பம் மற்றும் ஆட்டோமேஷன் தீர்வுகளுடன் உங்கள் வாழ்க்கையை எளிமையாக்குவதில் தமிழன் எனர்ஜி சிஸ்டம்ஸ் முன்னணி வகிக்கிறது." data-en="Thamizhan Energy Systems leads in simplifying your life with modern technology and automation solutions.">நவீன தொழில்நுட்பம் மற்றும் ஆட்டோமேஷன் தீர்வுகளுடன் உங்கள் வாழ்க்கையை எளிமையாக்குவதில் தமிழன் எனர்ஜி சிஸ்டம்ஸ் முன்னணி வகிக்கிறது.</p>
         </div>
 
-        <div class="job-card" style="border-left-color: #2196F3;">
-            <h3>2. கணக்காளர் (Accountant)</h3>
-            <p><b data-ta="தகுதி:" data-en="Qualification:">தகுதி:</b> B.Com / M.Com அல்லது கணக்கியல் துறையில் அனுபவம்.</p>
-            <p><b data-ta="விவரம்:" data-en="Description:">விவரம்:</b> GST, டேலி (Tally) மற்றும் நிறுவனத்தின் வரவு-செலவு கணக்குகளைப் பராமரித்தல்.</p>
+        <div class="content-card">
+            <h3 data-ta="எங்களது பயணம் & வரலாறு (Our Journey)" data-en="Our Journey">எங்களது பயணம் & வரலாறு (Our Journey)</h3>
+            <p data-ta="2018 முதல் 'தமிழன் எலக்ட்ரானிக் சர்வீஸ் பிரொவைடர்' என்ற பெயரில் எலக்ட்ரானிக்ஸ் மற்றும் எலக்ட்ரிக்கல் துறையில் வாடிக்கையாளர்களுக்குச் சிறந்த முறையில் சேவைகளை வழங்கி வெற்றிகரமாக இயங்கி வந்தது. வாடிக்கையாளர்களிடம் எங்களுக்குக் கிடைத்த நம்பிக்கையும் வரவேற்பும் தான் எங்களை அடுத்த கட்டத்திற்கு நகர்த்தியது." data-en="Since 2018, we have been successfully operating as a service provider in the electronics and electrical sector under the name 'Thamizhan Electronic Service Provider'. The trust and welcome we received from our customers pushed us to the next level.">2018 முதல் <b>'தமிழன் எலக்ட்ரானிக் சர்வீஸ் பிரொவைடர்'</b> என்ற பெயரில் எலக்ட்ரானிக்ஸ் மற்றும் எலக்ட்ரிக்கல் துறையில் வாடிக்கையாளர்களுக்குச் சிறந்த முறையில் சேவைகளை வழங்கி வெற்றிகரமாக இயங்கி வந்தது. வாடிக்கையாளர்களிடம் எங்களுக்குக் கிடைத்த நம்பிக்கையும் வரவேற்பும் தான் எங்களை அடுத்த கட்டத்திற்கு நகர்த்தியது.</p>
+            <p data-ta="இதன் தொடர்ச்சியாக, எங்களது நீண்ட கால அனுபவத்தையும் தொழில்நுட்ப அறிவையும் கொண்டு, உலகத் தரம் வாய்ந்த சொந்த தயாரிப்புகளை அறிமுகப்படுத்தும் நோக்கில் உருவாக்கப்பட்டதுதான் 'தமிழன் எனர்ஜி சிஸ்டம்ஸ்' (Thamizhan Energy Systems) ஆகும். தற்போது IoT (இன்டர்நெட் ஆஃப் திங்ஸ்) மற்றும் ஆட்டோமேஷன் தொழில்நுட்பத்தில் அதிநவீன வாட்டர் லெவல் கண்ட்ரோலர் (Water Level Controller) சாதனங்களை வெற்றிகரமாகத் தயாரித்து வழங்கி வருகிறோம்." data-en="Following this, with our long-term experience and technical knowledge, 'Thamizhan Energy Systems' was created with the aim of introducing world-class own products. Currently, we successfully manufacture and supply state-of-the-art Water Level Controller devices in IoT and automation technology.">இதன் தொடர்ச்சியாக, எங்களது நீண்ட கால அனுபவத்தையும் தொழில்நுட்ப அறிவையும் கொண்டு, உலகத் தரம் வாய்ந்த சொந்த தயாரிப்புகளை அறிமுகப்படுத்தும் நோக்கில் உருவாக்கப்பட்டதுதான் <b>'தமிழன் எனர்ஜி சிஸ்டம்ஸ்' (Thamizhan Energy Systems)</b> ஆகும். தற்போது IoT (இன்டர்நெட் ஆஃப் திங்ஸ்) மற்றும் ஆட்டோமேஷன் தொழில்நுட்பத்தில் அதிநவீன வாட்டர் லெவல் கண்ட்ரோலர் (Water Level Controller) சாதனங்களை வெற்றிகரமாகத் தயாரித்து வழங்கி வருகிறோம்.</p>
         </div>
 
-        <div class="apply-box">
-            <h3 data-ta="📝 வேலைக்கு விண்ணப்பிக்க" data-en="📝 Job Application Form"><i class="fas fa-file-signature" style="color:#00ff88;"></i> வேலைக்கு விண்ணப்பிக்க</h3>
-            <form id="jobApplicationForm" onsubmit="submitApplication(event)">
-                <div class="form-group">
-                    <label data-ta="விருக்கும் வேலை (Job Role)" data-en="Job Role">விருக்கும் வேலை (Job Role)</label>
-                    <select id="jobRole" required>
-                        <option value="PCB Design Engineer">PCB டிசைன் இன்ஜினியர்</option>
-                        <option value="Accountant">கணக்காளர் (Accountant)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label data-ta="முழுப் பெயர் (Full Name)" data-en="Full Name">முழுப் பெயர் (Full Name)</label>
-                    <input type="text" id="applicantName" placeholder="உங்களது பெயரை உள்ளிடவும்" required>
-                </div>
-                <div class="form-group">
-                    <label data-ta="பிறந்த தேதி (Date of Birth)" data-en="Date of Birth">பிறந்த தேதி (Date of Birth)</label>
-                    <input type="date" id="applicantDOB" required>
-                </div>
-                <div class="form-group">
-                    <label data-ta="மொபைல் எண் & ஈமெயில் (Phone & Email)" data-en="Phone & Email">மொபைல் எண் & ஈமெயில் (Phone & Email)</label>
-                    <input type="text" id="applicantContact" placeholder="Phone / Email" required>
-                </div>
-                <div class="form-group">
-                    <label data-ta="முகவரி (Address)" data-en="Address">முகவரி (Address)</label>
-                    <textarea id="applicantAddress" rows="2" placeholder="உங்கள் முகவரியை உள்ளிடவும்" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label data-ta="கல்வித் தகுதி & அனுபவம் (Qualification & Description)" data-en="Qualification & Description">கல்வித் தகுதி & அனுபவம் (Qualification & Description)</label>
-                    <textarea id="applicantDesc" rows="3" placeholder="உங்கள் கல்வி மற்றும் முந்தைய அனுபவத்தைப் பற்றி எழுதவும்" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label data-ta="ரெஸ்யூம் அப்லோட் (Upload Resume - PDF/Doc)" data-en="Upload Resume (PDF/Doc)">ரெஸ்யூம் அப்லோட் (Upload Resume - PDF/Doc)</label>
-                    <input type="file" id="applicantResume" accept=".pdf,.doc,.docx" required>
-                </div>
-                <button type="submit" class="btn" data-ta="விண்ணப்பத்தைச் சமர்ப்பிக்கவும்" data-en="Submit Application">விண்ணப்பத்தைச் சமர்ப்பிக்கவும்</button>
-            </form>
+        <div class="vision-mission-grid">
+            <div class="vm-card">
+                <h4 data-ta="🎯 எங்களது முக்கிய நோக்கம் (Our Mission)" data-en="🎯 Our Mission">🎯 எங்களது முக்கிய நோக்கம் (Our Mission)</h4>
+                <p data-ta="உயர்தரமான எலக்ட்ரானிக் சாதனங்களை மிகச் சரியான மற்றும் நியாயமான விலையில் அனைத்து தர மக்களுக்கும் விநியோகிப்பது. புதிய மற்றும் மேம்பட்ட டெக்னாலஜிகள் மூலம் மனிதர்களின் அன்றாடப் பணிகளை எளிதாக்கி, உலகை அடுத்த கட்டத்திற்கு எடுத்துச் செல்வதே எங்களது பிரதான நோக்கமாகும்." data-en="To distribute high-quality electronic devices at very fair and reasonable prices to all strata of people. Our main objective is to simplify people's daily chores through new and advanced technologies and take the world to the next level.">உயர்தரமான எலக்ட்ரானிக் சாதனங்களை மிகச் சரியான மற்றும் நியாயமான விலையில் அனைத்து தர மக்களுக்கும் விநியோகிப்பது. புதிய மற்றும் மேம்பட்ட டெக்னாலஜிகள் மூலம் மனிதர்களின் அன்றாடப் பணிகளை எளிதாக்கி, உலகை அடுத்த கட்டத்திற்கு எடுத்துச் செல்வதே எங்களது பிரதான நோக்கமாகும்.</p>
+            </div>
+            <div class="vm-card">
+                <h4 data-ta="💡 எதிர்கால இலக்கு (Our Vision)" data-en="💡 Our Vision">💡 எதிர்கால இலக்கு (Our Vision)</h4>
+                <p data-ta="இந்தியாவின் முன்னணி ஸ்மார்ட் ஆட்டோமேஷன் மற்றும் ஐஓடி (IoT) தயாரிப்பு நிறுவனமாக உருவெடுப்பதுடன், வீடுகள் மற்றும் தொழிற்சாலைகளுக்குத் தேவையான அதிநவீன மின்சாதனத் தீர்வுகளைத் தொடர்ச்சியாக வழங்குவது." data-en="To emerge as India's leading smart automation and IoT manufacturing company, and continuously provide state-of-the-art electrical appliance solutions required for homes and industries.">இந்தியாவின் முன்னணி ஸ்மார்ட் ஆட்டோமேஷன் மற்றும் ஐஓடி (IoT) தயாரிப்பு நிறுவனமாக உருவெடுப்பதுடன், வீடுகள் மற்றும் தொழிற்சாலைகளுக்குத் தேவையான அதிநவீன மின்சாதனத் தீர்வுகளைத் தொடர்ச்சியாக வழங்குவது.</p>
+            </div>
         </div>
+
+        <div class="founder-section">
+            <h3 data-ta="சி. பாலசுப்பிரமணியம் B.E" data-en="C. Balasubramanian B.E">சி. பாலசுப்பிரமணியம் B.E</h3>
+            <div class="title" data-ta="CEO & Founder - தமிழன் எனர்ஜி சிஸ்டம்ஸ்" data-en="CEO & Founder - Thamizhan Energy Systems">CEO & Founder - தமிழன் எனர்ஜி சிஸ்டம்ஸ்</div>
+            <p data-ta='"தொழில்நுட்பம் எளிமையானதாகவும், அனைவரையும் சென்றடையும் வகையிலும் இருக்க வேண்டும் என்ற லட்சியத்துடன் எங்கள் தயாரிப்புகள் உருவாக்கப்படுகின்றன."' data-en='"Our products are created with the ambition that technology should be simple and accessible to everyone.'">"தொழில்நுட்பம் எளிமையானதாகவும், அனைவரையும் சென்றடையும் வகையிலும் இருக்க வேண்டும் என்ற லட்சியத்துடன் எங்கள் தயாரிப்புகள் உருவாக்கப்படுகின்றன."</p>
+        </div>
+
     </div>
 
-    <footer><p data-ta="&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ்." data-en="&copy; 2026 Thamizhan Energy Systems.">&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ்.</p></footer>
+    <footer>
+        <p data-ta="&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை." data-en="&copy; 2026 Thamizhan Energy Systems. All Rights Reserved.">&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
+    </footer>
 
     <script>
         function toggleSidebar() {
@@ -255,39 +220,7 @@
         document.addEventListener("DOMContentLoaded", function() {
             applyLanguage();
         });
-
-        function submitApplication(event) {
-            event.preventDefault();
-
-            let role = document.getElementById('jobRole').value;
-            let name = document.getElementById('applicantName').value.trim();
-            let dob = document.getElementById('applicantDOB').value;
-            let contact = document.getElementById('applicantContact').value.trim();
-            let address = document.getElementById('applicantAddress').value.trim();
-            let desc = document.getElementById('applicantDesc').value.trim();
-            let resumeInput = document.getElementById('applicantResume');
-
-            let resumeName = resumeInput.files.length > 0 ? resumeInput.files[0].name : "No file uploaded";
-
-            let newApp = {
-                id: 'JOB-' + Math.floor(1000 + Math.random() * 9000),
-                role: role,
-                name: name,
-                dob: dob,
-                contact: contact,
-                address: address,
-                desc: desc,
-                resume: resumeName,
-                date: new Date().toLocaleDateString()
-            };
-
-            let allApps = JSON.parse(localStorage.getItem('jobApplications')) || [];
-            allApps.push(newApp);
-            localStorage.setItem('jobApplications', JSON.stringify(allApps));
-
-            alert(currentLang === 'ta' ? "உங்களது விண்ணப்பம் வெற்றிகரமாகச் சமர்ப்பிக்கப்பட்டது!" : "Your application has been submitted successfully!");
-            document.getElementById('jobApplicationForm').reset();
-        }
     </script>
+
 </body>
 </html>
