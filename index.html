@@ -15,93 +15,93 @@
         a { text-decoration: none; color: inherit; transition: 0.3s; }
         
         /* Header & Logo Section */
-        header {
-            background: #fff;
-            padding: 10px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+        header { 
+            background: rgba(15, 32, 39, 0.95); 
+            backdrop-filter: blur(10px);
+            color: white; 
+            padding: 12px 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .brand-section { display: flex; align-items: center; gap: 12px; }
-        .logo-img { height: 50px; width: auto; display: block; }
-        .company-title h1 { font-size: 16px; color: #0f2027; font-weight: 700; line-height: 1.2; }
-        .company-title p { font-size: 10px; color: #555; letter-spacing: 0.5px; }
+        .brand-section { display: flex; align-items: center; gap: 10px; }
+        .logo-img { height: 38px; width: auto; object-fit: contain; }
         
-        .nav-container { display: flex; align-items: center; gap: 15px; }
-        nav ul { list-style: none; display: flex; gap: 12px; align-items: center; }
-        
-        nav ul li a {
-            background: #f0f2f5;
-            color: #333;
-            padding: 7px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 12px;
-            display: inline-block;
-            transition: 0.3s;
+        .brand-title h1 { 
+            font-size: 15px; 
+            color: #ffffff; 
+            font-weight: 700; 
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
         }
-        nav ul li a:hover { background: #0f2027; color: #00ff88; }
-
-        .lang-btn {
-            background: #0f2027;
-            color: #00ff88;
-            border: 2px solid #00ff88;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 12px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .lang-btn:hover { background: #00ff88; color: #0f2027; }
-
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 28px;
-            height: 20px;
-            cursor: pointer;
-            background: transparent;
-            border: none;
-        }
-        .menu-toggle span {
-            width: 100%;
-            height: 3px;
-            background-color: #0f2027;
-            border-radius: 3px;
-            transition: 0.3s;
+        .brand-tagline { 
+            font-size: 10px; 
+            font-weight: 500; 
+            background: linear-gradient(90deg, #dfdfdf, #ffffff, #859398, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
         }
 
-        .sidebar-menu { position: fixed; top: 0; left: -320px; width: 300px; height: 100%; background: #fff; box-shadow: 5px 0 15px rgba(0,0,0,0.2); z-index: 3000; transition: 0.3s ease-in-out; padding: 20px; overflow-y: auto; color: #333; }
+        .menu-btn { 
+            background: transparent; 
+            border: none; 
+            color: white; 
+            cursor: pointer; 
+            font-size: 20px;
+            padding: 5px;
+        }
+
+        .sidebar-menu { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: #fff; box-shadow: 5px 0 15px rgba(0,0,0,0.2); z-index: 3000; transition: 0.3s ease-in-out; padding: 20px; overflow-y: auto; color: #333; }
         .sidebar-menu.active { left: 0; }
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
         .sidebar-header h3 { font-size: 16px; color: #0f2027; }
-        .sidebar-close { font-size: 24px; cursor: pointer; color: #666; }
+        .sidebar-close { font-size: 24px; cursor: pointer; color: #666; background: none; border: none; }
         .sidebar-links { list-style: none; }
         .sidebar-links li { margin-bottom: 12px; }
         .sidebar-links a { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: none; border: none; font-size: 14px; font-weight: 600; color: #333; text-decoration: none; padding: 10px; border-radius: 6px; transition: 0.2s; }
         .sidebar-links a:hover { background: #f0f2f5; color: #00ff88; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 2500; }
+        
+        .lang-sidebar-btn {
+            background: #0f2027;
+            color: #00ff88;
+            border: 2px solid #00ff88;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+        .lang-sidebar-btn:hover { background: #00ff88; color: #0f2027; }
+
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); display: none; z-index: 2500; }
         .overlay.active { display: block; }
 
-        /* Sliding Images Hero Section Styles */
-        .hero {
-            position: relative;
-            height: 70vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        /* Exact 1674 x 939 px Slider Box with Button Below */
+        .hero-wrapper {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 15px;
             text-align: center;
-            color: white;
-            padding: 0 20px;
-            overflow: hidden;
+        }
+
+        .hero-slider-box {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1674 / 939; /* Exact aspect ratio constraint */
             background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
         }
 
         .slider-container {
@@ -110,7 +110,6 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1;
         }
 
         .slide {
@@ -121,71 +120,54 @@
             height: 100%;
             opacity: 0;
             transition: opacity 1s ease-in-out;
-            background-size: cover;
+            background-size: contain; /* Ensures 1674x939 px image is fully visible without crop */
+            background-repeat: no-repeat;
             background-position: center center;
+            background-color: #0f2027;
         }
 
         .slide.active {
             opacity: 1;
         }
 
-        /* Dark overlay to make button clearly visible over slides */
-        .hero::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 2;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 3;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        .button-container {
+            margin-top: 20px;
         }
 
         .btn { 
             background: #00ff88; 
             color: #0f2027; 
-            padding: 12px 30px; 
+            padding: 12px 35px; 
             border-radius: 30px; 
             font-weight: 700; 
-            font-size: 15px; 
+            font-size: 14px; 
             text-transform: uppercase; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             transition: 0.3s;
         }
         .btn:hover { background: #00cc6a; transform: translateY(-2px); }
 
         /* Products Section (Only Specs Overview now) */
-        .products-section { padding: 60px 20px; max-width: 1200px; margin: 0 auto; text-align: center; }
-        .section-title { font-size: 28px; color: #0f2027; margin-bottom: 15px; }
-        .section-desc { color: #666; margin-bottom: 40px; font-size: 14px; }
+        .products-section { padding: 40px 20px; max-width: 1100px; margin: 0 auto; text-align: center; }
+        .section-title { font-size: 24px; color: #0f2027; margin-bottom: 10px; }
+        .section-desc { color: #666; margin-bottom: 30px; font-size: 13px; }
 
         .specs-image-box { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-top: 20px; }
         .specs-img { width: 100%; height: auto; border-radius: 8px; display: block; }
 
         /* Future Devices Section */
-        .future-section { background: #0f2027; color: #fff; padding: 50px 20px; text-align: center; margin-top: 50px; }
-        .future-section h2 { color: #fff; font-size: 26px; margin-bottom: 15px; }
+        .future-section { background: #0f2027; color: #fff; padding: 40px 20px; text-align: center; margin-top: 40px; }
+        .future-section h2 { color: #fff; font-size: 22px; margin-bottom: 10px; }
         .future-image-box { max-width: 1000px; margin: 20px auto 0 auto; background: #182830; padding: 15px; border-radius: 12px; }
         .future-img { width: 100%; height: auto; border-radius: 8px; display: block; }
 
         /* Footer */
-        footer { background: #0c1a1f; color: #aaa; padding: 25px; text-align: center; font-size: 12px; }
+        footer { background: #0c1a1f; color: #aaa; padding: 20px; text-align: center; font-size: 12px; }
 
-        /* Mobile Responsive Styles (<= 768px) */
-        @media (max-width: 768px) {
-            header { padding: 10px 15px; }
-            .logo-img { height: 42px; }
-            .menu-toggle { display: flex; }
-            .nav-container { display: none; }
+        @media (max-width: 480px) {
+            .brand-tagline { font-size: 7px; letter-spacing: 0.5px; }
+            .brand-title h1 { font-size: 12px; }
         }
     </style>
 </head>
@@ -193,60 +175,44 @@
 
     <header>
         <div class="brand-section">
-            <button class="menu-toggle" id="mobileMenuBtn" onclick="toggleSidebar()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <img src="1.png" alt="Thamizhi Logo" class="logo-img">
-            <div class="company-title">
-                <h1 data-ta="தமிழன் எனர்ஜி சிஸ்டம்ஸ்" data-en="Thamizhan Energy Systems">தமிழன் எனர்ஜி சிஸ்டம்ஸ்</h1>
-                <p>The Name of Quality, The Pride of Automation</p>
+            <button type="button" class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <img src="1.png" alt="Logo" class="logo-img">
+            <div class="brand-title">
+                <h1 data-ta="தமிழன் எனர்ஜி சிஸ்டம்ஸ்" data-en="Thamizhan Energy Systems">Thamizhan Energy Systems</h1>
+                <div class="brand-tagline">The name of quality, The pride of Automation</div>
             </div>
-        </div>
-
-        <div class="nav-container">
-            <nav>
-                <ul>
-                    <li><a href="index.html" data-ta="🏠 முகப்பு" data-en="🏠 Home">🏠 முகப்பு</a></li>
-                    <li><a href="shop.html" data-ta="🛒 ஸ்டோர்" data-en="🛒 Store">🛒 ஸ்டோர்</a></li>
-                    <li><a href="dashboard.html" data-ta="🌐 IoT டேஷ்போர்டு" data-en="🌐 IoT Dashboard">🌐 IoT டேஷ்போர்டு</a></li>
-                    <li><a href="career.html" data-ta="📄 வேலைவாய்ப்பு" data-en="📄 Career">📄 வேலைவாய்ப்பு</a></li>
-                    <li><a href="contact.html" data-ta="📞 தொடர்புக்கு" data-en="📞 Contact">📞 தொடர்புக்கு</a></li>
-                    <li><a href="aboutus.html" data-ta="ℹ️ எங்களைப் பற்றி" data-en="ℹ️ About Us">ℹ️ எங்களைப் பற்றி</a></li>
-                </ul>
-            </nav>
-            <button class="lang-btn" id="langToggleBtn" onclick="toggleLanguage()">English</button>
         </div>
     </header>
 
     <div class="sidebar-menu" id="sidebarMenu">
         <div class="sidebar-header">
             <h3 data-ta="மெனு பார்" data-en="Menu Bar">மெனு பார்</h3>
-            <span class="sidebar-close" onclick="toggleSidebar()">&times;</span>
+            <button class="sidebar-close" onclick="toggleSidebar()">&times;</button>
         </div>
         <ul class="sidebar-links">
             <li><a href="index.html"><i class="fas fa-home"></i> <span data-ta="🏠 முகப்பு" data-en="🏠 Home">🏠 முகப்பு</span></a></li>
-            <li><a href="shop.html"><i class="fas fa-store"></i> <span data-ta="🛒 ஸ்டோர்" data-en="🛒 Store">🛒 ஸ்டோர்</span></a></li>
+            <li><a href="shop.html"><i class="fas fa-store"></i> <span data-ta="🛒 ஆன்லைன் ஸ்டோர் (Shop)" data-en="🛒 Online Store (Shop)">ஆன்லைன் ஸ்டோர் (Shop)</span></a></li>
             <li><a href="dashboard.html"><i class="fas fa-network-wired"></i> <span data-ta="🌐 IoT டேஷ்போர்டு" data-en="🌐 IoT Dashboard">🌐 IoT டேஷ்போர்டு</span></a></li>
-            <li><a href="career.html"><i class="fas fa-briefcase"></i> <span data-ta="📄 வேலைவாய்ப்பு (Career)" data-en="📄 Career">📄 வேலைவாய்ப்பு (Career)</span></a></li>
+            <li><a href="career.html"><i class="fas fa-briefcase"></i> <span data-ta="📄 வேலைவாய்ப்பு (Career)" data-en="📄 Career">வேலைவாய்ப்பு (Career)</span></a></li>
             <li><a href="contact.html"><i class="fas fa-envelope"></i> <span data-ta="📞 தொடர்புக்கு" data-en="📞 Contact">📞 தொடர்புக்கு</span></a></li>
             <li><a href="aboutus.html"><i class="fas fa-info-circle"></i> <span data-ta="ℹ️ எங்களைப் பற்றி" data-en="ℹ️ About Us">ℹ️ எங்களைப் பற்றி</span></a></li>
-            <li><button class="lang-btn" id="sidebarLangBtn" onclick="toggleLanguage()" style="width: 100%; margin-top: 10px;">English</button></li>
+            <li><button class="lang-sidebar-btn" id="langSidebarBtn" onclick="toggleLanguage()">English</button></li>
         </ul>
     </div>
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
-    <section class="hero" id="home">
-        <div class="slider-container" id="sliderContainer">
-            <div class="slide active" style="background-image: url('slide1.png');"></div>
-            <div class="slide" style="background-image: url('slide2.png');"></div>
-            <div class="slide" style="background-image: url('slide3.png');"></div>
+    <div class="hero-wrapper" id="home">
+        <div class="hero-slider-box">
+            <div class="slider-container" id="sliderContainer">
+                <div class="slide active" style="background-image: url('slide1.png');"></div>
+                <div class="slide" style="background-image: url('slide2.png');"></div>
+                <div class="slide" style="background-image: url('slide3.png');"></div>
+            </div>
         </div>
-        <div class="hero-content">
+        <div class="button-container">
             <a href="shop.html" class="btn" data-ta="எங்கள் தயாரிப்புகள்" data-en="Our Products">எங்கள் தயாரிப்புகள்</a>
         </div>
-    </section>
+    </div>
 
     <section class="products-section" id="products">
         <h2 class="section-title" data-ta="தொழில்நுட்ப விவரங்கள் (Specifications Overview)" data-en="Specifications Overview">தொழில்நுட்ப விவரங்கள் (Specifications Overview)</h2>
@@ -290,11 +256,6 @@
         setInterval(nextSlide, 3000);
 
         let currentLang = localStorage.getItem('siteLang') || 'ta';
-
-        document.addEventListener("DOMContentLoaded", function() {
-            applyLanguage();
-        });
-
         function toggleLanguage() {
             currentLang = (currentLang === 'ta') ? 'en' : 'ta';
             localStorage.setItem('siteLang', currentLang);
@@ -303,12 +264,10 @@
 
         function applyLanguage() {
             if (currentLang === 'en') {
-                document.getElementById('langToggleBtn').innerText = 'தமிழ்';
-                document.getElementById('sidebarLangBtn').innerText = 'தமிழ்';
+                document.getElementById('langSidebarBtn').innerText = 'தமிழ்';
                 document.getElementById('htmlRoot').setAttribute('lang', 'en');
             } else {
-                document.getElementById('langToggleBtn').innerText = 'English';
-                document.getElementById('sidebarLangBtn').innerText = 'English';
+                document.getElementById('langSidebarBtn').innerText = 'English';
                 document.getElementById('htmlRoot').setAttribute('lang', 'ta');
             }
 
@@ -321,6 +280,10 @@
                 }
             });
         }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            applyLanguage();
+        });
     </script>
 
 </body>
