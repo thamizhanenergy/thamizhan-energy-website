@@ -97,8 +97,8 @@
         .hero-slider-box {
             position: relative;
             width: 100%;
-            aspect-ratio: 1674 / 939; /* Exact aspect ratio constraint */
-            background: #000;
+            aspect-ratio: 1674 / 939; 
+            background: #0f2027;
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 8px 25px rgba(0,0,0,0.15);
@@ -112,18 +112,16 @@
             height: 100%;
         }
 
+        /* Standard <img> tag styling to display images directly */
         .slide {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            object-fit: contain;
             opacity: 0;
             transition: opacity 1s ease-in-out;
-            background-size: contain; /* Ensures 1674x939 px image is fully visible without crop */
-            background-repeat: no-repeat;
-            background-position: center center;
-            background-color: #0f2027;
         }
 
         .slide.active {
@@ -148,7 +146,7 @@
         }
         .btn:hover { background: #00cc6a; transform: translateY(-2px); }
 
-        /* Products Section (Only Specs Overview now) */
+        /* Products Section */
         .products-section { padding: 40px 20px; max-width: 1100px; margin: 0 auto; text-align: center; }
         .section-title { font-size: 24px; color: #0f2027; margin-bottom: 10px; }
         .section-desc { color: #666; margin-bottom: 30px; font-size: 13px; }
@@ -204,9 +202,9 @@
     <div class="hero-wrapper" id="home">
         <div class="hero-slider-box">
             <div class="slider-container" id="sliderContainer">
-                <div class="slide active" style="background-image: url('slide1.png');"></div>
-                <div class="slide" style="background-image: url('slide2.png');"></div>
-                <div class="slide" style="background-image: url('slide3.png');"></div>
+                <img src="slide1.png" class="slide active" alt="Slide 1">
+                <img src="slide2.png" class="slide" alt="Slide 2">
+                <img src="slide3.png" class="slide" alt="Slide 3">
             </div>
         </div>
         <div class="button-container">
@@ -242,7 +240,7 @@
             document.getElementById('overlay').classList.toggle('active');
         }
 
-        // Image Slider Script (Slides every 3 seconds)
+        // Direct Image Slider Script using <img> tags
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         
