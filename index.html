@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>தமிழன் எனர்ஜி சிஸ்டம்ஸ் | Thamizhan Energy Systems</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <link rel="manifest" href="manifest.json">
@@ -85,7 +85,7 @@
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); display: none; z-index: 2500; }
         .overlay.active { display: block; }
 
-        /* Perfect 1674x939 Ratio Slider Box */
+        /* Exact 1024 x 576 px Ratio Slider Box */
         .hero-wrapper {
             max-width: 1100px;
             margin: 30px auto;
@@ -96,7 +96,7 @@
         .hero-slider-box {
             position: relative;
             width: 100%;
-            aspect-ratio: 1674 / 939; 
+            aspect-ratio: 1024 / 576; /* Exact ratio of the uploaded images */
             background: #0f2027;
             border-radius: 12px;
             overflow: hidden;
@@ -117,7 +117,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Ensures the image covers the box perfectly without distortion */
+            object-fit: cover; /* Perfectly fits the image without stretching */
             opacity: 0;
             transition: opacity 1s ease-in-out;
         }
