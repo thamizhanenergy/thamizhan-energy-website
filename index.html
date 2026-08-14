@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>தமிழன் எனர்ஜி சிஸ்டம்ஸ் | Thamizhan Energy Systems</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <link rel="manifest" href="manifest.json">
@@ -14,45 +14,43 @@
         body { background-color: #f4f7f6; color: #333; line-height: 1.6; overflow-x: hidden; }
         a { text-decoration: none; color: inherit; transition: 0.3s; }
         
-        /* Header & Logo Section */
+        /* Clean White Header Section */
         header { 
-            background: rgba(15, 32, 39, 0.95); 
-            backdrop-filter: blur(10px);
-            color: white; 
-            padding: 12px 20px; 
+            background: #ffffff; 
+            color: #0f2027; 
+            padding: 10px 15px; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
             position: sticky; 
             top: 0; 
             z-index: 1000; 
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            border-bottom: 1px solid #eaeaea;
         }
         .brand-section { display: flex; align-items: center; gap: 10px; }
-        .logo-img { height: 38px; width: auto; object-fit: contain; }
+        .logo-img { height: 42px; width: auto; object-fit: contain; }
         
         .brand-title h1 { 
             font-size: 15px; 
-            color: #ffffff; 
+            color: #0f2027; 
             font-weight: 700; 
-            letter-spacing: 0.5px;
-            margin-bottom: 2px;
+            letter-spacing: 0.3px;
+            margin-bottom: 1px;
         }
         .brand-tagline { 
-            font-size: 10px; 
-            font-weight: 500; 
-            background: linear-gradient(90deg, #dfdfdf, #ffffff, #859398, #ffffff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 9px; 
+            font-weight: 600; 
+            color: #555;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             white-space: nowrap;
         }
 
         .menu-btn { 
             background: transparent; 
             border: none; 
-            color: white; 
+            color: #0f2027; 
             cursor: pointer; 
             font-size: 20px;
             padding: 5px;
@@ -86,10 +84,10 @@
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); display: none; z-index: 2500; }
         .overlay.active { display: block; }
 
-        /* Exact 1674 x 939 px Slider Box with Button Below */
+        /* Slider Box */
         .hero-wrapper {
             max-width: 1100px;
-            margin: 30px auto;
+            margin: 25px auto;
             padding: 0 15px;
             text-align: center;
         }
@@ -97,11 +95,11 @@
         .hero-slider-box {
             position: relative;
             width: 100%;
-            aspect-ratio: 1674 / 939; /* Exact aspect ratio constraint */
+            aspect-ratio: 1674 / 939; 
             background: #000;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
         }
 
         .slider-container {
@@ -120,10 +118,10 @@
             height: 100%;
             opacity: 0;
             transition: opacity 1s ease-in-out;
-            background-size: contain; /* Ensures 1674x939 px image is fully visible without crop */
+            background-size: contain; 
             background-repeat: no-repeat;
             background-position: center center;
-            background-color: #0f2027;
+            background-color: #f4f7f6;
         }
 
         .slide.active {
@@ -131,43 +129,50 @@
         }
 
         .button-container {
-            margin-top: 20px;
+            margin-top: 18px;
         }
 
         .btn { 
-            background: #00ff88; 
-            color: #0f2027; 
-            padding: 12px 35px; 
+            background: #0f2027; 
+            color: #00ff88; 
+            padding: 12px 32px; 
             border-radius: 30px; 
             font-weight: 700; 
             font-size: 14px; 
             text-transform: uppercase; 
             display: inline-block;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             transition: 0.3s;
+            border: 2px solid #00ff88;
         }
-        .btn:hover { background: #00cc6a; transform: translateY(-2px); }
+        .btn:hover { background: #00ff88; color: #0f2027; transform: translateY(-2px); }
 
-        /* Products Section (Only Specs Overview now) */
+        /* Products Section */
         .products-section { padding: 40px 20px; max-width: 1100px; margin: 0 auto; text-align: center; }
-        .section-title { font-size: 24px; color: #0f2027; margin-bottom: 10px; }
-        .section-desc { color: #666; margin-bottom: 30px; font-size: 13px; }
+        .section-title { font-size: 24px; color: #0f2027; margin-bottom: 8px; }
+        .section-desc { color: #666; margin-bottom: 25px; font-size: 13px; }
 
-        .specs-image-box { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-top: 20px; }
+        .specs-image-box { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); margin-top: 15px; }
         .specs-img { width: 100%; height: auto; border-radius: 8px; display: block; }
 
         /* Future Devices Section */
         .future-section { background: #0f2027; color: #fff; padding: 40px 20px; text-align: center; margin-top: 40px; }
-        .future-section h2 { color: #fff; font-size: 22px; margin-bottom: 10px; }
+        .future-section h2 { color: #fff; font-size: 24px; margin-bottom: 8px; }
         .future-image-box { max-width: 1000px; margin: 20px auto 0 auto; background: #182830; padding: 15px; border-radius: 12px; }
         .future-img { width: 100%; height: auto; border-radius: 8px; display: block; }
 
         /* Footer */
-        footer { background: #0c1a1f; color: #aaa; padding: 20px; text-align: center; font-size: 12px; }
+        footer { background: #0c1a1f; color: #aaa; padding: 25px; text-align: center; font-size: 12px; }
 
+        /* Mobile Adjustments */
         @media (max-width: 480px) {
-            .brand-tagline { font-size: 7px; letter-spacing: 0.5px; }
+            header { padding: 8px 12px; }
+            .logo-img { height: 35px; }
             .brand-title h1 { font-size: 12px; }
+            .brand-tagline { font-size: 7px; letter-spacing: 0.2px; }
+            .menu-btn { font-size: 18px; }
+            .section-title { font-size: 20px; }
+            .section-desc { font-size: 12px; }
         }
     </style>
 </head>
