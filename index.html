@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>தமிழன் எனர்ஜி சிஸ்டம்ஸ் | Thamizhan Energy Systems</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <link rel="manifest" href="manifest.json">
@@ -19,7 +19,7 @@
             background: rgba(15, 32, 39, 0.95); 
             backdrop-filter: blur(10px);
             color: white; 
-            padding: 12px 20px; 
+            padding: 10px 15px; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
@@ -28,24 +28,24 @@
             z-index: 1000; 
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .brand-section { display: flex; align-items: center; gap: 10px; }
-        .logo-img { height: 38px; width: auto; object-fit: contain; }
+        .brand-section { display: flex; align-items: center; gap: 8px; }
+        .logo-img { height: 32px; width: auto; object-fit: contain; }
         
         .brand-title h1 { 
-            font-size: 15px; 
+            font-size: 13px; 
             color: #ffffff; 
             font-weight: 700; 
-            letter-spacing: 0.5px;
-            margin-bottom: 2px;
+            letter-spacing: 0.3px;
+            margin-bottom: 1px;
         }
         .brand-tagline { 
-            font-size: 10px; 
+            font-size: 9px; 
             font-weight: 500; 
             background: linear-gradient(90deg, #dfdfdf, #ffffff, #859398, #ffffff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             white-space: nowrap;
         }
 
@@ -54,8 +54,8 @@
             border: none; 
             color: white; 
             cursor: pointer; 
-            font-size: 20px;
-            padding: 5px;
+            font-size: 18px;
+            padding: 4px;
         }
 
         .sidebar-menu { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: #fff; box-shadow: 5px 0 15px rgba(0,0,0,0.2); z-index: 3000; transition: 0.3s ease-in-out; padding: 20px; overflow-y: auto; color: #333; }
@@ -86,22 +86,22 @@
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); display: none; z-index: 2500; }
         .overlay.active { display: block; }
 
-        /* Exact 1674 x 939 px Slider Box with Button Below */
+        /* Slider Box */
         .hero-wrapper {
             max-width: 1100px;
-            margin: 30px auto;
-            padding: 0 15px;
+            margin: 20px auto;
+            padding: 0 12px;
             text-align: center;
         }
 
         .hero-slider-box {
             position: relative;
             width: 100%;
-            aspect-ratio: 1674 / 939; /* Exact aspect ratio constraint */
+            aspect-ratio: 1674 / 939; 
             background: #000;
-            border-radius: 12px;
+            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
         }
 
         .slider-container {
@@ -120,7 +120,7 @@
             height: 100%;
             opacity: 0;
             transition: opacity 1s ease-in-out;
-            background-size: contain; /* Ensures 1674x939 px image is fully visible without crop */
+            background-size: contain; 
             background-repeat: no-repeat;
             background-position: center center;
             background-color: #0f2027;
@@ -131,43 +131,49 @@
         }
 
         .button-container {
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         .btn { 
             background: #00ff88; 
             color: #0f2027; 
-            padding: 12px 35px; 
+            padding: 10px 25px; 
             border-radius: 30px; 
             font-weight: 700; 
-            font-size: 14px; 
+            font-size: 13px; 
             text-transform: uppercase; 
             display: inline-block;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             transition: 0.3s;
         }
         .btn:hover { background: #00cc6a; transform: translateY(-2px); }
 
-        /* Products Section (Only Specs Overview now) */
-        .products-section { padding: 40px 20px; max-width: 1100px; margin: 0 auto; text-align: center; }
-        .section-title { font-size: 24px; color: #0f2027; margin-bottom: 10px; }
-        .section-desc { color: #666; margin-bottom: 30px; font-size: 13px; }
+        /* Products Section */
+        .products-section { padding: 30px 15px; max-width: 1100px; margin: 0 auto; text-align: center; }
+        .section-title { font-size: 20px; color: #0f2027; margin-bottom: 8px; }
+        .section-desc { color: #666; margin-bottom: 20px; font-size: 12px; }
 
-        .specs-image-box { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-top: 20px; }
-        .specs-img { width: 100%; height: auto; border-radius: 8px; display: block; }
+        .specs-image-box { background: white; padding: 12px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-top: 15px; }
+        .specs-img { width: 100%; height: auto; border-radius: 6px; display: block; }
 
         /* Future Devices Section */
-        .future-section { background: #0f2027; color: #fff; padding: 40px 20px; text-align: center; margin-top: 40px; }
-        .future-section h2 { color: #fff; font-size: 22px; margin-bottom: 10px; }
-        .future-image-box { max-width: 1000px; margin: 20px auto 0 auto; background: #182830; padding: 15px; border-radius: 12px; }
-        .future-img { width: 100%; height: auto; border-radius: 8px; display: block; }
+        .future-section { background: #0f2027; color: #fff; padding: 30px 15px; text-align: center; margin-top: 30px; }
+        .future-section h2 { color: #fff; font-size: 20px; margin-bottom: 8px; }
+        .future-image-box { max-width: 1000px; margin: 15px auto 0 auto; background: #182830; padding: 12px; border-radius: 10px; }
+        .future-img { width: 100%; height: auto; border-radius: 6px; display: block; }
 
         /* Footer */
-        footer { background: #0c1a1f; color: #aaa; padding: 20px; text-align: center; font-size: 12px; }
+        footer { background: #0c1a1f; color: #aaa; padding: 20px; text-align: center; font-size: 11px; }
 
+        /* Mobile Screen Adjustments */
         @media (max-width: 480px) {
-            .brand-tagline { font-size: 7px; letter-spacing: 0.5px; }
-            .brand-title h1 { font-size: 12px; }
+            header { padding: 8px 12px; }
+            .logo-img { height: 28px; }
+            .brand-title h1 { font-size: 11px; }
+            .brand-tagline { font-size: 7px; letter-spacing: 0.2px; }
+            .menu-btn { font-size: 16px; }
+            .section-title { font-size: 18px; }
+            .section-desc { font-size: 11px; }
         }
     </style>
 </head>
@@ -193,7 +199,7 @@
             <li><a href="index.html"><i class="fas fa-home"></i> <span data-ta="🏠 முகப்பு" data-en="🏠 Home">🏠 முகப்பு</span></a></li>
             <li><a href="shop.html"><i class="fas fa-store"></i> <span data-ta="🛒 ஆன்லைன் ஸ்டோர் (Shop)" data-en="🛒 Online Store (Shop)">ஆன்லைன் ஸ்டோர் (Shop)</span></a></li>
             <li><a href="dashboard.html"><i class="fas fa-network-wired"></i> <span data-ta="🌐 IoT டேஷ்போர்டு" data-en="🌐 IoT Dashboard">🌐 IoT டேஷ்போர்டு</span></a></li>
-            <li><a href="career.html"><i class="fas fa-briefcase"></i> <span data-ta="📄 வேலைவாய்ப்பு (Career)" data-en="📄 Career">வேலைவாய்ப்பு (Career)</span></a></li>
+            <li><a href="career.html"><i class="fas fa-briefcase"></i> <span data-ta="📄 வேலைவாய்ப்பு (Career)" data-en="📄 Career">📄 வேலைவாய்ப்பு (Career)</span></a></li>
             <li><a href="contact.html"><i class="fas fa-envelope"></i> <span data-ta="📞 தொடர்புக்கு" data-en="📞 Contact">📞 தொடர்புக்கு</span></a></li>
             <li><a href="aboutus.html"><i class="fas fa-info-circle"></i> <span data-ta="ℹ️ எங்களைப் பற்றி" data-en="ℹ️ About Us">ℹ️ எங்களைப் பற்றி</span></a></li>
             <li><button class="lang-sidebar-btn" id="langSidebarBtn" onclick="toggleLanguage()">English</button></li>
