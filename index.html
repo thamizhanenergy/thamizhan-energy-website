@@ -32,10 +32,8 @@
         .company-title p { font-size: 10px; color: #555; letter-spacing: 0.5px; }
         
         .nav-container { display: flex; align-items: center; gap: 15px; }
-        
         nav ul { list-style: none; display: flex; gap: 12px; align-items: center; }
         
-        /* Header Menu Buttons Style */
         nav ul li a {
             background: #f0f2f5;
             color: #333;
@@ -46,12 +44,8 @@
             display: inline-block;
             transition: 0.3s;
         }
-        nav ul li a:hover {
-            background: #0f2027;
-            color: #00ff88;
-        }
+        nav ul li a:hover { background: #0f2027; color: #00ff88; }
 
-        /* Language Toggle Button Style */
         .lang-btn {
             background: #0f2027;
             color: #00ff88;
@@ -65,7 +59,6 @@
         }
         .lang-btn:hover { background: #00ff88; color: #0f2027; }
 
-        /* Hamburger Menu Icon (Three Dash) */
         .menu-toggle {
             display: none;
             flex-direction: column;
@@ -84,7 +77,6 @@
             transition: 0.3s;
         }
 
-        /* Sidebar Drawer Menu */
         .sidebar-menu { position: fixed; top: 0; left: -320px; width: 300px; height: 100%; background: #fff; box-shadow: 5px 0 15px rgba(0,0,0,0.2); z-index: 3000; transition: 0.3s ease-in-out; padding: 20px; overflow-y: auto; color: #333; }
         .sidebar-menu.active { left: 0; }
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
@@ -97,9 +89,9 @@
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 2500; }
         .overlay.active { display: block; }
 
-        /* Hero Section */
+        /* Sliding Images Hero Section Styles */
         .hero {
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('4.png') no-repeat center center/cover;
+            position: relative;
             height: 70vh;
             display: flex;
             flex-direction: column;
@@ -108,11 +100,68 @@
             text-align: center;
             color: white;
             padding: 0 20px;
+            overflow: hidden;
+            background: #000;
         }
-        .hero h2 { font-size: 36px; margin-bottom: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-        .hero p { font-size: 16px; max-width: 700px; margin-bottom: 30px; }
-        .btn { background: #00ff88; color: #0f2027; padding: 12px 30px; border-radius: 30px; font-weight: 700; font-size: 15px; text-transform: uppercase; }
-        .btn:hover { background: #00cc6a; }
+
+        .slider-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-size: cover;
+            background-position: center center;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        /* Dark overlay to make button clearly visible over slides */
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 2;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn { 
+            background: #00ff88; 
+            color: #0f2027; 
+            padding: 12px 30px; 
+            border-radius: 30px; 
+            font-weight: 700; 
+            font-size: 15px; 
+            text-transform: uppercase; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: 0.3s;
+        }
+        .btn:hover { background: #00cc6a; transform: translateY(-2px); }
 
         /* Products Section (Only Specs Overview now) */
         .products-section { padding: 60px 20px; max-width: 1200px; margin: 0 auto; text-align: center; }
@@ -135,14 +184,8 @@
         @media (max-width: 768px) {
             header { padding: 10px 15px; }
             .logo-img { height: 42px; }
-            
             .menu-toggle { display: flex; }
-            
-            .nav-container {
-                display: none;
-            }
-            .hero h2 { font-size: 24px; }
-            .hero p { font-size: 13px; }
+            .nav-container { display: none; }
         }
     </style>
 </head>
@@ -195,9 +238,14 @@
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
     <section class="hero" id="home">
-        <h2 data-ta="புரட்சிகரமான நீர் மேலாண்மை" data-en="Revolutionary Water Management">புரட்சிகரமான நீர் மேலாண்மை</h2>
-        <p data-ta="இந்தியாவின் நம்பகமான ஆட்டோமேஷன் மற்றும் ஐஓடி தீர்வுகள். உங்கள் நீரை எளிதாகக் கண்காணிக்கவும் கட்டுப்படுத்தவும்." data-en="India's trusted automation and IoT solutions. Easily monitor and control your water.">இந்தியாவின் நம்பகமான ஆட்டோமேஷன் மற்றும் ஐஓடி தீர்வுகள். உங்கள் நீரை எளிதாகக் கண்காணிக்கவும் கட்டுப்படுத்தவும்.</p>
-        <a href="shop.html" class="btn" data-ta="எங்கள் தயாரிப்புகள்" data-en="Our Products">எங்கள் தயாரிப்புகள்</a>
+        <div class="slider-container" id="sliderContainer">
+            <div class="slide active" style="background-image: url('slide1.png');"></div>
+            <div class="slide" style="background-image: url('slide2.png');"></div>
+            <div class="slide" style="background-image: url('slide3.png');"></div>
+        </div>
+        <div class="hero-content">
+            <a href="shop.html" class="btn" data-ta="எங்கள் தயாரிப்புகள்" data-en="Our Products">எங்கள் தயாரிப்புகள்</a>
+        </div>
     </section>
 
     <section class="products-section" id="products">
@@ -227,6 +275,19 @@
             document.getElementById('sidebarMenu').classList.toggle('active');
             document.getElementById('overlay').classList.toggle('active');
         }
+
+        // Image Slider Script (Slides every 3 seconds)
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        
+        function nextSlide() {
+            if (slides.length === 0) return;
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+        
+        setInterval(nextSlide, 3000);
 
         let currentLang = localStorage.getItem('siteLang') || 'ta';
 
