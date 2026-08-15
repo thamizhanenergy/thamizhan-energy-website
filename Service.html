@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ta" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>சேவைகள் (Services) | தமிழன் எலக்ட்ரானிக் சர்வீஸ்</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="manifest" href="manifest.json">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f4f7f6; color: #333; line-height: 1.6; overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        
+        /* Clean White Header Section */
+        header { 
+            background: #ffffff; 
+            color: #0f2027; 
+            padding: 10px 15px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            border-bottom: 1px solid #eaeaea;
+        }
+        .brand-section { display: flex; align-items: center; gap: 10px; }
+        .logo-img { height: 42px; width: auto; object-fit: contain; }
+        
+        .brand-title h1 { 
+            font-size: 15px; 
+            color: #0f2027; 
+            font-weight: 700; 
+            letter-spacing: 0.3px;
+            margin-bottom: 1px;
+        }
+        .brand-tagline { 
+            font-size: 9px; 
+            font-weight: 600; 
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .menu-btn { 
+            background: transparent; 
+            border: none; 
+            color: #0f2027; 
+            cursor: pointer; 
+            font-size: 20px;
+            padding: 5px;
+        }
+
+        .sidebar-menu { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: #fff; box-shadow: 5px 0 15px rgba(0,0,0,0.2); z-index: 3000; transition: 0.3s ease-in-out; padding: 20px; overflow-y: auto; color: #333; }
+        .sidebar-menu.active { left: 0; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .sidebar-header h3 { font-size: 16px; color: #0f2027; }
+        .sidebar-close { font-size: 24px; cursor: pointer; color: #666; background: none; border: none; }
+        .sidebar-links { list-style: none; }
+        .sidebar-links li { margin-bottom: 12px; }
+        .sidebar-links a { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: none; border: none; font-size: 14px; font-weight: 600; color: #333; text-decoration: none; padding: 10px; border-radius: 6px; transition: 0.2s; }
+        .sidebar-links a:hover { background: #f0f2f5; color: #00ff88; }
+        
+        .lang-sidebar-btn {
+            background: #0f2027;
+            color: #00ff88;
+            border: 2px solid #00ff88;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+        .lang-sidebar-btn:hover { background: #00ff88; color: #0f2027; }
+
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); display: none; z-index: 2500; }
+        .overlay.active { display: block; }
+
+        /* Services Content Layout */
+        .container { max-width: 1100px; margin: 30px auto; padding: 0 15px; }
+        .page-title-box { text-align: center; margin-bottom: 35px; }
+        .page-title { font-size: 26px; color: #0f2027; margin-bottom: 8px; font-weight: 700; }
+        .page-desc { font-size: 14px; color: #666; max-width: 700px; margin: 0 auto; }
+
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
+        
+        .service-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            border-top: 5px solid #0f2027;
+            transition: 0.3s;
+        }
+        .service-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+
+        .service-img-box {
+            width: 100%;
+            height: 180px;
+            background: #eaeaea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .service-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .service-body { padding: 20px; }
+        .service-title { font-size: 18px; color: #0f2027; margin-bottom: 10px; font-weight: 700; }
+        .service-text { font-size: 13px; color: #555; margin-bottom: 15px; }
+
+        .btn-service {
+            display: inline-block;
+            background: #0f2027;
+            color: #00ff88;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+        .btn-service:hover { background: #00ff88; color: #0f2027; }
+
+        /* Footer */
+        footer { background: #0c1a1f; color: #aaa; padding: 25px; text-align: center; font-size: 12px; margin-top: 50px; }
+
+        @media (max-width: 480px) {
+            .brand-tagline { font-size: 7px; letter-spacing: 0.2px; }
+            .brand-title h1 { font-size: 12px; }
+            .page-title { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-section">
+            <button type="button" class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <img src="1.png" alt="Logo" class="logo-img">
+            <div class="brand-title">
+                <h1 data-ta="தமிழன் எலக்ட்ரானிக் சர்வீஸ்" data-en="Thamizhan Electronic Systems">Thamizhan Electronic Systems</h1>
+                <div class="brand-tagline">Professional Service & Support Partner</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div class="sidebar-header">
+            <h3 data-ta="மெனு பார்" data-en="Menu Bar">மெனு பார்</h3>
+            <button class="sidebar-close" onclick="toggleSidebar()">&times;</button>
+        </div>
+        <ul class="sidebar-links">
+            <li><a href="index.html"><i class="fas fa-home"></i> <span data-ta="🏠 முகப்பு" data-en="🏠 Home">🏠 முகப்பு</span></a></li>
+            <li><a href="shop.html"><i class="fas fa-store"></i> <span data-ta="🛒 ஆன்லைன் ஸ்டோர் (Shop)" data-en="🛒 Online Store (Shop)">ஆன்லைன் ஸ்டோர் (Shop)</span></a></li>
+            <li><a href="service.html" style="color: #00ff88; background: #0f2027;"><i class="fas fa-tools"></i> <span data-ta="🛠️ சேவைகள் (Services)" data-en="🛠️ Services">🛠️ சேவைகள் (Services)</span></a></li>
+            <li><a href="dashboard.html"><i class="fas fa-network-wired"></i> <span data-ta="🌐 IoT டேஷ்போர்டு" data-en="🌐 IoT Dashboard">🌐 IoT டேஷ்போர்டு</span></a></li>
+            <li><a href="career.html"><i class="fas fa-briefcase"></i> <span data-ta="📄 வேலைவாய்ப்பு (Career)" data-en="📄 Career">📄 வேலைவாய்ப்பு (Career)</span></a></li>
+            <li><a href="contact.html"><i class="fas fa-envelope"></i> <span data-ta="📞 தொடர்புக்கு" data-en="📞 Contact">📞 தொடர்புக்கு</span></a></li>
+            <li><a href="aboutus.html"><i class="fas fa-info-circle"></i> <span data-ta="ℹ️ எங்களைப் பற்றி" data-en="ℹ️ About Us">ℹ️ எங்களைப் பற்றி</span></a></li>
+            <li><button class="lang-sidebar-btn" id="langSidebarBtn" onclick="toggleLanguage()">English</button></li>
+        </ul>
+    </div>
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="container">
+        <div class="page-title-box">
+            <h2 class="page-title" data-ta="எங்களது தொழில்முறை சேவைகள் (Our Professional Services)" data-en="Our Professional Services">எங்களது தொழில்முறை சேவைகள் (Our Professional Services)</h2>
+            <p class="page-desc" data-ta="எலக்ட்ரானிக்ஸ் மற்றும் ஆட்டோமேஷன் துறையில் அதிநவீன தொழில்நுட்பத்துடன் கூடிய உயர்தரமான பழுதுபார்ப்பு மற்றும் பராமரிப்புச் சேவைகள்." data-en="High-quality repair and maintenance services with cutting-edge technology in electronics and automation.">எலக்ட்ரானிக்ஸ் மற்றும் ஆட்டோமேஷன் துறையில் அதிநவீன தொழில்நுட்பத்துடன் கூடிய உயர்தரமான பழுதுபார்ப்பு மற்றும் பராமரிப்புச் சேவைகள்.</p>
+        </div>
+
+        <div class="services-grid">
+            
+            <div class="service-card">
+                <div class="service-img-box">
+                    <img src="service1.png" alt="Automation Devices Service" class="service-img" onerror="this.src='https://via.placeholder.com/400x180?text=Automation+Devices+Service'">
+                </div>
+                <div class="service-body">
+                    <h3 class="service-title" data-ta="ஆட்டோமேஷன் சாதனங்கள் சேவை" data-en="Automation Devices Service">ஆட்டோமேஷன் சாதனங்கள் சேவை</h3>
+                    <p class="service-text" data-ta="பல்வேறு வகையான இண்டஸ்ட்ரியல் மற்றும் ஹோம் ஆட்டோமேஷன் கருவிகளுக்கான பிரத்யேக பழுதுபார்ப்பு மற்றும் சர்வீஸ்." data-en="Exclusive repair and maintenance services for various types of industrial and home automation devices.">பல்வேறு வகையான இண்டஸ்ட்ரியல் மற்றும் ஹோம் ஆட்டோமேஷன் கருவிகளுக்கான பிரத்யேக பழுதுபார்ப்பு மற்றும் சர்வீஸ்.</p>
+                    <a href="contact.html" class="btn-service" data-ta="சர்வீஸ் புக் செய்ய" data-en="Book Service">சர்வீஸ் புக் செய்ய</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-img-box">
+                    <img src="service2.png" alt="Electronics Services" class="service-img" onerror="this.src='https://via.placeholder.com/400x180?text=Electronics+Services'">
+                </div>
+                <div class="service-body">
+                    <h3 class="service-title" data-ta="எலக்ட்ரானிக்ஸ் சேவைகள்" data-en="Electronics Services">எலக்ட்ரானிக்ஸ் சேவைகள்</h3>
+                    <p class="service-text" data-ta="அனைத்து வகையான எலக்ட்ரானிக் சர்க்யூட்டுகள் மற்றும் பவர் சாதனங்களைச் சரிசெய்தல் மற்றும் பரிசோதனை செய்தல்." data-en="Troubleshooting, repairing, and testing of all kinds of electronic circuits and power equipment.">அனைத்து வகையான எலக்ட்ரானிக் சர்க்யூட்டுகள் மற்றும் பவர் சாதனங்களைச் சரிசெய்தல் மற்றும் பரிசோதனை செய்தல்.</p>
+                    <a href="contact.html" class="btn-service" data-ta="சர்வீஸ் புக் செய்ய" data-en="Book Service">சர்வீஸ் புக் செய்ய</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-img-box">
+                    <img src="service3.png" alt="PCB Service" class="service-img" onerror="this.src='https://via.placeholder.com/400x180?text=PCB+Service'">
+                </div>
+                <div class="service-body">
+                    <h3 class="service-title" data-ta="PCB சர்வீஸ்" data-en="PCB Service">PCB சர்வீஸ்</h3>
+                    <p class="service-text" data-ta="சிங்கிள் மற்றும் மல்டிலேயர் பிரிண்டெட் சர்க்யூட் போர்டுகளுக்கான (PCB) பழுது நீக்குதல் மற்றும் டிரேசிங் சர்வீஸ்." data-en="Repair, troubleshooting, and trace tracing services for single and multilayer printed circuit boards (PCB).">சிங்கிள் மற்றும் மல்டிலேயர் பிரிண்டெட் சர்க்யூட் போர்டுகளுக்கான (PCB) பழுது நீக்குதல் மற்றும் டிரேசிங் சர்வீஸ்.</p>
+                    <a href="contact.html" class="btn-service" data-ta="சர்வீஸ் புக் செய்ய" data-en="Book Service">சர்வீஸ் புக் செய்ய</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-img-box">
+                    <img src="service4.png" alt="PLC Service" class="service-img" onerror="this.src='https://via.placeholder.com/400x180?text=PLC+Service'">
+                </div>
+                <div class="service-body">
+                    <h3 class="service-title" data-ta="PLC சர்வீஸ்" data-en="PLC Service">PLC சர்வீஸ்</h3>
+                    <p class="service-text" data-ta="தொழிற்சாலை ஆட்டோமேஷனுக்குப் பயன்படும் பிஎல்சி (PLC) கண்ட்ரோலர்கள் மற்றும் ஹார்டுவேர் பழுதுகளைச் சரிசெய்தல்." data-en="Repair and maintenance of PLC controllers and hardware used for industrial automation.">தொழிற்சாலை ஆட்டோமேஷனுக்குப் பயன்படும் பிஎல்சி (PLC) கண்ட்ரோலர்கள் மற்றும் ஹார்டுவேர் பழுதுகளைச் சரிசெய்தல்.</p>
+                    <a href="contact.html" class="btn-service" data-ta="சர்வீஸ் புக் செய்ய" data-en="Book Service">சர்வீஸ் புக் செய்ய</a>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-img-box">
+                    <img src="service5.png" alt="Laser Source Service" class="service-img" onerror="this.src='https://via.placeholder.com/400x180?text=Laser+Source+Service'">
+                </div>
+                <div class="service-body">
+                    <h3 class="service-title" data-ta="லேசர் சோர்ஸ் சர்வீஸ்" data-en="Laser Source Service">லேசர் சோர்ஸ் சர்வீஸ்</h3>
+                    <p class="service-text" data-ta="இண்டஸ்ட்ரியல் லேசர் கட்டிங் மற்றும் மார்க்கிங் மெஷின்களுக்கான லேசர் சோர்ஸ் (Laser Source) பழுதுபார்ப்பு மற்றும் பராமரிப்பு." data-en="Repair and maintenance of laser sources for industrial laser cutting and marking machines.">இண்டஸ்ட்ரியல் லேசர் கட்டிங் மற்றும் மார்க்கிங் மெஷின்களுக்கான லேசர் சோர்ஸ் (Laser Source) பழுதுபார்ப்பு மற்றும் பராமரிப்பு.</p>
+                    <a href="contact.html" class="btn-service" data-ta="சர்வீஸ் புக் செய்ய" data-en="Book Service">சர்வீஸ் புக் செய்ய</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <p data-ta="&copy; 2026 தமிழன் எலக்ட்ரானிக் சர்வீஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை." data-en="&copy; 2026 Thamizhan Electronic Systems. All Rights Reserved.">&copy; 2026 தமிழன் எலக்ட்ரானிக் சர்வீஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
+    </footer>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebarMenu').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+
+        let currentLang = localStorage.getItem('siteLang') || 'ta';
+        function toggleLanguage() {
+            currentLang = (currentLang === 'ta') ? 'en' : 'ta';
+            localStorage.setItem('siteLang', currentLang);
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            if (currentLang === 'en') {
+                document.getElementById('langSidebarBtn').innerText = 'தமிழ்';
+                document.getElementById('htmlRoot').setAttribute('lang', 'en');
+            } else {
+                document.getElementById('langSidebarBtn').innerText = 'English';
+                document.getElementById('htmlRoot').setAttribute('lang', 'ta');
+            }
+
+            const elements = document.querySelectorAll('[data-ta]');
+            elements.forEach(el => {
+                if (currentLang === 'en') {
+                    if(el.getAttribute('data-en')) el.innerText = el.getAttribute('data-en');
+                } else {
+                    if(el.getAttribute('data-ta')) el.innerText = el.getAttribute('data-ta');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            applyLanguage();
+        });
+    </script>
+
+</body>
+</html>
