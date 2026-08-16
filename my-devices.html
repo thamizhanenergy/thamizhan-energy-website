@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ta" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>எனது சாதனங்கள் (My Devices) | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="manifest" href="manifest.json">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f4f7f6; color: #333; line-height: 1.6; min-height: 100vh; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        
+        /* Header Section */
+        header { 
+            background: #ffffff; 
+            color: #0f2027; 
+            padding: 10px 15px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            border-bottom: 1px solid #eaeaea;
+        }
+        .brand-section { display: flex; align-items: center; gap: 10px; }
+        .logo-img { height: 42px; width: auto; object-fit: contain; }
+        
+        .brand-title h1 { 
+            font-size: 15px; 
+            color: #0f2027; 
+            font-weight: 700; 
+            letter-spacing: 0.3px;
+            margin-bottom: 1px;
+        }
+        .brand-tagline { 
+            font-size: 9px; 
+            font-weight: 600; 
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .menu-btn { 
+            background: transparent; 
+            border: none; 
+            color: #0f2027; 
+            cursor: pointer; 
+            font-size: 20px;
+            padding: 5px;
+        }
+
+        .sidebar-menu { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: #fff; box-shadow: 5px 0 15px rgba(0,0,0,0.2); z-index: 3000; transition: 0.3s ease-in-out; padding: 20px; overflow-y: auto; color: #333; }
+        .sidebar-menu.active { left: 0; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .sidebar-header h3 { font-size: 16px; color: #0f2027; }
+        .sidebar-close { font-size: 24px; cursor: pointer; color: #666; background: none; border: none; }
+        .sidebar-links { list-style: none; }
+        .sidebar-links li { margin-bottom: 12px; }
+        .sidebar-links a { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: none; border: none; font-size: 14px; font-weight: 600; color: #333; text-decoration: none; padding: 10px; border-radius: 6px; transition: 0.2s; }
+        .sidebar-links a:hover { background: #f0f2f5; color: #00ff88; }
+        
+        .lang-sidebar-btn {
+            background: #0f2027;
+            color: #00ff88;
+            border: 2px solid #00ff88;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+        .lang-sidebar-btn:hover { background: #00ff88; color: #0f2027; }
+
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); display: none; z-index: 2500; }
+        .overlay.active { display: block; }
+
+        /* Main Container */
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+        .welcome-box { text-align: center; margin-bottom: 30px; }
+        .welcome-box h2 { font-size: 24px; color: #0f2027; margin-bottom: 8px; font-weight: 700; }
+        .welcome-box p { font-size: 14px; color: #666; }
+
+        /* Device Selection Grid */
+        .devices-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+
+        .device-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-top: 5px solid #00ff88;
+            text-align: center;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .device-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+
+        .device-icon { font-size: 40px; color: #0f2027; margin-bottom: 15px; }
+        .device-title { font-size: 18px; color: #0f2027; font-weight: 700; margin-bottom: 8px; }
+        .device-model { font-size: 12px; background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 10px; display: inline-block; font-weight: 600; margin-bottom: 12px; }
+        .device-desc { font-size: 13px; color: #666; margin-bottom: 20px; }
+
+        .btn-dashboard {
+            background: #0f2027;
+            color: #00ff88;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 13px;
+            display: block;
+            transition: 0.3s;
+            border: 2px solid #00ff88;
+        }
+        .btn-dashboard:hover { background: #00ff88; color: #0f2027; }
+
+        /* Multiple Device Add Section */
+        .add-device-section {
+            margin-top: 40px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .add-device-section h3 { font-size: 16px; color: #0f2027; margin-bottom: 10px; }
+        .add-device-section p { font-size: 13px; color: #666; margin-bottom: 15px; }
+        .btn-add {
+            background: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-add:hover { background: #1976D2; }
+
+        footer { background: #0c1a1f; color: #aaa; padding: 25px; text-align: center; font-size: 12px; margin-top: 50px; }
+
+        @media (max-width: 480px) {
+            .brand-tagline { font-size: 7px; letter-spacing: 0.2px; }
+            .brand-title h1 { font-size: 12px; }
+            .welcome-box h2 { font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-section">
+            <button type="button" class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <img src="1.png" alt="Logo" class="logo-img">
+            <div class="brand-title">
+                <h1 data-ta="தமிழன் எனர்ஜி சிஸ்டம்ஸ்" data-en="Thamizhan Energy Systems">Thamizhan Energy Systems</h1>
+                <div class="brand-tagline">The name of quality, The pride of Automation</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div class="sidebar-header">
+            <h3 data-ta="மெனு பார்" data-en="Menu Bar">மெனு பார்</h3>
+            <button class="sidebar-close" onclick="toggleSidebar()">&times;</button>
+        </div>
+        <ul class="sidebar-links">
+            <li><a href="index.html"><i class="fas fa-home"></i> <span data-ta="🏠 முகப்பு" data-en="🏠 Home">🏠 முகப்பு</span></a></li>
+            <li><a href="shop.html"><i class="fas fa-store"></i> <span data-ta="🛒 ஆன்லைன் ஸ்டோர் (Shop)" data-en="🛒 Online Store (Shop)">ஆன்லைன் ஸ்டோர் (Shop)</span></a></li>
+            <li><a href="my-devices.html" style="color: #00ff88; background: #0f2027;"><i class="fas fa-network-wired"></i> <span data-ta="🌐 IoT டேஷ்போர்டு" data-en="🌐 IoT Dashboard">🌐 IoT டேஷ்போர்டு</span></a></li>
+            <li><a href="service.html"><i class="fas fa-tools"></i> <span data-ta="🛠️ சேவைகள்" data-en="🛠️ Services">🛠️ சேவைகள்</span></a></li>
+            <li><a href="career.html"><i class="fas fa-briefcase"></i> <span data-ta="📄 வேலைவாய்ப்பு" data-en="📄 Career">📄 வேலைவாய்ப்பு</span></a></li>
+            <li><a href="contact.html"><i class="fas fa-envelope"></i> <span data-ta="📞 தொடர்புக்கு" data-en="📞 Contact">📞 தொடர்புக்கு</span></a></li>
+            <li><a href="aboutus.html"><i class="fas fa-info-circle"></i> <span data-ta="ℹ️ எங்களைப் பற்றி" data-en="ℹ️ About Us">ℹ️ எங்களைப் பற்றி</span></a></li>
+            <li><button class="lang-sidebar-btn" id="langSidebarBtn" onclick="toggleLanguage()">English</button></li>
+        </ul>
+    </div>
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="container">
+        <div class="welcome-box">
+            <h2 data-ta="உங்கள் ஸ்மார்ட் சாதனங்கள் (My IoT Devices)" data-en="My IoT Devices">உங்கள் ஸ்மார்ட் சாதனங்கள் (My IoT Devices)</h2>
+            <p data-ta="நீங்கள் கண்காணிக்க விரும்பும் சாதனத்தைத் தேர்ந்தெடுக்கவும் அல்லது புதிய சாதனத்தை இணைக்கவும்." data-en="Select the device you want to monitor or connect a new device.">நீங்கள் கண்காணிக்க விரும்பும் சாதனத்தைத் தேர்ந்தெடுக்கவும் அல்லது புதிய சாதனத்தை இணைக்கவும்.</p>
+        </div>
+
+        <div class="devices-grid">
+            
+            <div class="device-card">
+                <div>
+                    <div class="device-icon"><i class="fas fa-wifi"></i></div>
+                    <h3 class="device-title" data-ta="வைஃபை வாட்டர் லெவல் கண்ட்ரோலர்" data-en="WiFi Water Level Controller">வைஃபை வாட்டர் லெவல் கண்ட்ரோலர்</h3>
+                    <span class="device-model">Model: AWLCW</span>
+                    <p class="device-desc" data-ta="இணையம் மூலம் தொட்டியின் நீரைக் கண்காணித்து மோட்டாரை இயக்கும் ஸ்மார்ட் வைஃபை சாதனம்." data-en="Smart WiFi device to monitor tank water and control motor via internet.">இணையம் மூலம் தொட்டியின் நீரைக் கண்காணித்து மோட்டாரை இயக்கும் ஸ்மார்ட் வைஃபை சாதனம்.</p>
+                </div>
+                <a href="dashboard.html" class="btn-dashboard" data-ta="டேஷ்போர்டுக்கு செல்ல" data-en="Open Dashboard">டேஷ்போர்டுக்கு செல்ல</a>
+            </div>
+
+            <div class="device-card" style="border-top-color: #ff9800;">
+                <div>
+                    <div class="device-icon" style="color: #ff9800;"><i class="fas fa-solar-panel"></i></div>
+                    <h3 class="device-title" data-ta="சோலார் வாட்டர் லெவல் கண்ட்ரோலர்" data-en="Solar Water Level Controller">சோலார் வாட்டர் லெவல் கண்ட்ரோலர்</h3>
+                    <span class="device-model" style="background: #fff3e0; color: #e65100;">Model: AWLCWS</span>
+                    <p class="device-desc" data-ta="சோலார் வோல்டேஜ், பேட்டரி லெவல் மற்றும் அல்ட்ராசோனிக் துல்லியமான நீர் அளவைக் காட்டும் சாதனம்." data-en="Device showing solar voltage, battery level and ultrasonic accurate water level.">சோலார் வோல்டேஜ், பேட்டரி லெவல் மற்றும் அல்ட்ராசோனிக் துல்லியமான நீர் அளவைக் காட்டும் சாதனம்.</p>
+                </div>
+                <a href="solar-dashboard.html" class="btn-dashboard" data-ta="டேஷ்போர்டுக்கு செல்ல" data-en="Open Dashboard">டேஷ்போர்டுக்கு செல்ல</a>
+            </div>
+
+            <div class="device-card" style="border-top-color: #2196F3;">
+                <div>
+                    <div class="device-icon" style="color: #2196F3;"><i class="fas fa-bolt"></i></div>
+                    <h3 class="device-title" data-ta="ஹோம் ஆட்டோமேஷன் & பவர் மானிட்டர்" data-en="Home Automation & Power Monitor">ஹோம் ஆட்டோமேஷன் & பவர் மானிட்டர்</h3>
+                    <span class="device-model" style="background: #e3f2fd; color: #1565c0;">Model: HAM-PM</span>
+                    <p class="device-desc" data-ta="வீட்டு மின் உபகரணங்களைக் கட்டுப்படுத்துவதுடன், இபி ரீடிங் மற்றும் பவர் கன்சம்ஷனைக் காட்டும்." data-en="Controls home appliances and displays EB reading and power consumption.">வீட்டு மின் உபகரணங்களைக் கட்டுப்படுத்துவதுடன், இபி ரீடிங் மற்றும் பவர் கன்சம்ஷனைக் காட்டும்.</p>
+                </div>
+                <a href="power-dashboard.html" class="btn-dashboard" data-ta="டேஷ்போர்டுக்கு செல்ல" data-en="Open Dashboard">டேஷ்போர்டுக்கு செல்ல</a>
+            </div>
+
+        </div>
+
+        <div class="add-device-section">
+            <h3 data-ta="கூடுதல் சாதனங்களை இணைக்க வேண்டுமா?" data-en="Want to add more devices?">கூடுதல் சாதனங்களை இணைக்க வேண்டுமா?</h3>
+            <p data-ta="உங்களிடம் பல கிளைகள் அல்லது வீடுகளில் கூடுதல் சாதனங்கள் இருந்தால், அவற்றின் சீரியல் எண்ணை உள்ளிட்டு இங்கே இணைத்துக் கொள்ளலாம்." data-en="If you have additional devices in multiple locations, enter their serial number to link them here.">உங்களிடம் பல கிளைகள் அல்லது வீடுகளில் கூடுதல் சாதனங்கள் இருந்தால், அவற்றின் சீரியல் எண்ணை உள்ளிட்டு இங்கே இணைத்துக் கொள்ளலாம்.</p>
+            <button class="btn-add" onclick="alert(currentLang === 'ta' ? 'புதிய சாதனம் இணைக்கும் வசதி விரைவில் செயல்படுத்தப்படும்!' : 'Add new device feature coming soon!')"><i class="fas fa-plus"></i> <span data-ta="புதிய சாதனத்தை இணைக்க" data-en="Add New Device">புதிய சாதனத்தை இணைக்க</span></button>
+        </div>
+    </div>
+
+    <footer>
+        <p data-ta="&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை." data-en="&copy; 2026 Thamizhan Energy Systems. All Rights Reserved.">&copy; 2026 தமிழன் எனர்ஜி சிஸ்டம்ஸ். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</p>
+    </footer>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebarMenu').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+
+        let currentLang = localStorage.getItem('siteLang') || 'ta';
+        function toggleLanguage() {
+            currentLang = (currentLang === 'ta') ? 'en' : 'ta';
+            localStorage.setItem('siteLang', currentLang);
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            if (currentLang === 'en') {
+                document.getElementById('langSidebarBtn').innerText = 'தமிழ்';
+                document.getElementById('htmlRoot').setAttribute('lang', 'en');
+            } else {
+                document.getElementById('langSidebarBtn').innerText = 'English';
+                document.getElementById('htmlRoot').setAttribute('lang', 'ta');
+            }
+
+            const elements = document.querySelectorAll('[data-ta]');
+            elements.forEach(el => {
+                if (currentLang === 'en') {
+                    if(el.getAttribute('data-en')) el.innerText = el.getAttribute('data-en');
+                } else {
+                    if(el.getAttribute('data-ta')) el.innerText = el.getAttribute('data-ta');
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            applyLanguage();
+        });
+    </script>
+
+</body>
+</html>
