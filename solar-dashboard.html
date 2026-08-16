@@ -37,6 +37,20 @@
         .card h3 { font-size: 15px; margin-bottom: 12px; color: var(--accent-orange); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
         .card p { font-size: 13px; color: var(--text-muted); margin-bottom: 15px; text-align: left; }
 
+        .input-group { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 10px; }
+        .input-group select, .input-group input { padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main); width: 100%; max-width: 320px; outline: none; font-size: 13px; }
+        .input-group button { background: var(--accent-orange); color: var(--bg-primary); border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px; width: 100%; max-width: 320px; transition: 0.2s; }
+        .input-group button:hover { opacity: 0.9; }
+        .btn-ble { background: var(--accent-blue) !important; color: white !important; }
+        .btn-danger { background: rgba(255, 82, 82, 0.15) !important; color: var(--accent-red) !important; border: 1px solid rgba(255, 82, 82, 0.3) !important; }
+        .btn-danger:hover { background: var(--accent-red) !important; color: white !important; }
+
+        #popupModal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.75); justify-content: center; align-items: center; }
+        .modal-content { background: var(--bg-card); padding: 30px; border-radius: 14px; border: 1px solid var(--accent-orange); text-align: center; max-width: 400px; width: 90%; box-shadow: 0 10px 30px rgba(255,167,38,0.3); }
+        .modal-content h3 { color: var(--accent-orange); font-size: 18px; margin-bottom: 10px; text-align: center; border: none; }
+        .modal-content p { color: var(--text-main); font-size: 14px; margin-bottom: 20px; text-align: center; }
+        .modal-content button { background: var(--accent-orange); color: var(--bg-primary); border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; width: auto; }
+
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         @media(max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
 
@@ -61,7 +75,6 @@
         .btn-manual { background: var(--accent-blue); color: white; }
         .btn-reset { background: var(--accent-red); color: white; display: none; }
 
-        /* Settings Form Styles for Dynamic Level Input */
         .settings-form { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; background: var(--bg-primary); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color); text-align: left; }
         .form-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
         .form-row label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
@@ -69,6 +82,7 @@
         .btn-save { background: var(--accent-green); color: var(--bg-primary); border: none; padding: 10px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 12px; width: 100%; margin-top: 5px; }
         .btn-save:hover { opacity: 0.9; }
 
+        .danger-zone { margin-top: 25px; padding-top: 15px; border-top: 1px dashed var(--border-color); display: flex; flex-direction: column; gap: 8px; }
         .btn-secondary { background: var(--border-color); color: var(--text-main); border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; width: 100%; margin-top: 8px; }
         .btn-secondary:hover { background: #334a61; }
     </style>
@@ -77,25 +91,57 @@
     <div class="container">
         <header>
             <div class="logo-area">
-                <h1>Tamilan Energy Systems</h1>
-                <p>AWLCWS 1.0 Solar Cloud Dashboard</p>
+                <h1 id="tMainHeading">Tamilan Energy Systems</h1>
+                <p id="tSubHeading">AWLCWS 1.0 Solar Cloud Dashboard</p>
             </div>
             <div class="header-actions">
-                <a href="my-devices.html" class="home-btn">📱 My Devices</a>
+                <a href="my-devices.html" class="home-btn" id="tHomeBtn">📱 My Devices</a>
                 <button class="lang-btn" onclick="toggleLanguage()" id="langToggleBtn">English</button>
                 <span class="user-badge" id="userInfo">Guest</span>
             </div>
         </header>
 
-        <div class="card">
-            <h3>Solar Controller Instance Selection</h3>
-            <p>Select your active solar water controller unit ID.</p>
-            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                <select id="solarDeviceSelect" style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main); max-width: 280px; width:100%;">
-                    <option value="">-- Select Solar Unit ID --</option>
-                </select>
-                <button onclick="initSolarDashboard()" style="background: var(--accent-orange); color: var(--bg-primary); border:none; padding:10px 20px; border-radius:8px; font-weight:700; cursor:pointer;">Connect</button>
+        <div id="popupModal">
+            <div class="modal-content">
+                <h3 id="modalTitle">Status</h3>
+                <p id="modalMsg">Processing...</p>
+                <button id="modalBtn" onclick="closeModal()" style="display:none;">OK</button>
             </div>
+        </div>
+
+        <div class="card" id="selectorCard">
+            <h3 id="tSelTitle">Solar Device Fleet Management</h3>
+            <p id="tSelDesc">Select your active solar controller instance or provision a new unit.</p>
+            <div class="input-group">
+                <select id="solarDeviceSelect">
+                    <option value="" id="tSelDefault">-- Select Solar Unit ID --</option>
+                </select>
+                <button onclick="selectExistingSolarDevice()" id="tOpenDash">Open Dashboard</button>
+                <button class="btn-ble" onclick="showPairingScreen()" id="tAddDev">+ Provision New Solar Device</button>
+            </div>
+        </div>
+
+        <div class="card" id="pairingCard" style="display:none;">
+            <h3 id="tPairTitle">BLE Provisioning & Integration</h3>
+            <p id="tPairDesc">Enter your Solar controller Serial Number and scan via Bluetooth.</p>
+            <div class="input-group">
+                <input type="text" id="targetDeviceId" placeholder="Enter Serial Number (e.g., 2001)">
+                <button class="btn-ble" onclick="searchAndConnectBLE()" id="tScanBle">🔍 Scan & Connect BLE</button>
+            </div>
+            <p id="bleStatus" style="font-size:13px; color:var(--accent-orange); margin: 10px 0;"></p>
+
+            <div id="wifiForm" style="display:none; margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                <p id="tWifiLabel" style="color: var(--accent-orange); margin-bottom: 10px; font-weight: 600;">Select Local Wi-Fi Network:</p>
+                <div class="input-group">
+                    <select id="wifiSsidSelect">
+                        <option value="" id="tWifiDefault">-- Scanning Available Networks --</option>
+                    </select>
+                    <input type="password" id="wifiPass" placeholder="Wi-Fi Password">
+                    <button onclick="sendWiFiToESP32()" id="tConnectWifi">Configure & Link Network</button>
+                </div>
+            </div>
+            <br>
+            <button class="btn-secondary" onclick="backToSelector()" id="tBackBtn">← Back to Fleet List</button>
         </div>
 
         <div id="solarDashboardContent" style="display:none;">
@@ -166,7 +212,11 @@
                         <button class="btn-control btn-reset" id="solarResetBtn" onclick="resetSolarDryRun()">Reset Dry Run Trip</button>
                     </div>
 
-                    <a href="my-devices.html" class="btn-secondary">← Back to My Devices</a>
+                    <div class="danger-zone">
+                        <button class="btn-control btn-danger" onclick="deleteCurrentSolarDevice()">🗑️ Unbind / Delete Solar Device</button>
+                    </div>
+
+                    <button class="btn-secondary" onclick="backToSelector()">← Switch Controller Instance</button>
                 </div>
             </div>
         </div>
@@ -192,16 +242,66 @@
         const database = firebase.database();
         const auth = firebase.auth();
 
+        let bleCharacteristic;
         let activeSolarId = "";
         let solarDbRef = null;
         let currentSolarAuto = 1;
         let currentSolarMotor = 0;
         let currentLang = 'ta';
+        let isSuccessModal = false;
+
+        const translations = {
+            ta: {
+                selTitle: "சோலார் சாதன மேலாண்மை",
+                selDesc: "உங்கள் சோலார் சாதனத்தைத் தேர்ந்தெடுக்கவும் அல்லது புதியதை இணைக்கவும்",
+                selDefault: "-- சோலார் சாதனத்தைத் தேர்ந்தெடுக்கவும் --",
+                openDash: "டேஷ்போர்டைத் திற (Open Dashboard)",
+                addDev: "+ புதிய சோலார் சாதனத்தை இணைக்கவும்",
+                pairTitle: "ப்ளூடூத் வைஃபை இணைப்பு (BLE Provisioning)",
+                pairDesc: "உங்களது சாதனத்தின் சீரியல் எண்ணை உள்ளிட்டு புளூடூத் மூலம் இணைக்கவும்",
+                scanBle: "🔍 புளூடூத் மூலம் தேடிக் இணை (Scan BLE)",
+                wifiLabel: "ஹோம் வைஃபை நெட்வொர்க்கைத் தேர்ந்தெடுக்கவும்:",
+                wifiDefault: "-- வைஃபை நெட்வொர்க்கைத் தேர்ந்தெடுக்கவும் --",
+                connectWifi: "வைஃபையுடன் இணைக்கவும் (Configure)",
+                backBtn: "← பின் செல்ல"
+            },
+            en: {
+                selTitle: "Solar Device Fleet Management",
+                selDesc: "Select your active solar controller instance or provision a new unit.",
+                selDefault: "-- Select Solar Unit ID --",
+                openDash: "Open Dashboard",
+                addDev: "+ Provision New Solar Device",
+                pairTitle: "BLE Provisioning & Integration",
+                pairDesc: "Enter your Solar controller Serial Number and scan via Bluetooth.",
+                scanBle: "🔍 Scan & Connect BLE",
+                wifiLabel: "Select Local Wi-Fi Network:",
+                wifiDefault: "-- Scanning Available Networks --",
+                connectWifi: "Configure & Link Network",
+                backBtn: "← Back to Fleet List"
+            }
+        };
 
         function toggleLanguage() {
             currentLang = currentLang === 'ta' ? 'en' : 'ta';
             document.getElementById('langToggleBtn').innerText = currentLang === 'ta' ? 'English' : 'தமிழ்';
             document.getElementById('htmlRoot').setAttribute('lang', currentLang);
+            updateUIStrings();
+        }
+
+        function updateUIStrings() {
+            let t = translations[currentLang];
+            document.getElementById('tSelTitle').innerText = t.selTitle;
+            document.getElementById('tSelDesc').innerText = t.selDesc;
+            document.getElementById('tSelDefault').innerText = t.selDefault;
+            document.getElementById('tOpenDash').innerText = t.openDash;
+            document.getElementById('tAddDev').innerText = t.addDev;
+            document.getElementById('tPairTitle').innerText = t.pairTitle;
+            document.getElementById('tPairDesc').innerText = t.pairDesc;
+            document.getElementById('tScanBle').innerText = t.scanBle;
+            document.getElementById('tWifiLabel').innerText = t.wifiLabel;
+            document.getElementById('tWifiDefault').innerText = t.wifiDefault;
+            document.getElementById('tConnectWifi').innerText = t.connectWifi;
+            document.getElementById('tBackBtn').innerText = t.backBtn;
         }
 
         auth.onAuthStateChanged((user) => {
@@ -210,13 +310,16 @@
                 loadSolarDevices(user.uid);
             } else {
                 document.getElementById('userInfo').innerText = "Guest";
+                document.getElementById('selectorCard').style.display = 'block';
+                document.getElementById('pairingCard').style.display = 'none';
+                document.getElementById('solarDashboardContent').style.display = 'none';
             }
         });
 
         function loadSolarDevices(uid) {
-            database.ref('users/' + uid + '/devices').on('value', (snapshot) => {
+            database.ref('users/' + uid + '/solar_devices').on('value', (snapshot) => {
                 let select = document.getElementById('solarDeviceSelect');
-                select.innerHTML = `<option value="">-- Select Solar Unit ID --</option>`;
+                select.innerHTML = `<option value="" id="tSelDefault">${translations[currentLang].selDefault}</option>`;
                 if (snapshot.exists()) {
                     snapshot.forEach((child) => {
                         let devId = child.key;
@@ -226,10 +329,24 @@
                         select.appendChild(opt);
                     });
                 }
+                document.getElementById('selectorCard').style.display = 'block';
+                document.getElementById('pairingCard').style.display = 'none';
+                document.getElementById('solarDashboardContent').style.display = 'none';
             });
         }
 
-        function initSolarDashboard() {
+        function showPairingScreen() {
+            document.getElementById('selectorCard').style.display = 'none';
+            document.getElementById('pairingCard').style.display = 'block';
+        }
+
+        function backToSelector() {
+            if (solarDbRef) solarDbRef.off();
+            let user = auth.currentUser;
+            if (user) loadSolarDevices(user.uid);
+        }
+
+        function selectExistingSolarDevice() {
             let select = document.getElementById('solarDeviceSelect');
             let devId = select.value;
             if (!devId) {
@@ -238,8 +355,138 @@
             }
             activeSolarId = devId;
             document.getElementById('activeSolarId').innerText = activeSolarId;
+            document.getElementById('selectorCard').style.display = 'none';
             document.getElementById('solarDashboardContent').style.display = 'block';
+            initSolarDashboardListener();
+        }
 
+        const SERVICE_UUID = 0x180F;
+        const CHARACTERISTIC_UUID = 0x2A19;
+
+        async function searchAndConnectBLE() {
+            let targetId = document.getElementById('targetDeviceId').value.trim();
+            let statusText = document.getElementById('bleStatus');
+
+            if (!targetId) {
+                alert(currentLang === 'ta' ? "சாதனத்தின் சீரியல் எண்ணை (Serial Number) உள்ளிடவும்." : "Please enter device serial number.");
+                return;
+            }
+
+            try {
+                let seconds = 0;
+                isSuccessModal = false;
+                document.getElementById('modalTitle').innerText = currentLang === 'ta' ? "புளூடூத் ஸ்கேனிங்" : "Bluetooth Scanning";
+                document.getElementById('modalMsg').innerText = (currentLang === 'ta' ? "⏳ ESP32 சோலார் சாதனம் தேடப்படுகிறது... (" : "⏳ Searching for ESP32 Solar Device... (") + seconds + "s)";
+                document.getElementById('modalBtn').style.display = 'none';
+                document.getElementById('popupModal').style.display = 'flex';
+
+                let scanTimer = setInterval(() => {
+                    seconds++;
+                    document.getElementById('modalMsg').innerText = (currentLang === 'ta' ? "⏳ ESP32 சோலார் சாதனம் தேடப்படுகிறது... (" : "⏳ Searching for ESP32 Solar Device... (") + seconds + "s)";
+                }, 1000);
+
+                const device = await navigator.bluetooth.requestDevice({
+                    filters: [{ name: 'TES-AWLCWS-' + targetId }, { name: 'TES-AWLCWS-2001' }],
+                    optionalServices: [SERVICE_UUID]
+                });
+
+                const server = await device.gatt.connect();
+                const service = await server.getPrimaryService(SERVICE_UUID);
+                bleCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
+
+                await bleCharacteristic.startNotifications();
+                
+                bleCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
+                    clearInterval(scanTimer);
+                    document.getElementById('popupModal').style.display = 'none';
+
+                    let decoder = new TextDecoder('utf-8');
+                    let wifiString = decoder.decode(event.target.value);
+                    let networks = wifiString.split(',');
+
+                    let wifiSelect = document.getElementById('wifiSsidSelect');
+                    wifiSelect.innerHTML = `<option value="">${translations[currentLang].wifiDefault}</option>`;
+                    
+                    networks.forEach(ssid => {
+                        if(ssid.trim() !== "") {
+                            let opt = document.createElement('option');
+                            opt.value = ssid;
+                            opt.innerText = ssid;
+                            wifiSelect.appendChild(opt);
+                        }
+                    });
+
+                    statusText.innerText = currentLang === 'ta' ? "✅ வைஃபை நெட்வொர்க்குகள் கண்டறியப்பட்டன!" : "✅ Wi-Fi Networks Found!";
+                    document.getElementById('wifiForm').style.display = 'block';
+                });
+
+                let encoder = new TextEncoder();
+                await bleCharacteristic.writeValue(encoder.encode("SCAN"));
+
+            } catch (error) {
+                document.getElementById('popupModal').style.display = 'none';
+                statusText.innerText = (currentLang === 'ta' ? "❌ புளூடூத் இணைப்பு தோல்வி: " : "❌ BLE Connection Failed: ") + error.message;
+            }
+        }
+
+        async function sendWiFiToESP32() {
+            let ssid = document.getElementById('wifiSsidSelect').value;
+            let pass = document.getElementById('wifiPass').value.trim();
+            let targetId = document.getElementById('targetDeviceId').value.trim();
+            let statusText = document.getElementById('bleStatus');
+
+            if (!ssid || !pass) {
+                alert(currentLang === 'ta' ? "வைஃபை பெயர் மற்றும் கடவுச்சொல் தேவை." : "Wi-Fi SSID and Password required.");
+                return;
+            }
+
+            try {
+                let dataString = ssid + ":" + pass;
+                let encoder = new TextEncoder();
+                await bleCharacteristic.writeValue(encoder.encode(dataString));
+
+                let connSec = 0;
+                isSuccessModal = true;
+                document.getElementById('modalTitle').innerText = currentLang === 'ta' ? "வைஃபை இணைப்பு" : "Wi-Fi Connecting";
+                document.getElementById('modalMsg').innerText = (currentLang === 'ta' ? "⏳ ஹோம் வைஃபையுடன் இணைக்கப்படுகிறது... (" : "⏳ Connecting to Home Wi-Fi... (") + connSec + "s)";
+                document.getElementById('modalBtn').style.display = 'none';
+                document.getElementById('popupModal').style.display = 'flex';
+
+                let connTimer = setInterval(() => {
+                    connSec++;
+                    document.getElementById('modalMsg').innerText = (currentLang === 'ta' ? "⏳ ஹோம் வைஃபையுடன் இணைக்கப்படுகிறது... (" : "⏳ Connecting to Home Wi-Fi... (") + connSec + "s)";
+                }, 1000);
+                
+                let user = auth.currentUser;
+                if (user) {
+                    await database.ref('users/' + user.uid + '/solar_devices/' + targetId).set(true);
+                    await database.ref('solar_devices/' + targetId).update({ boundUser: user.uid, motorStatus: 0, dryRun: 0 });
+                }
+
+                setTimeout(() => {
+                    clearInterval(connTimer);
+                    document.getElementById('modalTitle').innerText = currentLang === 'ta' ? "வெற்றி!" : "Success";
+                    document.getElementById('modalMsg').innerHTML = `<b style="color:var(--accent-green); font-size:15px;">${currentLang === 'ta' ? 'சாதனம் வெற்றிகரமாக வைஃபை மற்றும் டேஷ்போர்டில் இணைக்கப்பட்டது!' : 'Device connected successfully to Wi-Fi and added to your fleet!'}</b>`;
+                    document.getElementById('modalBtn').style.display = 'inline-block';
+                }, 8000);
+
+            } catch (error) {
+                document.getElementById('popupModal').style.display = 'none';
+                statusText.innerText = (currentLang === 'ta' ? "❌ வைஃபை அமைப்பதில் பிழை: " : "❌ Configuration Error: ") + error.message;
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('popupModal').style.display = 'none';
+            if (isSuccessModal) {
+                document.getElementById('pairingCard').style.display = 'none';
+                let user = auth.currentUser;
+                if (user) loadSolarDevices(user.uid);
+            }
+        }
+
+        function initSolarDashboardListener() {
+            if (!activeSolarId) return;
             if (solarDbRef) solarDbRef.off();
             solarDbRef = database.ref('solar_devices/' + activeSolarId);
 
@@ -253,37 +500,31 @@
                     return;
                 }
 
-                // Online status check (25s interval)
                 let isOnline = (Date.now() - (data.lastSeen || 0) < 25000);
                 onlineBadge.innerText = isOnline ? "Online" : "Offline";
                 onlineBadge.className = isOnline ? "badge badge-online" : "badge badge-offline";
 
-                // Water Level % & Ultrasonic Tank Fill
                 let waterPerc = data.waterPercentage !== undefined ? Number(data.waterPercentage) : 0;
                 waterPerc = Math.max(0, Math.min(100, waterPerc));
                 document.getElementById('solarWaterFill').style.height = waterPerc + '%';
                 document.getElementById('solarTankLevelText').innerText = waterPerc + '%';
 
-                // Solar Charge Status
                 let isCharging = data.solarCharging === 1;
                 let chargeBadge = document.getElementById('solarChargeStatus');
                 chargeBadge.innerText = isCharging ? "Charging Active ⚡" : "No Sunlight / Standby";
                 chargeBadge.className = isCharging ? "badge badge-online" : "badge badge-solar";
 
-                // Battery Voltage & Percentage
                 let bVolt = data.batteryVoltage !== undefined ? Number(data.batteryVoltage).toFixed(1) : "12.0";
                 let bPerc = data.batteryPercentage !== undefined ? Number(data.batteryPercentage) : 80;
                 document.getElementById('batteryVoltText').innerText = bVolt + " V";
                 document.getElementById('batteryPercText').innerText = bPerc + "%";
 
-                // Threshold inputs sync (if available in DB)
                 if (data.thresholds) {
                     if(document.activeElement !== document.getElementById('setHigh')) document.getElementById('setHigh').value = data.thresholds.high || 90;
                     if(document.activeElement !== document.getElementById('setMid')) document.getElementById('setMid').value = data.thresholds.mid || 50;
                     if(document.activeElement !== document.getElementById('setLow')) document.getElementById('setLow').value = data.thresholds.low || 20;
                 }
 
-                // Mode & Motor
                 currentSolarAuto = data.autoMode !== undefined ? Number(data.autoMode) : 1;
                 let modeBadge = document.getElementById('solarModeStatus');
                 let modeBtn = document.getElementById('solarModeBtn');
@@ -315,7 +556,6 @@
                     motorBtn.style.background = "var(--accent-blue)";
                 }
 
-                // Dry Run
                 let dryBadge = document.getElementById('solarDryRunStatus');
                 let resetBtn = document.getElementById('solarResetBtn');
                 if (data.dryRun === 1) {
@@ -362,6 +602,19 @@
 
         function resetSolarDryRun() {
             database.ref('solar_devices/' + activeSolarId).update({ dryRun: 0, resetTrigger: 1 });
+        }
+
+        function deleteCurrentSolarDevice() {
+            if (confirm(currentLang === 'ta' ? "நிச்சயமாக இந்த சோலார் சாதனத்தை உங்கள் கணக்கிலிருந்து நீக்க விரும்புகிறீர்களா?" : "Unbind and remove this solar controller from your account?")) {
+                let user = auth.currentUser;
+                if (user && activeSolarId) {
+                    if (solarDbRef) solarDbRef.off();
+                    database.ref('users/' + user.uid + '/solar_devices/' + activeSolarId).remove();
+                    database.ref('solar_devices/' + activeSolarId).update({ boundUser: "", motorStatus: 0, dryRun: 0 });
+                    alert(currentLang === 'ta' ? "சாதனம் வெற்றிகரமாக நீக்கப்பட்டது!" : "Device successfully unlinked.");
+                    loadSolarDevices(user.uid);
+                }
+            }
         }
     </script>
 </body>
