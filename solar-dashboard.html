@@ -160,19 +160,18 @@
                     </div>
 
                     <div class="settings-form">
-                        <h4 style="font-size: 13px; color: var(--accent-orange); margin-bottom: 5px;"><i class="fas fa-sliders-h"></i> Tank Level Settings</h4>
+                        <h4 style="font-size: 13px; color: var(--accent-orange); margin-bottom: 5px;"><i class="fas fa-sliders-h"></i> Tank Level & Capacity Settings</h4>
                         
-                        <div id="firstTimeSetupDiv" style="background: rgba(41,182,246,0.08); padding: 8px; border-radius: 6px; margin-bottom: 8px; border: 1px dashed var(--accent-blue);">
-                            <div class="form-row" style="margin-bottom: 6px;">
-                                <label>Tank Capacity (L):</label>
-                                <input type="number" id="setTankCapacity" value="1000">
-                            </div>
-                            <div class="form-row">
-                                <label>Current Level (%):</label>
-                                <input type="number" id="setCurrentPercInput" value="50" min="0" max="100">
-                            </div>
-                            <button class="btn-set" onclick="submitFirstTimeSetup()">🚀 Save First-time Setup</button>
+                        <div class="form-row" style="margin-bottom: 6px;">
+                            <label>Tank Capacity (L):</label>
+                            <input type="number" id="setTankCapacity" value="1000">
                         </div>
+                        <div class="form-row">
+                            <label>Current Level (%):</label>
+                            <input type="number" id="setCurrentPercInput" value="50" min="0" max="100">
+                        </div>
+                        <button class="btn-set" onclick="submitCurrentLevelAndCapacity()">🎯 Set Current Level & Capacity</button>
+                        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 8px 0;">
 
                         <div class="form-row">
                             <label>High Level Stop (%):</label>
@@ -488,8 +487,7 @@
                     await database.ref('solar_devices/' + targetId).update({ 
                         boundUser: user.uid, 
                         motorStatus: 0, 
-                        dryRun: 0,
-                        setupDone: 0 
+                        dryRun: 0 
                     });
                 }
 
@@ -552,13 +550,6 @@
                 document.getElementById('todayUsageText').innerText = todayLitres + " Litres";
                 document.getElementById('monthlyUsageText').innerText = monthlyLitres + " Litres";
 
-                let setupDone = data.setupDone !== undefined ? Number(data.setupDone) : 0;
-                if (setupDone === 1) {
-                    document.getElementById('firstTimeSetupDiv').style.display = 'none';
-                } else {
-                    document.getElementById('firstTimeSetupDiv').style.display = 'block';
-                }
-
                 if (data.thresholds) {
                     if(document.activeElement !== document.getElementById('setTankCapacity')) document.getElementById('setTankCapacity').value = data.thresholds.capacity !== undefined ? data.thresholds.capacity : 1000;
                     if(document.activeElement !== document.getElementById('setHigh')) document.getElementById('setHigh').value = data.thresholds.high !== undefined ? data.thresholds.high : 80;
@@ -611,7 +602,8 @@
             });
         }
 
-        function submitFirstTimeSetup() {
+        // டேஷ்போர்டில் எப்போதுமே இருக்கும் செட்டிங்ஸ் மூலம் கேலிப்ரேஷன் செய்தல்
+        function submitCurrentLevelAndCapacity() {
             if (!activeSolarId) return;
             let cap = Number(document.getElementById('setTankCapacity').value);
             let val = Number(document.getElementById('setCurrentPercInput').value);
@@ -623,12 +615,11 @@
 
             database.ref('solar_devices/' + activeSolarId).update({ 
                 manualSetPercentage: val,
-                setPercentageTrigger: 1,
-                setupDone: 1
+                setPercentageTrigger: 1
             }, (error) => {
                 if (!error) {
                     database.ref('solar_devices/' + activeSolarId + '/thresholds').update({ capacity: cap });
-                    alert(currentLang === 'ta' ? "🚀 முதல் முறை அமைப்பு வெற்றிகரமாகச் சேமிக்கப்பட்டது!" : "🚀 First-time setup saved successfully!");
+                    alert(currentLang === 'ta' ? "🎯 நீர் மட்டம் மற்றும் கொள்ளளவு வெற்றிகரமாகச் சேமிக்கப்பட்டது!" : "🎯 Water level and capacity saved successfully!");
                 }
             });
         }
