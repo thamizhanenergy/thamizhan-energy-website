@@ -81,6 +81,8 @@
         .form-row input { width: 90px; padding: 8px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main); font-size: 13px; text-align: center; outline: none; }
         .btn-save { background: var(--accent-green); color: var(--bg-primary); border: none; padding: 10px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 12px; width: 100%; margin-top: 5px; }
         .btn-save:hover { opacity: 0.9; }
+        .btn-zero { background: var(--accent-blue); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 12px; width: 100%; margin-top: 5px; }
+        .btn-zero:hover { opacity: 0.9; }
 
         .danger-zone { margin-top: 25px; padding-top: 15px; border-top: 1px dashed var(--border-color); display: flex; flex-direction: column; gap: 8px; }
         .btn-secondary { background: var(--border-color); color: var(--text-main); border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; width: 100%; margin-top: 8px; }
@@ -156,19 +158,20 @@
                     </div>
 
                     <div class="settings-form">
-                        <h4 style="font-size: 13px; color: var(--accent-orange); margin-bottom: 5px;"><i class="fas fa-sliders-h"></i> Tank Level & Zero Settings</h4>
+                        <h4 style="font-size: 13px; color: var(--accent-orange); margin-bottom: 5px;"><i class="fas fa-sliders-h"></i> Tank Calibration & Settings</h4>
                         
-                        <div class="form-row">
-                            <label>Tank Empty 0% Distance (cm):</label>
-                            <input type="number" id="setTankZero" value="100">
+                        <div style="margin-bottom: 10px; text-align: center;">
+                            <button class="btn-zero" onclick="setTankZero()">🎯 Set as Zero (0% Empty Tank)</button>
+                            <p style="font-size: 10px; color: var(--text-muted); margin-top: 4px; text-align: center;">தொட்டி காலியாக உள்ள நிலையில் அழுத்தவும்</p>
                         </div>
+
                         <div class="form-row">
                             <label>High Level Stop (%):</label>
-                            <input type="number" id="setHigh" value="90">
+                            <input type="number" id="setHigh" value="80">
                         </div>
                         <div class="form-row">
                             <label>Mid Level Trigger (%):</label>
-                            <input type="number" id="setMid" value="50">
+                            <input type="number" id="setMid" value="30">
                         </div>
                         <div class="form-row">
                             <label>Low Level Start (%):</label>
@@ -525,10 +528,9 @@
                 document.getElementById('batteryPercText').innerText = bPerc + "%";
 
                 if (data.thresholds) {
-                    if(document.activeElement !== document.getElementById('setTankZero')) document.getElementById('setTankZero').value = data.thresholds.tankZero || 100;
-                    if(document.activeElement !== document.getElementById('setHigh')) document.getElementById('setHigh').value = data.thresholds.high || 90;
-                    if(document.activeElement !== document.getElementById('setMid')) document.getElementById('setMid').value = data.thresholds.mid || 50;
-                    if(document.activeElement !== document.getElementById('setLow')) document.getElementById('setLow').value = data.thresholds.low || 20;
+                    if(document.activeElement !== document.getElementById('setHigh')) document.getElementById('setHigh').value = data.thresholds.high !== undefined ? data.thresholds.high : 80;
+                    if(document.activeElement !== document.getElementById('setMid')) document.getElementById('setMid').value = data.thresholds.mid !== undefined ? data.thresholds.mid : 30;
+                    if(document.activeElement !== document.getElementById('setLow')) document.getElementById('setLow').value = data.thresholds.low !== undefined ? data.thresholds.low : 20;
                 }
 
                 currentSolarAuto = data.autoMode !== undefined ? Number(data.autoMode) : 1;
@@ -576,15 +578,25 @@
             });
         }
 
+        // தொட்டி காலியாக உள்ள நிலையில் 0% என சென்சார் தூரத்தை ஃபைர்பேஸில் பதிவு செய்யும் ஃபங்ஷன்
+        function setTankZero() {
+            if (!activeSolarId) return;
+            database.ref('solar_devices/' + activeSolarId).update({ setZeroTrigger: 1 }, (error) => {
+                if (error) {
+                    alert("Error triggering Set as Zero.");
+                } else {
+                    alert(currentLang === 'ta' ? "🎯 தொட்டியின் காலி நிலை (0%) வெற்றிகரமாக பதிவு செய்யப்பட்டது!" : "🎯 Tank Empty Position (0%) Recorded Successfully!");
+                }
+            });
+        }
+
         function saveThresholds() {
             if (!activeSolarId) return;
-            let tankZero = Number(document.getElementById('setTankZero').value);
             let high = Number(document.getElementById('setHigh').value);
             let mid = Number(document.getElementById('setMid').value);
             let low = Number(document.getElementById('setLow').value);
 
-            database.ref('solar_devices/' + activeSolarId + '/thresholds').set({
-                tankZero: tankZero,
+            database.ref('solar_devices/' + activeSolarId + '/thresholds').update({
                 high: high,
                 mid: mid,
                 low: low
@@ -592,7 +604,7 @@
                 if (error) {
                     alert("Error saving settings.");
                 } else {
-                    alert(currentLang === 'ta' ? "அமைப்புகள் வெற்றிகரமாக சேமிக்கப்பட்டன!" : "Settings saved successfully!");
+                    alert(currentLang === 'ta' ? "லெவல் அளவுகள் வெற்றிகரமாக சேமிக்கப்பட்டன!" : "Level thresholds saved successfully!");
                 }
             });
         }
