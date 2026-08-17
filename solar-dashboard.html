@@ -526,7 +526,8 @@
                     return;
                 }
 
-                let isOnline = (Date.now() - (data.lastSeen || 0) < 35000);
+                // ஆன்லைன் டைம் வரம்பை 60 வினாடிகளாக உயர்த்தி சரி செய்யப்பட்டுள்ளது
+                let isOnline = (Date.now() - (data.lastSeen || 0) < 60000);
                 onlineBadge.innerText = isOnline ? "Online" : "Offline";
                 onlineBadge.className = isOnline ? "badge badge-online" : "badge badge-offline";
 
@@ -681,7 +682,7 @@
                 if (user && activeSolarId) {
                     if (solarDbRef) solarDbRef.off();
                     database.ref('users/' + user.uid + '/solar_devices/' + activeSolarId).remove();
-                    database.ref('solar_devices/' + activeSolarId).update({ boundUser: "", motorStatus: 0, dryRun: 0 });
+                    database.ref('solar_devices/' + activeSerial).update({ boundUser: "", motorStatus: 0, dryRun: 0 });
                     alert(currentLang === 'ta' ? "சாதனம் வெற்றிகரமாக நீக்கப்பட்டது!" : "Device successfully unlinked.");
                     loadSolarDevices(user.uid);
                 }
