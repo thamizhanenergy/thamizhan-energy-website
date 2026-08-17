@@ -156,7 +156,12 @@
                     </div>
 
                     <div class="settings-form">
-                        <h4 style="font-size: 13px; color: var(--accent-orange); margin-bottom: 5px;"><i class="fas fa-sliders-h"></i> Tank Level Settings (%)</h4>
+                        <h4 style="font-size: 13px; color: var(--accent-orange); margin-bottom: 5px;"><i class="fas fa-sliders-h"></i> Tank Level & Zero Settings</h4>
+                        
+                        <div class="form-row">
+                            <label>Tank Empty 0% Distance (cm):</label>
+                            <input type="number" id="setTankZero" value="100">
+                        </div>
                         <div class="form-row">
                             <label>High Level Stop (%):</label>
                             <input type="number" id="setHigh" value="90">
@@ -520,6 +525,7 @@
                 document.getElementById('batteryPercText').innerText = bPerc + "%";
 
                 if (data.thresholds) {
+                    if(document.activeElement !== document.getElementById('setTankZero')) document.getElementById('setTankZero').value = data.thresholds.tankZero || 100;
                     if(document.activeElement !== document.getElementById('setHigh')) document.getElementById('setHigh').value = data.thresholds.high || 90;
                     if(document.activeElement !== document.getElementById('setMid')) document.getElementById('setMid').value = data.thresholds.mid || 50;
                     if(document.activeElement !== document.getElementById('setLow')) document.getElementById('setLow').value = data.thresholds.low || 20;
@@ -572,11 +578,13 @@
 
         function saveThresholds() {
             if (!activeSolarId) return;
+            let tankZero = Number(document.getElementById('setTankZero').value);
             let high = Number(document.getElementById('setHigh').value);
             let mid = Number(document.getElementById('setMid').value);
             let low = Number(document.getElementById('setLow').value);
 
             database.ref('solar_devices/' + activeSolarId + '/thresholds').set({
+                tankZero: tankZero,
                 high: high,
                 mid: mid,
                 low: low
@@ -584,7 +592,7 @@
                 if (error) {
                     alert("Error saving settings.");
                 } else {
-                    alert(currentLang === 'ta' ? "நீர் மட்ட அளவுகள் வெற்றிகரமாக சேமிக்கப்பட்டன!" : "Threshold levels saved successfully!");
+                    alert(currentLang === 'ta' ? "அமைப்புகள் வெற்றிகரமாக சேமிக்கப்பட்டன!" : "Settings saved successfully!");
                 }
             });
         }
