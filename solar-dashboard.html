@@ -158,7 +158,7 @@
                     </div>
 
                     <div class="settings-form">
-                        <h4 style="font-size: 13px; color: var(--accent-orange); margin-bottom: 5px;"><i class="fas fa-sliders-h"></i> Tank Calibration & Settings</h4>
+                        <h4 style="font-size: 13px; color: var(--accent-orange); margin-bottom: 5px;"><i class="fas fa-sliders-h"></i> Tank Level & Zero Settings</h4>
                         
                         <div style="margin-bottom: 10px; text-align: center;">
                             <button class="btn-zero" onclick="setTankZero()">🎯 Set as Zero (0% Empty Tank)</button>
@@ -508,7 +508,7 @@
                     return;
                 }
 
-                let isOnline = (Date.now() - (data.lastSeen || 0) < 25000);
+                let isOnline = (Date.now() - (data.lastSeen || 0) < 35000);
                 onlineBadge.innerText = isOnline ? "Online" : "Offline";
                 onlineBadge.className = isOnline ? "badge badge-online" : "badge badge-offline";
 
@@ -578,7 +578,6 @@
             });
         }
 
-        // தொட்டி காலியாக உள்ள நிலையில் 0% என சென்சார் தூரத்தை ஃபைர்பேஸில் பதிவு செய்யும் ஃபங்ஷன்
         function setTankZero() {
             if (!activeSolarId) return;
             database.ref('solar_devices/' + activeSolarId).update({ setZeroTrigger: 1 }, (error) => {
