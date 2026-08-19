@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Management System | Thamizhan Energy Systems</title>
+    <title>அட்மின் ஹப் | தமிழன் எனர்ஜி சிஸ்டம்ஸ்</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -35,7 +35,6 @@
         .admin-profile { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; color: #555; }
 
         .content-body { padding: 25px; overflow-y: auto; flex-grow: 1; background: #f8fafc; }
-        
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
@@ -44,7 +43,7 @@
         .stat-card h4 { font-size: 13px; color: #666; margin-bottom: 8px; }
         .stat-card .value { font-size: 24px; font-weight: 700; color: #0f2027; }
 
-        .table-container { background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid #eaeaea; margin-bottom: 20px; }
+        .table-container { background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid #eaeaea; margin-bottom: 25px; }
         .table-header { padding: 15px 20px; font-size: 15px; font-weight: 700; color: #0f2027; border-bottom: 1px solid #eaeaea; display: flex; justify-content: space-between; align-items: center; }
         table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
         th, td { padding: 12px 20px; border-bottom: 1px solid #f0f0f0; }
@@ -55,9 +54,8 @@
         .badge-pending { background: #fff3e0; color: #e65100; }
         .badge-completed { background: #e8f5e9; color: #2e7d32; }
 
-        .action-select, .form-input, textarea.form-input { padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 12px; outline: none; background: #fff; width: 100%; }
-        .btn-action { background: #0f2027; color: #00ff88; border: none; padding: 8px 15px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px; }
-        .form-group-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #eaeaea; margin-bottom: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; align-items: flex-end; }
+        .action-select, .form-input { padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 12px; outline: none; background: #fff; width: 100%; margin-bottom: 5px; }
+        .btn-action { background: #0f2027; color: #00ff88; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -82,11 +80,9 @@
             </div>
             <ul class="sidebar-menu">
                 <li><a onclick="switchTab('dashboard')" class="active" id="nav-dashboard"><i class="fas fa-chart-pie"></i> <span>Dashboard</span></a></li>
-                <li><a onclick="switchTab('orders')" id="nav-orders"><i class="fas fa-shopping-cart"></i> <span>Order & Delivery</span></a></li>
-                <li><a onclick="switchTab('stock')" id="nav-stock"><i class="fas fa-boxes"></i> <span>Stock & Products</span></a></li>
-                <li><a onclick="switchTab('production')" id="nav-production"><i class="fas fa-industry"></i> <span>Production</span></a></li>
+                <li><a onclick="switchTab('orders')" id="nav-orders"><i class="fas fa-shopping-cart"></i> <span>Orders & Tracking</span></a></li>
                 <li><a onclick="switchTab('support')" id="nav-support"><i class="fas fa-headset"></i> <span>Customer Support</span></a></li>
-                <li><a onclick="switchTab('sales')" id="nav-sales"><i class="fas fa-rupee-sign"></i> <span>Sales & Accounts</span></a></li>
+                <li><a onclick="switchTab('careers')" id="nav-careers"><i class="fas fa-briefcase"></i> <span>Career Resumes</span></a></li>
                 <li><a onclick="switchTab('access')" id="nav-access"><i class="fas fa-user-lock"></i> <span>Admin Access</span></a></li>
             </ul>
         </div>
@@ -114,32 +110,28 @@
                         <div class="value" id="statTotalOrders">0</div>
                     </div>
                     <div class="stat-card" style="border-left-color: #2196F3;">
-                        <h4>மொத்த தயாரிப்புகள் (Products)</h4>
-                        <div class="value" id="statTotalProducts">0</div>
-                    </div>
-                    <div class="stat-card" style="border-left-color: #ff9800;">
-                        <h4>சப்போர்ட் டிக்கெட்டுகள்</h4>
+                        <h4>சப்போர்ட் மெசேஜ்கள்</h4>
                         <div class="value" id="statTotalTickets">0</div>
                     </div>
-                    <div class="stat-card" style="border-left-color: #9c27b0;">
-                        <h4>இன்றைய விற்பனை</h4>
-                        <div class="value">₹ 0.00</div>
+                    <div class="stat-card" style="border-left-color: #ff9800;">
+                        <h4>பெறப்பட்ட ரெஸ்யூம்கள்</h4>
+                        <div class="value" id="statTotalResumes">0</div>
                     </div>
                 </div>
             </div>
 
             <div id="tab-orders" class="tab-content">
                 <div class="table-container">
-                    <div class="table-header"><span>🛒 ஆர்டர்கள் & டிராக்கிங் மேலாண்மை (Order & Delivery Management)</span></div>
+                    <div class="table-header"><span>🛒 ஆர்டர்கள் & டிராக்கிங் மேலாண்மை (Orders & Tracking)</span></div>
                     <table>
                         <thead>
                             <tr>
                                 <th>Order ID</th>
                                 <th>கஸ்டமர் பெயர் & போன்</th>
-                                <th>தயாரிப்பு & தொகை</th>
-                                <th>முகவரி</th>
-                                <th>நிலை (Status)</th>
-                                <th>டிராக்கிங் ஐடி & கூரியர் லிங்க் (Update)</th>
+                                <th>பொருட்கள் & தொகை</th>
+                                <th>டெலிவரி முகவரி</th>
+                                <th>ஆர்டர் நிலை (Status)</th>
+                                <th>டிராக்கிங் ஐடி & கூரியர் லிங்க் (Send)</th>
                             </tr>
                         </thead>
                         <tbody id="ordersTableBody">
@@ -149,82 +141,30 @@
                 </div>
             </div>
 
-            <div id="tab-stock" class="tab-content">
-                <div class="form-group-box">
-                    <div>
-                        <label style="font-size:12px; font-weight:600;">Product Name:</label>
-                        <input type="text" id="prodName" class="form-input" placeholder="e.g., AWLCW 1.0">
-                    </div>
-                    <div>
-                        <label style="font-size:12px; font-weight:600;">Actual Price (₹):</label>
-                        <input type="number" id="prodPrice" class="form-input" placeholder="5499">
-                    </div>
-                    <div>
-                        <label style="font-size:12px; font-weight:600;">Offer Price (₹):</label>
-                        <input type="number" id="prodDiscount" class="form-input" placeholder="4999">
-                    </div>
-                    <div>
-                        <label style="font-size:12px; font-weight:600;">Stock Qty:</label>
-                        <input type="number" id="prodStock" class="form-input" placeholder="10">
-                    </div>
-                    <div>
-                        <label style="font-size:12px; font-weight:600;">Offer Tag:</label>
-                        <input type="text" id="prodOfferTag" class="form-input" placeholder="Save ₹500">
-                    </div>
-                    <div>
-                        <label style="font-size:12px; font-weight:600;">Image URL / Filename:</label>
-                        <input type="text" id="prodImg" class="form-input" value="3.png">
-                    </div>
-                    <div style="grid-column: 1 / -1;">
-                        <label style="font-size:12px; font-weight:600;">Specifications (ஒவ்வொரு வரியிலும் ஒன்றாக):</label>
-                        <textarea id="prodSpecs" class="form-input" rows="2" placeholder="மொபைல் ரிமோட் கண்ட்ரோல்&#10;1 வருடம் உத்தரவாதம்"></textarea>
-                    </div>
-                    <div style="grid-column: 1 / -1;">
-                        <button class="btn-action" style="width: 100%; padding: 12px; font-size: 14px;" onclick="addNewProductToShop()">+ Add / Save Product to Shop</button>
-                    </div>
-                </div>
-
-                <div class="table-container">
-                    <div class="table-header"><span>📦 ஏற்கனவே உள்ள தயாரிப்புகள் & ஸ்டாக் மேலாண்மை</span></div>
-                    <table>
-                        <thead>
-                            <tr><th>Image</th><th>Product Name</th><th>Price / Offer</th><th>Stock</th><th>Action</th></tr>
-                        </thead>
-                        <tbody id="adminProductsTableBody">
-                            <tr><td colspan="5" style="text-align: center; color: #888; padding: 20px;">தயாரிப்புகள் ஏற்றப்படுகின்றன...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="tab-production" class="tab-content">
-                <div class="table-container">
-                    <div class="table-header"><span>🏭 உற்பத்தி நிலை (Production Management)</span></div>
-                    <table>
-                        <thead><tr><th>Batch No</th><th>Device Model</th><th>Units Manufactured</th><th>Status</th></tr></thead>
-                        <tbody><tr><td>BAT-2026-01</td><td>AWLCW 1.0</td><td>50 Units</td><td><span class="badge badge-completed">Testing Phase</span></td></tr></tbody>
-                    </table>
-                </div>
-            </div>
-
             <div id="tab-support" class="tab-content">
                 <div class="table-container">
-                    <div class="table-header"><span>🛠️ கஸ்டமர் சப்போர்ட் டிக்கெட்டுகள்</span></div>
+                    <div class="table-header"><span>🛠️ கஸ்டமர் சப்போர்ட் மெசேஜ்கள் (Contact Messages)</span></div>
                     <table>
-                        <thead><tr><th>Ticket ID</th><th>பெயர்</th><th>மொபைல்</th><th>விவரம்</th><th>நிலை</th></tr></thead>
+                        <thead>
+                            <tr><th>தேதி / நேரம்</th><th>பெயர்</th><th>போன் / ஈமெயில்</th><th>செய்தி (Message)</th></tr>
+                        </thead>
                         <tbody id="supportTableBody">
-                            <tr><td colspan="5" style="text-align: center; color: #888; padding: 20px;">டிக்கெட்டுகள் இல்லை</td></tr>
+                            <tr><td colspan="4" style="text-align: center; color: #888; padding: 20px;">மெசேஜ்கள் இல்லை</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <div id="tab-sales" class="tab-content">
+            <div id="tab-careers" class="tab-content">
                 <div class="table-container">
-                    <div class="table-header"><span>💰 விற்பனை & கணக்குகள்</span></div>
+                    <div class="table-header"><span>📄 வேலைவாய்ப்பு ரெஸ்யூம்கள் (Career Resumes)</span></div>
                     <table>
-                        <thead><tr><th>Date</th><th>Description</th><th>Type</th><th>Amount</th></tr></thead>
-                        <tbody><tr><td>2026-03-30</td><td>Online Website Sales</td><td><span class="badge badge-completed">Credit</span></td><td>₹ 3,499</td></tr></tbody>
+                        <thead>
+                            <tr><th>விண்ணப்பதாரர் பெயர்</th><th>போன் எண்</th><th>ஈமெயில்</th><th>ரெஸ்யூம் / கோப்பு (Resume)</th></tr>
+                        </thead>
+                        <tbody id="careersTableBody">
+                            <tr><td colspan="4" style="text-align: center; color: #888; padding: 20px;">ரெஸ்யூம்கள் இல்லை</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -235,7 +175,7 @@
                     <button class="btn-action" onclick="grantAdminAccess()">+ Grant Admin Access</button>
                 </div>
                 <div class="table-container">
-                    <div class="table-header"><span>🔐 அனுமதிக்கப்பட்ட அட்மின் ஈமெயில்கள் (Authorized Admins)</span></div>
+                    <div class="table-header"><span>🔐 அனுமதிக்கப்பட்ட அட்மின் ஈமெயில்கள்</span></div>
                     <table>
                         <thead><tr><th>Email Address</th><th>Access Level</th><th>Action</th></tr></thead>
                         <tbody id="adminAccessTableBody">
@@ -248,9 +188,9 @@
         </div>
     </main>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
     <script>
         const firebaseConfig = {
@@ -263,7 +203,7 @@
             appId: "1:727924977035:web:ab34a19d7bd3a65976538e"
         };
 
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const database = firebase.database();
         const auth = firebase.auth();
 
@@ -314,18 +254,16 @@
 
             const titles = {
                 'dashboard': '📊 ஒட்டுமொத்த சுருக்கம் (Dashboard)',
-                'orders': '🛒 ஆர்டர் & டெலிவரி மேலாண்மை (Order & Delivery)',
-                'stock': '📦 பொருட்கள் இருப்பு & தயாரிப்புகள் (Stock & Products)',
-                'production': '🏭 உற்பத்தி மேலாண்மை (Production)',
-                'support': '🛠️ கஸ்டமர் சப்போர்ட் (Customer Support)',
-                'sales': '💰 விற்பனை & கணக்குகள் (Sales & Accounts)',
+                'orders': '🛒 ஆர்டர்கள் & டிராக்கிங் மேலாண்மை (Orders & Tracking)',
+                'support': '🛠️ கஸ்டமர் சப்போர்ட் மெசேஜ்கள் (Contact Messages)',
+                'careers': '📄 வேலைவாய்ப்பு ரெஸ்யூம்கள் (Career Resumes)',
                 'access': '🔐 அட்மின் அனுமதி மேலாண்மை (Admin Access)'
             };
             document.getElementById('pageTitle').innerText = titles[tabId];
         }
 
         function initDataListeners() {
-            // Orders & Tracking Listener
+            // 1. Orders & Tracking Listener
             database.ref('orders').on('value', (snapshot) => {
                 let tbody = document.getElementById('ordersTableBody');
                 tbody.innerHTML = '';
@@ -352,8 +290,8 @@
                             </td>
                             <td>
                                 <input type="text" class="form-input" id="trackId_${k}" placeholder="Tracking ID" value="${ord.trackingId || ''}" style="margin-bottom:4px;">
-                                <input type="text" class="form-input" id="trackUrl_${k}" placeholder="Courier URL" value="${ord.trackingUrl || ''}" style="margin-bottom:4px;">
-                                <button class="btn-action" style="padding:4px 8px; font-size:11px;" onclick="saveTracking('${k}')">Save Tracking</button>
+                                <input type="text" class="form-input" id="trackUrl_${k}" placeholder="Courier Tracking URL" value="${ord.trackingUrl || ''}" style="margin-bottom:4px;">
+                                <button class="btn-action" onclick="saveTracking('${k}')">Save & Send</button>
                             </td>
                         `;
                         tbody.appendChild(tr);
@@ -365,34 +303,7 @@
                 }
             });
 
-            // Products & Stock Listener
-            database.ref('products').on('value', (snapshot) => {
-                let tbody = document.getElementById('adminProductsTableBody');
-                tbody.innerHTML = '';
-                let pCount = 0;
-                if (snapshot.exists()) {
-                    snapshot.forEach((childSnap) => {
-                        let key = childSnap.key;
-                        let item = childSnap.val();
-                        pCount++;
-                        let tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td><img src="${item.img || '3.png'}" style="width:40px; height:40px; object-fit:contain;"></td>
-                            <td><b>${item.name || 'Product'}</b><br><small>${item.offerTag || ''}</small></td>
-                            <td>₹${item.discount || item.price} <span style="text-decoration:line-through; font-size:11px; color:#888;">₹${item.price}</span></td>
-                            <td><input type="number" value="${item.stock !== undefined ? item.stock : 10}" style="width:60px; padding:4px;" onchange="updateStockQty('${key}', this.value)"> Units</td>
-                            <td><button class="btn-action" style="background:#ff5252;" onclick="deleteProduct('${key}')">Delete</button></td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
-                    document.getElementById('statTotalProducts').innerText = pCount;
-                } else {
-                    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #888; padding: 20px;">தயாரிப்புகள் எதுவும் இல்லை</td></tr>`;
-                    document.getElementById('statTotalProducts').innerText = '0';
-                }
-            });
-
-            // Support Tickets
+            // 2. Contact / Support Messages Listener (From contact.html)
             database.ref('supportTickets').on('value', (snapshot) => {
                 let tbody = document.getElementById('supportTableBody');
                 tbody.innerHTML = '';
@@ -403,18 +314,42 @@
                         tCount++;
                         let tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td>#${tic.ticketId || '100'}</td>
-                            <td>${tic.name || 'N/A'}</td>
-                            <td>${tic.phone || 'N/A'}</td>
-                            <td>${tic.serviceType || 'General'} - ${tic.message || ''}</td>
-                            <td><span class="badge badge-pending">${tic.status || 'Open'}</span></td>
+                            <td>${tic.date || 'Recent'}</td>
+                            <td><b>${tic.name || 'N/A'}</b></td>
+                            <td>${tic.phone || ''}<br><small>${tic.email || ''}</small></td>
+                            <td>${tic.message || tic.serviceType || 'General Message'}</td>
                         `;
                         tbody.appendChild(tr);
                     });
                     document.getElementById('statTotalTickets').innerText = tCount;
                 } else {
-                    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #888; padding: 20px;">டிக்கெட்டுகள் இல்லை</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #888; padding: 20px;">மெசேஜ்கள் எதுவும் இல்லை</td></tr>`;
                     document.getElementById('statTotalTickets').innerText = '0';
+                }
+            });
+
+            // 3. Career Resumes Listener (From career.html)
+            database.ref('careers').on('value', (snapshot) => {
+                let tbody = document.getElementById('careersTableBody');
+                tbody.innerHTML = '';
+                let rCount = 0;
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnap) => {
+                        let car = childSnap.val();
+                        rCount++;
+                        let tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td><b>${car.name || 'Applicant'}</b></td>
+                            <td>${car.phone || 'N/A'}</td>
+                            <td>${car.email || 'N/A'}</td>
+                            <td><a href="${car.resumeUrl || '#'}" target="_blank" style="color:#2874f0; text-decoration:underline; font-weight:600;">Download / View Resume ↗</a></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                    document.getElementById('statTotalResumes').innerText = rCount;
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #888; padding: 20px;">ரெஸ்யூம்கள் எதுவும் இல்லை</td></tr>`;
+                    document.getElementById('statTotalResumes').innerText = '0';
                 }
             });
 
@@ -439,50 +374,6 @@
             });
         }
 
-        // Add New Product to Shop
-        function addNewProductToShop() {
-            let name = document.getElementById('prodName').value.trim();
-            let price = Number(document.getElementById('prodPrice').value);
-            let discount = Number(document.getElementById('prodDiscount').value);
-            let stock = Number(document.getElementById('prodStock').value);
-            let offerTag = document.getElementById('prodOfferTag').value.trim();
-            let img = document.getElementById('prodImg').value.trim() || '3.png';
-            let specsRaw = document.getElementById('prodSpecs').value.trim();
-            let specs = specsRaw ? specsRaw.split('\n') : ["1 வருடம் உத்தரவாதம்"];
-
-            if (!name || isNaN(price)) {
-                alert("தயாரிப்பின் பெயர் மற்றும் விலை அவசியம்.");
-                return;
-            }
-
-            database.ref('products').push({
-                name, price, discount, stock, offerTag, img, specs
-            }, (error) => {
-                if (!error) {
-                    alert("புதிய தயாரிப்பு வெற்றிகரமாக சேர்க்கப்பட்டது! (Shop.html பக்கத்தில் உடனுக்குடன் காட்டும்)");
-                    document.getElementById('prodName').value = '';
-                    document.getElementById('prodPrice').value = '';
-                    document.getElementById('prodDiscount').value = '';
-                    document.getElementById('prodStock').value = '';
-                    document.getElementById('prodOfferTag').value = '';
-                    document.getElementById('prodImg').value = '3.png';
-                    document.getElementById('prodSpecs').value = '';
-                } else {
-                    alert("பிழை: " + error.message);
-                }
-            });
-        }
-
-        function updateStockQty(key, newStock) {
-            database.ref('products/' + key).update({ stock: Number(newStock) });
-        }
-
-        function deleteProduct(key) {
-            if (confirm("இந்தப் பொருளை நீக்க விரும்புகிறீர்களா?")) {
-                database.ref('products/' + key).remove();
-            }
-        }
-
         function updateOrderStatus(orderId, newStatus) {
             database.ref('orders/' + orderId).update({ status: newStatus });
         }
@@ -497,7 +388,7 @@
                 status: 'Shipped'
             }, (error) => {
                 if (!error) {
-                    alert("டிராக்கிங் விவரங்கள் வெற்றிகரமாக சேமிக்கப்பட்டன!");
+                    alert("டிராக்கிங் ஐடி மற்றும் லிங்க் வெற்றிகரமாக சேமிக்கப்பட்டு கஸ்டமருக்கு அனுப்பப்பட்டது!");
                 }
             });
         }
