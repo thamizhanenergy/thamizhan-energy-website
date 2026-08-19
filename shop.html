@@ -100,7 +100,7 @@
 
         .order-history-box { background: #fff; border: 1px solid #ddd; padding: 12px; border-radius: 8px; margin-top: 12px; font-size: 13px; border-left: 4px solid #2874f0; }
 
-        /* Success Checkmark Animation Styles */
+        /* Success Animation Styles */
         .success-animation-box { text-align: center; padding: 20px; }
         .checkmark-circle { width: 80px; height: 80px; position: relative; border-radius: 50%; background: #4CAF50; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; animation: popUp 0.4s ease-in-out; }
         .checkmark { width: 40px; height: 25px; border-left: 5px solid white; border-bottom: 5px solid white; transform: rotate(-45deg); margin-top: -5px; animation: checkDraw 0.4s ease-in-out forwards; }
@@ -144,7 +144,7 @@
             <li><button type="button" onclick="toggleSidebar(); handleUserClick();">👤 <span id="sidebar-user-text" data-ta="எனது கணக்கு & விவரங்கள்" data-en="My Account & Details">எனது கணக்கு & விவரங்கள்</span></button></li>
             <li><button type="button" onclick="toggleSidebar(); openCartModal();"><span data-ta="🛒 எனது கார்ட் பொருட்கள்" data-en="🛒 My Cart Items">🛒 எனது கார்ட் பொருட்கள்</span> (<span id="sidebar-cart-count">0</span>)</button></li>
             <li><button type="button" onclick="toggleSidebar(); openTrackingModal();"><span data-ta="📦 ஆர்டர்கள் & டிராக்கிங்" data-en="📦 Orders & Tracking">📦 ஆர்டர்கள் & டிராக்கிங்</span></button></li>
-            <li><a href="admin.html" id="sidebarAdminBtn" style="display:none; color:#cc0c39;" data-ta="⚙️ அட்மின் டேஷ்போர்டு" data-en="⚙️ Admin Dashboard">⚙️ அட்மின் டேஷ்போர்டு</a></li>
+            <li><a href="admin-hub.html" id="sidebarAdminBtn" style="display:none; color:#cc0c39;" data-ta="⚙️ அட்மின் ஹப்" data-en="⚙️ Admin Hub">⚙️ அட்மின் ஹப்</a></li>
             <li><button type="button" onclick="toggleLanguage();"><span id="sidebarLangText">🌐 Switch to English</span></button></li>
         </ul>
     </div>
@@ -255,48 +255,7 @@
         const ADMIN_EMAIL = "thamizhanes@gmail.com";
         const RAZORPAY_KEY_ID = "rzp_live_TJABmArhfi4WPG";
 
-        // காமன் ஸ்டோரேஜ் (LocalStorage) மூலம் இன்வென்டரி மேனேஜ்மென்ட் உடன் இணைக்கப்பட்ட தயாரிப்புகள்
-        function getShopProducts() {
-            let saved = localStorage.getItem('shopProducts');
-            if (saved) {
-                return JSON.parse(saved);
-            } else {
-                let defaultProducts = [
-                    {
-                        id: "p1",
-                        name: "AWLCP 1.0",
-                        price: 3999,
-                        discount: 3499,
-                        stock: 15,
-                        offerTag: "Save ₹500",
-                        img: "3.png",
-                        specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"]
-                    },
-                    {
-                        id: "p2",
-                        name: "AWLCW 1.0",
-                        price: 5499,
-                        discount: 4999,
-                        stock: 10,
-                        offerTag: "WiFi Model",
-                        img: "3.png",
-                        specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"]
-                    },
-                    {
-                        id: "p3",
-                        name: "AWLCWS 1.0",
-                        price: 7499,
-                        discount: 6999,
-                        stock: 8,
-                        offerTag: "Solar + WiFi",
-                        img: "3.png",
-                        specs: ["மேல் & கீழ் தொட்டி வயர்லெஸ் இணைப்பு", "சோலார் பவர் சப்போர்ட்", "1 வருடம் உத்தரவாதம்"]
-                    }
-                ];
-                localStorage.setItem('shopProducts', JSON.stringify(defaultProducts));
-                return defaultProducts;
-            }
-        }
+        let liveProducts = [];
 
         function toggleSidebar() { document.getElementById('sidebarMenu').classList.toggle('active'); }
 
@@ -315,7 +274,7 @@
                     if(el.getAttribute('data-ta')) el.innerText = el.getAttribute('data-ta');
                 }
             });
-            renderProducts(getShopProducts());
+            renderProducts(liveProducts);
         }
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -326,7 +285,33 @@
                 elements.forEach(el => { if(el.getAttribute('data-en')) el.innerText = el.getAttribute('data-en'); });
             }
 
-            renderProducts(getShopProducts());
+            // Firebase-ல் இருந்து ஸ்டாக் & ப்ராடக்ட் விவரங்களை லைவ்வாகப் பெறுதல்
+            database.ref('stocks').on('value', (snapshot) => {
+                liveProducts = [];
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnap) => {
+                        let item = childSnap.val();
+                        liveProducts.push({
+                            id: childSnap.key,
+                            name: item.name || "Product",
+                            price: item.price ? Number(item.price) + 500 : 4499,
+                            discount: item.price ? Number(item.price) : 3999,
+                            stock: item.qty !== undefined ? Number(item.qty) : 10,
+                            offerTag: item.offerTag || "Live Stock",
+                            img: item.img || "3.png",
+                            specs: item.specs || ["உயர்தர எலக்ட்ரானிக்ஸ்", "1 வருடம் உத்தரவாதம்"]
+                        });
+                    });
+                } else {
+                    // Default fallback if database is empty
+                    liveProducts = [
+                        { id: "p1", name: "AWLCP 1.0", price: 3999, discount: 3499, stock: 15, offerTag: "Save ₹500", img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"] },
+                        { id: "p2", name: "AWLCW 1.0", price: 5499, discount: 4999, stock: 10, offerTag: "WiFi Model", img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"] }
+                    ];
+                }
+                renderProducts(liveProducts);
+            });
+
             updateCartDisplay();
             
             firebase.auth().onAuthStateChanged((user) => {
@@ -430,7 +415,6 @@
             firebase.auth().signOut().then(() => { location.reload(); });
         }
 
-        // Profile Modal (Only User Details & Editing)
         function openProfileModal() {
             let user = firebase.auth().currentUser;
             if (!user) { openLoginModal(); return; }
@@ -479,41 +463,46 @@
 
         function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
 
-        // Separate Orders & Tracking Modal
+        // ஆர்டர்கள் & டிராக்கிங் (Firebase-ல் இருந்து லைவ்வாகப் பெறுதல்)
         function openTrackingModal() {
             let user = firebase.auth().currentUser;
             if (!user) { alert(currentLang === 'ta' ? 'தயவுசெய்து முதலில் லாகின் செய்யவும்!' : 'Please login first!'); openLoginModal(); return; }
 
-            let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
-            let userOrders = allOrders.filter(o => o.email === user.email);
+            database.ref('orders').orderByChild('email').equalTo(user.email).once('value').then((snapshot) => {
+                let userOrders = [];
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnap) => {
+                        userOrders.push(childSnap.val());
+                    });
+                }
 
-            let ordersHTML = userOrders.length === 0 ? `<p style="color:#888; text-align:center;">${currentLang === 'ta' ? 'ஆர்டர்கள் எதுவும் இல்லை.' : 'No orders found.'}</p>` : userOrders.map(ord => {
-                let trackingInfo = ord.trackingId ? 
-                    `<p style="margin-top: 5px;"><b>${currentLang === 'ta' ? 'டிராக்கிங் ஐடி' : 'Tracking ID'}:</b> <span style="background:#e0f7fa; padding:2px 6px; border-radius:4px;">${ord.trackingId}</span></p>
-                     <p style="margin-top: 3px;"><b>${currentLang === 'ta' ? 'கொரியர் லிங்க்' : 'Courier Link'}:</b> <a href="${ord.trackingUrl}" target="_blank" style="color:#2874f0; text-decoration:underline;">${currentLang === 'ta' ? 'டிரா செய்ய கிளிக் செய்க ↗' : 'Click to Track ↗'}</a></p>` : 
-                    `<p style="margin-top: 5px; color:#e67e22; font-size:12px;"><b>${currentLang === 'ta' ? 'நிலை' : 'Status'}:</b> ${currentLang === 'ta' ? 'விரைவில் கொரியர் செய்யப்படும்' : 'Will be shipped soon'}</p>`;
+                let ordersHTML = userOrders.length === 0 ? `<p style="color:#888; text-align:center;">${currentLang === 'ta' ? 'ஆர்டர்கள் எதுவும் இல்லை.' : 'No orders found.'}</p>` : userOrders.map(ord => {
+                    let trackingInfo = ord.trackingId ? 
+                        `<p style="margin-top: 5px;"><b>${currentLang === 'ta' ? 'டிராக்கிங் ஐடி' : 'Tracking ID'}:</b> <span style="background:#e0f7fa; padding:2px 6px; border-radius:4px;">${ord.trackingId}</span></p>
+                         <p style="margin-top: 3px;"><b>${currentLang === 'ta' ? 'கொரியர் லிங்க்' : 'Courier Link'}:</b> <a href="${ord.trackingUrl || '#'}" target="_blank" style="color:#2874f0; text-decoration:underline;">${currentLang === 'ta' ? 'டிரா செய்ய கிளிக் செய்க ↗' : 'Click to Track ↗'}</a></p>` : 
+                        `<p style="margin-top: 5px; color:#e67e22; font-size:12px;"><b>${currentLang === 'ta' ? 'நிலை' : 'Status'}:</b> ${currentLang === 'ta' ? 'விரைவில் கொரியர் செய்யப்படும்' : 'Will be shipped soon'}</p>`;
 
-                return `
-                    <div class="order-history-box">
-                        <p><b>${currentLang === 'ta' ? 'ஆர்டர் ஐடி' : 'Order ID'}:</b> <span style="color:#2874f0;">${ord.orderId}</span></p>
-                        <p><b>${currentLang === 'ta' ? 'பொருட்கள்' : 'Items'}:</b> ${ord.items}</p>
-                        <p><b>${currentLang === 'ta' ? 'தொகை' : 'Amount'}:</b> ${ord.amount}</p>
-                        <p><b>${currentLang === 'ta' ? 'முகவரி' : 'Address'}:</b> ${ord.address}</p>
-                        <p><b>${currentLang === 'ta' ? 'நிலை' : 'Status'}:</b> <span style="color:#007600; font-weight:bold;">${ord.status}</span></p>
-                        ${trackingInfo}
-                    </div>
-                `;
-            }).join('');
+                    return `
+                        <div class="order-history-box">
+                            <p><b>${currentLang === 'ta' ? 'ஆர்டர் ஐடி' : 'Order ID'}:</b> <span style="color:#2874f0;">${ord.orderId}</span></p>
+                            <p><b>${currentLang === 'ta' ? 'பொருட்கள்' : 'Items'}:</b> ${ord.product || ord.items}</p>
+                            <p><b>${currentLang === 'ta' ? 'தொகை' : 'Amount'}:</b> ₹${ord.amount}</p>
+                            <p><b>${currentLang === 'ta' ? 'முகவரி' : 'Address'}:</b> ${ord.address}</p>
+                            <p><b>${currentLang === 'ta' ? 'நிலை' : 'Status'}:</b> <span style="color:#007600; font-weight:bold;">${ord.status}</span></p>
+                            ${trackingInfo}
+                        </div>
+                    `;
+                }).join('');
 
-            document.getElementById('trackingDetailsContainer').innerHTML = ordersHTML;
-            document.getElementById('trackingModal').style.display = 'flex';
+                document.getElementById('trackingDetailsContainer').innerHTML = ordersHTML;
+                document.getElementById('trackingModal').style.display = 'flex';
+            });
         }
 
         function closeTrackingModal() { document.getElementById('trackingModal').style.display = 'none'; }
 
         function addToCart(name, price) {
-            let products = getShopProducts();
-            let prod = products.find(p => p.name === name);
+            let prod = liveProducts.find(p => p.name === name);
             if(prod && prod.stock <= 0) {
                 alert(currentLang === 'ta' ? 'மன்னிக்கவும்! இந்தப் பொருள் ஸ்டாக் இல்லை.' : 'Sorry! Product is out of stock.');
                 return;
@@ -598,7 +587,7 @@
         }
 
         function proceedToCOD() {
-            completeOrder(currentLang === 'ta' ? 'ஆர்டர் உறுதி செய்யப்பட்டது (COD)' : 'Order Confirmed (COD)', 'TES-COD-');
+            completeOrder(currentLang === 'ta' ? 'Pending (COD)' : 'Pending (COD)', 'TES-COD-');
         }
 
         function proceedToRazorpay() {
@@ -616,7 +605,7 @@
                 "name": "தமிழன் எனர்ஜி சிஸ்டம்ஸ்",
                 "description": itemNames,
                 "handler": function (response){
-                    completeOrder(currentLang === 'ta' ? 'ஆர்டர் உறுதி செய்யப்பட்டது (Paid)' : 'Order Confirmed (Paid)', orderId);
+                    completeOrder('Pending (Paid)', orderId);
                 },
                 "prefill": { "name": userExtra.name, "email": user.email, "contact": userExtra.phone },
                 "theme": { "color": "#ff9900" }
@@ -629,16 +618,14 @@
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             if(cart.length === 0) return;
             
-            // ஸ்டாக் அளவைக் குறைத்தல் (Inventory Management)
-            let products = getShopProducts();
+            // Firebase-ல் உள்ள ஸ்டாக் அளவைக் குறைத்தல் (Inventory Management Sync)
             cart.forEach(item => {
-                let prod = products.find(p => p.name === item.name);
+                let prod = liveProducts.find(p => p.name === item.name);
                 if (prod && prod.stock > 0) {
-                    prod.stock -= 1;
+                    let newQty = prod.stock - 1;
+                    database.ref('stocks/' + prod.id).update({ qty: newQty });
                 }
             });
-            localStorage.setItem('shopProducts', JSON.stringify(products));
-            renderProducts(products);
 
             let user = firebase.auth().currentUser;
             let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || {};
@@ -649,25 +636,23 @@
             let orderDetails = { 
                 orderId: orderId, 
                 email: user.email, 
+                name: userExtra.name || 'Customer',
                 phone: userExtra.phone || 'N/A',
-                items: itemNames, 
+                product: itemNames, 
                 address: userExtra.address, 
-                amount: "₹" + cartTotalText, 
+                amount: cartTotalText, 
                 status: statusText, 
                 trackingId: '', 
                 trackingUrl: '' 
             };
 
-            // அட்மின் பக்கம் ஆர்டர்களைக் காண காமன் ஸ்டோரேஜில் சேமித்தல்
-            let allOrders = JSON.parse(localStorage.getItem('allOrders')) || [];
-            allOrders.push(orderDetails);
-            localStorage.setItem('allOrders', JSON.stringify(allOrders));
+            // Firebase 'orders' நோடில் ஆர்டரைச் சேமித்தல் (அட்மின் ஹப்பிற்கு லைவ்வாகச் செல்ல)
+            database.ref('orders').push(orderDetails);
             
             localStorage.removeItem('cartItems');
             updateCartDisplay();
             closeCartModal();
 
-            // Success Animation Modal காட்டுதல்
             document.getElementById('successOrderIdText').innerText = (currentLang === 'ta' ? 'ஆர்டர் ஐடி: ' : 'Order ID: ') + orderId;
             document.getElementById('successModal').style.display = 'flex';
         }
