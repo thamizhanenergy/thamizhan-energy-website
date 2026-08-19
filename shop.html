@@ -100,7 +100,6 @@
 
         .order-history-box { background: #fff; border: 1px solid #ddd; padding: 12px; border-radius: 8px; margin-top: 12px; font-size: 13px; border-left: 4px solid #2874f0; }
 
-        /* Success Animation Styles */
         .success-animation-box { text-align: center; padding: 20px; }
         .checkmark-circle { width: 80px; height: 80px; position: relative; border-radius: 50%; background: #4CAF50; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; animation: popUp 0.4s ease-in-out; }
         .checkmark { width: 40px; height: 25px; border-left: 5px solid white; border-bottom: 5px solid white; transform: rotate(-45deg); margin-top: -5px; animation: checkDraw 0.4s ease-in-out forwards; }
@@ -153,7 +152,9 @@
         <div class="shop-header">
             <h2 id="mainHeading" data-ta="எங்கள் வாட்டர் லெவல் கண்ட்ரோலர் தயாரிப்புகள்" data-en="Our Water Level Controller Products">எங்கள் வாட்டர் லெவல் கண்ட்ரோலர் தயாரிப்புகள்</h2>
         </div>
-        <div class="product-grid" id="dynamicProductGrid"></div>
+        <div class="product-grid" id="dynamicProductGrid">
+            <p style="text-align: center; color: #888; grid-column: 1/-1; padding: 20px;" data-ta="தயாரிப்புகள் ஏற்றப்படுகின்றன..." data-en="Loading products...">தயாரிப்புகள் ஏற்றப்படுகின்றன...</p>
+        </div>
     </div>
 
     <div class="modal" id="loginModal">
@@ -168,13 +169,10 @@
     <div class="modal" id="detailsModal">
         <div class="modal-content">
             <h3 data-ta="கஸ்டமர் கட்டாய விவரங்கள்" data-en="Complete Your Details">கஸ்டமர் கட்டாய விவரங்கள்</h3>
-            <p style="font-size: 12px; color: #666; margin-bottom: 12px;" data-ta="தொடர உங்களது முழு விவரங்களைப் பதிவு செய்யவும்:" data-en="Please enter your full details to proceed:">தொடர உங்களது முழு விவரங்களைப் பதிவு செய்யவும்:</p>
-            
             <input type="text" id="custFullName" placeholder="முழுப் பெயர் (Full Name)" required>
             <input type="tel" id="custPhone" placeholder="மொபைல் எண் (Phone Number)" required>
             <input type="email" id="custEmailInput" placeholder="ஈமெயில் ஐடி (Email ID)" required readonly style="background:#eee;">
             <textarea id="custAddress" rows="3" placeholder="டெலிவரி முகவரி (Door No, Street, City, Pincode)" required></textarea>
-            
             <button type="button" class="btn" onclick="saveCustomerDetails()" style="background:#2874f0; color:white;" data-ta="விவரங்களைச் சேமிக்க" data-en="Save Details">விவரங்களைச் சேமிக்க</button>
         </div>
     </div>
@@ -183,18 +181,7 @@
         <div class="modal-content">
             <span class="close-btn" onclick="closeProfileModal()">&times;</span>
             <h3 data-ta="எனது கணக்கு விவரங்கள்" data-en="My Account Details">எனது கணக்கு விவரங்கள்</h3>
-            
             <div id="profileViewSection" style="font-size: 14px; color: #333; margin-bottom: 15px; line-height: 1.6;"></div>
-            <button type="button" id="editProfileToggleBtn" class="btn" style="background:#ff9900; color:#131921; margin-bottom:10px;" onclick="toggleEditProfile()" data-ta="✏️ விவரங்களை எடிட் செய்ய" data-en="✏️ Edit Details">✏️ விவரங்களை எடிட் செய்ய</button>
-
-            <div id="profileEditSection" style="display:none; background:#f1f3f6; padding:12px; border-radius:8px; margin-bottom:15px;">
-                <h4 style="font-size:13px; margin-bottom:8px;" data-ta="விவரங்களை மாற்றுக:" data-en="Update Details:">விவரங்களை மாற்றுக:</h4>
-                <input type="text" id="editName" placeholder="பெயர் (Name)">
-                <input type="tel" id="editPhone" placeholder="போன் எண் (Phone)">
-                <textarea id="editAddress" rows="2" placeholder="முகவரி (Address)"></textarea>
-                <button type="button" class="btn" style="background:#388e3c; color:white; padding:6px; font-size:12px;" onclick="saveEditedProfile()" data-ta="மாற்றங்களைச் சேமி" data-en="Save Changes">மாற்றங்களைச் சேமி</button>
-            </div>
-
             <button type="button" class="btn logout-btn" onclick="logoutUser()" data-ta="வெளியேறு (Logout)" data-en="Logout">வெளியேறு (Logout)</button>
         </div>
     </div>
@@ -217,12 +204,10 @@
             <div id="addressVerifyBox" style="background: #f1f3f6; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #dcdcdc;">
                 <p style="font-size: 12px; font-weight: 700; color: #131921; margin-bottom: 5px;" data-ta="டெலிவரி முகவரி சரிபார்ப்பு:" data-en="Delivery Address Verification:">டெலிவரி முகவரி சரிபார்ப்பு:</p>
                 <p id="displaySavedAddress" style="font-size: 12px; color: #555; margin-bottom: 8px;"></p>
-                
                 <div id="addressOptions" style="display: flex; gap: 8px;">
                     <button type="button" class="btn" style="padding: 6px; font-size: 11px; background:#388e3c; color:white; flex:1;" onclick="confirmAddressYes()" data-ta="✔️ முகவரி சரியானது" data-en="✔️ Correct Address">✔️ முகவரி சரியானது</button>
                     <button type="button" class="btn" style="padding: 6px; font-size: 11px; background:#ff5252; color:white; flex:1;" onclick="confirmAddressNo()" data-ta="❌ மாற்று முகவரி" data-en="❌ Change Address">❌ மாற்று முகவரி</button>
                 </div>
-
                 <div id="newAddressForm" style="display: none; margin-top: 10px;">
                     <textarea id="altCustAddress" rows="2" placeholder="புதிய டெலிவரி முகவரியை உள்ளிடவும்..." data-ta="புதிய டெலிவரி முகவரியை உள்ளிடவும்..." data-en="Enter new delivery address..."></textarea>
                     <button type="button" class="btn" style="padding: 6px; font-size: 11px; background:#ff9800; color:white;" onclick="saveAlternativeAddress()" data-ta="முகவரியைச் சேமித்து தொடர" data-en="Save & Continue">முகவரியைச் சேமித்து தொடர</button>
@@ -239,9 +224,7 @@
     <div class="modal" id="successModal">
         <div class="modal-content" style="max-width: 380px; text-align: center;">
             <div class="success-animation-box">
-                <div class="checkmark-circle">
-                    <div class="checkmark"></div>
-                </div>
+                <div class="checkmark-circle"><div class="checkmark"></div></div>
                 <h3 style="color: #2874f0; margin-bottom: 10px;" data-ta="ஆர்டர் கன்பார்ம்டு சக்சஸ்ஃபுல்லி!" data-en="Order Confirmed Successfully!">ஆர்டர் கன்பார்ம்டு சக்சஸ்ஃபுல்லி!</h3>
                 <p style="font-size: 13px; color: #666; margin-bottom: 20px;" id="successOrderIdText"></p>
                 <button type="button" class="btn" style="background:#2874f0; color:white;" onclick="closeSuccessModal()" data-ta="சரி (OK)" data-en="OK">சரி (OK)</button>
@@ -265,28 +248,12 @@
             localStorage.setItem('siteLang', currentLang);
             document.getElementById('sidebarLangText').innerText = (currentLang === 'en') ? '🌐 தமிழில் மாற்ற' : '🌐 Switch to English';
             document.getElementById('htmlRoot').setAttribute('lang', currentLang);
-
-            const elements = document.querySelectorAll('[data-ta]');
-            elements.forEach(el => {
-                if (currentLang === 'en') {
-                    if(el.getAttribute('data-en')) el.innerText = el.getAttribute('data-en');
-                } else {
-                    if(el.getAttribute('data-ta')) el.innerText = el.getAttribute('data-ta');
-                }
-            });
             renderProducts(liveProducts);
         }
 
         document.addEventListener("DOMContentLoaded", function() {
-            if (currentLang === 'en') {
-                document.getElementById('sidebarLangText').innerText = '🌐 தமிழில் மாற்ற';
-                document.getElementById('htmlRoot').setAttribute('lang', 'en');
-                const elements = document.querySelectorAll('[data-ta]');
-                elements.forEach(el => { if(el.getAttribute('data-en')) el.innerText = el.getAttribute('data-en'); });
-            }
-
-            // Firebase-ல் இருந்து ஸ்டாக் & ப்ராடக்ட் விவரங்களை லைவ்வாகப் பெறுதல்
-            database.ref('stocks').on('value', (snapshot) => {
+            // Firebase-ல் உள்ள 'products' டேட்டாபேஸ் நோட் மூலம் அனைத்துத் தயாரிப்புகளையும் லைவ்வாகப் பெறுதல்
+            database.ref('products').on('value', (snapshot) => {
                 liveProducts = [];
                 if (snapshot.exists()) {
                     snapshot.forEach((childSnap) => {
@@ -294,20 +261,14 @@
                         liveProducts.push({
                             id: childSnap.key,
                             name: item.name || "Product",
-                            price: item.price ? Number(item.price) + 500 : 4499,
-                            discount: item.price ? Number(item.price) : 3999,
-                            stock: item.qty !== undefined ? Number(item.qty) : 10,
-                            offerTag: item.offerTag || "Live Stock",
+                            price: item.price ? Number(item.price) : 3999,
+                            discount: item.discount ? Number(item.discount) : (item.price ? Number(item.price) - 500 : 3499),
+                            stock: item.stock !== undefined ? Number(item.stock) : (item.qty !== undefined ? Number(item.qty) : 10),
+                            offerTag: item.offerTag || "Available",
                             img: item.img || "3.png",
-                            specs: item.specs || ["உயர்தர எலக்ட்ரானிக்ஸ்", "1 வருடம் உத்தரவாதம்"]
+                            specs: item.specs ? (Array.isArray(item.specs) ? item.specs : item.specs.split('\n')) : ["உயர்தர எலக்ட்ரானிக்ஸ்", "1 வருடம் உத்தரவாதம்"]
                         });
                     });
-                } else {
-                    // Default fallback if database is empty
-                    liveProducts = [
-                        { id: "p1", name: "AWLCP 1.0", price: 3999, discount: 3499, stock: 15, offerTag: "Save ₹500", img: "3.png", specs: ["ஆட்டோமேட்டிக் டேங்க் ஆன்/ஆஃப்", "ட்ரைடன் பாதுகாப்பு", "1 வருடம் உத்தரவாதம்"] },
-                        { id: "p2", name: "AWLCW 1.0", price: 5499, discount: 4999, stock: 10, offerTag: "WiFi Model", img: "3.png", specs: ["மொபைல் மூலம் ரிமோட் கண்ட்ரோல்", "ஒயர்டு சென்சார்கள்", "1 வருடம் உத்தரவாதம்"] }
-                    ];
                 }
                 renderProducts(liveProducts);
             });
@@ -322,12 +283,7 @@
                         document.getElementById('detailsModal').style.display = 'flex';
                     }
                     document.getElementById('sidebar-user-text').innerText = user.email;
-
-                    if (user.email === ADMIN_EMAIL) {
-                        document.getElementById('sidebarAdminBtn').style.display = 'block';
-                    } else {
-                        document.getElementById('sidebarAdminBtn').style.display = 'none';
-                    }
+                    document.getElementById('sidebarAdminBtn').style.display = (user.email === ADMIN_EMAIL) ? 'block' : 'none';
                 } else {
                     document.getElementById('sidebar-user-text').innerText = (currentLang === 'ta' ? 'உள்நுழை / எனது கணக்கு' : 'Login / My Account');
                     document.getElementById('sidebarAdminBtn').style.display = 'none';
@@ -337,32 +293,36 @@
 
         function renderProducts(products) {
             let gridHTML = '';
-            products.forEach((p) => {
-                let specsHTML = p.specs ? p.specs.map(s => `<li>${s}</li>`).join('') : '';
-                let isOutOfStock = p.stock <= 0;
-                let stockStatus = !isOutOfStock ? `<b style="color:#007600;">${currentLang === 'ta' ? 'ஸ்டாக் உள்ளது' : 'In Stock'} (${p.stock})</b>` : `<b style="color:#cc0c39;">${currentLang === 'ta' ? 'ஸ்டாக் காலியாக உள்ளது' : 'Out of Stock'}</b>`;
-                let btnText = isOutOfStock ? (currentLang === 'ta' ? 'ஸ்டாக் இல்லை' : 'Out of Stock') : (currentLang === 'ta' ? 'கார்ட்டில் சேர்க்கவும்' : 'Add to Cart');
+            if (products.length === 0) {
+                gridHTML = `<p style="text-align: center; color: #888; grid-column: 1/-1; padding: 20px;">${currentLang === 'ta' ? 'தயாரிப்புகள் எதுவும் இல்லை.' : 'No products available.'}</p>`;
+            } else {
+                products.forEach((p) => {
+                    let specsHTML = p.specs ? p.specs.map(s => `<li>${s}</li>`).join('') : '';
+                    let isOutOfStock = p.stock <= 0;
+                    let stockStatus = !isOutOfStock ? `<b style="color:#007600;">${currentLang === 'ta' ? 'ஸ்டாக் உள்ளது' : 'In Stock'} (${p.stock})</b>` : `<b style="color:#cc0c39;">${currentLang === 'ta' ? 'ஸ்டாக் காலியாக உள்ளது' : 'Out of Stock'}</b>`;
+                    let btnText = isOutOfStock ? (currentLang === 'ta' ? 'ஸ்டாக் இல்லை' : 'Out of Stock') : (currentLang === 'ta' ? 'கார்ட்டில் சேர்க்கவும்' : 'Add to Cart');
 
-                let offerBadge = p.offerTag ? `<span class="offer-tag">${p.offerTag}</span>` : '';
-                let finalPrice = p.discount && p.discount < p.price ? p.discount : p.price;
-                let priceSection = p.discount && p.discount < p.price ? 
-                    `<div class="price-box"><span class="price">₹${p.discount}/-</span><span class="old-price">₹${p.price}/-</span></div>` : 
-                    `<div class="price-box"><span class="price">₹${p.price}/-</span></div>`;
+                    let offerBadge = p.offerTag ? `<span class="offer-tag">${p.offerTag}</span>` : '';
+                    let finalPrice = p.discount && p.discount < p.price ? p.discount : p.price;
+                    let priceSection = p.discount && p.discount < p.price ? 
+                        `<div class="price-box"><span class="price">₹${p.discount}/-</span><span class="old-price">₹${p.price}/-</span></div>` : 
+                        `<div class="price-box"><span class="price">₹${p.price}/-</span></div>`;
 
-                gridHTML += `
-                    <div class="product-card" data-name="${p.name.toLowerCase()}">
-                        ${offerBadge}
-                        <div>
-                            <div class="product-img-box"><img src="${p.img || '3.png'}" alt="${p.name}" class="product-img"></div>
-                            <div class="product-title">${p.name}</div>
-                            ${priceSection}
-                            <p style="font-size:12px; margin-bottom:8px;">${stockStatus}</p>
-                            <ul class="features">${specsHTML}</ul>
+                    gridHTML += `
+                        <div class="product-card" data-name="${p.name.toLowerCase()}">
+                            ${offerBadge}
+                            <div>
+                                <div class="product-img-box"><img src="${p.img || '3.png'}" alt="${p.name}" class="product-img"></div>
+                                <div class="product-title">${p.name}</div>
+                                ${priceSection}
+                                <p style="font-size:12px; margin-bottom:8px;">${stockStatus}</p>
+                                <ul class="features">${specsHTML}</ul>
+                            </div>
+                            <button type="button" class="btn" ${isOutOfStock ? 'disabled style="background:#ddd; border-color:#ccc; cursor:not-allowed;"' : ''} onclick="addToCart('${p.name}', ${finalPrice})">${btnText}</button>
                         </div>
-                        <button type="button" class="btn" ${isOutOfStock ? 'disabled style="background:#ddd; border-color:#ccc; cursor:not-allowed;"' : ''} onclick="addToCart('${p.name}', ${finalPrice})">${btnText}</button>
-                    </div>
-                `;
-            });
+                    `;
+                });
+            }
             document.getElementById('dynamicProductGrid').innerHTML = gridHTML;
         }
 
@@ -389,13 +349,12 @@
             let email = document.getElementById('custEmailInput').value.trim();
             let address = document.getElementById('custAddress').value.trim();
 
-            if(!name || !phone || !email || !address) { alert(currentLang === 'ta' ? 'அனைத்து விவரங்களையும் நிரப்பவும்.' : 'Please fill all details.'); return; }
-
+            if(!name || !phone || !email || !address) { alert('அனைத்து விவரங்களையும் நிரப்பவும்.'); return; }
             let user = firebase.auth().currentUser;
             if(user) {
                 localStorage.setItem('userExtra_' + user.email, JSON.stringify({ name, phone, email, address }));
                 document.getElementById('detailsModal').style.display = 'none';
-                alert(currentLang === 'ta' ? 'விவரங்கள் வெற்றிகரமாகச் சேமிக்கப்பட்டன!' : 'Details saved successfully!');
+                alert('விவரங்கள் வெற்றிகரமாகச் சேமிக்கப்பட்டன!');
             }
         }
 
@@ -411,108 +370,40 @@
             }).catch((error) => { alert("Login Error: " + error.message); });
         }
 
-        function logoutUser() {
-            firebase.auth().signOut().then(() => { location.reload(); });
-        }
-
+        function logoutUser() { firebase.auth().signOut().then(() => { location.reload(); }); }
         function openProfileModal() {
             let user = firebase.auth().currentUser;
             if (!user) { openLoginModal(); return; }
-
             let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || {name:'N/A', phone:'N/A', email:user.email, address:'N/A'};
-
-            document.getElementById('profileViewSection').innerHTML = `
-                <p><b>${currentLang === 'ta' ? 'பெயர்' : 'Name'}:</b> ${userExtra.name}</p>
-                <p><b>${currentLang === 'ta' ? 'மின்னஞ்சல்' : 'Email'}:</b> ${user.email}</p>
-                <p><b>${currentLang === 'ta' ? 'போன் எண்' : 'Phone'}:</b> ${userExtra.phone}</p>
-                <p><b>${currentLang === 'ta' ? 'முகவரி' : 'Address'}:</b> ${userExtra.address}</p>
-            `;
-
-            document.getElementById('editName').value = userExtra.name;
-            document.getElementById('editPhone').value = userExtra.phone;
-            document.getElementById('editAddress').value = userExtra.address;
-            document.getElementById('profileEditSection').style.display = 'none';
-
+            document.getElementById('profileViewSection').innerHTML = `<p><b>பெயர்:</b> ${userExtra.name}</p><p><b>மின்னஞ்சல்:</b> ${user.email}</p><p><b>போன்:</b> ${userExtra.phone}</p><p><b>முகவரி:</b> ${userExtra.address}</p>`;
             document.getElementById('profileModal').style.display = 'flex';
         }
-
-        function toggleEditProfile() {
-            let editSec = document.getElementById('profileEditSection');
-            editSec.style.display = (editSec.style.display === 'none') ? 'block' : 'none';
-        }
-
-        function saveEditedProfile() {
-            let user = firebase.auth().currentUser;
-            if(!user) return;
-
-            let newName = document.getElementById('editName').value.trim();
-            let newPhone = document.getElementById('editPhone').value.trim();
-            let newAddress = document.getElementById('editAddress').value.trim();
-
-            if(!newName || !newPhone || !newAddress) {
-                alert(currentLang === 'ta' ? 'அனைத்து புலங்களையும் நிரப்பவும்.' : 'Please fill all fields.');
-                return;
-            }
-
-            let userExtra = { name: newName, phone: newPhone, email: user.email, address: newAddress };
-            localStorage.setItem('userExtra_' + user.email, JSON.stringify(userExtra));
-
-            alert(currentLang === 'ta' ? 'விவரங்கள் வெற்றிகரமாக மாற்றப்பட்டன!' : 'Details updated successfully!');
-            openProfileModal();
-        }
-
         function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
 
-        // ஆர்டர்கள் & டிராக்கிங் (Firebase-ல் இருந்து லைவ்வாகப் பெறுதல்)
         function openTrackingModal() {
             let user = firebase.auth().currentUser;
-            if (!user) { alert(currentLang === 'ta' ? 'தயவுசெய்து முதலில் லாகின் செய்யவும்!' : 'Please login first!'); openLoginModal(); return; }
-
+            if (!user) { alert('தயவுசெய்து முதலில் லாகின் செய்யவும்!'); openLoginModal(); return; }
             database.ref('orders').orderByChild('email').equalTo(user.email).once('value').then((snapshot) => {
                 let userOrders = [];
-                if (snapshot.exists()) {
-                    snapshot.forEach((childSnap) => {
-                        userOrders.push(childSnap.val());
-                    });
-                }
-
-                let ordersHTML = userOrders.length === 0 ? `<p style="color:#888; text-align:center;">${currentLang === 'ta' ? 'ஆர்டர்கள் எதுவும் இல்லை.' : 'No orders found.'}</p>` : userOrders.map(ord => {
-                    let trackingInfo = ord.trackingId ? 
-                        `<p style="margin-top: 5px;"><b>${currentLang === 'ta' ? 'டிராக்கிங் ஐடி' : 'Tracking ID'}:</b> <span style="background:#e0f7fa; padding:2px 6px; border-radius:4px;">${ord.trackingId}</span></p>
-                         <p style="margin-top: 3px;"><b>${currentLang === 'ta' ? 'கொரியர் லிங்க்' : 'Courier Link'}:</b> <a href="${ord.trackingUrl || '#'}" target="_blank" style="color:#2874f0; text-decoration:underline;">${currentLang === 'ta' ? 'டிரா செய்ய கிளிக் செய்க ↗' : 'Click to Track ↗'}</a></p>` : 
-                        `<p style="margin-top: 5px; color:#e67e22; font-size:12px;"><b>${currentLang === 'ta' ? 'நிலை' : 'Status'}:</b> ${currentLang === 'ta' ? 'விரைவில் கொரியர் செய்யப்படும்' : 'Will be shipped soon'}</p>`;
-
-                    return `
-                        <div class="order-history-box">
-                            <p><b>${currentLang === 'ta' ? 'ஆர்டர் ஐடி' : 'Order ID'}:</b> <span style="color:#2874f0;">${ord.orderId}</span></p>
-                            <p><b>${currentLang === 'ta' ? 'பொருட்கள்' : 'Items'}:</b> ${ord.product || ord.items}</p>
-                            <p><b>${currentLang === 'ta' ? 'தொகை' : 'Amount'}:</b> ₹${ord.amount}</p>
-                            <p><b>${currentLang === 'ta' ? 'முகவரி' : 'Address'}:</b> ${ord.address}</p>
-                            <p><b>${currentLang === 'ta' ? 'நிலை' : 'Status'}:</b> <span style="color:#007600; font-weight:bold;">${ord.status}</span></p>
-                            ${trackingInfo}
-                        </div>
-                    `;
+                if (snapshot.exists()) { snapshot.forEach(c => userOrders.push(c.val())); }
+                let ordersHTML = userOrders.length === 0 ? `<p style="color:#888; text-align:center;">ஆர்டர்கள் எதுவும் இல்லை.</p>` : userOrders.map(ord => {
+                    let trackingInfo = ord.trackingId ? `<p><b>டிராக்கிங் ஐடி:</b> ${ord.trackingId}</p><p><b>கொரியர் லிங்க்:</b> <a href="${ord.trackingUrl || '#'}" target="_blank" style="color:#2874f0;">டிரா செய்ய கிளிக் செய்க ↗</a></p>` : `<p style="color:#e67e22;">நிலை: விரைவில் கொரியர் செய்யப்படும்</p>`;
+                    return `<div class="order-history-box"><p><b>ஆர்டர் ஐடி:</b> ${ord.orderId}</p><p><b>பொருட்கள்:</b> ${ord.product}</p><p><b>தொகை:</b> ₹${ord.amount}</p><p><b>நிலை:</b> <span style="color:#007600;">${ord.status}</span></p>${trackingInfo}</div>`;
                 }).join('');
-
                 document.getElementById('trackingDetailsContainer').innerHTML = ordersHTML;
                 document.getElementById('trackingModal').style.display = 'flex';
             });
         }
-
         function closeTrackingModal() { document.getElementById('trackingModal').style.display = 'none'; }
 
         function addToCart(name, price) {
             let prod = liveProducts.find(p => p.name === name);
-            if(prod && prod.stock <= 0) {
-                alert(currentLang === 'ta' ? 'மன்னிக்கவும்! இந்தப் பொருள் ஸ்டாக் இல்லை.' : 'Sorry! Product is out of stock.');
-                return;
-            }
-
+            if(prod && prod.stock <= 0) { alert('மன்னிக்கவும்! இந்தப் பொருள் ஸ்டாக் இல்லை.'); return; }
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             cart.push({name, price});
             localStorage.setItem('cartItems', JSON.stringify(cart));
             updateCartDisplay();
-            alert(name + (currentLang === 'ta' ? ' கார்ட்டில் சேர்க்கப்பட்டது!' : ' added to cart!'));
+            alert(name + ' கார்ட்டில் சேர்க்கப்பட்டது!');
         }
 
         function removeFromCart(index) {
@@ -526,15 +417,13 @@
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             document.getElementById('cart-count').innerText = cart.length;
             document.getElementById('sidebar-cart-count').innerText = cart.length;
-            
-            let listHTML = '';
-            let total = 0;
+            let listHTML = '', total = 0;
             if(cart.length === 0) {
-                listHTML = `<li style="color:#888; text-align:center; justify-content:center;">${currentLang === 'ta' ? 'கார்ட் காலியாக உள்ளது.' : 'Cart is empty.'}</li>`;
+                listHTML = `<li style="color:#888; text-align:center;">கார்ட் காலியாக உள்ளது.</li>`;
             } else {
                 cart.forEach((item, index) => {
                     total += item.price;
-                    listHTML += `<li><span><b>${item.name}</b> - ₹${item.price}</span><button type="button" class="remove-cart-item" onclick="removeFromCart(${index})">${currentLang === 'ta' ? 'நீக்கு' : 'Remove'}</button></li>`;
+                    listHTML += `<li><span><b>${item.name}</b> - ₹${item.price}</span><button type="button" class="remove-cart-item" onclick="removeFromCart(${index})">நீக்கு</button></li>`;
                 });
             }
             document.getElementById('cartItemsList').innerHTML = listHTML;
@@ -543,70 +432,41 @@
 
         function openCartModal() {
             let user = firebase.auth().currentUser;
-            if(!user) { alert(currentLang === 'ta' ? 'தயவுசெய்து முதலில் லாகின் செய்யவும்!' : 'Please login first!'); openLoginModal(); return; }
-            
+            if(!user) { alert('தயவுசெய்து முதலில் லாகின் செய்யவும்!'); openLoginModal(); return; }
             let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || null;
-            let addressBox = document.getElementById('displaySavedAddress');
-            
             document.getElementById('addressOptions').style.display = 'flex';
             document.getElementById('newAddressForm').style.display = 'none';
             document.getElementById('paymentOptionsBox').style.display = 'none';
-
-            if (userExtra && userExtra.address && userExtra.phone) {
-                addressBox.innerText = userExtra.address + " (Phone: " + userExtra.phone + ")";
-            } else {
-                addressBox.innerText = currentLang === 'ta' ? 'முகவரி விவரங்கள் இல்லை.' : 'No address details found.';
-                document.getElementById('addressOptions').style.display = 'none';
-                document.getElementById('newAddressForm').style.display = 'block';
-            }
+            document.getElementById('displaySavedAddress').innerText = (userExtra && userExtra.address) ? (userExtra.address + " (Phone: " + userExtra.phone + ")") : 'முகவரி விவரங்கள் இல்லை.';
             document.getElementById('cartModal').style.display = 'flex';
         }
         function closeCartModal() { document.getElementById('cartModal').style.display = 'none'; }
-
-        function confirmAddressYes() {
-            document.getElementById('addressOptions').style.display = 'none';
-            document.getElementById('paymentOptionsBox').style.display = 'block';
-        }
-        function confirmAddressNo() {
-            document.getElementById('addressOptions').style.display = 'none';
-            document.getElementById('newAddressForm').style.display = 'block';
-        }
+        function confirmAddressYes() { document.getElementById('addressOptions').style.display = 'none'; document.getElementById('paymentOptionsBox').style.display = 'block'; }
+        function confirmAddressNo() { document.getElementById('addressOptions').style.display = 'none'; document.getElementById('newAddressForm').style.display = 'block'; }
         function saveAlternativeAddress() {
             let altAddr = document.getElementById('altCustAddress').value.trim();
-            if(!altAddr) { alert(currentLang === 'ta' ? 'புதிய முகவரியை உள்ளிடவும்.' : 'Enter new address.'); return; }
-
+            if(!altAddr) return;
             let user = firebase.auth().currentUser;
             let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || {};
             userExtra.address = altAddr;
             localStorage.setItem('userExtra_' + user.email, JSON.stringify(userExtra));
-
             document.getElementById('displaySavedAddress').innerText = altAddr;
             document.getElementById('newAddressForm').style.display = 'none';
             document.getElementById('paymentOptionsBox').style.display = 'block';
-            alert(currentLang === 'ta' ? 'மாற்று முகவரி சேமிக்கப்பட்டது!' : 'Alternative address saved!');
         }
 
-        function proceedToCOD() {
-            completeOrder(currentLang === 'ta' ? 'Pending (COD)' : 'Pending (COD)', 'TES-COD-');
-        }
-
+        function proceedToCOD() { completeOrder('Pending (COD)', 'TES-COD-'); }
         function proceedToRazorpay() {
-            let cartTotalText = document.getElementById('cartTotalPrice').innerText.replace('₹', '').replace(',', '');
+            let total = document.getElementById('cartTotalPrice').innerText.replace('₹', '');
             let user = firebase.auth().currentUser;
             let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || {};
-            let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
-            let itemNames = cart.map(i => i.name).join(', ');
             let orderId = 'TES-' + Math.floor(100000 + Math.random() * 900000);
-
             var options = {
                 "key": RAZORPAY_KEY_ID,
-                "amount": parseInt(cartTotalText) * 100,
+                "amount": parseInt(total) * 100,
                 "currency": "INR",
                 "name": "தமிழன் எனர்ஜி சிஸ்டம்ஸ்",
-                "description": itemNames,
-                "handler": function (response){
-                    completeOrder('Pending (Paid)', orderId);
-                },
+                "handler": function (res){ completeOrder('Pending (Paid)', orderId); },
                 "prefill": { "name": userExtra.name, "email": user.email, "contact": userExtra.phone },
                 "theme": { "color": "#ff9900" }
             };
@@ -614,53 +474,35 @@
             rzp1.open();
         }
 
-        function completeOrder(statusText, customIdPrefix) {
+        function completeOrder(statusText, customId) {
             let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
             if(cart.length === 0) return;
             
-            // Firebase-ல் உள்ள ஸ்டாக் அளவைக் குறைத்தல் (Inventory Management Sync)
+            // வாடிக்கையாளர் ஆர்டர் செய்யும்போது ஃபயர்பேஸில் ஸ்டாக் அளவைக் குறைத்தல்
             cart.forEach(item => {
                 let prod = liveProducts.find(p => p.name === item.name);
                 if (prod && prod.stock > 0) {
-                    let newQty = prod.stock - 1;
-                    database.ref('stocks/' + prod.id).update({ qty: newQty });
+                    let newStock = prod.stock - 1;
+                    database.ref('products/' + prod.id).update({ stock: newStock });
                 }
             });
 
             let user = firebase.auth().currentUser;
             let userExtra = JSON.parse(localStorage.getItem('userExtra_' + user.email)) || {};
-            let cartTotalText = document.getElementById('cartTotalPrice').innerText.replace('₹', '').replace(',', '');
-            let orderId = customIdPrefix.includes('TES-') ? customIdPrefix : (customIdPrefix + Math.floor(100000 + Math.random() * 900000));
-            let itemNames = cart.map(i => i.name).join(', ');
+            let total = document.getElementById('cartTotalPrice').innerText.replace('₹', '');
+            let orderId = customId.includes('TES-') ? customId : (customId + Math.floor(100000 + Math.random() * 900000));
+            let itemsStr = cart.map(i => i.name).join(', ');
 
-            let orderDetails = { 
-                orderId: orderId, 
-                email: user.email, 
-                name: userExtra.name || 'Customer',
-                phone: userExtra.phone || 'N/A',
-                product: itemNames, 
-                address: userExtra.address, 
-                amount: cartTotalText, 
-                status: statusText, 
-                trackingId: '', 
-                trackingUrl: '' 
-            };
-
-            // Firebase 'orders' நோடில் ஆர்டரைச் சேமித்தல் (அட்மின் ஹப்பிற்கு லைவ்வாகச் செல்ல)
+            let orderDetails = { orderId, email: user.email, name: userExtra.name || 'Customer', phone: userExtra.phone || 'N/A', product: itemsStr, address: userExtra.address, amount: total, status: statusText, trackingId: '', trackingUrl: '' };
             database.ref('orders').push(orderDetails);
-            
+
             localStorage.removeItem('cartItems');
             updateCartDisplay();
             closeCartModal();
-
-            document.getElementById('successOrderIdText').innerText = (currentLang === 'ta' ? 'ஆர்டர் ஐடி: ' : 'Order ID: ') + orderId;
+            document.getElementById('successOrderIdText').innerText = 'ஆர்டர் ஐடி: ' + orderId;
             document.getElementById('successModal').style.display = 'flex';
         }
-
-        function closeSuccessModal() {
-            document.getElementById('successModal').style.display = 'none';
-            openTrackingModal();
-        }
+        function closeSuccessModal() { document.getElementById('successModal').style.display = 'none'; openTrackingModal(); }
     </script>
 </body>
 </html>
