@@ -7,6 +7,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyAJwgnJhXAiqNGpnaN0vWOevBcofYR9uxE",
+        authDomain: "thamizhan-energy-systems.firebaseapp.com",
+        databaseURL: "https://thamizhan-energy-systems-default-rtdb.firebaseio.com",
+        projectId: "thamizhan-energy-systems",
+        storageBucket: "thamizhan-energy-systems.firebasestorage.app",
+        messagingSenderId: "727924977035",
+        appId: "1:727924977035:web:ab34a19d7bd3a65976538e",
+        measurementId: "G-0MP2C3NZWK"
+      };
+      if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+      const database = firebase.database();
+    </script>
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         
@@ -17,7 +36,6 @@
             min-height: 100vh;
         }
         
-        /* MNC Style Header */
         header { 
             background: rgba(15, 32, 39, 0.95); 
             backdrop-filter: blur(10px);
@@ -34,7 +52,6 @@
         .brand-section { display: flex; align-items: center; gap: 10px; }
         .logo-img { height: 38px; width: auto; object-fit: contain; }
         
-        /* Chrome Finish Tagline Styling */
         .brand-title h1 { 
             font-size: 15px; 
             color: #ffffff; 
@@ -62,7 +79,6 @@
             padding: 5px;
         }
 
-        /* Sidebar Menu (Three Dash Drawer) */
         .sidebar-menu { 
             position: fixed; top: 0; left: -300px; width: 280px; height: 100%; 
             background: #ffffff; box-shadow: 5px 0 25px rgba(0,0,0,0.3); 
@@ -156,7 +172,7 @@
             <li><a href="index.html"><i class="fas fa-home"></i> <span data-ta="🏠 முகப்பு" data-en="🏠 Home">🏠 முகப்பு</span></a></li>
             <li><a href="shop.html"><i class="fas fa-store"></i> <span data-ta="🛒 ஆன்லைன் ஸ்டோர் (Shop)" data-en="🛒 Online Store (Shop)">ஆன்லைன் ஸ்டோர் (Shop)</span></a></li>
             <li><a href="dashboard.html"><i class="fas fa-network-wired"></i> <span data-ta="🌐 IoT டேஷ்போர்டு" data-en="🌐 IoT Dashboard">🌐 IoT டேஷ்போர்டு</span></a></li>
-            <li><a href="career.html"><i class="fas fa-briefcase"></i> <span data-ta="📄 வேலைவாய்ப்பு (Career)" data-en="📄 Career">வேலைவாய்ப்பு (Career)</span></a></li>
+            <li><a href="career.html"><i class="fas fa-briefcase"></i> <span data-ta="📄 வேலைவாய்ப்பு (Career)" data-en="📄 Career">📄 வேலைவாய்ப்பு (Career)</span></a></li>
             <li><a href="contact.html"><i class="fas fa-envelope"></i> <span data-ta="📞 தொடர்புக்கு" data-en="📞 Contact">📞 தொடர்புக்கு</span></a></li>
             <li><a href="aboutus.html"><i class="fas fa-info-circle"></i> <span data-ta="ℹ️ எங்களைப் பற்றி" data-en="ℹ️ About Us">ℹ️ எங்களைப் பற்றி</span></a></li>
             <li><button class="lang-sidebar-btn" id="langSidebarBtn" onclick="toggleLanguage()">English</button></li>
@@ -256,6 +272,7 @@
             applyLanguage();
         });
 
+        // Firebase-ல் 'careers' நோடில் விண்ணப்பத்தைச் சேமித்தல்
         function submitApplication(event) {
             event.preventDefault();
 
@@ -269,24 +286,27 @@
 
             let resumeName = resumeInput.files.length > 0 ? resumeInput.files[0].name : "No file uploaded";
 
-            let newApp = {
-                id: 'JOB-' + Math.floor(1000 + Math.random() * 9000),
-                role: role,
+            let applicationData = {
+                jobRole: role,
                 name: name,
                 dob: dob,
-                contact: contact,
+                email: contact, // ஃபோன் / ஈமெயில்
+                phone: contact,
                 address: address,
-                desc: desc,
-                resume: resumeName,
+                description: desc,
+                resumeUrl: "#" + resumeName, // ஃபைல் பெயர்
                 date: new Date().toLocaleDateString()
             };
 
-            let allApps = JSON.parse(localStorage.getItem('jobApplications')) || [];
-            allApps.push(newApp);
-            localStorage.setItem('jobApplications', JSON.stringify(allApps));
-
-            alert(currentLang === 'ta' ? "உங்களது விண்ணப்பம் வெற்றிகரமாகச் சமர்ப்பிக்கப்பட்டது!" : "Your application has been submitted successfully!");
-            document.getElementById('jobApplicationForm').reset();
+            // Firebase Realtime Database-ல் 'careers' என்ற நோடில் புஷ் செய்தல்
+            database.ref('careers').push(applicationData, (error) => {
+                if (!error) {
+                    alert(currentLang === 'ta' ? "உங்களது விண்ணப்பம் வெற்றிகரமாகச் சமர்ப்பிக்கப்பட்டு அட்மின் ஹப்பிற்கு அனுப்பப்பட்டது!" : "Your application has been successfully submitted and sent to Admin Hub!");
+                    document.getElementById('jobApplicationForm').reset();
+                } else {
+                    alert("பிழை: " + error.message);
+                }
+            });
         }
     </script>
 </body>
